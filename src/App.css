@@ -24,3 +24,28 @@ body {
 .backdrop-blur-sm {
   backdrop-filter: blur(4px);
 }
+
+
+/* Mejoras para z-index y modales */
+.modal-overlay {
+  z-index: 1000;
+}
+
+.modal-content {
+  z-index: 1001;
+}
+
+.dropdown-menu {
+  z-index: 1002;
+}
+
+/* Asegurar que los botones sean clickeables */
+button {
+  position: relative;
+  z-index: 1;
+}
+
+/* Mejorar la interactividad de los modales */
+.fixed {
+  position: fixed;
+}

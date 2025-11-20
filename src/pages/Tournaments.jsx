@@ -58,9 +58,11 @@ const Tournaments = ({
     }
   };
 
+  // En Tournaments.jsx - corregir handleUpdateStatus
   const handleUpdateStatus = async (tournamentId, newStatus) => {
     console.log("🔄 Actualizando estado:", tournamentId, newStatus);
     try {
+      // Solo enviar el campo que queremos actualizar (status)
       await onUpdateTournament(tournamentId, { status: newStatus });
       alert(`Estado cambiado a: ${newStatus}`);
     } catch (error) {

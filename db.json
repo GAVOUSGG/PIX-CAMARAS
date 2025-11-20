@@ -1,308 +1,72 @@
 {
   "tournaments": [
     {
-      "id": "1",
-      "name": "Torneo Empresarial CDMX",
-      "location": "Club de Golf Chapultepec, Ciudad de México",
-      "state": "CDMX",
-      "date": "2025-07-15",
-      "endDate": "2025-07-15",
-      "status": "activo",
-      "worker": "Juan Pérez",
-      "workerId": "1",
-      "cameras": [
-        "CS1",
-        "CS2"
-      ],
-      "holes": [
-        7,
-        12,
-        16
-      ],
-      "days": 1,
-      "field": "Club de Golf Chapultepec",
-      "createdAt": "2024-01-15T10:00:00Z"
-    },
-    {
-      "id": "2",
-      "name": "Copa Guadalajara Open",
-      "location": "Atlas Country Club, Guadalajara",
+      "id": "509e",
+      "name": "porsche",
+      "location": "asdasd, asdas",
       "state": "Jalisco",
-      "date": "2025-07-20",
-      "endDate": "2025-07-21",
-      "status": "pendiente",
-      "worker": "María González",
-      "workerId": "2",
-      "cameras": [
-        "CS3",
-        "CS4"
-      ],
-      "holes": [
-        3,
-        9,
-        18
-      ],
-      "days": 2,
-      "field": "Atlas Country Club",
-      "createdAt": "2024-01-10T14:30:00Z"
-    },
-    {
-      "id": "3",
-      "name": "Torneo Monterrey Elite",
-      "location": "La Herradura Golf Club, Monterrey",
-      "state": "Nuevo León",
-      "date": "2025-07-10",
-      "endDate": "2025-07-10",
-      "status": "terminado",
-      "worker": "Carlos Rodríguez",
+      "date": "2025-11-30",
+      "endDate": "2025-11-30",
+      "status": "activo",
+      "worker": "Por asignar",
       "workerId": "3",
-      "cameras": [
-        "CS5",
-        "CS6"
-      ],
-      "holes": [
-        5,
-        11,
-        17
-      ],
-      "days": 1,
-      "field": "La Herradura Golf Club",
-      "createdAt": "2024-01-05T09:15:00Z"
-    },
-    {
-      "id": "4",
-      "name": "Gira GADO",
-      "location": "atlasCC, asdasd",
-      "state": "Jalisco",
-      "date": "2025-11-30",
-      "endDate": "2025-11-30",
-      "status": "activo",
-      "worker": "Por asignar",
-      "workerId": "",
-      "cameras": [],
-      "holes": [
-        2
-      ],
-      "days": 1,
-      "field": "atlasCC",
-      "createdAt": "2025-11-12T17:09:01.240Z"
-    },
-    {
-      "id": "5",
-      "name": "Porsche Cup",
-      "location": "Guadalajara Country Club, Zapopan",
-      "state": "Jalisco",
-      "date": "2025-11-21",
-      "endDate": "2025-11-21",
-      "status": "pendiente",
-      "worker": "Por asignar",
-      "workerId": "2",
-      "cameras": [],
-      "holes": [
-        4
-      ],
-      "days": 1,
-      "field": "Guadalajara Country Club",
-      "createdAt": "2025-11-12T17:37:31.711Z"
-    },
-    {
-      "id": "6",
-      "name": "adsasd",
-      "location": "asdasd, asdasda",
-      "state": "CDMX",
-      "date": "2025-11-27",
-      "endDate": "2025-11-27",
-      "status": "pendiente",
-      "worker": "Por asignar",
-      "workerId": "6",
       "cameras": [],
       "holes": [
         2
       ],
       "days": 1,
       "field": "asdasd",
-      "createdAt": "2025-11-12T17:39:45.352Z"
-    },
-    {
-      "id": "7",
-      "name": "asdasd",
-      "location": "asdasd, asdasdas",
-      "state": "CDMX",
-      "date": "2026-11-30",
-      "endDate": "2026-11-30",
-      "status": "pendiente",
-      "worker": "Por asignar",
-      "workerId": "6",
-      "cameras": [],
-      "holes": [
-        2
-      ],
-      "days": 1,
-      "field": "asdasd",
-      "createdAt": "2025-11-12T17:42:31.549Z"
-    },
-    {
-      "id": "8",
-      "name": "asdasd",
-      "location": "asda, asdasdasd",
-      "state": "CDMX",
-      "date": "2025-11-30",
-      "endDate": "2025-11-30",
-      "status": "pendiente",
-      "worker": "Por asignar",
-      "workerId": "6",
-      "cameras": [],
-      "holes": [
-        2
-      ],
-      "days": 1,
-      "field": "asda",
-      "createdAt": "2025-11-12T17:47:47.987Z"
-    },
-    {
-      "id": "9",
-      "name": "hola",
-      "location": "hola, hola",
-      "state": "Baja California",
-      "date": "2025-11-30",
-      "endDate": "2025-11-30",
-      "status": "pendiente",
-      "worker": "Por asignar",
-      "workerId": "5",
-      "cameras": [],
-      "holes": [
-        1
-      ],
-      "days": 1,
-      "field": "hola",
-      "createdAt": "2025-11-12T17:48:33.329Z"
-    },
-    {
-      "id": 10,
-      "name": "hola",
-      "location": "chapultepec, zapopan",
-      "state": "Jalisco",
-      "date": "2025-11-30",
-      "endDate": "2025-11-30",
-      "status": "pendiente",
-      "worker": "Por asignar",
-      "workerId": "2",
-      "cameras": [],
-      "holes": [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6
-      ],
-      "days": 1,
-      "field": "chapultepec",
-      "createdAt": "2025-11-12T17:52:32.181Z"
-    },
-    {
-      "id": 11,
-      "name": "asdasd",
-      "location": "asdasd, asdasd",
-      "state": "Jalisco",
-      "date": "2025-11-30",
-      "endDate": "2025-11-30",
-      "status": "pendiente",
-      "worker": "Por asignar",
-      "workerId": "2",
-      "cameras": [],
-      "holes": [
-        2
-      ],
-      "days": 1,
-      "field": "asdasd",
-      "createdAt": "2025-11-12T19:26:22.973Z"
-    },
-    {
-      "id": 12,
-      "name": "asdasdas",
-      "location": "asdasd, asdasd",
-      "state": "CDMX",
-      "date": "2025-11-30",
-      "endDate": "2025-12-01",
-      "status": "pendiente",
-      "worker": "Por asignar",
-      "workerId": "6",
-      "cameras": [],
-      "holes": [
-        2
-      ],
-      "days": 2,
-      "field": "asdasd",
-      "createdAt": "2025-11-12T19:33:45.861Z"
+      "updatedAt": "2025-11-14T19:53:26.958Z"
     }
   ],
   "workers": [
     {
       "id": "1",
-      "name": "Juan Pérez",
-      "state": "CDMX",
-      "status": "activo",
-      "phone": "55-1234-5678",
-      "email": "juan@pxgolf.com",
+      "name": "Ernesto De Keratry",
+      "state": "Jalisco",
+      "phone": "3314299723",
+      "email": "ernestodekeratry@pixgolf.com",
+      "status": "disponible",
+      "specialty": "Mantenimiento equipos",
+      "camerasAssigned": [],
       "photo": "",
-      "specialty": "Instalación cámaras solares",
-      "camerasAssigned": []
+      "updatedAt": "2025-11-13T04:13:11.838Z"
     },
     {
       "id": "2",
-      "name": "María González",
+      "name": "Carolina Trinidad",
       "state": "Jalisco",
+      "phone": "3334770053",
+      "email": "carolina@gmail.com",
       "status": "disponible",
-      "phone": "33-8765-4321",
-      "email": "maria@pxgolf.com",
-      "photo": "",
       "specialty": "Coordinación torneos",
-      "camerasAssigned": []
+      "camerasAssigned": [],
+      "photo": "",
+      "updatedAt": "2025-11-13T04:14:26.651Z"
     },
     {
       "id": "3",
-      "name": "Carlos Rodríguez",
-      "state": "Nuevo León",
+      "name": "Gabriel Camberos Trinidad",
+      "state": "Jalisco",
+      "phone": "3321712415",
+      "email": "gavo.ct@gmail.com",
       "status": "disponible",
-      "phone": "81-5555-1234",
-      "email": "carlos@pxgolf.com",
+      "specialty": "Soporte técnico",
+      "camerasAssigned": [],
       "photo": "",
-      "specialty": "Mantenimiento equipos",
-      "camerasAssigned": []
+      "updatedAt": "2025-11-13T04:14:40.271Z"
     },
     {
       "id": "4",
-      "name": "Ana Martínez",
-      "state": "Yucatán",
-      "status": "activo",
-      "phone": "999-123-4567",
-      "email": "ana@pxgolf.com",
-      "photo": "",
-      "specialty": "Logística envíos",
-      "camerasAssigned": []
-    },
-    {
-      "id": "5",
-      "name": "Roberto Silva",
-      "state": "Baja California",
+      "name": "Arturo Alvarado Morales",
+      "state": "Quintana Roo",
+      "phone": "9982605176",
+      "email": "arturo@gmail.com",
       "status": "disponible",
-      "phone": "664-987-6543",
-      "email": "roberto@pxgolf.com",
-      "photo": "",
       "specialty": "Instalación cámaras solares",
-      "camerasAssigned": []
-    },
-    {
-      "id": "6",
-      "name": "Laura Hernández",
-      "state": "CDMX",
-      "status": "disponible",
-      "phone": "55-4321-8765",
-      "email": "laura@pxgolf.com",
+      "camerasAssigned": [],
       "photo": "",
-      "specialty": "Soporte técnico",
-      "camerasAssigned": []
+      "updatedAt": "2025-11-13T04:14:49.631Z"
     }
   ],
   "cameras": [
@@ -310,119 +74,48 @@
       "id": "CS1",
       "model": "Hikvision DS-2XS6A25G0-I/CH20S40",
       "type": "Solar",
-      "status": "en uso",
-      "location": "CDMX",
-      "batteryLevel": 85,
-      "lastMaintenance": "2024-01-10"
-    },
-    {
-      "id": "CS2",
-      "model": "Hikvision DS-2XS6A25G0-I/CH20S40",
-      "type": "Solar",
-      "status": "en uso",
-      "location": "CDMX",
-      "batteryLevel": 92,
-      "lastMaintenance": "2024-01-10"
-    },
-    {
-      "id": "CS3",
-      "model": "Hikvision DS-2XS6825G0-I/CH20S40",
-      "type": "Solar",
       "status": "disponible",
       "location": "Jalisco",
-      "batteryLevel": 100,
-      "lastMaintenance": "2024-01-12"
-    },
-    {
-      "id": "CS4",
-      "model": "Hikvision DS-2XS6825G0-I/CH20S40",
-      "type": "Solar",
-      "status": "disponible",
-      "location": "Jalisco",
-      "batteryLevel": 100,
-      "lastMaintenance": "2024-01-12"
-    },
-    {
-      "id": "CS5",
-      "model": "Hikvision DS-2XS6A25G0-I/CH20S40",
-      "type": "Solar",
-      "status": "disponible",
-      "location": "Nuevo León",
-      "batteryLevel": 95,
-      "lastMaintenance": "2024-01-08"
-    },
-    {
-      "id": "CS6",
-      "model": "Hikvision DS-2XS6825G0-I/CH20S40",
-      "type": "Solar",
-      "status": "disponible",
-      "location": "Nuevo León",
-      "batteryLevel": 88,
-      "lastMaintenance": "2024-01-08"
-    },
-    {
-      "id": "CS7",
-      "model": "Hikvision DS-2XS6A25G0-I/CH20S40",
-      "type": "Solar",
-      "status": "mantenimiento",
-      "location": "Almacén",
-      "batteryLevel": 45,
-      "lastMaintenance": "2024-01-15"
-    },
-    {
-      "id": "CS8",
-      "model": "Hikvision DS-2XS6825G0-I/CH20S40",
-      "type": "Solar",
-      "status": "disponible",
-      "location": "Almacén",
-      "batteryLevel": 100,
-      "lastMaintenance": "2024-01-05"
-    },
-    {
-      "id": "CS9",
-      "model": "Hikvision DS-2XS6A25G0-I/CH20S40",
-      "type": "Solar",
-      "status": "disponible",
-      "location": "Almacén",
-      "batteryLevel": 100,
-      "lastMaintenance": "2024-01-03"
-    },
-    {
-      "id": "CS10",
-      "model": "Hikvision DS-2XS6825G0-I/CH20S40",
-      "type": "Solar",
-      "status": "disponible",
-      "location": "Almacén",
-      "batteryLevel": 100,
-      "lastMaintenance": "2024-01-03"
+      "serialNumber": "12345678910",
+      "simNumber": "3321712415",
+      "assignedTo": "Ernesto De Keratry",
+      "notes": "Antena rota",
+      "createdAt": "2025-11-14T18:26:03.368Z",
+      "updatedAt": "2025-11-14T19:50:09.648Z"
     }
   ],
   "shipments": [
     {
       "id": "ENV-001",
       "cameras": [
-        "CS7",
-        "CS8"
+        "CS1"
       ],
-      "destination": "Cancún, Quintana Roo",
-      "recipient": "Luis Hernández",
-      "sender": "Almacén Central",
-      "date": "2025-07-09",
-      "status": "enviado",
-      "trackingNumber": "TRK789123456"
+      "destination": "Quintana Roo",
+      "recipient": "Arturo Alvarado Morales",
+      "sender": "",
+      "shipper": "Ernesto De Keratry",
+      "date": "2025-11-14",
+      "status": "entregado",
+      "trackingNumber": "TRK1763149707377",
+      "extraItems": "lol",
+      "createdAt": "2025-11-14T19:48:53.669Z",
+      "updatedAt": "2025-11-14T19:49:10.462Z"
     },
     {
       "id": "ENV-002",
       "cameras": [
-        "CS9",
-        "CS10"
+        "CS1"
       ],
-      "destination": "Tijuana, Baja California",
-      "recipient": "Roberto Silva",
-      "sender": "Almacén Central",
-      "date": "2025-07-11",
-      "status": "pendiente",
-      "trackingNumber": "TRK789123457"
+      "destination": "Jalisco",
+      "recipient": "Ernesto De Keratry",
+      "sender": "potosinos",
+      "shipper": "Arturo Alvarado Morales",
+      "date": "2025-11-14",
+      "status": "entregado",
+      "trackingNumber": "TRK1763149764877",
+      "extraItems": "1 cargador",
+      "createdAt": "2025-11-14T19:49:49.183Z",
+      "updatedAt": "2025-11-14T19:50:09.648Z"
     }
   ]
 }

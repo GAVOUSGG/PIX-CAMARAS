@@ -4,18 +4,20 @@ import {
   MoreVertical,
   Edit,
   Trash2,
-  Camera,
+  Truck,
+  Package,
+  MapPin,
+  Calendar,
   User,
-  MessageCircle,
   Hash,
 } from "lucide-react";
 import StatusBadge from "../UI/StatusBadge";
 
-const CamerasTable = ({
-  cameras,
-  onEditCamera,
-  onDeleteCamera,
-  onViewCamera,
+const ShipmentsTable = ({
+  shipments,
+  onEditShipment,
+  onDeleteShipment,
+  onViewShipment,
 }) => {
   const [actionMenu, setActionMenu] = useState(null);
 
@@ -31,36 +33,40 @@ const CamerasTable = ({
     }
   }, [actionMenu]);
 
-  const handleEdit = (camera) => {
-    console.log("✏️ Editando cámara:", camera);
-    onEditCamera(camera);
+  const handleEdit = (shipment) => {
+    console.log("✏️ Editando envío:", shipment);
+    onEditShipment(shipment);
     setActionMenu(null);
   };
 
-  const handleDelete = (cameraId) => {
-    console.log("🗑️ Solicitando eliminar cámara:", cameraId);
-    if (confirm("¿Estás seguro de que quieres eliminar esta cámara?")) {
-      onDeleteCamera(cameraId);
+  const handleDelete = (shipmentId) => {
+    console.log("🗑️ Solicitando eliminar envío:", shipmentId);
+    if (confirm("¿Estás seguro de que quieres eliminar este envío?")) {
+      onDeleteShipment(shipmentId);
     }
     setActionMenu(null);
   };
 
-  const handleView = (camera) => {
-    console.log("👀 Viendo cámara:", camera);
-    onViewCamera(camera);
+  const handleView = (shipment) => {
+    console.log("👀 Viendo envío:", shipment);
+    onViewShipment(shipment);
     setActionMenu(null);
   };
 
-  const getTypeBadgeColor = (type) => {
-    switch (type) {
-      case "Solar":
-        return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
-      case "Eléctrica":
-        return "bg-blue-500/20 text-blue-400 border-blue-500/30";
-      case "Híbrida":
-        return "bg-green-500/20 text-green-400 border-green-500/30";
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "enviado":
+        return "text-green-400";
+      case "preparando":
+        return "text-yellow-400";
+      case "pendiente":
+        return "text-orange-400";
+      case "entregado":
+        return "text-blue-400";
+      case "cancelado":
+        return "text-red-400";
       default:
-        return "bg-gray-500/20 text-gray-400 border-gray-500/30";
+        return "text-gray-400";
     }
   };
 
@@ -72,28 +78,28 @@ const CamerasTable = ({
             <thead className="bg-white/5">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  ID
+                  ID Envío
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Modelo
+                  Cámaras
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Tipo
+                  Destino
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  N° Serie
+                  Destinatario
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  SIM
+                  Envía
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                  Fecha
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                   Estado
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Ubicación
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Asignada a
+                  Tracking
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                   Acciones
@@ -101,100 +107,107 @@ const CamerasTable = ({
               </tr>
             </thead>
             <tbody className="divide-y divide-white/10">
-              {cameras && cameras.length > 0 ? (
-                cameras.map((camera) => (
+              {shipments && shipments.length > 0 ? (
+                shipments.map((shipment) => (
                   <tr
-                    key={camera.id}
+                    key={shipment.id}
                     className="hover:bg-white/5 transition-colors"
                   >
-                    {/* ID */}
+                    {/* ID Envío */}
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center space-x-2">
-                        <Camera className="w-4 h-4 text-gray-400" />
+                        <Truck className="w-4 h-4 text-gray-400" />
                         <div>
-                          <div className="text-sm font-medium text-white">
-                            {camera.id}
+                          <div className="text-sm font-medium text-white font-mono">
+                            {shipment.id}
                           </div>
+                          {shipment.sender && (
+                            <div className="text-xs text-gray-400">
+                              {shipment.sender}
+                            </div>
+                          )}
                         </div>
                       </div>
                     </td>
 
-                    {/* Modelo */}
+                    {/* Cámaras */}
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-300">
-                        {camera.model}
+                      <div className="flex flex-wrap gap-1">
+                        {shipment.cameras &&
+                          shipment.cameras.map((cameraId) => (
+                            <span
+                              key={cameraId}
+                              className="bg-blue-500/20 text-blue-400 px-2 py-1 rounded text-xs"
+                            >
+                              {cameraId}
+                            </span>
+                          ))}
                       </div>
-                      {camera.notes && (
+                      <div className="text-xs text-gray-400 mt-1">
+                        {shipment.cameras?.length || 0} cámaras
+                      </div>
+                      {shipment.extraItems && (
                         <div
-                          className="text-xs text-gray-500 truncate max-w-xs"
-                          title={camera.notes}
+                          className="text-xs text-yellow-400 mt-1"
+                          title={shipment.extraItems}
                         >
-                          {camera.notes}
+                          + items extra
                         </div>
                       )}
                     </td>
 
-                    {/* Tipo */}
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div
-                        className={`px-3 py-1 rounded-full text-xs font-medium border flex items-center space-x-1 w-fit ${getTypeBadgeColor(
-                          camera.type
-                        )}`}
-                      >
-                        <span>☀️</span>
-                        <span>{camera.type}</span>
-                      </div>
-                    </td>
-
-                    {/* Número de Serie */}
+                    {/* Destino */}
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center space-x-2">
-                        <Hash className="w-4 h-4 text-gray-400" />
-                        <div className="text-sm text-gray-300 font-mono">
-                          {camera.serialNumber}
+                        <MapPin className="w-4 h-4 text-gray-400" />
+                        <div className="text-sm text-gray-300">
+                          {shipment.destination}
                         </div>
                       </div>
                     </td>
 
-                    {/* Número de SIM */}
+                    {/* Destinatario */}
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center space-x-2">
-                        <MessageCircle className="w-4 h-4 text-gray-400" />
-                        <div className="text-sm text-gray-300 font-mono">
-                          {camera.simNumber || (
-                            <span className="text-gray-500 italic">N/A</span>
-                          )}
+                        <User className="w-4 h-4 text-gray-400" />
+                        <div className="text-sm text-gray-300">
+                          {shipment.recipient}
+                        </div>
+                      </div>
+                    </td>
+
+                    {/* Persona que Envía */}
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center space-x-2">
+                        <User className="w-4 h-4 text-gray-400" />
+                        <div className="text-sm text-gray-300">
+                          {shipment.shipper}
+                        </div>
+                      </div>
+                    </td>
+
+                    {/* Fecha */}
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center space-x-2">
+                        <Calendar className="w-4 h-4 text-gray-400" />
+                        <div className="text-sm text-gray-300">
+                          {shipment.date}
                         </div>
                       </div>
                     </td>
 
                     {/* Estado */}
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <StatusBadge status={camera.status} />
+                      <StatusBadge status={shipment.status} />
                     </td>
 
-                    {/* Ubicación */}
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-300">
-                        {camera.location}
-                      </div>
-                    </td>
-
-                    {/* Asignada a */}
+                    {/* Tracking */}
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center space-x-2">
-                        {camera.assignedTo ? (
-                          <>
-                            <User className="w-4 h-4 text-gray-400" />
-                            <div className="text-sm text-gray-300">
-                              {camera.assignedTo}
-                            </div>
-                          </>
-                        ) : (
-                          <span className="text-gray-500 text-sm italic">
-                            No asignada
-                          </span>
-                        )}
+                        <Hash className="w-4 h-4 text-gray-400" />
+                        <div className="text-sm text-gray-300 font-mono">
+                          {shipment.trackingNumber || "N/A"}
+                        </div>
                       </div>
                     </td>
 
@@ -205,8 +218,8 @@ const CamerasTable = ({
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
-                            console.log("👀 Click en botón Ver cámara");
-                            handleView(camera);
+                            console.log("👀 Click en botón Ver envío");
+                            handleView(shipment);
                           }}
                           className="text-emerald-400 hover:text-emerald-300 transition-colors p-1 rounded hover:bg-white/10"
                           title="Ver detalles"
@@ -219,9 +232,9 @@ const CamerasTable = ({
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
-                              console.log("📋 Click en menú acciones cámara");
+                              console.log("📋 Click en menú acciones envío");
                               setActionMenu(
-                                actionMenu === camera.id ? null : camera.id
+                                actionMenu === shipment.id ? null : shipment.id
                               );
                             }}
                             className="text-gray-400 hover:text-white transition-colors p-1 rounded hover:bg-white/10"
@@ -229,14 +242,14 @@ const CamerasTable = ({
                             <MoreVertical className="w-4 h-4" />
                           </button>
 
-                          {actionMenu === camera.id && (
+                          {actionMenu === shipment.id && (
                             <div className="absolute right-0 mt-2 w-48 bg-slate-800 border border-white/20 rounded-lg shadow-xl z-50">
                               <div className="p-2">
                                 {/* Ver detalles */}
                                 <button
                                   onClick={(e) => {
                                     e.stopPropagation();
-                                    handleView(camera);
+                                    handleView(shipment);
                                   }}
                                   className="w-full flex items-center space-x-3 px-3 py-2 text-sm text-white hover:bg-white/10 rounded-lg transition-colors"
                                 >
@@ -248,12 +261,12 @@ const CamerasTable = ({
                                 <button
                                   onClick={(e) => {
                                     e.stopPropagation();
-                                    handleEdit(camera);
+                                    handleEdit(shipment);
                                   }}
                                   className="w-full flex items-center space-x-3 px-3 py-2 text-sm text-blue-400 hover:bg-white/10 rounded-lg transition-colors"
                                 >
                                   <Edit className="w-4 h-4" />
-                                  <span>Editar cámara</span>
+                                  <span>Editar envío</span>
                                 </button>
 
                                 {/* Eliminar */}
@@ -261,12 +274,12 @@ const CamerasTable = ({
                                 <button
                                   onClick={(e) => {
                                     e.stopPropagation();
-                                    handleDelete(camera.id);
+                                    handleDelete(shipment.id);
                                   }}
                                   className="w-full flex items-center space-x-3 px-3 py-2 text-sm text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
                                 >
                                   <Trash2 className="w-4 h-4" />
-                                  <span>Eliminar cámara</span>
+                                  <span>Eliminar envío</span>
                                 </button>
                               </div>
                             </div>
@@ -282,7 +295,7 @@ const CamerasTable = ({
                     colSpan="9"
                     className="px-6 py-4 text-center text-gray-400"
                   >
-                    No hay cámaras para mostrar
+                    No hay envíos para mostrar
                   </td>
                 </tr>
               )}
@@ -294,4 +307,4 @@ const CamerasTable = ({
   );
 };
 
-export default CamerasTable;
+export default ShipmentsTable;

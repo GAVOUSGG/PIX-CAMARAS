@@ -1,296 +1,652 @@
-import { useState, useEffect } from 'react';
-import { apiService } from '../services/api';
-import { tournaments as mockTournaments, workers as mockWorkers, cameras as mockCameras, shipments as mockShipments, tasks as mockTasks } from '../data/mockData';
+import { useState, useEffect } from "react";
+import { apiService } from "../services/api";
+
+// Datos iniciales de respaldo
+const initialTournaments = [
+  {
+    id: "1",
+    name: "Torneo Empresarial CDMX",
+    location: "Club de Golf Chapultepec, Ciudad de México",
+    state: "CDMX",
+    date: "2025-07-15",
+    endDate: "2025-07-15",
+    status: "activo",
+    worker: "Juan Pérez",
+    workerId: "1",
+    cameras: ["CS1", "CS2"],
+    holes: [7, 12, 16],
+    days: 1,
+    field: "Club de Golf Chapultepec",
+  },
+];
+
+const initialWorkers = [
+  {
+    id: "1",
+    name: "Juan Pérez",
+    state: "CDMX",
+    status: "activo",
+    phone: "55-1234-5678",
+    email: "juan@pxgolf.com",
+    specialty: "Instalación cámaras solares",
+    camerasAssigned: [],
+  },
+];
+
+const initialCameras = [
+  {
+    id: "CS1",
+    model: "Hikvision DS-2XS6A25G0-I/CH20S40",
+    type: "Solar",
+    status: "en uso",
+    location: "CDMX",
+    batteryLevel: 85,
+    lastMaintenance: "2024-01-10",
+  },
+];
+
+const initialShipments = [
+  {
+    id: "ENV-001",
+    cameras: ["CS7", "CS8"],
+    destination: "Cancún, Quintana Roo",
+    recipient: "Luis Hernández",
+    sender: "Almacén Central",
+    date: "2025-07-09",
+    status: "enviado",
+    trackingNumber: "TRK789123456",
+  },
+];
 
 export const useAppState = () => {
-  const [activeTab, setActiveTab] = useState('dashboard');
+  const [activeTab, setActiveTab] = useState("dashboard");
   const [selectedTournament, setSelectedTournament] = useState(null);
+
+  // Estados de datos
   const [tournamentsData, setTournamentsData] = useState([]);
   const [workersData, setWorkersData] = useState([]);
   const [camerasData, setCamerasData] = useState([]);
   const [shipmentsData, setShipmentsData] = useState([]);
-  const [tasksData, setTasksData] = useState([]);
+
+  // Estados de carga y conexión
   const [loading, setLoading] = useState(true);
   const [apiAvailable, setApiAvailable] = useState(false);
 
-  // Función para generar ID consecutivo
-  const generateConsecutiveId = () => {
-    if (tournamentsData.length === 0) {
-      return 1;
-    }
-    
-    const maxId = Math.max(...tournamentsData.map(t => t.id));
-    return maxId + 1;
-  };
-
-  // Función para verificar si la API está disponible
-  const checkApiAvailability = async () => {
-    try {
-      console.log('🔍 Verificando disponibilidad de API...');
-      const response = await fetch('http://127.0.0.1:3001/tournaments', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      const isAvailable = response.ok;
-      console.log('🔍 API disponible:', isAvailable);
-      return isAvailable;
-    } catch (error) {
-      console.log('🔍 API no disponible:', error.message);
-      return false;
-    }
-  };
-
-  // NUEVA FUNCIÓN MEJORADA: Verificar necesidades de cámaras con más detalle
-  const checkWorkerCameraNeeds = (workerId, tournamentId, holesCount, camerasData) => {
-    const worker = workersData.find(w => w.id === parseInt(workerId));
-    const camerasNeeded = holesCount * 2;
-    
-    if (!worker) return null;
-    
-    // Obtener cámaras actualmente asignadas al trabajador
-    const assignedCameras = worker.camerasAssigned || [];
-    
-    // Verificar cámaras disponibles en el almacén
-    const availableCameras = camerasData.filter(camera => 
-      camera.status === 'disponible' && camera.location === 'Almacén'
-    );
-    
-    if (assignedCameras.length === 0) {
-      return {
-        needsCameras: true,
-        camerasNeeded: camerasNeeded,
-        assignedCameras: [],
-        availableCameras: availableCameras,
-        reason: 'Trabajador sin cámaras asignadas',
-        canFulfill: availableCameras.length >= camerasNeeded
-      };
-    }
-    
-    // Si tiene cámaras pero no suficientes
-    if (assignedCameras.length < camerasNeeded) {
-      const additionalNeeded = camerasNeeded - assignedCameras.length;
-      return {
-        needsCameras: true,
-        camerasNeeded: additionalNeeded,
-        assignedCameras: assignedCameras,
-        availableCameras: availableCameras,
-        reason: `Trabajador tiene ${assignedCameras.length} cámaras, necesita ${additionalNeeded} más`,
-        canFulfill: availableCameras.length >= additionalNeeded
-      };
-    }
-    
-    return { 
-      needsCameras: false,
-      assignedCameras: assignedCameras,
-      availableCameras: []
-    };
-  };
-
-  // NUEVA FUNCIÓN MEJORADA: Crear tarea de envío con información de cámaras
-  const createShipmentTask = (tournament, worker, cameraCheck) => {
-    const taskId = Date.now();
-    const dueDate = new Date(tournament.date);
-    dueDate.setDate(dueDate.getDate() - 2);
-    
-    const newTask = {
-      id: taskId,
-      type: 'camera_shipment',
-      title: `Envío de cámaras para ${tournament.name}`,
-      description: `${worker.name} necesita ${cameraCheck.camerasNeeded} cámaras para ${tournament.name} en ${tournament.location}`,
-      assignedTo: worker.name,
-      workerId: worker.id,
-      workerPhone: worker.phone,
-      tournamentId: tournament.id,
-      tournamentName: tournament.name,
-      tournamentLocation: tournament.location,
-      state: worker.state,
-      camerasNeeded: cameraCheck.camerasNeeded,
-      assignedCameras: cameraCheck.assignedCameras || [],
-      availableCameras: cameraCheck.availableCameras || [],
-      selectedCameras: [],
-      priority: cameraCheck.canFulfill ? 'media' : 'alta',
-      dueDate: dueDate.toISOString().split('T')[0],
-      status: 'pendiente',
-      createdAt: new Date().toISOString()
-    };
-    
-    setTasksData(prev => {
-      const newData = [...prev, newTask];
-      localStorage.setItem('pixgolf-tasks', JSON.stringify(newData));
-      return newData;
-    });
-    
-    console.log('📋 Nueva tarea de envío creada:', newTask);
-    return newTask;
-  };
-
   // Cargar datos iniciales
+  // En useAppState.js - mejorar el useEffect
   useEffect(() => {
     const loadData = async () => {
-      setLoading(true);
-      
       try {
-        const isApiAvailable = await checkApiAvailability();
-        setApiAvailable(isApiAvailable);
+        setLoading(true);
+        console.log("🔄 [useAppState] Iniciando carga de datos...");
 
-        if (isApiAvailable) {
-          console.log('✅ API disponible, cargando datos desde JSON Server...');
-          const [tournaments, workers, cameras, shipments] = await Promise.all([
+        // Intentar cargar desde API
+        try {
+          console.log("🌐 [useAppState] Intentando conectar con API...");
+          const workers = await apiService.getWorkers();
+          console.log(
+            "✅ [useAppState] Datos cargados desde API:",
+            workers.length,
+            "trabajadores"
+          );
+
+          setWorkersData(workers);
+          setApiAvailable(true);
+
+          // Cargar también los otros datos
+          const [tournaments, cameras, shipments] = await Promise.all([
             apiService.getTournaments(),
-            apiService.getWorkers(),
             apiService.getCameras(),
-            apiService.getShipments()
+            apiService.getShipments(),
           ]);
 
           setTournamentsData(tournaments);
-          setWorkersData(workers);
           setCamerasData(cameras);
           setShipmentsData(shipments);
-
-          localStorage.setItem('pixgolf-tournaments', JSON.stringify(tournaments));
-          localStorage.setItem('pixgolf-workers', JSON.stringify(workers));
-          localStorage.setItem('pixgolf-cameras', JSON.stringify(cameras));
-        } else {
-          throw new Error('API no disponible');
+        } catch (apiError) {
+          console.warn(
+            "⚠️ [useAppState] Error cargando desde API, usando datos locales:",
+            apiError
+          );
+          setApiAvailable(false);
+          setWorkersData(initialWorkers);
+          setTournamentsData(initialTournaments);
+          setCamerasData(initialCameras);
+          setShipmentsData(initialShipments);
         }
       } catch (error) {
-        console.warn('❌ No se pudo conectar con la API, usando datos locales:', error.message);
-        
-        const savedTournaments = localStorage.getItem('pixgolf-tournaments');
-        const savedWorkers = localStorage.getItem('pixgolf-workers');
-        const savedCameras = localStorage.getItem('pixgolf-cameras');
-        const savedTasks = localStorage.getItem('pixgolf-tasks');
-
-        if (savedTournaments && savedTournaments !== '[]' && savedTournaments !== 'null') {
-          console.log('📁 Cargando datos desde localStorage...');
-          setTournamentsData(JSON.parse(savedTournaments));
-          setWorkersData(JSON.parse(savedWorkers || JSON.stringify(mockWorkers)));
-          setCamerasData(JSON.parse(savedCameras || JSON.stringify(mockCameras)));
-        } else {
-          console.log('🔄 Usando datos mock iniciales...');
-          setTournamentsData(mockTournaments);
-          setWorkersData(mockWorkers);
-          setCamerasData(mockCameras);
-        }
-
-        if (savedTasks && savedTasks !== '[]' && savedTasks !== 'null') {
-          setTasksData(JSON.parse(savedTasks));
-        } else {
-          setTasksData(mockTasks);
-        }
-
-        setShipmentsData(mockShipments);
+        console.error("❌ [useAppState] Error crítico:", error);
+        setApiAvailable(false);
+        setWorkersData(initialWorkers);
+        setTournamentsData(initialTournaments);
+        setCamerasData(initialCameras);
+        setShipmentsData(initialShipments);
       } finally {
         setLoading(false);
+        console.log("🏁 [useAppState] Carga de datos completada");
       }
     };
 
     loadData();
   }, []);
+  // ========== FUNCIONES PARA TRABAJADORES ==========
+  const createWorker = async (workerData) => {
+    try {
+      console.log("🎯 Creando trabajador:", workerData);
 
-  // Torneos - Con IDs consecutivos y detección MEJORADA de cámaras
-  const createTournament = (tournament) => {
-    const newTournament = { ...tournament, id: Date.now() };
-    setTournamentsData(prev => [newTournament, ...(prev || [])]);
-  };
+      if (apiAvailable) {
+        // Calcular el próximo ID consecutivo
+        const nextId = await getNextWorkerId();
+        const workerWithId = { ...workerData, id: nextId.toString() };
 
-  const updateTournament = (id, patch) => {
-    setTournamentsData(prev => prev.map(t => t.id === id ? { ...t, ...patch } : t));
-    if (selectedTournament && selectedTournament.id === id) {
-      setSelectedTournament(prev => prev ? { ...prev, ...patch } : prev);
-    }
-  };
+        console.log("📡 Enviando a API con ID:", nextId);
+        const newWorker = await apiService.createWorker(workerWithId);
+        console.log("✅ Trabajador creado en API:", newWorker);
 
-  const deleteTournament = (id) => {
-    setTournamentsData(prev => prev.filter(t => t.id !== id));
-    if (selectedTournament && selectedTournament.id === id) {
-      setSelectedTournament(null);
-    }
-  };
+        // Actualizar estado local
+        setWorkersData((prev) => [...prev, newWorker]);
+        return newWorker;
+      } else {
+        // Modo offline - calcular ID local
+        const nextId = getNextWorkerIdLocal();
+        const newWorker = {
+          ...workerData,
+          id: nextId.toString(),
+          createdAt: new Date().toISOString(),
+        };
 
-  // Trabajadores
-  const updateWorker = async (id, updates) => {
-    setWorkersData(prev => {
-      const newData = prev.map(w => w.id === id ? { ...w, ...updates } : w);
-      localStorage.setItem('pixgolf-workers', JSON.stringify(newData));
-      return newData;
-    });
-
-    if (apiAvailable) {
-      try {
-        await apiService.updateWorker(id, updates);
-      } catch (apiError) {
-        console.warn('Error actualizando trabajador en API:', apiError);
+        setWorkersData((prev) => [...prev, newWorker]);
+        return newWorker;
       }
+    } catch (error) {
+      console.error("❌ Error creating worker:", error);
+      throw error;
     }
   };
 
-  // Cámaras
-  const updateCamera = async (id, updates) => {
-    setCamerasData(prev => {
-      const newData = prev.map(c => c.id === id ? { ...c, ...updates } : c);
-      localStorage.setItem('pixgolf-cameras', JSON.stringify(newData));
-      return newData;
-    });
+  // Función para obtener el próximo ID consecutivo desde la API
+  const getNextWorkerId = async () => {
+    try {
+      const workers = await apiService.getWorkers();
+      if (workers.length === 0) return 1;
 
-    if (apiAvailable) {
-      try {
-        await apiService.updateCamera(id, updates);
-      } catch (apiError) {
-        console.warn('Error actualizando cámara en API:', apiError);
-      }
-    }
-  };
-
-  // NUEVA FUNCIÓN: Completar tarea
-  const completeTask = async (taskId) => {
-    setTasksData(prev => {
-      const newData = prev.map(task => 
-        task.id === taskId ? { ...task, status: 'completada' } : task
+      // Encontrar el máximo ID numérico
+      const maxId = Math.max(
+        ...workers.map((worker) => {
+          const id = parseInt(worker.id);
+          return isNaN(id) ? 0 : id;
+        })
       );
-      localStorage.setItem('pixgolf-tasks', JSON.stringify(newData));
-      return newData;
-    });
+
+      return maxId + 1;
+    } catch (error) {
+      console.error("Error getting next ID:", error);
+      // Fallback: usar timestamp
+      return Date.now();
+    }
   };
 
-  // NUEVA FUNCIÓN: Crear envío desde tarea
+  // Función para obtener el próximo ID consecutivo localmente
+  const getNextWorkerIdLocal = () => {
+    if (workersData.length === 0) return 1;
+
+    const maxId = Math.max(
+      ...workersData.map((worker) => {
+        const id = parseInt(worker.id);
+        return isNaN(id) ? 0 : id;
+      })
+    );
+
+    return maxId + 1;
+  };
+
+  const updateWorker = async (id, workerData) => {
+    try {
+      if (apiAvailable) {
+        const updatedWorker = await apiService.updateWorker(id, workerData);
+        setWorkersData((prev) =>
+          prev.map((worker) => (worker.id === id ? updatedWorker : worker))
+        );
+        return updatedWorker;
+      } else {
+        // Modo offline
+        setWorkersData((prev) =>
+          prev.map((worker) =>
+            worker.id === id
+              ? {
+                  ...worker,
+                  ...workerData,
+                  updatedAt: new Date().toISOString(),
+                }
+              : worker
+          )
+        );
+        return workerData;
+      }
+    } catch (error) {
+      console.error("Error updating worker:", error);
+      throw error;
+    }
+  };
+
+  const deleteWorker = async (id) => {
+    try {
+      if (apiAvailable) {
+        await apiService.deleteWorker(id);
+      }
+      setWorkersData((prev) => prev.filter((worker) => worker.id !== id));
+    } catch (error) {
+      console.error("Error deleting worker:", error);
+      throw error;
+    }
+  };
+
+  // ========== FUNCIONES PARA TORNEOS ==========
+  const createTournament = async (tournamentData) => {
+    try {
+      if (apiAvailable) {
+        const newTournament = await apiService.createTournament(tournamentData);
+        setTournamentsData((prev) => [...prev, newTournament]);
+        return newTournament;
+      } else {
+        // Modo offline
+        const newTournament = {
+          ...tournamentData,
+          id: Date.now().toString(),
+          createdAt: new Date().toISOString(),
+        };
+        setTournamentsData((prev) => [...prev, newTournament]);
+        return newTournament;
+      }
+    } catch (error) {
+      console.error("Error creating tournament:", error);
+      throw error;
+    }
+  };
+
+  // En useAppState.js - corregir la función updateTournament
+  const updateTournament = async (id, tournamentData) => {
+    try {
+      console.log("🔄 Actualizando torneo:", id, tournamentData);
+
+      // Encontrar el torneo actual para preservar los datos existentes
+      const currentTournament = tournamentsData.find((t) => t.id === id);
+      if (!currentTournament) {
+        throw new Error(`Torneo con ID ${id} no encontrado`);
+      }
+
+      // Combinar los datos existentes con los nuevos datos
+      const updatedData = {
+        ...currentTournament,
+        ...tournamentData,
+        updatedAt: new Date().toISOString(),
+      };
+
+      console.log("📦 Datos combinados para actualizar:", updatedData);
+
+      if (apiAvailable) {
+        const updatedTournament = await apiService.updateTournament(
+          id,
+          updatedData
+        );
+        setTournamentsData((prev) =>
+          prev.map((tournament) =>
+            tournament.id === id ? updatedTournament : tournament
+          )
+        );
+        return updatedTournament;
+      } else {
+        // Modo offline
+        setTournamentsData((prev) =>
+          prev.map((tournament) =>
+            tournament.id === id ? updatedData : tournament
+          )
+        );
+        return updatedData;
+      }
+    } catch (error) {
+      console.error("❌ Error updating tournament:", error);
+      throw error;
+    }
+  };
+
+  const deleteTournament = async (id) => {
+    try {
+      if (apiAvailable) {
+        await apiService.deleteTournament(id);
+      }
+      setTournamentsData((prev) =>
+        prev.filter((tournament) => tournament.id !== id)
+      );
+    } catch (error) {
+      console.error("Error deleting tournament:", error);
+      throw error;
+    }
+  };
+
+  // ========== FUNCIONES PARA CÁMARAS ==========
+  // En useAppState.js - agregar estas funciones
+
+  // En useAppState.js - agregar estas funciones después de las funciones de trabajadores
+
+  // ========== FUNCIONES PARA CÁMARAS ==========
+  const createCamera = async (cameraData) => {
+    try {
+      console.log("🎯 Creando cámara:", cameraData);
+
+      if (apiAvailable) {
+        const newCamera = await apiService.createCamera(cameraData);
+        setCamerasData((prev) => [...prev, newCamera]);
+        return newCamera;
+      } else {
+        // Modo offline
+        const newCamera = {
+          ...cameraData,
+          createdAt: new Date().toISOString(),
+        };
+        setCamerasData((prev) => [...prev, newCamera]);
+        return newCamera;
+      }
+    } catch (error) {
+      console.error("❌ Error creating camera:", error);
+      throw error;
+    }
+  };
+
+  const updateCamera = async (id, cameraData) => {
+    try {
+      console.log("🔄 Actualizando cámara:", id, cameraData);
+
+      const currentCamera = camerasData.find((c) => c.id === id);
+      if (!currentCamera) {
+        throw new Error(`Cámara con ID ${id} no encontrada`);
+      }
+
+      const updatedData = {
+        ...currentCamera,
+        ...cameraData,
+        updatedAt: new Date().toISOString(),
+      };
+
+      if (apiAvailable) {
+        const updatedCamera = await apiService.updateCamera(id, updatedData);
+        setCamerasData((prev) =>
+          prev.map((camera) => (camera.id === id ? updatedCamera : camera))
+        );
+        return updatedCamera;
+      } else {
+        setCamerasData((prev) =>
+          prev.map((camera) => (camera.id === id ? updatedData : camera))
+        );
+        return updatedData;
+      }
+    } catch (error) {
+      console.error("❌ Error updating camera:", error);
+      throw error;
+    }
+  };
+
+  const deleteCamera = async (id) => {
+    try {
+      if (apiAvailable) {
+        await apiService.deleteCamera(id);
+      }
+      setCamerasData((prev) => prev.filter((camera) => camera.id !== id));
+    } catch (error) {
+      console.error("❌ Error deleting camera:", error);
+      throw error;
+    }
+  };
+
+  // En useAppState.js - agregar estas funciones después de las funciones de cámaras
+
+  // ========== FUNCIONES PARA ENVÍOS ==========
+  // En useAppState.js - actualizar las funciones de envíos
+
+  // ========== FUNCIONES PARA ENVÍOS ==========
+  const createShipment = async (shipmentData) => {
+    try {
+      console.log("🎯 Creando envío:", shipmentData);
+
+      if (apiAvailable) {
+        const newShipment = await apiService.createShipment(shipmentData);
+        setShipmentsData((prev) => [...prev, newShipment]);
+
+        // Actualizar el estado de las cámaras a "EN ENVIO" si el estado es "enviado"
+        if (
+          shipmentData.cameras &&
+          shipmentData.cameras.length > 0 &&
+          shipmentData.status === "enviado"
+        ) {
+          shipmentData.cameras.forEach((cameraId) => {
+            updateCamera(cameraId, { status: "en envio" });
+          });
+        }
+
+        return newShipment;
+      } else {
+        // Modo offline
+        const newShipment = {
+          ...shipmentData,
+          createdAt: new Date().toISOString(),
+        };
+        setShipmentsData((prev) => [...prev, newShipment]);
+
+        // Actualizar cámaras en modo offline
+        if (
+          shipmentData.cameras &&
+          shipmentData.cameras.length > 0 &&
+          shipmentData.status === "enviado"
+        ) {
+          setCamerasData((prev) =>
+            prev.map((camera) =>
+              shipmentData.cameras.includes(camera.id)
+                ? { ...camera, status: "en envio" }
+                : camera
+            )
+          );
+        }
+
+        return newShipment;
+      }
+    } catch (error) {
+      console.error("❌ Error creating shipment:", error);
+      throw error;
+    }
+  };
+
+  const updateShipment = async (id, shipmentData) => {
+    try {
+      console.log("🔄 Actualizando envío:", id, shipmentData);
+
+      const currentShipment = shipmentsData.find((s) => s.id === id);
+      if (!currentShipment) {
+        throw new Error(`Envío con ID ${id} no encontrado`);
+      }
+
+      const updatedData = {
+        ...currentShipment,
+        ...shipmentData,
+        updatedAt: new Date().toISOString(),
+      };
+
+      // Lógica para manejar cambios de estado
+      await handleShipmentStatusChange(currentShipment, updatedData);
+
+      if (apiAvailable) {
+        const updatedShipment = await apiService.updateShipment(
+          id,
+          updatedData
+        );
+        setShipmentsData((prev) =>
+          prev.map((shipment) =>
+            shipment.id === id ? updatedShipment : shipment
+          )
+        );
+        return updatedShipment;
+      } else {
+        setShipmentsData((prev) =>
+          prev.map((shipment) => (shipment.id === id ? updatedData : shipment))
+        );
+        return updatedData;
+      }
+    } catch (error) {
+      console.error("❌ Error updating shipment:", error);
+      throw error;
+    }
+  };
+
+  // Nueva función para manejar cambios de estado de envíos
+  const handleShipmentStatusChange = async (
+    currentShipment,
+    updatedShipment
+  ) => {
+    const { cameras, recipient, status: newStatus } = updatedShipment;
+    const { status: oldStatus } = currentShipment;
+
+    console.log("🔄 Manejando cambio de estado de envío:", {
+      oldStatus,
+      newStatus,
+      cameras,
+      recipient,
+    });
+
+    // Si no hay cámaras en el envío, no hacer nada
+    if (!cameras || cameras.length === 0) return;
+
+    // Caso 1: Cambio a "enviado" - Cámaras cambian a "EN ENVIO"
+    if (newStatus === "enviado" && oldStatus !== "enviado") {
+      console.log('📦 Cambiando cámaras a estado "EN ENVIO":', cameras);
+      cameras.forEach((cameraId) => {
+        updateCamera(cameraId, { status: "en envio" });
+      });
+    }
+
+    // Caso 2: Cambio a "entregado" - Cámaras cambian a "disponible" y se asignan al destinatario
+    if (newStatus === "entregado" && oldStatus !== "entregado") {
+      console.log(
+        '✅ Cambiando cámaras a estado "disponible" y asignando a:',
+        recipient
+      );
+      cameras.forEach((cameraId) => {
+        updateCamera(cameraId, {
+          status: "disponible",
+          assignedTo: recipient,
+          location: updatedShipment.destination,
+        });
+      });
+    }
+
+    // Caso 3: Cambio de "enviado" a otro estado (cancelado, pendiente, etc.) - Revertir a "disponible"
+    if (
+      oldStatus === "enviado" &&
+      newStatus !== "enviado" &&
+      newStatus !== "entregado"
+    ) {
+      console.log('↩️ Revertiendo cámaras a estado "disponible":', cameras);
+      cameras.forEach((cameraId) => {
+        updateCamera(cameraId, { status: "disponible" });
+      });
+    }
+
+    // Caso 4: Cambio de "entregado" a otro estado - Revertir asignación
+    if (oldStatus === "entregado" && newStatus !== "entregado") {
+      console.log("↩️ Revertiendo asignación de cámaras:", cameras);
+      cameras.forEach((cameraId) => {
+        updateCamera(cameraId, {
+          status: "disponible",
+          assignedTo: "",
+          location: "Almacén",
+        });
+      });
+    }
+  };
+
+  const deleteShipment = async (id) => {
+    try {
+      console.log("🗑️ Eliminando envío:", id);
+
+      // Encontrar el envío para liberar las cámaras
+      const shipmentToDelete = shipmentsData.find((s) => s.id === id);
+
+      if (apiAvailable) {
+        await apiService.deleteShipment(id);
+      }
+
+      setShipmentsData((prev) => prev.filter((shipment) => shipment.id !== id));
+
+      // Liberar cámaras (cambiar estado a "disponible" y quitar asignación)
+      if (shipmentToDelete && shipmentToDelete.cameras) {
+        console.log(
+          "🔄 Liberando cámaras del envío eliminado:",
+          shipmentToDelete.cameras
+        );
+        shipmentToDelete.cameras.forEach((cameraId) => {
+          updateCamera(cameraId, {
+            status: "disponible",
+            assignedTo: "",
+            location: "Almacén",
+          });
+        });
+      }
+    } catch (error) {
+      console.error("❌ Error deleting shipment:", error);
+      throw error;
+    }
+  };
+  // ========== FUNCIONES PARA TAREAS ==========
+  const completeTask = async (taskId) => {
+    console.log(`Completando tarea: ${taskId}`);
+    // Lógica para completar tareas
+  };
+
   const createShipmentFromTask = async (task, selectedCameras) => {
-    const newShipment = {
-      id: `ENV-${Date.now()}`,
-      cameras: selectedCameras,
-      destination: `${task.tournamentLocation}, ${task.state}`,
-      recipient: task.assignedTo,
-      recipientPhone: task.workerPhone,
-      sender: "Almacén Central",
-      date: new Date().toISOString().split('T')[0],
-      status: 'pendiente',
-      trackingNumber: `TRK${Date.now()}`,
-      tournamentId: task.tournamentId,
-      tournamentName: task.tournamentName,
-      taskId: task.id
-    };
+    try {
+      const shipmentData = {
+        cameras: selectedCameras,
+        destination: task.tournamentLocation || task.state,
+        recipient: task.assignedTo,
+        sender: "Almacén Central",
+        date: new Date().toISOString().split("T")[0],
+        status: "preparando",
+        trackingNumber: `TRK${Date.now()}`,
+      };
 
-    setShipmentsData(prev => {
-      const newData = [...prev, newShipment];
-      localStorage.setItem('pixgolf-shipments', JSON.stringify(newData));
-      return newData;
-    });
-
-    // Actualizar estado de cámaras a "en uso"
-    selectedCameras.forEach(cameraId => {
-      updateCamera(cameraId, { status: 'en uso', location: task.state });
-    });
-
-    // Completar la tarea
-    completeTask(task.id);
-
-    return newShipment;
+      return await createShipment(shipmentData);
+    } catch (error) {
+      console.error("Error creating shipment from task:", error);
+      throw error;
+    }
   };
 
+  // ========== DATOS DE TAREAS (placeholder) ==========
+  const tasksData = [
+    {
+      id: "1",
+      title: "Envío de cámaras para Torneo Guadalajara",
+      description:
+        "Preparar y enviar cámaras solares para el torneo en Jalisco",
+      type: "camera_shipment",
+      priority: "alta",
+      status: "pendiente",
+      assignedTo: "María González",
+      state: "Jalisco",
+      camerasNeeded: 4,
+      dueDate: "2025-07-18",
+      tournamentLocation: "Guadalajara, Jalisco",
+      availableCameras: [
+        { id: "CS3", model: "Hikvision DS-2XS6825G0-I/CH20S40" },
+        { id: "CS4", model: "Hikvision DS-2XS6825G0-I/CH20S40" },
+        { id: "CS8", model: "Hikvision DS-2XS6825G0-I/CH20S40" },
+        { id: "CS9", model: "Hikvision DS-2XS6A25G0-I/CH20S40" },
+        { id: "CS10", model: "Hikvision DS-2XS6825G0-I/CH20S40" },
+      ],
+    },
+  ];
+
+  // ========== RETURN COMPLETO ==========
   return {
-    // Estado
+    // Estados
     activeTab,
     setActiveTab,
     selectedTournament,
@@ -302,21 +658,34 @@ export const useAppState = () => {
     tasksData,
     loading,
     apiAvailable,
-    
-    // Acciones
+
+    // Funciones para torneos
     createTournament,
     updateTournament,
     deleteTournament,
+    setTournamentsData,
+
+    // Funciones para trabajadores
+    createWorker,
     updateWorker,
+    deleteWorker,
+    setWorkersData,
+
+    // Funciones para cámaras
+    createCamera,
     updateCamera,
+    deleteCamera,
+    setCamerasData,
+
+    // Funciones para envíos
+    createShipment,
+    updateShipment,
+    deleteShipment,
+    setShipmentsData,
+
+
+    // Funciones para tareas
     completeTask,
     createShipmentFromTask,
-    
-    // Setters
-    setTournamentsData,
-    setWorkersData,
-    setCamerasData,
-    setShipmentsData,
-    setTasksData
   };
 };

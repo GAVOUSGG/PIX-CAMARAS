@@ -12,10 +12,20 @@ const TournamentModal = ({
   cameras,
 }) => {
   if (!isOpen) return null;
-
+  
+  const handleModalClick = (e) => {
+    e.stopPropagation();
+  };
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="bg-slate-900 p-6 rounded-lg w-full max-w-3xl">
+      {/* Overlay - cierra al hacer clic */}
+      <div className="fixed inset-0 bg-black/50" onClick={onClose} />
+      
+      {/* Modal - previene que el clic cierre */}
+      <div 
+        className="bg-slate-900 p-6 rounded-lg w-full max-w-3xl relative z-50"
+        onClick={handleModalClick}
+      >
         <TournamentForm
           tournament={tournament}
           onSave={(data) => onSave(data)}
@@ -25,7 +35,6 @@ const TournamentModal = ({
           isOpen={isOpen}
         />
       </div>
-      <div className="fixed inset-0" onClick={onClose} />
     </div>
   );
 };

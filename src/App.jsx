@@ -25,35 +25,34 @@ function App() {
     createTournament,
     updateTournament,
     deleteTournament,
+    createWorker,
     updateWorker,
+    deleteWorker,
+    createCamera,
+    deleteCamera,
     updateCamera,
     completeTask,
     createShipmentFromTask,
+    
+    createShipment,
+    updateShipment,
+    deleteShipment,
     setTournamentsData,
     setWorkersData,
     setCamerasData,
     setShipmentsData,
   } = useAppState();
 
-  // Función MEJORADA para manejar el envío de cámaras
+  // Función para manejar el envío de cámaras
   const handleShipCameras = async (taskWithSelection) => {
     console.log("🚀 Iniciando envío de cámaras:", taskWithSelection);
-
     try {
       const newShipment = await createShipmentFromTask(
         taskWithSelection,
         taskWithSelection.selectedCameras
       );
       console.log("📦 Envío creado exitosamente:", newShipment);
-
-      alert(
-        `✅ Envío creado exitosamente!\n\nCámaras: ${taskWithSelection.selectedCameras.join(
-          ", "
-        )}\nDestino: ${taskWithSelection.tournamentLocation}\nTracking: ${
-          newShipment.trackingNumber
-        }`
-      );
-
+      alert(`✅ Envío creado exitosamente!`);
       setActiveTab("logistics");
     } catch (error) {
       console.error("❌ Error creando envío:", error);
@@ -80,7 +79,6 @@ function App() {
             tournamentsData={tournamentsData}
             workersData={workersData}
             camerasData={camerasData}
-            // Pasar todas las funciones necesarias
             onCreateTournament={createTournament}
             onUpdateTournament={updateTournament}
             onDeleteTournament={deleteTournament}
@@ -88,11 +86,35 @@ function App() {
           />
         );
       case "workers":
-        return <Workers workersData={workersData} />;
+        return (
+          <Workers
+            workersData={workersData}
+            onCreateWorker={createWorker}
+            onUpdateWorker={updateWorker}
+            onDeleteWorker={deleteWorker}
+          />
+        );
       case "cameras":
-        return <Cameras camerasData={camerasData} />;
+        return (
+          <Cameras
+            camerasData={camerasData}
+            workersData={workersData}
+            onCreateCamera={createCamera}
+            onUpdateCamera={updateCamera}
+            onDeleteCamera={deleteCamera}
+          />
+        );
       case "logistics":
-        return <Logistics shipmentsData={shipmentsData} />;
+        return (
+          <Logistics
+            shipmentsData={shipmentsData}
+            camerasData={camerasData}
+            workersData={workersData}
+            onCreateShipment={createShipment}
+            onUpdateShipment={updateShipment}
+            onDeleteShipment={deleteShipment}
+          />
+        );
       case "map":
         return (
           <Map

@@ -92,7 +92,7 @@ export const workers = [
   {
     id: 7,
     name: "Miguel Torres",
-    state: "Jalisco",
+    state: "Jalisco", 
     status: "disponible",
     phone: "33-1234-5678",
     email: "miguel@pxgolf.com",
