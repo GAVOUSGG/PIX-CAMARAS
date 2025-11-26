@@ -248,7 +248,7 @@
       "state": "CDMX",
       "date": "2025-11-25",
       "endDate": "2025-11-29",
-      "status": "terminado",
+      "status": "activo",
       "worker": "Larissa Granados",
       "workerId": "11",
       "cameras": [],
@@ -259,7 +259,7 @@
       "field": "Club de Golf México",
       "cameraStatus": "none",
       "createdAt": "2025-11-23T00:37:19.019Z",
-      "updatedAt": "2025-11-23T00:38:32.111Z"
+      "updatedAt": "2025-11-26T21:01:23.449Z"
     },
     {
       "id": "7917",
@@ -268,7 +268,7 @@
       "state": "Estado de México",
       "date": "2025-11-25",
       "endDate": "2025-11-28",
-      "status": "pendiente",
+      "status": "activo",
       "worker": "Alanna Sanchez Granados",
       "workerId": "14",
       "cameras": [],
@@ -280,7 +280,8 @@
       "days": 4,
       "field": "Club de Golf Vallescondido ",
       "cameraStatus": "none",
-      "createdAt": "2025-11-25T04:05:56.486Z"
+      "createdAt": "2025-11-25T04:05:56.486Z",
+      "updatedAt": "2025-11-26T21:00:57.440Z"
     },
     {
       "id": "c530",
@@ -433,7 +434,9 @@
       "email": "corrreo@gmail.com",
       "status": "disponible",
       "specialty": "Instalación cámaras solares",
-      "camerasAssigned": [],
+      "camerasAssigned": [
+        "prueba"
+      ],
       "photo": "",
       "createdAt": "2025-11-22T21:45:40.820Z"
     },
@@ -479,14 +482,14 @@
       "id": "prueba",
       "model": "Hikvision DS-2XS6A25G0-I/CH20S40",
       "type": "Solar",
-      "status": "en envio",
-      "location": "Jalisco",
+      "status": "disponible",
+      "location": "CDMX",
       "serialNumber": "asda",
       "simNumber": "354621345645",
-      "assignedTo": "Ernesto De Keratry",
+      "assignedTo": "Larissa Granados",
       "notes": "",
       "createdAt": "2025-11-23T00:48:46.469Z",
-      "updatedAt": "2025-11-23T00:54:18.574Z"
+      "updatedAt": "2025-11-26T21:02:04.981Z"
     }
   ],
   "shipments": [
@@ -500,10 +503,11 @@
       "sender": "",
       "shipper": "Ernesto De Keratry",
       "date": "2025-11-23",
-      "status": "enviado",
+      "status": "entregado",
       "trackingNumber": "TRK1763859118225",
       "extraItems": "",
-      "createdAt": "2025-11-23T00:52:22.775Z"
+      "createdAt": "2025-11-23T00:52:22.775Z",
+      "updatedAt": "2025-11-26T21:02:02.833Z"
     }
   ]
 }

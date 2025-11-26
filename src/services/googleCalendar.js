@@ -14,7 +14,13 @@ const formatDateForGoogleCalendar = (date, isEndDate = false) => {
 
   if (typeof date === "string") {
     // Si es string, crear Date object
-    dateObj = new Date(date);
+    // IMPORTANTE: Si es YYYY-MM-DD, agregar T00:00:00 para que sea local y no UTC
+    // Esto evita que se reste un día en zonas horarias occidentales (como México)
+    if (date.includes("-") && !date.includes("T")) {
+      dateObj = new Date(`${date}T00:00:00`);
+    } else {
+      dateObj = new Date(date);
+    }
   } else {
     dateObj = date;
   }
@@ -127,7 +133,12 @@ const formatDateForAPI = (date, isEndDate = false) => {
   let dateObj;
 
   if (typeof date === "string") {
-    dateObj = new Date(date);
+    // IMPORTANTE: Si es YYYY-MM-DD, agregar T00:00:00 para que sea local y no UTC
+    if (date.includes("-") && !date.includes("T")) {
+      dateObj = new Date(`${date}T00:00:00`);
+    } else {
+      dateObj = new Date(date);
+    }
   } else {
     dateObj = date;
   }
