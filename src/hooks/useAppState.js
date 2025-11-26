@@ -1,5 +1,18 @@
 import { useState, useEffect } from "react";
 import { apiService } from "../services/api";
+import {
+  addToGoogleCalendar,
+  addToGoogleCalendarAuto,
+  createCalendarEvent,
+  updateCalendarEvent,
+  deleteCalendarEvent,
+  findCalendarEvent,
+  isAuthenticated,
+} from "../services/googleCalendar";
+import {
+  initiateOAuth,
+  exchangeCodeForTokens,
+} from "../services/googleCalendarOAuth";
 
 // Datos iniciales de respaldo
 const initialTournaments = [
@@ -134,30 +147,69 @@ export const useAppState = () => {
     try {
       console.log("🎯 Creando trabajador:", workerData);
 
+      let newWorker;
+      let workerId;
+
       if (apiAvailable) {
         // Calcular el próximo ID consecutivo
         const nextId = await getNextWorkerId();
-        const workerWithId = { ...workerData, id: nextId.toString() };
+        workerId = nextId.toString();
+        const workerWithId = { ...workerData, id: workerId };
 
         console.log("📡 Enviando a API con ID:", nextId);
-        const newWorker = await apiService.createWorker(workerWithId);
+        newWorker = await apiService.createWorker(workerWithId);
         console.log("✅ Trabajador creado en API:", newWorker);
+        workerId = newWorker.id;
 
         // Actualizar estado local
         setWorkersData((prev) => [...prev, newWorker]);
-        return newWorker;
       } else {
         // Modo offline - calcular ID local
         const nextId = getNextWorkerIdLocal();
-        const newWorker = {
+        workerId = nextId.toString();
+        newWorker = {
           ...workerData,
-          id: nextId.toString(),
+          id: workerId,
           createdAt: new Date().toISOString(),
         };
 
         setWorkersData((prev) => [...prev, newWorker]);
-        return newWorker;
       }
+
+      // Actualizar assignedTo en las cámaras asignadas al nuevo trabajador
+      // Usar el nombre del trabajador en lugar del ID
+      const camerasAssigned = workerData.camerasAssigned || [];
+      const workerName = newWorker.name;
+      const workerState = newWorker.state;
+      if (camerasAssigned.length > 0 && workerName) {
+        console.log(
+          `👤 [createWorker] Asignando cámaras a trabajador: ${workerName}`
+        );
+        await Promise.all(
+          camerasAssigned.map(async (cameraId) => {
+            try {
+              console.log(
+                `📷 [createWorker] Actualizando cámara ${cameraId} con assignedTo: ${workerName}`
+              );
+              // Actualizar la cámara con el nombre del trabajador y su estado como ubicación
+              await updateCamera(cameraId, {
+                assignedTo: workerName,
+                location: workerState, // Actualizar location con el state del trabajador
+              });
+              console.log(
+                `✅ [createWorker] Cámara ${cameraId} actualizada exitosamente`
+              );
+            } catch (error) {
+              console.error(
+                `❌ [createWorker] Error actualizando cámara ${cameraId}:`,
+                error
+              );
+            }
+          })
+        );
+      }
+
+      return newWorker;
     } catch (error) {
       console.error("❌ Error creating worker:", error);
       throw error;
@@ -200,8 +252,106 @@ export const useAppState = () => {
     return maxId + 1;
   };
 
-  const updateWorker = async (id, workerData) => {
+  const updateWorker = async (id, workerData, skipCameraUpdate = false) => {
     try {
+      console.log(
+        "🔄 [updateWorker] Iniciando actualización de trabajador:",
+        id
+      );
+      console.log("📦 [updateWorker] Datos del trabajador:", workerData);
+      console.log(`🔄 [updateWorker] skipCameraUpdate: ${skipCameraUpdate}`);
+
+      // Obtener el trabajador actual para comparar las cámaras asignadas
+      const currentWorker = workersData.find((w) => w.id === id);
+      const previousCameras = currentWorker?.camerasAssigned || [];
+      const newCameras = workerData.camerasAssigned || [];
+
+      console.log("📷 [updateWorker] Cámaras anteriores:", previousCameras);
+      console.log("📷 [updateWorker] Cámaras nuevas:", newCameras);
+
+      // Identificar cámaras agregadas y removidas
+      const camerasAdded = newCameras.filter(
+        (cameraId) => !previousCameras.includes(cameraId)
+      );
+      const camerasRemoved = previousCameras.filter(
+        (cameraId) => !newCameras.includes(cameraId)
+      );
+
+      console.log("➕ [updateWorker] Cámaras agregadas:", camerasAdded);
+      console.log("➖ [updateWorker] Cámaras removidas:", camerasRemoved);
+
+      // Solo actualizar cámaras si no se está saltando (para evitar bucles infinitos)
+      if (!skipCameraUpdate) {
+        // Actualizar assignedTo en TODAS las cámaras nuevas (incluyendo las que ya estaban)
+        // Esto asegura que todas las cámaras asignadas tengan el assignedTo correcto
+        // Usar el nombre del trabajador en lugar del ID
+        const workerName = workerData.name || currentWorker?.name;
+        const workerState = workerData.state || currentWorker?.state;
+        if (newCameras.length > 0 && workerName) {
+          console.log(
+            "🔄 [updateWorker] Actualizando assignedTo en cámaras:",
+            newCameras
+          );
+          console.log(
+            `👤 [updateWorker] Asignando cámaras a trabajador: ${workerName}`
+          );
+          await Promise.all(
+            newCameras.map(async (cameraId) => {
+              try {
+                console.log(
+                  `📷 [updateWorker] Actualizando cámara ${cameraId} con assignedTo: ${workerName}`
+                );
+                // Actualizar la cámara con el nombre del trabajador y su estado como ubicación
+                await updateCamera(cameraId, {
+                  assignedTo: workerName,
+                  location: workerState, // Actualizar location con el state del trabajador
+                });
+                console.log(
+                  `✅ [updateWorker] Cámara ${cameraId} actualizada exitosamente`
+                );
+              } catch (error) {
+                console.error(
+                  `❌ [updateWorker] Error actualizando cámara ${cameraId}:`,
+                  error
+                );
+              }
+            })
+          );
+        }
+      } else {
+        console.log(
+          "⏭️ [updateWorker] Saltando actualización de cámaras para evitar bucle"
+        );
+      }
+
+      // Cámaras removidas: limpiar assignedTo
+      if (camerasRemoved.length > 0) {
+        console.log(
+          "🔄 [updateWorker] Limpiando assignedTo en cámaras removidas:",
+          camerasRemoved
+        );
+        await Promise.all(
+          camerasRemoved.map(async (cameraId) => {
+            try {
+              console.log(
+                `📷 [updateWorker] Limpiando assignedTo de cámara ${cameraId}`
+              );
+              await updateCamera(cameraId, {
+                assignedTo: "",
+              });
+              console.log(
+                `✅ [updateWorker] Cámara ${cameraId} limpiada exitosamente`
+              );
+            } catch (error) {
+              console.error(
+                `❌ [updateWorker] Error limpiando cámara ${cameraId}:`,
+                error
+              );
+            }
+          })
+        );
+      }
+
       if (apiAvailable) {
         const updatedWorker = await apiService.updateWorker(id, workerData);
         setWorkersData((prev) =>
@@ -231,6 +381,19 @@ export const useAppState = () => {
 
   const deleteWorker = async (id) => {
     try {
+      // Obtener el trabajador antes de eliminarlo para limpiar las cámaras
+      const workerToDelete = workersData.find((w) => w.id === id);
+      const camerasAssigned = workerToDelete?.camerasAssigned || [];
+
+      // Limpiar assignedTo de todas las cámaras asignadas a este trabajador
+      await Promise.all(
+        camerasAssigned.map((cameraId) =>
+          updateCamera(cameraId, {
+            assignedTo: "",
+          })
+        )
+      );
+
       if (apiAvailable) {
         await apiService.deleteWorker(id);
       }
@@ -244,20 +407,96 @@ export const useAppState = () => {
   // ========== FUNCIONES PARA TORNEOS ==========
   const createTournament = async (tournamentData) => {
     try {
+      let newTournament;
+
       if (apiAvailable) {
-        const newTournament = await apiService.createTournament(tournamentData);
+        newTournament = await apiService.createTournament(tournamentData);
         setTournamentsData((prev) => [...prev, newTournament]);
-        return newTournament;
       } else {
         // Modo offline
-        const newTournament = {
+        newTournament = {
           ...tournamentData,
           id: Date.now().toString(),
           createdAt: new Date().toISOString(),
         };
         setTournamentsData((prev) => [...prev, newTournament]);
-        return newTournament;
       }
+
+      // Agregar a Google Calendar después de crear el torneo
+      try {
+        console.log("📅 [createTournament] Agregando torneo a Google Calendar");
+
+        if (isAuthenticated()) {
+          // Si está autenticado, crear evento automáticamente
+          try {
+            const calendarEvent = await createCalendarEvent(newTournament);
+            if (calendarEvent && calendarEvent.id) {
+              // Guardar el eventId en el torneo
+              newTournament.googleCalendarEventId = calendarEvent.id;
+
+              // Actualizar el torneo con el eventId si es necesario
+              if (apiAvailable && newTournament.id) {
+                await apiService.updateTournament(newTournament.id, {
+                  ...newTournament,
+                  googleCalendarEventId: calendarEvent.id,
+                });
+              }
+
+              console.log(
+                "✅ [createTournament] Evento creado en Google Calendar:",
+                calendarEvent.id
+              );
+            }
+          } catch (apiError) {
+            console.warn(
+              "⚠️ [createTournament] Error con API de Google Calendar, usando método manual:",
+              apiError
+            );
+            // Fallback al método manual si falla la API
+            addToGoogleCalendar(newTournament);
+          }
+        } else {
+          // Si no está autenticado, intentar autenticar primero
+          try {
+            console.log(
+              "🔐 [createTournament] Iniciando autenticación OAuth..."
+            );
+            const code = await initiateOAuth();
+            if (code) {
+              await exchangeCodeForTokens(code);
+              // Después de autenticar, crear el evento
+              const calendarEvent = await createCalendarEvent(newTournament);
+              if (calendarEvent && calendarEvent.id) {
+                newTournament.googleCalendarEventId = calendarEvent.id;
+                if (apiAvailable && newTournament.id) {
+                  await apiService.updateTournament(newTournament.id, {
+                    ...newTournament,
+                    googleCalendarEventId: calendarEvent.id,
+                  });
+                }
+                console.log(
+                  "✅ [createTournament] Autenticado y evento creado en Google Calendar"
+                );
+              }
+            }
+          } catch (oauthError) {
+            console.warn(
+              "⚠️ [createTournament] Error en OAuth, usando método manual:",
+              oauthError
+            );
+            // Si falla OAuth, usar método manual
+            addToGoogleCalendar(newTournament);
+          }
+        }
+      } catch (calendarError) {
+        // No fallar si hay error con Google Calendar, solo loguear
+        console.warn(
+          "⚠️ [createTournament] Error al agregar a Google Calendar:",
+          calendarError
+        );
+      }
+
+      return newTournament;
     } catch (error) {
       console.error("Error creating tournament:", error);
       throw error;
@@ -284,26 +523,103 @@ export const useAppState = () => {
 
       console.log("📦 Datos combinados para actualizar:", updatedData);
 
+      let updatedTournament;
       if (apiAvailable) {
-        const updatedTournament = await apiService.updateTournament(
-          id,
-          updatedData
-        );
+        updatedTournament = await apiService.updateTournament(id, updatedData);
         setTournamentsData((prev) =>
           prev.map((tournament) =>
             tournament.id === id ? updatedTournament : tournament
           )
         );
-        return updatedTournament;
       } else {
         // Modo offline
+        updatedTournament = updatedData;
         setTournamentsData((prev) =>
           prev.map((tournament) =>
             tournament.id === id ? updatedData : tournament
           )
         );
-        return updatedData;
       }
+
+      // Actualizar en Google Calendar después de actualizar el torneo
+      try {
+        console.log(
+          "📅 [updateTournament] Actualizando evento en Google Calendar"
+        );
+
+        if (isAuthenticated() && updatedTournament.googleCalendarEventId) {
+          // Si está autenticado y tiene eventId, actualizar evento existente
+          try {
+            await updateCalendarEvent(
+              updatedTournament,
+              updatedTournament.googleCalendarEventId
+            );
+            console.log(
+              "✅ [updateTournament] Evento actualizado en Google Calendar"
+            );
+          } catch (apiError) {
+            console.warn(
+              "⚠️ [updateTournament] Error al actualizar evento, intentando crear uno nuevo:",
+              apiError
+            );
+            // Si falla la actualización, intentar crear uno nuevo
+            try {
+              const calendarEvent = await createCalendarEvent(
+                updatedTournament
+              );
+              if (calendarEvent && calendarEvent.id) {
+                updatedTournament.googleCalendarEventId = calendarEvent.id;
+                // Actualizar el torneo con el nuevo eventId
+                if (apiAvailable) {
+                  await apiService.updateTournament(id, {
+                    ...updatedTournament,
+                    googleCalendarEventId: calendarEvent.id,
+                  });
+                }
+              }
+            } catch (createError) {
+              // Si todo falla, usar método manual
+              addToGoogleCalendar(updatedTournament);
+            }
+          }
+        } else {
+          // Si no tiene eventId, buscar si existe o crear uno nuevo
+          if (isAuthenticated()) {
+            try {
+              const existingEvent = await findCalendarEvent(
+                updatedTournament.name
+              );
+              if (existingEvent) {
+                // Actualizar evento existente
+                await updateCalendarEvent(updatedTournament, existingEvent.id);
+                updatedTournament.googleCalendarEventId = existingEvent.id;
+              } else {
+                // Crear nuevo evento
+                const calendarEvent = await createCalendarEvent(
+                  updatedTournament
+                );
+                if (calendarEvent && calendarEvent.id) {
+                  updatedTournament.googleCalendarEventId = calendarEvent.id;
+                }
+              }
+            } catch (error) {
+              // Fallback al método manual
+              addToGoogleCalendar(updatedTournament);
+            }
+          } else {
+            // Método manual si no está autenticado
+            addToGoogleCalendar(updatedTournament);
+          }
+        }
+      } catch (calendarError) {
+        // No fallar si hay error con Google Calendar, solo loguear
+        console.warn(
+          "⚠️ [updateTournament] Error al actualizar en Google Calendar:",
+          calendarError
+        );
+      }
+
+      return updatedTournament;
     } catch (error) {
       console.error("❌ Error updating tournament:", error);
       throw error;
@@ -312,12 +628,81 @@ export const useAppState = () => {
 
   const deleteTournament = async (id) => {
     try {
+      // Obtener el torneo antes de eliminarlo para mostrar información
+      const tournamentToDelete = tournamentsData.find((t) => t.id === id);
+
       if (apiAvailable) {
         await apiService.deleteTournament(id);
       }
       setTournamentsData((prev) =>
         prev.filter((tournament) => tournament.id !== id)
       );
+
+      // Eliminar de Google Calendar si está autenticado y tiene eventId
+      if (tournamentToDelete) {
+        try {
+          console.log(
+            "🗑️ [deleteTournament] Eliminando evento de Google Calendar"
+          );
+
+          if (isAuthenticated() && tournamentToDelete.googleCalendarEventId) {
+            try {
+              await deleteCalendarEvent(
+                tournamentToDelete.googleCalendarEventId
+              );
+              console.log(
+                "✅ [deleteTournament] Evento eliminado de Google Calendar"
+              );
+            } catch (deleteError) {
+              console.warn(
+                "⚠️ [deleteTournament] Error al eliminar evento de Google Calendar:",
+                deleteError
+              );
+              // Si falla, buscar el evento por nombre
+              try {
+                const existingEvent = await findCalendarEvent(
+                  tournamentToDelete.name
+                );
+                if (existingEvent) {
+                  await deleteCalendarEvent(existingEvent.id);
+                  console.log(
+                    "✅ [deleteTournament] Evento encontrado y eliminado"
+                  );
+                } else {
+                  alert(
+                    `Torneo "${tournamentToDelete.name}" eliminado del sistema.\n\n` +
+                      `No se pudo encontrar el evento en Google Calendar para eliminarlo automáticamente. ` +
+                      `Por favor verifica manualmente.`
+                  );
+                }
+              } catch (searchError) {
+                alert(
+                  `Torneo "${tournamentToDelete.name}" eliminado del sistema.\n\n` +
+                    `No se pudo eliminar automáticamente de Google Calendar. ` +
+                    `Por favor elimínalo manualmente si lo habías agregado.`
+                );
+              }
+            }
+          } else {
+            // Si no está autenticado o no tiene eventId, mostrar mensaje informativo
+            alert(
+              `Torneo "${tournamentToDelete.name}" eliminado del sistema.\n\n` +
+                `Si agregaste este evento a tu Google Calendar, ` +
+                `por favor elimínalo manualmente desde allí.`
+            );
+          }
+        } catch (calendarError) {
+          // No fallar si hay error con Google Calendar, solo loguear
+          console.warn(
+            "⚠️ [deleteTournament] Error al eliminar de Google Calendar:",
+            calendarError
+          );
+          alert(
+            `Torneo "${tournamentToDelete.name}" eliminado.\n\n` +
+              `Recuerda eliminar este evento de tu Google Calendar si ya lo habías agregado.`
+          );
+        }
+      }
     } catch (error) {
       console.error("Error deleting tournament:", error);
       throw error;
@@ -355,11 +740,77 @@ export const useAppState = () => {
 
   const updateCamera = async (id, cameraData) => {
     try {
-      console.log("🔄 Actualizando cámara:", id, cameraData);
+      console.log("🔄 [updateCamera] Actualizando cámara:", id, cameraData);
 
       const currentCamera = camerasData.find((c) => c.id === id);
       if (!currentCamera) {
         throw new Error(`Cámara con ID ${id} no encontrada`);
+      }
+
+      const previousAssignedTo = currentCamera.assignedTo || "";
+      const newAssignedTo = cameraData.assignedTo || "";
+
+      // Detectar cambios en assignedTo
+      if (previousAssignedTo !== newAssignedTo) {
+        console.log(
+          `🔄 [updateCamera] Cambio en assignedTo: "${previousAssignedTo}" -> "${newAssignedTo}"`
+        );
+
+        // Si había un trabajador anterior, remover la cámara de su lista
+        if (previousAssignedTo) {
+          const previousWorker = workersData.find(
+            (w) => w.name === previousAssignedTo
+          );
+          if (previousWorker) {
+            const updatedCamerasAssigned = (
+              previousWorker.camerasAssigned || []
+            ).filter((cameraId) => cameraId !== id);
+            console.log(
+              `➖ [updateCamera] Removiendo cámara ${id} del trabajador ${previousWorker.name}`
+            );
+            await updateWorker(
+              previousWorker.id,
+              {
+                ...previousWorker,
+                camerasAssigned: updatedCamerasAssigned,
+              },
+              true
+            ); // skipCameraUpdate = true para evitar bucle
+          }
+        }
+
+        // Si se asigna a un nuevo trabajador, agregar la cámara a su lista
+        if (newAssignedTo) {
+          const newWorker = workersData.find((w) => w.name === newAssignedTo);
+          if (newWorker) {
+            const updatedCamerasAssigned = [
+              ...(newWorker.camerasAssigned || []),
+              id,
+            ].filter(
+              (cameraId, index, self) => self.indexOf(cameraId) === index
+            ); // Remover duplicados
+            console.log(
+              `➕ [updateCamera] Agregando cámara ${id} al trabajador ${newWorker.name}`
+            );
+            // Actualizar la ubicación de la cámara con el estado del trabajador
+            cameraData.location = newWorker.state;
+            console.log(
+              `📍 [updateCamera] Actualizando location de cámara a: ${newWorker.state}`
+            );
+            await updateWorker(
+              newWorker.id,
+              {
+                ...newWorker,
+                camerasAssigned: updatedCamerasAssigned,
+              },
+              true
+            ); // skipCameraUpdate = true para evitar bucle
+          } else {
+            console.warn(
+              `⚠️ [updateCamera] Trabajador "${newAssignedTo}" no encontrado`
+            );
+          }
+        }
       }
 
       const updatedData = {
@@ -388,10 +839,54 @@ export const useAppState = () => {
 
   const deleteCamera = async (id) => {
     try {
+      console.log("🗑️ [deleteCamera] Eliminando cámara:", id);
+
+      // Buscar la cámara antes de eliminarla para obtener información del trabajador asignado
+      const cameraToDelete = camerasData.find((c) => c.id === id);
+
+      if (cameraToDelete && cameraToDelete.assignedTo) {
+        // Buscar el trabajador que tiene esta cámara asignada
+        const assignedWorker = workersData.find(
+          (w) => w.name === cameraToDelete.assignedTo
+        );
+
+        if (assignedWorker) {
+          console.log(
+            `🔄 [deleteCamera] Removiendo cámara ${id} del trabajador ${assignedWorker.name}`
+          );
+
+          // Remover la cámara de la lista del trabajador
+          const updatedCamerasAssigned = (
+            assignedWorker.camerasAssigned || []
+          ).filter((cameraId) => cameraId !== id);
+
+          // Actualizar el trabajador sin actualizar las cámaras (para evitar bucle)
+          await updateWorker(
+            assignedWorker.id,
+            {
+              ...assignedWorker,
+              camerasAssigned: updatedCamerasAssigned,
+            },
+            true // skipCameraUpdate = true porque la cámara se está eliminando
+          );
+
+          console.log(
+            `✅ [deleteCamera] Cámara ${id} removida del trabajador ${assignedWorker.name}`
+          );
+        } else {
+          console.warn(
+            `⚠️ [deleteCamera] Trabajador "${cameraToDelete.assignedTo}" no encontrado`
+          );
+        }
+      }
+
+      // Eliminar la cámara
       if (apiAvailable) {
         await apiService.deleteCamera(id);
       }
       setCamerasData((prev) => prev.filter((camera) => camera.id !== id));
+
+      console.log(`✅ [deleteCamera] Cámara ${id} eliminada exitosamente`);
     } catch (error) {
       console.error("❌ Error deleting camera:", error);
       throw error;
@@ -682,7 +1177,6 @@ export const useAppState = () => {
     updateShipment,
     deleteShipment,
     setShipmentsData,
-
 
     // Funciones para tareas
     completeTask,

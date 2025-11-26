@@ -146,7 +146,7 @@
       "state": "Querétaro",
       "date": "2025-11-21",
       "endDate": "2025-11-22",
-      "status": "activo",
+      "status": "terminado",
       "worker": "Gabriela Granados",
       "workerId": "10",
       "cameras": [],
@@ -156,7 +156,7 @@
       "days": 2,
       "field": "Golf Juriquilla",
       "createdAt": "2025-11-21T02:03:03.113Z",
-      "updatedAt": "2025-11-22T17:42:03.793Z"
+      "updatedAt": "2025-11-22T21:37:42.741Z"
     },
     {
       "id": "0c0b",
@@ -165,9 +165,9 @@
       "state": "Durango",
       "date": "2025-11-22",
       "endDate": "2025-11-23",
-      "status": "activo",
-      "worker": "Por asignar",
-      "workerId": "",
+      "status": "terminado",
+      "worker": "Edgar Alfredo Sánchez Rodríguez",
+      "workerId": "13",
       "cameras": [],
       "holes": [
         1,
@@ -176,29 +176,132 @@
       "days": 2,
       "field": "Campestre de Durango",
       "createdAt": "2025-11-22T16:49:49.349Z",
-      "updatedAt": "2025-11-22T17:09:21.612Z"
+      "updatedAt": "2025-11-23T00:35:12.637Z",
+      "cameraStatus": "none"
     },
     {
-      "id": "0ae7",
-      "name": "asasds",
-      "location": "asdasd, asdasdas",
+      "id": "1b0a",
+      "name": "WELCOME BACK 2025",
+      "location": "El Tigre, Puerto Vallarta",
       "state": "Jalisco",
-      "date": "2025-11-30",
-      "endDate": "2025-11-30",
-      "status": "pendiente",
-      "worker": "Ernesto De Keratry",
-      "workerId": "1",
-      "cameras": [
-        "CS1",
-        "CS2"
-      ],
+      "date": "2025-11-22",
+      "endDate": "2025-11-22",
+      "status": "terminado",
+      "worker": "Janeth Elizabeth Gutierrez Aguilar",
+      "workerId": "6",
+      "cameras": [],
       "holes": [
-        1
+        2
       ],
       "days": 1,
-      "field": "asdasd",
-      "cameraStatus": "complete",
-      "createdAt": "2025-11-22T18:13:17.455Z"
+      "field": "El Tigre",
+      "cameraStatus": "none",
+      "createdAt": "2025-11-22T21:30:57.453Z",
+      "updatedAt": "2025-11-23T00:35:16.183Z"
+    },
+    {
+      "id": "2595",
+      "name": "TORNEO DE GOLF BIFAM 2025",
+      "location": "Santa Monica, Aguascalientes",
+      "state": "Aguascalientes",
+      "date": "2025-11-22",
+      "endDate": "2025-11-22",
+      "status": "terminado",
+      "worker": "Cristhofer Gaytán ",
+      "workerId": "12",
+      "cameras": [],
+      "holes": [
+        5,
+        9,
+        14
+      ],
+      "days": 1,
+      "field": "Santa Monica",
+      "cameraStatus": "none",
+      "createdAt": "2025-11-22T21:37:18.412Z",
+      "updatedAt": "2025-11-22T21:50:58.192Z"
+    },
+    {
+      "id": "3e5e",
+      "name": "TORNEO MIGUEL ALEMAN VALDEZ",
+      "location": "Club de Golf Ciudad De México, CDMX",
+      "state": "CDMX",
+      "date": "2025-11-22",
+      "endDate": "2025-11-23",
+      "status": "terminado",
+      "worker": "Larissa Granados",
+      "workerId": "11",
+      "cameras": [],
+      "holes": [
+        16
+      ],
+      "days": 2,
+      "field": "Club de Golf Ciudad De México",
+      "cameraStatus": "none",
+      "createdAt": "2025-11-22T21:42:28.204Z",
+      "updatedAt": "2025-11-23T00:38:27.656Z"
+    },
+    {
+      "id": "d5c6",
+      "name": "TORNEO MIGUEL ALEMAN VALDEZ",
+      "location": "Club de Golf México, CDMX",
+      "state": "CDMX",
+      "date": "2025-11-25",
+      "endDate": "2025-11-29",
+      "status": "terminado",
+      "worker": "Larissa Granados",
+      "workerId": "11",
+      "cameras": [],
+      "holes": [
+        16
+      ],
+      "days": 5,
+      "field": "Club de Golf México",
+      "cameraStatus": "none",
+      "createdAt": "2025-11-23T00:37:19.019Z",
+      "updatedAt": "2025-11-23T00:38:32.111Z"
+    },
+    {
+      "id": "7917",
+      "name": "TORNEO INTERIOR VALLESCONDIDO",
+      "location": "Club de Golf Vallescondido , EDOMEX",
+      "state": "Estado de México",
+      "date": "2025-11-25",
+      "endDate": "2025-11-28",
+      "status": "pendiente",
+      "worker": "Alanna Sanchez Granados",
+      "workerId": "14",
+      "cameras": [],
+      "holes": [
+        5,
+        12,
+        15
+      ],
+      "days": 4,
+      "field": "Club de Golf Vallescondido ",
+      "cameraStatus": "none",
+      "createdAt": "2025-11-25T04:05:56.486Z"
+    },
+    {
+      "id": "c530",
+      "name": "Zacatecas",
+      "location": "Club de golf Zacatecas, Zacatecas",
+      "state": "Zacatecas",
+      "date": "2025-11-27",
+      "endDate": "2025-11-29",
+      "status": "pendiente",
+      "worker": "Por asignar",
+      "workerId": "",
+      "cameras": [],
+      "holes": [
+        3,
+        5
+      ],
+      "days": 3,
+      "field": "Club de golf Zacatecas",
+      "cameraStatus": "pending",
+      "createdAt": "2025-11-25T04:17:31.912Z",
+      "updatedAt": "2025-11-25T04:20:26.381Z"
     }
   ],
   "workers": [
@@ -210,12 +313,9 @@
       "email": "ernestodekeratry@pixgolf.com",
       "status": "disponible",
       "specialty": "Mantenimiento equipos",
-      "camerasAssigned": [
-        "CS1",
-        "CS2"
-      ],
+      "camerasAssigned": [],
       "photo": "",
-      "updatedAt": "2025-11-22T18:02:01.030Z"
+      "updatedAt": "2025-11-23T00:48:54.457Z"
     },
     {
       "id": "2",
@@ -247,14 +347,11 @@
       "state": "Quintana Roo",
       "phone": "9982605176",
       "email": "arturo@gmail.com",
-      "status": "disponible",
+      "status": "activo",
       "specialty": "Instalación cámaras solares",
-      "camerasAssigned": [
-        "CS2",
-        "CS1"
-      ],
+      "camerasAssigned": [],
       "photo": "",
-      "updatedAt": "2025-11-22T17:38:31.803Z"
+      "updatedAt": "2025-11-23T00:45:48.251Z"
     },
     {
       "id": "5",
@@ -262,11 +359,11 @@
       "state": "Jalisco",
       "phone": "3320431567",
       "email": "sincorreo@gmail.com",
-      "status": "activo",
+      "status": "disponible",
       "specialty": "Instalación cámaras solares",
       "camerasAssigned": [],
       "photo": "",
-      "updatedAt": "2025-11-20T04:45:28.838Z"
+      "updatedAt": "2025-11-22T21:35:49.555Z"
     },
     {
       "id": "6",
@@ -274,11 +371,11 @@
       "state": "Jalisco",
       "phone": "3221902625",
       "email": "correo@gmail.com",
-      "status": "activo",
+      "status": "disponible",
       "specialty": "Instalación cámaras solares",
       "camerasAssigned": [],
       "photo": "",
-      "updatedAt": "2025-11-20T04:45:20.409Z"
+      "updatedAt": "2025-11-22T22:11:27.132Z"
     },
     {
       "id": "7",
@@ -286,11 +383,11 @@
       "state": "Puebla",
       "phone": "221270536",
       "email": "correo@gmail.com",
-      "status": "activo",
+      "status": "disponible",
       "specialty": "Instalación cámaras solares",
       "camerasAssigned": [],
       "photo": "",
-      "updatedAt": "2025-11-20T04:45:36.720Z"
+      "updatedAt": "2025-11-22T21:35:32.657Z"
     },
     {
       "id": "8",
@@ -314,7 +411,7 @@
       "specialty": "Instalación cámaras solares",
       "camerasAssigned": [],
       "photo": "",
-      "createdAt": "2025-11-21T01:35:20.176Z"
+      "updatedAt": "2025-11-22T22:14:44.394Z"
     },
     {
       "id": "10",
@@ -327,67 +424,86 @@
       "camerasAssigned": [],
       "photo": "",
       "createdAt": "2025-11-21T02:03:47.989Z"
+    },
+    {
+      "id": "11",
+      "name": "Larissa Granados",
+      "state": "CDMX",
+      "phone": "55 6703 1343",
+      "email": "corrreo@gmail.com",
+      "status": "disponible",
+      "specialty": "Instalación cámaras solares",
+      "camerasAssigned": [],
+      "photo": "",
+      "createdAt": "2025-11-22T21:45:40.820Z"
+    },
+    {
+      "id": "12",
+      "name": "Cristhofer Gaytán ",
+      "state": "Aguascalientes",
+      "phone": "449 364 7135",
+      "email": "correo@gmail.com",
+      "status": "disponible",
+      "specialty": "Instalación cámaras solares",
+      "camerasAssigned": [],
+      "photo": "",
+      "updatedAt": "2025-11-22T22:16:02.083Z"
+    },
+    {
+      "id": "13",
+      "name": "Edgar Alfredo Sánchez Rodríguez",
+      "state": "Durango",
+      "phone": "618 801 4842",
+      "email": "correo@gmail.com",
+      "status": "disponible",
+      "specialty": "Instalación cámaras solares",
+      "camerasAssigned": [],
+      "photo": "",
+      "createdAt": "2025-11-22T21:49:01.601Z"
+    },
+    {
+      "id": "14",
+      "name": "Alanna Sanchez Granados",
+      "state": "Estado de México",
+      "phone": "55 6510 8886",
+      "email": "correo@gmail.com",
+      "status": "disponible",
+      "specialty": "Instalación cámaras solares",
+      "camerasAssigned": [],
+      "photo": "",
+      "createdAt": "2025-11-25T04:03:48.503Z"
     }
   ],
   "cameras": [
     {
-      "id": "CS1",
+      "id": "prueba",
       "model": "Hikvision DS-2XS6A25G0-I/CH20S40",
       "type": "Solar",
-      "status": "disponible",
-      "location": "Almacén",
-      "serialNumber": "12345678910",
-      "simNumber": "3321712415",
-      "assignedTo": "",
-      "notes": "Antena rota",
-      "createdAt": "2025-11-14T18:26:03.368Z",
-      "updatedAt": "2025-11-22T17:34:51.898Z"
-    },
-    {
-      "id": "CS2",
-      "model": "Hikvision DS-2XS6A25G0-I/CH20S40",
-      "type": "Solar",
-      "status": "disponible",
-      "location": "Almacén",
-      "serialNumber": "asdasd",
-      "simNumber": "3321712415",
-      "assignedTo": "",
+      "status": "en envio",
+      "location": "Jalisco",
+      "serialNumber": "asda",
+      "simNumber": "354621345645",
+      "assignedTo": "Ernesto De Keratry",
       "notes": "",
-      "createdAt": "2025-11-22T17:35:53.924Z"
+      "createdAt": "2025-11-23T00:48:46.469Z",
+      "updatedAt": "2025-11-23T00:54:18.574Z"
     }
   ],
   "shipments": [
     {
       "id": "ENV-001",
       "cameras": [
-        "CS1"
+        "prueba"
       ],
-      "destination": "Quintana Roo",
-      "recipient": "Arturo Alvarado Morales",
+      "destination": "Estado de México",
+      "recipient": "Larissa Granados",
       "sender": "",
       "shipper": "Ernesto De Keratry",
-      "date": "2025-11-14",
-      "status": "entregado",
-      "trackingNumber": "TRK1763149707377",
-      "extraItems": "lol",
-      "createdAt": "2025-11-14T19:48:53.669Z",
-      "updatedAt": "2025-11-14T19:49:10.462Z"
-    },
-    {
-      "id": "ENV-002",
-      "cameras": [
-        "CS1"
-      ],
-      "destination": "Jalisco",
-      "recipient": "Ernesto De Keratry",
-      "sender": "potosinos",
-      "shipper": "Arturo Alvarado Morales",
-      "date": "2025-11-14",
-      "status": "entregado",
-      "trackingNumber": "TRK1763149764877",
-      "extraItems": "1 cargador",
-      "createdAt": "2025-11-14T19:49:49.183Z",
-      "updatedAt": "2025-11-14T19:50:09.648Z"
+      "date": "2025-11-23",
+      "status": "enviado",
+      "trackingNumber": "TRK1763859118225",
+      "extraItems": "",
+      "createdAt": "2025-11-23T00:52:22.775Z"
     }
   ]
 }

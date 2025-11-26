@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useAppState } from "./hooks/useAppState";
 import Layout from "./components/Layout/Layout";
 import Dashboard from "./pages/Dashboard";
@@ -8,8 +8,25 @@ import Cameras from "./pages/Cameras";
 import Logistics from "./pages/Logistics";
 import Map from "./pages/Map";
 import TournamentModal from "./components/Tournaments/TournamentModal";
+import OAuthCallback from "./components/GoogleCalendar/OAuthCallback";
 
 function App() {
+  // Verificar si estamos en la página de callback de OAuth
+  const isOAuthCallback = window.location.pathname === '/oauth/callback' || 
+                          window.location.search.includes('code=');
+
+  useEffect(() => {
+    // Si estamos en el callback, limpiar la URL después de procesar
+    if (isOAuthCallback && window.location.search.includes('code=')) {
+      // El componente OAuthCallback manejará el callback
+    }
+  }, [isOAuthCallback]);
+
+  // Mostrar el componente de callback si estamos en esa ruta
+  if (isOAuthCallback) {
+    return <OAuthCallback />;
+  }
+
   const {
     activeTab,
     setActiveTab,

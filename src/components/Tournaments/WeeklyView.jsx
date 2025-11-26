@@ -86,19 +86,29 @@ const WeeklyView = ({
     return days;
   }, [currentWeek]);
 
+  // Función auxiliar para obtener la fecha como string YYYY-MM-DD en hora local
+  const getLocalDateString = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
   // Función para obtener torneos que ocurren en un día específico (incluyendo multi-día)
   const getTournamentsForDay = (day) => {
-    const dateString = day.toISOString().split("T")[0];
+    // Obtener la fecha como string YYYY-MM-DD en hora local (sin conversión a UTC)
+    const dayString = getLocalDateString(day);
 
     return tournaments.filter((tournament) => {
       if (!tournament.date || !tournament.endDate) return false;
 
-      const startDate = new Date(tournament.date);
-      const endDate = new Date(tournament.endDate);
-      const currentDay = new Date(dateString);
+      // Extraer solo la parte de la fecha (YYYY-MM-DD) de las fechas del torneo
+      const tournamentStart = tournament.date.split("T")[0];
+      const tournamentEnd = tournament.endDate.split("T")[0];
 
-      // El torneo ocurre en este día si está entre startDate y endDate (inclusive)
-      return currentDay >= startDate && currentDay <= endDate;
+      // El torneo ocurre en este día si el día está entre startDate y endDate (inclusive)
+      // Comparación de strings funciona correctamente para fechas en formato YYYY-MM-DD
+      return dayString >= tournamentStart && dayString <= tournamentEnd;
     });
   };
 
@@ -155,7 +165,7 @@ const WeeklyView = ({
 
   const isToday = (date) => {
     const today = new Date();
-    return date.toDateString() === today.toDateString();
+    return getLocalDateString(date) === getLocalDateString(today);
   };
 
   // Función para obtener el color del torneo basado en su estado
