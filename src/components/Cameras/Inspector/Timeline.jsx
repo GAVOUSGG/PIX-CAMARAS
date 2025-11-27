@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { ChevronLeft, ChevronRight, Calendar } from "lucide-react";
 import EventCard from "./EventCard";
 
-const Timeline = ({ events, onEventClick, zoomLevel }) => {
+const Timeline = ({ events, onEventClick, onEventDelete, zoomLevel }) => {
   const scrollContainerRef = useRef(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
@@ -101,11 +101,38 @@ const Timeline = ({ events, onEventClick, zoomLevel }) => {
                 transform: `scale(${zoomLevel})`,
                 transformOrigin: "left center",
               }}
-              className="flex-shrink-0 relative"
+              className="flex-shrink-0 relative group/item"
             >
-              <div className="absolute -top-2 -right-2 w-6 h-6 bg-slate-700 border border-white/10 rounded-full flex items-center justify-center text-xs font-bold text-white">
+              <div className="absolute -top-2 -right-2 w-6 h-6 bg-slate-700 border border-white/10 rounded-full flex items-center justify-center text-xs font-bold text-white z-10">
                 {events.length - index}
               </div>
+              
+              {/* Delete Button */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onEventDelete(event.id);
+                }}
+                className="absolute -top-2 right-6 w-6 h-6 bg-red-500/20 border border-red-500/30 rounded-full flex items-center justify-center text-red-400 hover:bg-red-500 hover:text-white transition-all opacity-0 group-hover/item:opacity-100 z-10"
+                title="Eliminar evento"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M3 6h18" />
+                  <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                  <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                </svg>
+              </button>
+
               <EventCard event={event} onClick={() => onEventClick(event)} />
             </div>
           ))}

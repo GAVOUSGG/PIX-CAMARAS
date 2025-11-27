@@ -122,15 +122,13 @@ const TournamentForm = ({
         (w) => w.id.toString() === formData.workerId
       );
 
-      if (
-        selectedWorker &&
-        selectedWorker.camerasAssigned &&
-        selectedWorker.camerasAssigned.length > 0
-      ) {
+      if (selectedWorker) {
         // Obtener información completa de las cámaras asignadas al trabajador
+        // Buscamos tanto por ID en la lista del trabajador como por nombre en la cámara
         const workerCameras = cameras.filter(
           (camera) =>
-            selectedWorker.camerasAssigned.includes(camera.id) &&
+            ((selectedWorker.camerasAssigned || []).includes(camera.id) ||
+              camera.assignedTo === selectedWorker.name) &&
             camera.status === "disponible"
         );
         setAvailableCameras(workerCameras);

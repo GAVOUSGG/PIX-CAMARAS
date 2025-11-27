@@ -61,6 +61,22 @@ const CameraInspector = ({ cameraId, onBack }) => {
     );
   }
 
+  const handleDeleteHistoryEntry = async (entryId) => {
+    if (
+      window.confirm(
+        "¿Estás seguro de que deseas eliminar este evento del historial?"
+      )
+    ) {
+      try {
+        await apiService.deleteCameraHistory(entryId);
+        setHistory((prev) => prev.filter((entry) => entry.id !== entryId));
+      } catch (error) {
+        console.error("Error deleting history entry:", error);
+        alert("Error al eliminar el evento");
+      }
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-6">
       {/* Header */}
@@ -112,6 +128,7 @@ const CameraInspector = ({ cameraId, onBack }) => {
           <Timeline
             events={history}
             onEventClick={setSelectedEvent}
+            onEventDelete={handleDeleteHistoryEntry}
             zoomLevel={zoomLevel}
           />
         </div>

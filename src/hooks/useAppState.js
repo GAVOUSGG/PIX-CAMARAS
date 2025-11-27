@@ -688,6 +688,33 @@ export const useAppState = () => {
       const tournamentToDelete = tournamentsData.find((t) => t.id === id);
 
       if (apiAvailable) {
+        // Eliminar historial asociado al torneo
+        try {
+          const allHistory = await apiService.getCameraHistory();
+          const tournamentHistory = allHistory.filter(
+            (entry) =>
+              entry.type === "tournament" &&
+              entry.details &&
+              entry.details.tournamentId === id
+          );
+
+          if (tournamentHistory.length > 0) {
+            console.log(
+              `🗑️ [deleteTournament] Eliminando ${tournamentHistory.length} entradas de historial`
+            );
+            await Promise.all(
+              tournamentHistory.map((entry) =>
+                apiService.deleteCameraHistory(entry.id)
+              )
+            );
+          }
+        } catch (historyError) {
+          console.warn(
+            "⚠️ [deleteTournament] Error al eliminar historial:",
+            historyError
+          );
+        }
+
         await apiService.deleteTournament(id);
       }
       setTournamentsData((prev) =>
@@ -936,8 +963,18 @@ export const useAppState = () => {
         }
       }
 
-      // Eliminar la cámara
+      // Eliminar historial de la cámara
       if (apiAvailable) {
+        try {
+          const history = await apiService.getCameraHistoryById(id);
+          if (history && history.length > 0) {
+            console.log(`🗑️ [deleteCamera] Eliminando ${history.length} entradas de historial`);
+            await Promise.all(history.map(entry => apiService.deleteCameraHistory(entry.id)));
+          }
+        } catch (historyError) {
+          console.warn("⚠️ [deleteCamera] Error al eliminar historial:", historyError);
+        }
+
         await apiService.deleteCamera(id);
       }
       setCamerasData((prev) => prev.filter((camera) => camera.id !== id));
@@ -981,6 +1018,18 @@ export const useAppState = () => {
       console.error(`❌ [createCameraHistoryEntry] Error:`, error);
       // No fallar la operación principal si falla el historial
       return null;
+    }
+  };
+
+  const deleteCameraHistoryEntry = async (id) => {
+    try {
+      console.log(`🗑️ [deleteCameraHistoryEntry] Eliminando entrada de historial: ${id}`);
+      if (apiAvailable) {
+        await apiService.deleteCameraHistory(id);
+      }
+    } catch (error) {
+      console.error(`❌ [deleteCameraHistoryEntry] Error:`, error);
+      throw error;
     }
   };
 
@@ -1293,6 +1342,33 @@ export const useAppState = () => {
       const shipmentToDelete = shipmentsData.find((s) => s.id === id);
 
       if (apiAvailable) {
+        // Eliminar historial asociado al envío
+        try {
+          const allHistory = await apiService.getCameraHistory();
+          const shipmentHistory = allHistory.filter(
+            (entry) =>
+              (entry.type === "shipment" || entry.type === "return") &&
+              entry.details &&
+              entry.details.shipmentId === id
+          );
+
+          if (shipmentHistory.length > 0) {
+            console.log(
+              `🗑️ [deleteShipment] Eliminando ${shipmentHistory.length} entradas de historial`
+            );
+            await Promise.all(
+              shipmentHistory.map((entry) =>
+                apiService.deleteCameraHistory(entry.id)
+              )
+            );
+          }
+        } catch (historyError) {
+          console.warn(
+            "⚠️ [deleteShipment] Error al eliminar historial:",
+            historyError
+          );
+        }
+
         await apiService.deleteShipment(id);
       }
 
