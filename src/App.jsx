@@ -7,6 +7,7 @@ import Workers from "./pages/Workers";
 import Cameras from "./pages/Cameras";
 import Logistics from "./pages/Logistics";
 import Map from "./pages/Map";
+import CameraHistory from "./pages/CameraHistory";
 import CameraInspector from "./components/Cameras/Inspector/CameraInspector";
 import TournamentModal from "./components/Tournaments/TournamentModal";
 import OAuthCallback from "./components/GoogleCalendar/OAuthCallback";
@@ -98,6 +99,7 @@ function App() {
             tournamentsData={tournamentsData}
             camerasData={camerasData}
             workersData={workersData}
+            shipmentsData={shipmentsData}
             tasksData={tasksData}
             onCompleteTask={completeTask}
             onShipCameras={handleShipCameras}
@@ -136,6 +138,8 @@ function App() {
             onInspectCamera={setInspectorCameraId}
           />
         );
+      case "history":
+        return <CameraHistory />;
       case "logistics":
         return (
           <Logistics
@@ -153,6 +157,7 @@ function App() {
             tournamentsData={tournamentsData}
             workersData={workersData}
             camerasData={camerasData}
+            shipmentsData={shipmentsData}
           />
         );
       default:
@@ -161,6 +166,7 @@ function App() {
             tournamentsData={tournamentsData}
             camerasData={camerasData}
             workersData={workersData}
+            shipmentsData={shipmentsData}
             tasksData={tasksData}
             onCompleteTask={completeTask}
             onShipCameras={handleShipCameras}

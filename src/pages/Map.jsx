@@ -1,7 +1,7 @@
 import React from 'react';
 import MexicoMap from '../components/Map/MexicoMap';
 
-const Map = ({ tournamentsData, workersData, camerasData }) => {
+const Map = ({ tournamentsData, workersData, camerasData, shipmentsData }) => {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -15,6 +15,7 @@ const Map = ({ tournamentsData, workersData, camerasData }) => {
         tournaments={tournamentsData}
         workers={workersData}
         cameras={camerasData}
+        shipments={shipmentsData}
       />
     </div>
   );

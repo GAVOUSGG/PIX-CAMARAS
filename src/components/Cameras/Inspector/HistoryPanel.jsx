@@ -125,7 +125,7 @@ const HistoryPanel = ({ camera, history, onBack }) => {
             </span>
           </div>
           <div className="flex justify-between items-center p-2 hover:bg-white/5 rounded transition-colors">
-            <span className="text-gray-400 text-sm">Devoluciones</span>
+            <span className="text-gray-400 text-sm">Entregas</span>
             <span className="text-orange-400 font-bold">{stats.returns}</span>
           </div>
           <div className="flex justify-between items-center p-2 hover:bg-white/5 rounded transition-colors">

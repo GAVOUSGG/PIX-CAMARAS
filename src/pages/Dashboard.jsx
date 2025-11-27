@@ -4,7 +4,7 @@ import ActiveTournaments from "../components/Dashboard/ActiveTournaments";
 import MexicoMap from "../components/Map/MexicoMap";
 import TasksList from "../components/Tasks/TasksList";
 
-const Dashboard = ({ tournamentsData, camerasData, workersData }) => {
+const Dashboard = ({ tournamentsData, camerasData, workersData, shipmentsData }) => {
   return (
     <div className="space-y-6">
       <StatsGrid
@@ -47,6 +47,7 @@ const Dashboard = ({ tournamentsData, camerasData, workersData }) => {
         tournaments={tournamentsData}
         workers={workersData}
         cameras={camerasData}
+        shipments={shipmentsData}
       />
     </div>
   );
