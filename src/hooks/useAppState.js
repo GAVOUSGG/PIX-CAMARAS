@@ -1009,15 +1009,21 @@ export const useAppState = () => {
           }
         }
 
-        // Actualizar el estado de las cámaras a "EN ENVIO" si el estado es "enviado"
-        if (
-          shipmentData.cameras &&
-          shipmentData.cameras.length > 0 &&
-          shipmentData.status === "enviado"
-        ) {
-          shipmentData.cameras.forEach((cameraId) => {
-            updateCamera(cameraId, { status: "en envio" });
-          });
+        // Actualizar el estado de las cámaras según el estado del envío
+        if (shipmentData.cameras && shipmentData.cameras.length > 0) {
+          if (shipmentData.status === "enviado") {
+            shipmentData.cameras.forEach((cameraId) => {
+              updateCamera(cameraId, { status: "en envio" });
+            });
+          } else if (shipmentData.status === "entregado") {
+            shipmentData.cameras.forEach((cameraId) => {
+              updateCamera(cameraId, {
+                status: "disponible",
+                assignedTo: shipmentData.recipient,
+                location: shipmentData.destination,
+              });
+            });
+          }
         }
 
         return newShipment;
@@ -1030,18 +1036,29 @@ export const useAppState = () => {
         setShipmentsData((prev) => [...prev, newShipment]);
 
         // Actualizar cámaras en modo offline
-        if (
-          shipmentData.cameras &&
-          shipmentData.cameras.length > 0 &&
-          shipmentData.status === "enviado"
-        ) {
-          setCamerasData((prev) =>
-            prev.map((camera) =>
-              shipmentData.cameras.includes(camera.id)
-                ? { ...camera, status: "en envio" }
-                : camera
-            )
-          );
+        if (shipmentData.cameras && shipmentData.cameras.length > 0) {
+          if (shipmentData.status === "enviado") {
+            setCamerasData((prev) =>
+              prev.map((camera) =>
+                shipmentData.cameras.includes(camera.id)
+                  ? { ...camera, status: "en envio" }
+                  : camera
+              )
+            );
+          } else if (shipmentData.status === "entregado") {
+            setCamerasData((prev) =>
+              prev.map((camera) =>
+                shipmentData.cameras.includes(camera.id)
+                  ? {
+                      ...camera,
+                      status: "disponible",
+                      assignedTo: shipmentData.recipient,
+                      location: shipmentData.destination,
+                    }
+                  : camera
+              )
+            );
+          }
         }
 
         return newShipment;
@@ -1066,6 +1083,68 @@ export const useAppState = () => {
         ...shipmentData,
         updatedAt: new Date().toISOString(),
       };
+
+      // Detectar cambios en cámaras
+      const currentCameras = currentShipment.cameras || [];
+      const updatedCameras = updatedData.cameras || [];
+      
+      // Cámaras removidas: siempre liberarlas
+      const camerasRemoved = currentCameras.filter(c => !updatedCameras.includes(c));
+      if (camerasRemoved.length > 0) {
+        console.log("➖ [updateShipment] Cámaras removidas del envío:", camerasRemoved);
+        for (const cameraId of camerasRemoved) {
+           // Revertir a estado disponible y limpiar asignación
+           await updateCamera(cameraId, { 
+             status: "disponible",
+             assignedTo: "", // Limpiar asignación si la hubiera
+             location: "Almacén" // Opcional: regresar a almacén
+           });
+           
+           // Crear historial
+           await createCameraHistoryEntry(
+             cameraId,
+             "shipment",
+             `Removido del envío ${id}`,
+             {
+               shipmentId: id,
+               previousStatus: currentShipment.status
+             }
+           );
+        }
+      }
+
+      // Cámaras agregadas: manejar si el estado NO cambia (si cambia, lo maneja handleShipmentStatusChange)
+      const camerasAdded = updatedCameras.filter(c => !currentCameras.includes(c));
+      if (camerasAdded.length > 0 && currentShipment.status === updatedData.status) {
+         console.log("➕ [updateShipment] Cámaras agregadas al envío:", camerasAdded);
+         const status = updatedData.status;
+         
+         if (status === "enviado") {
+            for (const cameraId of camerasAdded) {
+               await updateCamera(cameraId, { status: "en envio" });
+               await createCameraHistoryEntry(
+                 cameraId,
+                 "shipment",
+                 `Agregado a envío ${id} (Enviado)`,
+                 { shipmentId: id, destination: updatedData.destination }
+               );
+            }
+         } else if (status === "entregado") {
+            for (const cameraId of camerasAdded) {
+               await updateCamera(cameraId, { 
+                 status: "disponible",
+                 assignedTo: updatedData.recipient,
+                 location: updatedData.destination
+               });
+               await createCameraHistoryEntry(
+                 cameraId,
+                 "shipment",
+                 `Agregado a envío ${id} (Entregado)`,
+                 { shipmentId: id, recipient: updatedData.recipient }
+               );
+            }
+         }
+      }
 
       // Lógica para manejar cambios de estado
       await handleShipmentStatusChange(currentShipment, updatedData);

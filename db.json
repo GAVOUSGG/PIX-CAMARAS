@@ -316,7 +316,9 @@
       "email": "ernestodekeratry@pixgolf.com",
       "status": "disponible",
       "specialty": "Mantenimiento equipos",
-      "camerasAssigned": [],
+      "camerasAssigned": [
+        "prueba"
+      ],
       "photo": "",
       "updatedAt": "2025-11-23T00:48:54.457Z"
     },
@@ -472,9 +474,7 @@
       "email": "correo@gmail.com",
       "status": "disponible",
       "specialty": "Instalación cámaras solares",
-      "camerasAssigned": [
-        "prueba"
-      ],
+      "camerasAssigned": [],
       "photo": "",
       "createdAt": "2025-11-25T04:03:48.503Z"
     }
@@ -485,10 +485,10 @@
       "model": "Hikvision DS-2XS6A25G0-I/CH20S40",
       "type": "Solar",
       "status": "disponible",
-      "location": "Estado de México",
+      "location": "Jalisco",
       "serialNumber": "asda",
       "simNumber": "354621345645",
-      "assignedTo": "Alanna Sanchez Granados",
+      "assignedTo": "Ernesto De Keratry",
       "assignedWorkerId": "11",
       "notes": "",
       "historyCount": 0,
@@ -496,7 +496,7 @@
       "lastWorkerId": "",
       "lastTournamentId": "",
       "createdAt": "2025-11-23T00:48:46.469Z",
-      "updatedAt": "2025-11-27T03:08:37.343Z"
+      "updatedAt": "2025-11-27T03:26:04.242Z"
     }
   ],
   "cameraHistory": [
@@ -569,6 +569,34 @@
       },
       "date": "2025-11-27T03:08:37.323Z",
       "createdAt": "2025-11-27T03:08:37.323Z"
+    },
+    {
+      "id": "prueba-1764213936742",
+      "cameraId": "prueba",
+      "type": "shipment",
+      "title": "Enviado a Jalisco",
+      "details": {
+        "shipmentId": "ENV-003",
+        "destination": "Jalisco",
+        "recipient": "Ernesto De Keratry",
+        "trackingNumber": "TRK1764213918831"
+      },
+      "date": "2025-11-27T03:25:36.742Z",
+      "createdAt": "2025-11-27T03:25:36.742Z"
+    },
+    {
+      "id": "prueba-1764213964108",
+      "cameraId": "prueba",
+      "type": "return",
+      "title": "Entregado a Ernesto De Keratry en Jalisco",
+      "details": {
+        "shipmentId": "ENV-003",
+        "destination": "Jalisco",
+        "recipient": "Ernesto De Keratry",
+        "status": "entregado"
+      },
+      "date": "2025-11-27T03:26:04.108Z",
+      "createdAt": "2025-11-27T03:26:04.108Z"
     }
   ],
   "shipments": [
@@ -603,6 +631,22 @@
       "extraItems": "",
       "createdAt": "2025-11-27T03:07:25.261Z",
       "updatedAt": "2025-11-27T03:08:37.321Z"
+    },
+    {
+      "id": "ENV-003",
+      "cameras": [
+        "prueba"
+      ],
+      "destination": "Jalisco",
+      "recipient": "Ernesto De Keratry",
+      "sender": "",
+      "shipper": "Alanna Sanchez Granados",
+      "date": "2025-11-27",
+      "status": "entregado",
+      "trackingNumber": "TRK1764213918831",
+      "extraItems": "",
+      "createdAt": "2025-11-27T03:25:36.707Z",
+      "updatedAt": "2025-11-27T03:26:04.104Z"
     }
   ]
 }
