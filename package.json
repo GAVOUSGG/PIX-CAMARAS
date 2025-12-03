@@ -8,12 +8,14 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "server": "json-server --watch db.json --port 3001 --host 127.0.0.1",
-    "dev:full": "concurrently -n \"JSON_SERVER,VITE\" -c \"green,blue\" \"npm run server\" \"npm run dev\""
+    "server": "node server/index.js",
+    "dev:full": "concurrently -n \"SERVER,VITE\" -c \"green,blue\" \"npm run server\" \"npm run dev\""
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.17",
     "autoprefixer": "^10.4.22",
+    "cors": "^2.8.5",
+    "express": "^5.2.1",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.553.0",
     "postcss": "^8.5.6",
@@ -21,6 +23,8 @@
     "react-dom": "^19.2.0",
     "react-leaflet": "^5.0.0",
     "react-router-dom": "^7.9.5",
+    "sequelize": "^6.37.7",
+    "sqlite3": "^5.1.7",
     "tailwindcss": "^4.1.17"
   },
   "devDependencies": {
