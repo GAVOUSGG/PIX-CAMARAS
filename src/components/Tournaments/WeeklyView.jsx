@@ -507,8 +507,8 @@ const WeeklyView = ({
                               Hoyos
                             </div>
                             <div className="text-sm text-white font-medium">
-                              {tournament.holes && tournament.holes.length > 0
-                                ? `${tournament.holes.length} hoyos`
+                              {tournament.holes > 0
+                                ? `${tournament.holes} hoyos`
                                 : "Por definir"}
                             </div>
                           </div>

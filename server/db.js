@@ -32,8 +32,8 @@ const Tournament = sequelize.define('Tournament', {
     defaultValue: [],
   },
   holes: {
-    type: DataTypes.JSON, // Storing array of hole numbers
-    defaultValue: [],
+    type: DataTypes.INTEGER, // Storing number of holes
+    defaultValue: 0,
   },
   days: DataTypes.INTEGER,
   field: DataTypes.STRING,

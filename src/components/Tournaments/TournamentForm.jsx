@@ -76,13 +76,13 @@ const TournamentForm = ({
     location: extractCityFromLocation(tournament?.location) || "",
     field:
       tournament?.field || extractFieldFromLocation(tournament?.location) || "",
-    holes: tournament?.holes || [],
+    holes: tournament?.holes || 0,
     days: tournament?.days || 1,
     startDate: tournament?.date || "",
     endDate: tournament?.endDate || "",
     status: tournament?.status || "pendiente",
     workerId: tournament?.workerId?.toString() || "",
-    selectedHoles: tournament?.holes || [],
+    selectedHoles: [], // Ya no se usa para selección, solo compatibilidad visual si fuera necesario
     assignedCameras: tournament?.cameras || [], // Nuevo: cámaras asignadas
   });
 
@@ -92,7 +92,7 @@ const TournamentForm = ({
     useState("pending"); // pending, complete, insufficient, none
 
   // Calcular cámaras necesarias
-  const requiredCameras = formData.selectedHoles.length * 2;
+  const requiredCameras = (formData.holes || 0) * 2;
 
   // Filtrar trabajadores por estado seleccionado
   useEffect(() => {
@@ -211,15 +211,9 @@ const TournamentForm = ({
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleHoleSelection = (holeNumber) => {
-    setFormData((prev) => {
-      const isSelected = prev.selectedHoles.includes(holeNumber);
-      const selectedHoles = isSelected
-        ? prev.selectedHoles.filter((h) => h !== holeNumber)
-        : [...prev.selectedHoles, holeNumber].sort((a, b) => a - b);
-
-      return { ...prev, selectedHoles, holes: selectedHoles };
-    });
+  const handleHoleCountChange = (count) => {
+    const holeCount = parseInt(count);
+    setFormData((prev) => ({ ...prev, holes: holeCount }));
   };
 
   // Función para asignar cámaras manualmente
@@ -282,8 +276,9 @@ const TournamentForm = ({
       status: finalStatus,
       worker: selectedWorker ? selectedWorker.name : "Por asignar",
       workerId: formData.workerId || "",
+      workerId: formData.workerId || "",
       cameras: formData.assignedCameras,
-      holes: formData.selectedHoles,
+      holes: parseInt(formData.holes) || 0,
       days: parseInt(formData.days) || 1,
       field: formData.field,
       cameraStatus: cameraAssignmentStatus, // Nuevo campo para trackear estado de cámaras
@@ -409,7 +404,6 @@ const TournamentForm = ({
               </label>
               <input
                 type="text"
-                required
                 value={formData.name}
                 onChange={(e) => handleInputChange("name", e.target.value)}
                 className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
@@ -422,7 +416,6 @@ const TournamentForm = ({
                 Estado *
               </label>
               <select
-                required
                 value={formData.state}
                 onChange={(e) => handleInputChange("state", e.target.value)}
                 className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
@@ -451,7 +444,6 @@ const TournamentForm = ({
               </label>
               <input
                 type="text"
-                required
                 value={formData.field}
                 onChange={(e) => handleInputChange("field", e.target.value)}
                 className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
@@ -465,7 +457,6 @@ const TournamentForm = ({
               </label>
               <input
                 type="text"
-                required
                 value={formData.location}
                 onChange={(e) => handleInputChange("location", e.target.value)}
                 className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
@@ -525,32 +516,25 @@ const TournamentForm = ({
             </div>
           </div>
 
-          {/* Selección de Hoyos */}
+          {/* Selección de Cantidad de Hoyos */}
           <div>
-            <label className="block text-sm font-medium text-gray-400 mb-4">
-              Hoyos Asegurados * (2 cámaras por hoyo)
+            <label className="block text-sm font-medium text-gray-400 mb-2">
+              Cantidad de Hoyos * (2 cámaras por hoyo)
             </label>
-            <div className="grid grid-cols-6 md:grid-cols-9 lg:grid-cols-18 gap-2">
-              {Array.from({ length: 18 }, (_, i) => i + 1).map((hole) => (
-                <button
-                  key={hole}
-                  type="button"
-                  onClick={() => handleHoleSelection(hole)}
-                  className={`p-3 rounded-lg border-2 transition-all relative ${
-                    formData.selectedHoles.includes(hole)
-                      ? "bg-emerald-500/20 border-emerald-500 text-emerald-400"
-                      : "bg-white/5 border-white/10 text-gray-400 hover:border-emerald-500/50"
-                  }`}
-                >
-                  {hole}
-                  {formData.selectedHoles.includes(hole) && (
-                    <CheckCircle className="w-3 h-3 absolute -top-1 -right-1" />
-                  )}
-                </button>
+            <select
+              value={formData.holes}
+              onChange={(e) => handleHoleCountChange(e.target.value)}
+              className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            >
+              <option value="0" className="text-white bg-gray-700">Seleccionar cantidad</option>
+              {Array.from({ length: 9 }, (_, i) => i + 1).map((num) => (
+                <option key={num} value={num} className="text-white bg-gray-700">
+                  {num} {num === 1 ? 'Hoyo' : 'Hoyos'}
+                </option>
               ))}
-            </div>
+            </select>
             <div className="mt-2 text-sm text-gray-400">
-              Seleccionados: {formData.selectedHoles.join(", ") || "Ninguno"} |
+              Seleccionados: {formData.holes > 0 ? `${formData.holes}` : "Ninguno"} |
               Cámaras requeridas: {requiredCameras}
             </div>
           </div>
@@ -756,7 +740,7 @@ const TournamentForm = ({
               <div>
                 <span className="text-gray-400">Hoyos:</span>
                 <span className="text-white ml-2">
-                  {formData.selectedHoles.length}
+                  {formData.holes}
                 </span>
               </div>
               <div>
@@ -794,11 +778,7 @@ const TournamentForm = ({
               type="submit"
               disabled={
                 !formData.name ||
-                !formData.state ||
-                !formData.field ||
-                !formData.location ||
-                !formData.startDate ||
-                formData.selectedHoles.length === 0
+                !formData.holes
               }
               className="bg-emerald-500 hover:bg-emerald-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white px-6 py-3 rounded-lg transition-colors flex items-center space-x-2"
             >
