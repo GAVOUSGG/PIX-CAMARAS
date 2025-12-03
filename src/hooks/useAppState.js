@@ -684,6 +684,7 @@ export const useAppState = () => {
 
   const deleteTournament = async (id) => {
     try {
+      console.log("🗑️ [useAppState] deleteTournament solicitado para ID:", id, typeof id);
       // Obtener el torneo antes de eliminarlo para mostrar información
       const tournamentToDelete = tournamentsData.find((t) => t.id === id);
 

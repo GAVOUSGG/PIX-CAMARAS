@@ -273,7 +273,7 @@ const TournamentForm = ({
     }
 
     const tournamentData = {
-      ...(isEditing && { id: tournamentId }),
+      id: tournamentId,
       name: formData.name,
       location: `${formData.field}, ${formData.location}`,
       state: formData.state,

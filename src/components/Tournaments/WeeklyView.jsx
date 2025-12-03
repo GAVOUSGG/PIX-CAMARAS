@@ -548,7 +548,7 @@ const WeeklyView = ({
                           <span>Editar</span>
                         </button>
                         <button
-                          onClick={() => onDeleteTournament(tournament)}
+                          onClick={() => onDeleteTournament(tournament.id)}
                           className="p-2.5 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-lg transition-all"
                         >
                           <Trash2 className="w-4 h-4" />
