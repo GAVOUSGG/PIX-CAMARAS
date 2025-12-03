@@ -269,6 +269,32 @@ const ShipmentsTable = ({
                                   <span>Editar envío</span>
                                 </button>
 
+                                {/* Cambiar Estado Rápido */}
+                                <div className="border-t border-white/10 my-1"></div>
+                                <div className="px-3 py-1 text-xs text-gray-400 font-medium">
+                                  Cambiar estado
+                                </div>
+                                {["preparando", "pendiente", "enviado", "entregado"].map((status) => (
+                                  <button
+                                    key={status}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      if (shipment.status !== status) {
+                                        onEditShipment({ ...shipment, status });
+                                        setActionMenu(null);
+                                      }
+                                    }}
+                                    className={`w-full flex items-center space-x-3 px-3 py-2 text-sm rounded-lg transition-colors ${
+                                      shipment.status === status
+                                        ? "bg-white/10 text-white cursor-default"
+                                        : "text-gray-400 hover:bg-white/10 hover:text-white"
+                                    }`}
+                                  >
+                                    <div className={`w-2 h-2 rounded-full ${getStatusColor(status).replace('text-', 'bg-')}`} />
+                                    <span className="capitalize">{status}</span>
+                                  </button>
+                                ))}
+
                                 {/* Eliminar */}
                                 <div className="border-t border-white/10 my-1"></div>
                                 <button

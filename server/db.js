@@ -97,6 +97,7 @@ const Shipment = sequelize.define('Shipment', {
   trackingNumber: DataTypes.STRING,
   extraItems: DataTypes.STRING,
   origin: DataTypes.STRING, // New field for origin location
+  originState: DataTypes.STRING, // Explicit state of origin
 }, {
   timestamps: true,
 });
