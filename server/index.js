@@ -10,10 +10,19 @@ app.use(express.json());
 
 // Generic CRUD handlers
 const createCrudRoutes = (router, Model, pathName) => {
-  // GET all
+  // GET all with filtering
   router.get(`/${pathName}`, async (req, res) => {
     try {
-      const items = await Model.findAll();
+      const where = {};
+      // Support simple filtering like json-server (e.g. ?cameraId=123)
+      // Ignore special params starting with _ (like _sort, _limit, etc.)
+      for (const key in req.query) {
+        if (!key.startsWith('_')) {
+          where[key] = req.query[key];
+        }
+      }
+      console.log(`🔍 [API] GET /${pathName} filters:`, where);
+      const items = await Model.findAll({ where });
       res.json(items);
     } catch (error) {
       console.error(`Error fetching ${pathName}:`, error);
@@ -90,22 +99,7 @@ createCrudRoutes(app, Camera, 'cameras');
 createCrudRoutes(app, Shipment, 'shipments');
 createCrudRoutes(app, CameraHistory, 'cameraHistory');
 
-// Specific route for cameraHistory with query param support (json-server style filter)
-// Overriding the generic GET /cameraHistory to support ?cameraId=...
-app.get('/cameraHistory', async (req, res) => {
-  try {
-    const { cameraId } = req.query;
-    const where = {};
-    if (cameraId) {
-      where.cameraId = cameraId;
-    }
-    const history = await CameraHistory.findAll({ where });
-    res.json(history);
-  } catch (error) {
-    console.error('Error fetching cameraHistory:', error);
-    res.status(500).json({ error: error.message });
-  }
-});
+
 
 // Start server
 const startServer = async () => {

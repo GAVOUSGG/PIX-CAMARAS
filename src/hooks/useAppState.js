@@ -1051,6 +1051,7 @@ export const useAppState = () => {
               `Enviado a ${shipmentData.destination}`,
               {
                 shipmentId: newShipment.id,
+                origin: shipmentData.origin,
                 destination: shipmentData.destination,
                 recipient: shipmentData.recipient,
                 trackingNumber: shipmentData.trackingNumber,

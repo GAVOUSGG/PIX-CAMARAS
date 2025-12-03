@@ -96,6 +96,7 @@ const Shipment = sequelize.define('Shipment', {
   status: DataTypes.STRING,
   trackingNumber: DataTypes.STRING,
   extraItems: DataTypes.STRING,
+  origin: DataTypes.STRING, // New field for origin location
 }, {
   timestamps: true,
 });
@@ -122,7 +123,7 @@ const initDb = async () => {
   try {
     await sequelize.authenticate();
     console.log('Connection has been established successfully.');
-    await sequelize.sync(); // Create tables if they don't exist
+    await sequelize.sync({ alter: true }); // Create tables if they don't exist, alter if they do
     console.log('Database synced.');
   } catch (error) {
     console.error('Unable to connect to the database:', error);

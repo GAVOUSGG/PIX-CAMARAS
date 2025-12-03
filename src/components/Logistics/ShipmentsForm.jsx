@@ -78,6 +78,7 @@ const ShipmentForm = ({
   const [formData, setFormData] = useState({
     id: shipment?.id || getNextShipmentId(),
     cameras: shipment?.cameras || [],
+    origin: shipment?.origin || "", // Nuevo campo origen
     destination: shipment?.destination || "",
     recipient: shipment?.recipient || "",
     sender: shipment?.sender || "",
@@ -154,6 +155,7 @@ const ShipmentForm = ({
         setFormData({
           id: getNextShipmentId(),
           cameras: [],
+          origin: "",
           destination: "",
           recipient: "",
           sender: "",
@@ -244,8 +246,36 @@ const ShipmentForm = ({
             </div>
           </div>
 
-          {/* Destino y Fecha */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Origen, Destino y Fecha */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-400 mb-2">
+                <MapPin className="w-4 h-4 inline mr-2" />
+                Origen *
+              </label>
+              <select
+                required
+                value={formData.origin}
+                onChange={(e) =>
+                  handleInputChange("origin", e.target.value)
+                }
+                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              >
+                <option value="" className="text-white bg-gray-700">
+                  Seleccionar origen
+                </option>
+                {estadosMexico.map((estado) => (
+                  <option
+                    key={estado}
+                    value={estado}
+                    className="text-white bg-gray-700"
+                  >
+                    {estado}
+                  </option>
+                ))}
+              </select>
+            </div>
+
             <div>
               <label className="block text-sm font-medium text-gray-400 mb-2">
                 <MapPin className="w-4 h-4 inline mr-2" />
@@ -477,6 +507,12 @@ const ShipmentForm = ({
                 <span className="text-gray-400">Tracking:</span>
                 <span className="text-white ml-2 font-mono">
                   {formData.trackingNumber}
+                </span>
+              </div>
+              <div>
+                <span className="text-gray-400">Origen:</span>
+                <span className="text-white ml-2">
+                  {formData.origin || "No especificado"}
                 </span>
               </div>
               <div>
