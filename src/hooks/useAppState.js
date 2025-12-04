@@ -822,7 +822,7 @@ export const useAppState = () => {
     }
   };
 
-  const updateCamera = async (id, cameraData) => {
+  const updateCamera = async (id, cameraData, skipWorkerUpdate = false) => {
     try {
       console.log("🔄 [updateCamera] Actualizando cámara:", id, cameraData);
 
@@ -834,8 +834,8 @@ export const useAppState = () => {
       const previousAssignedTo = currentCamera.assignedTo || "";
       const newAssignedTo = cameraData.assignedTo || "";
 
-      // Detectar cambios en assignedTo
-      if (previousAssignedTo !== newAssignedTo) {
+      // Detectar cambios en assignedTo (solo si no se salta la actualización del trabajador)
+      if (previousAssignedTo !== newAssignedTo && !skipWorkerUpdate) {
         console.log(
           `🔄 [updateCamera] Cambio en assignedTo: "${previousAssignedTo}" -> "${newAssignedTo}"`
         );
@@ -1064,9 +1064,49 @@ export const useAppState = () => {
         // Actualizar el estado de las cámaras según el estado del envío
         if (shipmentData.cameras && shipmentData.cameras.length > 0) {
           if (shipmentData.status === "enviado") {
-            shipmentData.cameras.forEach((cameraId) => {
-              updateCamera(cameraId, { status: "en envio" });
-            });
+            // Actualización por lotes de trabajadores para evitar condiciones de carrera
+            const recipientName = shipmentData.recipient;
+            const shipperName = shipmentData.shipper;
+            const camerasToTransfer = shipmentData.cameras;
+
+            // 1. Actualizar al destinatario (agregar todas las cámaras)
+            if (recipientName) {
+              const recipientWorker = workersData.find(w => w.name === recipientName);
+              if (recipientWorker) {
+                const currentCameras = recipientWorker.camerasAssigned || [];
+                // Agregar nuevas cámaras evitando duplicados
+                const newCameras = [...currentCameras, ...camerasToTransfer].filter(
+                  (id, index, self) => self.indexOf(id) === index
+                );
+                
+                await updateWorker(recipientWorker.id, {
+                  ...recipientWorker,
+                  camerasAssigned: newCameras
+                }, true); // skipCameraUpdate=true
+              }
+            }
+
+            // 2. Actualizar al remitente (quitar todas las cámaras)
+            if (shipperName) {
+              const shipperWorker = workersData.find(w => w.name === shipperName);
+              if (shipperWorker) {
+                const currentCameras = shipperWorker.camerasAssigned || [];
+                const newCameras = currentCameras.filter(id => !camerasToTransfer.includes(id));
+                
+                await updateWorker(shipperWorker.id, {
+                  ...shipperWorker,
+                  camerasAssigned: newCameras
+                }, true); // skipCameraUpdate=true
+              }
+            }
+
+            // 3. Actualizar cámaras individualmente (saltando actualización de trabajador)
+            for (const cameraId of shipmentData.cameras) {
+              await updateCamera(cameraId, { 
+                status: "en envio",
+                assignedTo: shipmentData.recipient
+              }, true); // skipWorkerUpdate=true
+            }
           } else if (shipmentData.status === "entregado") {
             shipmentData.cameras.forEach((cameraId) => {
               updateCamera(cameraId, {
@@ -1093,7 +1133,11 @@ export const useAppState = () => {
             setCamerasData((prev) =>
               prev.map((camera) =>
                 shipmentData.cameras.includes(camera.id)
-                  ? { ...camera, status: "en envio" }
+                  ? { 
+                      ...camera, 
+                      status: "en envio",
+                      assignedTo: shipmentData.recipient
+                    }
                   : camera
               )
             );
@@ -1173,7 +1217,10 @@ export const useAppState = () => {
          
          if (status === "enviado") {
             for (const cameraId of camerasAdded) {
-               await updateCamera(cameraId, { status: "en envio" });
+               await updateCamera(cameraId, { 
+                 status: "en envio",
+                 assignedTo: updatedData.recipient
+               });
                await createCameraHistoryEntry(
                  cameraId,
                  "shipment",
@@ -1245,8 +1292,52 @@ export const useAppState = () => {
     // Caso 1: Cambio a "enviado" - Cámaras cambian a "EN ENVIO"
     if (newStatus === "enviado" && oldStatus !== "enviado") {
       console.log('📦 Cambiando cámaras a estado "EN ENVIO":', cameras);
+      
+      // Actualización por lotes de trabajadores
+      const recipientName = recipient;
+      // Intentar deducir el remitente de las cámaras (asumiendo que todas vienen del mismo)
+      // O usar el remitente del envío si está disponible en updatedShipment (necesitaríamos pasarlo)
+      // Por ahora, nos enfocamos en asegurar que el destinatario las reciba
+      
+      if (recipientName) {
+        const recipientWorker = workersData.find(w => w.name === recipientName);
+        if (recipientWorker) {
+          const currentCameras = recipientWorker.camerasAssigned || [];
+          const newCameras = [...currentCameras, ...cameras].filter(
+            (id, index, self) => self.indexOf(id) === index
+          );
+          
+          await updateWorker(recipientWorker.id, {
+            ...recipientWorker,
+            camerasAssigned: newCameras
+          }, true);
+        }
+      }
+
+      // Intentar limpiar del remitente original (buscando en la primera cámara)
+      if (cameras.length > 0) {
+        const firstCamera = camerasData.find(c => c.id === cameras[0]);
+        const previousOwner = firstCamera?.assignedTo;
+        
+        if (previousOwner && previousOwner !== recipientName) {
+           const ownerWorker = workersData.find(w => w.name === previousOwner);
+           if (ownerWorker) {
+             const currentCameras = ownerWorker.camerasAssigned || [];
+             const newCameras = currentCameras.filter(id => !cameras.includes(id));
+             
+             await updateWorker(ownerWorker.id, {
+               ...ownerWorker,
+               camerasAssigned: newCameras
+             }, true);
+           }
+        }
+      }
+
       for (const cameraId of cameras) {
-        updateCamera(cameraId, { status: "en envio" });
+        updateCamera(cameraId, { 
+          status: "en envio",
+          assignedTo: recipient
+        }, true); // skipWorkerUpdate=true
         // Crear entrada de historial
         await createCameraHistoryEntry(
           cameraId,
