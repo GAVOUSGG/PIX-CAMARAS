@@ -105,8 +105,8 @@ const TournamentTable = ({
                       }
                     </div>
                     <div className="text-xs text-gray-400">
-                      {tournament.holes && tournament.holes.length > 0 
-                        ? `${tournament.holes.length} hoyos`
+                      {tournament.holes > 0 
+                        ? `${tournament.holes} hoyos`
                         : 'Sin hoyos'
                       }
                     </div>
