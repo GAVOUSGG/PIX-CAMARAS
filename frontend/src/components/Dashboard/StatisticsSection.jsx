@@ -15,8 +15,7 @@ import {
   Area
 } from 'recharts';
 
-const COLORS = ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6'];
-const DARK_COLORS = ['#059669', '#2563eb', '#d97706', '#dc2626', '#7c3aed'];
+const COLORS = ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#6366f1'];
 
 const StatisticsSection = ({ tournaments }) => {
   // Procesamiento de datos para las gráficas
@@ -38,6 +37,9 @@ const StatisticsSection = ({ tournaments }) => {
     // 4. Actividad Mensual (para AreaChart)
     const monthlyActivity = {};
 
+    // 5. Tipo Detallado (Días + Hoyos)
+    const typeMap = {};
+
     tournaments.forEach(t => {
       // Duración
       if (t.days === 1) durationStats[0].value++;
@@ -58,6 +60,12 @@ const StatisticsSection = ({ tournaments }) => {
         const monthYear = `${date.toLocaleString('es-MX', { month: 'short' })} ${date.getFullYear()}`;
         monthlyActivity[monthYear] = (monthlyActivity[monthYear] || 0) + 1;
       }
+
+      // Tipo Detallado
+      const daysLabel = t.days === 1 ? '1 Día' : `${t.days} Días`;
+      const holesLabel = t.holes ? `${t.holes} Hoyos` : 'Sin hoyos';
+      const typeKey = `${daysLabel}, ${holesLabel}`;
+      typeMap[typeKey] = (typeMap[typeKey] || 0) + 1;
     });
 
     // Formatear datos para Recharts
@@ -70,21 +78,19 @@ const StatisticsSection = ({ tournaments }) => {
       .sort((a, b) => b.value - a.value)
       .slice(0, 10); // Top 10 estados
 
-    // Ordenar cronológicamente los meses es complejo solo con string, 
-    // pero para este MVP los mostraremos como vienen (idealmente ordenar por fecha real)
-    // Una mejora rápida es asumir que el objeto se llena en orden si la DB trae orden, 
-    // si no, necesitariamos lógica de ordenamiento de fecha.
-    // Vamos a intentar ordenarlos basándonos en los datos del torneo.
-    
-    // Mejor estrategia para timeline: procesar todos los meses del último año
     const activityData = Object.entries(monthlyActivity)
       .map(([name, value]) => ({ name, value }));
+      
+    const typeData = Object.entries(typeMap)
+      .map(([name, value]) => ({ name, value }))
+      .sort((a, b) => b.value - a.value);
 
     return {
       duration: durationStats.filter(d => d.value > 0),
       holes: holesData,
       states: stateData,
-      activity: activityData
+      activity: activityData,
+      types: typeData
     };
   }, [tournaments]);
 
@@ -101,9 +107,28 @@ const StatisticsSection = ({ tournaments }) => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         
+        {/* Tipos de Torneo Detallados (Horizontal Bar - Full Width en mobile, ocupa 2 cols en desktop grande si se quiere destacar) */}
+        <div className="md:col-span-2 bg-black/20 backdrop-blur-lg rounded-2xl border border-white/10 p-6">
+           <h4 className="text-gray-300 font-medium mb-4">Tipos de Torneo (Días + Hoyos)</h4>
+           <div className="h-[300px] w-full">
+             <ResponsiveContainer width="100%" height="100%">
+               <BarChart data={stats.types} layout="vertical" margin={{ left: 40, right: 20 }}>
+                 <CartesianGrid strokeDasharray="3 3" stroke="#374151" horizontal={false} />
+                 <XAxis type="number" stroke="#9ca3af" />
+                 <YAxis type="category" dataKey="name" stroke="#9ca3af" width={120} />
+                 <Tooltip 
+                   cursor={{ fill: 'rgba(255, 255, 255, 0.05)' }}
+                   contentStyle={{ backgroundColor: '#1f2937', borderColor: '#374151', color: '#fff' }}
+                 />
+                 <Bar dataKey="value" name="Cantidad" fill="#8b5cf6" radius={[0, 4, 4, 0]} />
+               </BarChart>
+             </ResponsiveContainer>
+           </div>
+        </div>
+
         {/* Distribución por Duración (Pie) */}
         <div className="bg-black/20 backdrop-blur-lg rounded-2xl border border-white/10 p-6">
-          <h4 className="text-gray-300 font-medium mb-4">Duración de Torneos</h4>
+          <h4 className="text-gray-300 font-medium mb-4">Duración General</h4>
           <div className="h-[300px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
@@ -113,7 +138,7 @@ const StatisticsSection = ({ tournaments }) => {
                   cy="50%"
                   labelLine={false}
                   label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}
-                  outerRadius={100}
+                  outerRadius={80}
                   fill="#8884d8"
                   dataKey="value"
                 >
@@ -132,18 +157,18 @@ const StatisticsSection = ({ tournaments }) => {
 
         {/* Distribución por Hoyos (Bar) */}
         <div className="bg-black/20 backdrop-blur-lg rounded-2xl border border-white/10 p-6">
-          <h4 className="text-gray-300 font-medium mb-4">Distribución por Hoyos</h4>
+          <h4 className="text-gray-300 font-medium mb-4">Total Hoyos</h4>
           <div className="h-[300px] w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={stats.holes} layout="vertical" margin={{ left: 20 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#374151" horizontal={false} />
-                <XAxis type="number" stroke="#9ca3af" />
-                <YAxis dataKey="name" type="category" stroke="#9ca3af" width={100} />
+              <BarChart data={stats.holes} margin={{ top: 10 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#374151" vertical={false} />
+                <XAxis dataKey="name" stroke="#9ca3af" interval={0} fontSize={12} />
+                <YAxis stroke="#9ca3af" allowDecimals={false} />
                 <Tooltip 
                   cursor={{ fill: 'rgba(255, 255, 255, 0.05)' }}
                   contentStyle={{ backgroundColor: '#1f2937', borderColor: '#374151', color: '#fff' }}
                 />
-                <Bar dataKey="value" name="Torneos" fill="#10b981" radius={[0, 4, 4, 0]} />
+                <Bar dataKey="value" name="Torneos" fill="#10b981" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -151,7 +176,7 @@ const StatisticsSection = ({ tournaments }) => {
 
         {/* Torneos por Estado (Bar) */}
         <div className="bg-black/20 backdrop-blur-lg rounded-2xl border border-white/10 p-6">
-          <h4 className="text-gray-300 font-medium mb-4">Top Estados con Actividad</h4>
+          <h4 className="text-gray-300 font-medium mb-4">Top Estados</h4>
           <div className="h-[300px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={stats.states} margin={{ bottom: 20 }}>
@@ -175,10 +200,10 @@ const StatisticsSection = ({ tournaments }) => {
           </div>
         </div>
 
-        {/* Actividad Reciente (Area) - Opcional si hay datos de fecha */}
+        {/* Actividad Reciente (Area) */}
         {stats.activity.length > 0 && (
-          <div className="bg-black/20 backdrop-blur-lg rounded-2xl border border-white/10 p-6">
-            <h4 className="text-gray-300 font-medium mb-4">Actividad Mensual</h4>
+          <div className="md:col-span-2 bg-black/20 backdrop-blur-lg rounded-2xl border border-white/10 p-6">
+            <h4 className="text-gray-300 font-medium mb-4">Tendencia de Actividad</h4>
             <div className="h-[300px] w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={stats.activity}>
