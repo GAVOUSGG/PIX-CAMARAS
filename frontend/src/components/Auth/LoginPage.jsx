@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Lock, User } from 'lucide-react';
+import { API_URL } from '../../config';
 
 const LoginPage = ({ onLogin }) => {
   const [username, setUsername] = useState('');
@@ -13,7 +14,7 @@ const LoginPage = ({ onLogin }) => {
     setLoading(true);
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/login`, {
+      const response = await fetch(`${API_URL}/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

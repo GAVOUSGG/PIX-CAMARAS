@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "cd frontend && vite",
+    "start": "node backend/index.js",
     "build": "cd frontend && vite build",
     "lint": "cd frontend && eslint .",
     "preview": "cd frontend && vite preview",
@@ -21,6 +22,8 @@
     "jsonwebtoken": "^9.0.3",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.553.0",
+    "pg": "^8.18.0",
+    "pg-hstore": "^2.3.4",
     "postcss": "^8.5.6",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",

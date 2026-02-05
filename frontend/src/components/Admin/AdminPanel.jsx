@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Users, Clock, Shield, Plus, Edit2, Trash2, X, Save } from 'lucide-react';
+import { API_URL } from '../../config';
 
 const AdminPanel = () => {
   const [history, setHistory] = useState([]);
@@ -25,7 +26,7 @@ const AdminPanel = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/users`, {
+      const response = await fetch(`${API_URL}/users`, {
         headers: getAuthHeaders()
       });
       if (response.ok) {
@@ -43,7 +44,7 @@ const AdminPanel = () => {
 
   const fetchHistory = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/login-history`, {
+      const response = await fetch(`${API_URL}/login-history`, {
         headers: getAuthHeaders()
       });
       if (response.ok) {
@@ -65,8 +66,8 @@ const AdminPanel = () => {
     e.preventDefault();
     try {
       const url = editingUser 
-        ? `${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/users/${editingUser.id}`
-        : `${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/users`;
+        ? `${API_URL}/users/${editingUser.id}`
+        : `${API_URL}/users`;
       
       const method = editingUser ? 'PUT' : 'POST';
       
@@ -94,7 +95,7 @@ const AdminPanel = () => {
     if (!window.confirm('¿Estás seguro de eliminar este usuario?')) return;
     
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/users/${id}`, {
+      const response = await fetch(`${API_URL}/users/${id}`, {
         method: 'DELETE',
         headers: getAuthHeaders()
       });
@@ -163,7 +164,7 @@ const AdminPanel = () => {
                   if (window.confirm('¿Estás seguro de eliminar TODO el historial de cámaras? Esta acción no se puede deshacer.')) {
                      try {
                        const token = localStorage.getItem('token');
-                       const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3001'}/camera-history`, {
+                       const response = await fetch(`${API_URL}/camera-history`, {
                          method: 'DELETE',
                          headers: {
                            'Content-Type': 'application/json',
