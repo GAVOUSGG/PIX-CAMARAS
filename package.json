@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "cd frontend && vite",
     "start": "node backend/index.js",
-    "build": "cd frontend && vite build",
+    "build": "vite build --config frontend/vite.config.js",
     "lint": "cd frontend && eslint .",
     "preview": "cd frontend && vite preview",
     "server": "node backend/index.js",
