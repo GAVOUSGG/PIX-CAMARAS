@@ -2,12 +2,13 @@ import React, { useState, useMemo } from 'react';
 import CamerasTable from '../components/Cameras/CamerasTable';
 import CameraForm from '../components/Cameras/CameraForm';
 import CameraCard from '../components/Cameras/CameraCard';
-import { Search, Filter, Plus } from 'lucide-react';
+import { Search, Filter, Plus, Package } from 'lucide-react';
 
 const Cameras = ({ camerasData, workersData, onCreateCamera, onUpdateCamera, onDeleteCamera, onInspectCamera }) => {
   const [editingCamera, setEditingCamera] = useState(null);
   const [viewingCamera, setViewingCamera] = useState(null);
   const [showForm, setShowForm] = useState(false);
+  const [isAssigningToWarehouse, setIsAssigningToWarehouse] = useState(false);
   
   // Estados para el buscador y filtros
   const [searchTerm, setSearchTerm] = useState('');
@@ -104,23 +105,88 @@ const Cameras = ({ camerasData, workersData, onCreateCamera, onUpdateCamera, onD
     setEditingCamera(null);
   };
 
+  // Función para asignar todas las cámaras a almacén
+  const handleAssignAllToWarehouse = async () => {
+    // Confirmar acción
+    const confirmMessage = hasActiveFilters
+      ? `¿Estás seguro de que quieres asignar todas las ${filteredCameras.length} cámaras filtradas a Almacén?\n\nEsto cambiará su ubicación a "Almacén", estado a "disponible" y las desasignará de cualquier trabajador.`
+      : `¿Estás seguro de que quieres asignar todas las ${camerasData.length} cámaras a Almacén?\n\nEsto cambiará su ubicación a "Almacén", estado a "disponible" y las desasignará de cualquier trabajador.`;
+    
+    if (!window.confirm(confirmMessage)) {
+      return;
+    }
+
+    setIsAssigningToWarehouse(true);
+    const camerasToUpdate = hasActiveFilters ? filteredCameras : camerasData;
+    let successCount = 0;
+    let errorCount = 0;
+
+    try {
+      // Actualizar cada cámara
+      for (const camera of camerasToUpdate) {
+        try {
+          // Solo actualizar si no está ya en almacén y disponible
+          if (camera.location !== 'Almacén' || camera.status !== 'disponible' || camera.assignedTo) {
+            await onUpdateCamera(camera.id, {
+              location: 'Almacén',
+              status: 'disponible',
+              assignedTo: '', // Limpiar asignación
+            });
+            successCount++;
+          }
+        } catch (error) {
+          console.error(`Error actualizando cámara ${camera.id}:`, error);
+          errorCount++;
+        }
+      }
+
+      if (errorCount === 0) {
+        alert(`✅ ${successCount} ${successCount === 1 ? 'cámara actualizada' : 'cámaras actualizadas'} correctamente a Almacén.`);
+      } else {
+        alert(`⚠️ ${successCount} cámaras actualizadas, ${errorCount} errores.`);
+      }
+    } catch (error) {
+      console.error('Error en asignación masiva:', error);
+      alert('Error al asignar cámaras a almacén. Por favor intenta nuevamente.');
+    } finally {
+      setIsAssigningToWarehouse(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
-      {/* Header con título y botón */}
-      <div className="flex items-center justify-between">
+      {/* Header con título y botones */}
+      <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
           <h2 className="text-2xl font-bold text-white">Inventario de Cámaras</h2>
           <p className="text-gray-400 text-sm">
             {filteredCameras.length} de {camerasData.length} cámaras mostradas
           </p>
         </div>
-        <button
-          onClick={() => setShowForm(true)}
-          className="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg transition-colors flex items-center space-x-2"
-        >
-          <Plus className="w-5 h-5" />
-          <span>Agregar Cámara</span>
-        </button>
+        <div className="flex items-center space-x-2">
+          <button
+            onClick={handleAssignAllToWarehouse}
+            disabled={isAssigningToWarehouse || (hasActiveFilters ? filteredCameras.length === 0 : camerasData.length === 0)}
+            className="bg-blue-500 hover:bg-blue-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white px-4 py-2 rounded-lg transition-colors flex items-center space-x-2"
+            title={hasActiveFilters ? `Asignar ${filteredCameras.length} cámaras filtradas a Almacén` : `Asignar todas las ${camerasData.length} cámaras a Almacén`}
+          >
+            <Package className="w-5 h-5" />
+            <span>
+              {isAssigningToWarehouse 
+                ? 'Asignando...' 
+                : hasActiveFilters 
+                  ? `Asignar ${filteredCameras.length} a Almacén`
+                  : 'Asignar Todas a Almacén'}
+            </span>
+          </button>
+          <button
+            onClick={() => setShowForm(true)}
+            className="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg transition-colors flex items-center space-x-2"
+          >
+            <Plus className="w-5 h-5" />
+            <span>Agregar Cámara</span>
+          </button>
+        </div>
       </div>
 
       {/* Buscador y Filtros */}
