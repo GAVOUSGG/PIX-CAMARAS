@@ -34,11 +34,12 @@ const Cameras = ({ camerasData, workersData, onCreateCamera, onUpdateCamera, onD
   // Filtrar cámaras
   const filteredCameras = useMemo(() => {
     return camerasData.filter(camera => {
+      const searchLower = searchTerm.toLowerCase();
       const matchesSearch = searchTerm === '' || 
-        camera.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        camera.model.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        camera.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        camera.serialNumber.toLowerCase().includes(searchTerm.toLowerCase());
+        (camera.id && camera.id.toString().toLowerCase().includes(searchLower)) ||
+        (camera.model && camera.model.toString().toLowerCase().includes(searchLower)) ||
+        (camera.location && camera.location.toString().toLowerCase().includes(searchLower)) ||
+        (camera.serialNumber && camera.serialNumber.toString().toLowerCase().includes(searchLower));
       
       const matchesStatus = statusFilter === 'todos' || camera.status === statusFilter;
       const matchesType = typeFilter === 'todos' || camera.type === typeFilter;
