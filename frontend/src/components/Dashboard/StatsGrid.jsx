@@ -41,7 +41,7 @@ const StatsGrid = ({ tournaments, cameras, workers }) => {
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
       {stats.map((stat, index) => {
         const Icon = stat.icon;
         return (

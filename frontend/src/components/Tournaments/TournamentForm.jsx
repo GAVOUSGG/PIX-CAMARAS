@@ -241,18 +241,10 @@ const TournamentForm = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log(
-      "🎯 Iniciando ",
-      isEditing ? "edición" : "creación",
-      " de torneo..."
-    );
-
     // Buscar el trabajador seleccionado
     const selectedWorker = formData.workerId
       ? workers.find((w) => w.id.toString() === formData.workerId.toString())
       : null;
-
-    console.log("👤 Trabajador encontrado:", selectedWorker);
 
     // Para edición, usar el ID existente; para creación, generar nuevo
     const tournamentId = isEditing ? tournament.id : Date.now().toString();
@@ -286,12 +278,8 @@ const TournamentForm = ({
       ...(!isEditing && { createdAt: new Date().toISOString() }),
     };
 
-    console.log("📦 Datos del torneo a guardar:", tournamentData);
-
     try {
-      console.log("🚀 Llamando a onSave...");
       const result = await onSave(tournamentData);
-      console.log("✅ Torneo guardado exitosamente. Resultado:", result);
 
       setShowForm(false);
       if (!isEditing) {
@@ -312,7 +300,6 @@ const TournamentForm = ({
         setCameraAssignmentStatus("pending");
       }
     } catch (error) {
-      console.error("❌ Error guardando torneo:", error);
       alert(
         `Error al ${
           isEditing ? "actualizar" : "guardar"
@@ -349,28 +336,28 @@ const TournamentForm = ({
     switch (cameraAssignmentStatus) {
       case "complete":
         return {
-          message: "✅ Cámaras asignadas correctamente",
+          message: "Cámaras asignadas correctamente",
           color: "text-emerald-400",
           bgColor: "bg-emerald-500/20",
           borderColor: "border-emerald-500/30",
         };
       case "insufficient":
         return {
-          message: `⚠️ El trabajador tiene ${availableCameras.length} cámaras, pero se necesitan ${requiredCameras}`,
+          message: `El trabajador tiene ${availableCameras.length} cámaras, pero se necesitan ${requiredCameras}`,
           color: "text-yellow-400",
           bgColor: "bg-yellow-500/20",
           borderColor: "border-yellow-500/30",
         };
       case "none":
         return {
-          message: "❌ El trabajador no tiene cámaras asignadas",
+          message: "El trabajador no tiene cámaras asignadas",
           color: "text-red-400",
           bgColor: "bg-red-500/20",
           borderColor: "border-red-500/30",
         };
       default:
         return {
-          message: "⏳ Selecciona un trabajador para asignar cámaras",
+          message: "Selecciona un trabajador para asignar cámaras",
           color: "text-gray-400",
           bgColor: "bg-gray-500/20",
           borderColor: "border-gray-500/30",
@@ -381,8 +368,8 @@ const TournamentForm = ({
   const cameraStatus = getCameraStatusMessage();
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-      <div className="bg-slate-800/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-0 md:p-4 z-50">
+      <div className="bg-slate-800/90 backdrop-blur-xl rounded-none md:rounded-2xl border-x-0 border-t-0 md:border border-white/10 p-4 md:p-6 max-w-4xl w-full h-full md:h-auto md:max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-xl font-semibold text-white">
             {isEditing ? "Editar Torneo" : "Nuevo Torneo"}
@@ -549,7 +536,6 @@ const TournamentForm = ({
             <select
               value={formData.workerId}
               onChange={(e) => {
-                console.log("🔄 Seleccionando trabajador, ID:", e.target.value);
                 handleInputChange("workerId", e.target.value);
               }}
               className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"

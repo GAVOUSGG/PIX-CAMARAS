@@ -202,7 +202,6 @@ const Tournaments = ({
   };
 
   const handleSaveTournament = async (tournamentData) => {
-    console.log("💾 Guardando torneo:", tournamentData);
     try {
       if (editingTournament) {
         await onUpdateTournament(editingTournament.id, tournamentData);
@@ -214,19 +213,16 @@ const Tournaments = ({
       setShowForm(false);
       setEditingTournament(null);
     } catch (error) {
-      console.error("❌ Error guardando torneo:", error);
       alert("Error al guardar el torneo");
     }
   };
 
   const handleEditTournament = (tournament) => {
-    console.log("✏️ Editando torneo:", tournament);
     setEditingTournament(tournament);
     setShowForm(true);
   };
 
   const handleDeleteTournament = async (tournamentId) => {
-    console.log("🗑️ Eliminando torneo:", tournamentId);
     if (
       confirm(
         "¿Estás seguro de que quieres eliminar este torneo? Esta acción no se puede deshacer."
@@ -236,19 +232,16 @@ const Tournaments = ({
         await onDeleteTournament(tournamentId);
         alert("Torneo eliminado correctamente");
       } catch (error) {
-        console.error("❌ Error eliminando torneo:", error);
         alert("Error al eliminar el torneo");
       }
     }
   };
 
   const handleUpdateStatus = async (tournamentId, newStatus) => {
-    console.log("🔄 Actualizando estado:", tournamentId, newStatus);
     try {
       await onUpdateTournament(tournamentId, { status: newStatus });
       alert(`Estado cambiado a: ${newStatus}`);
     } catch (error) {
-      console.error("❌ Error cambiando estado:", error);
       alert("Error al cambiar el estado");
     }
   };

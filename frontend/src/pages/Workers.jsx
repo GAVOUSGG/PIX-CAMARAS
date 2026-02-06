@@ -78,31 +78,26 @@ const Workers = ({
       setShowForm(false);
       setEditingWorker(null);
     } catch (error) {
-      console.error("❌ Error guardando trabajador:", error);
       alert("Error al guardar el trabajador");
     }
   };
 
   const handleEditWorker = (worker) => {
-    console.log("✏️ Editando trabajador:", worker);
     setEditingWorker(worker);
     setShowForm(true);
     setViewingWorker(null);
   };
 
   const handleDeleteWorker = async (workerId) => {
-    console.log("🗑️ Eliminando trabajador:", workerId);
     try {
       await onDeleteWorker(workerId);
       alert("Trabajador eliminado correctamente");
     } catch (error) {
-      console.error("❌ Error eliminando trabajador:", error);
       alert("Error al eliminar el trabajador");
     }
   };
 
   const handleViewWorker = (worker) => {
-    console.log("👀 Viendo trabajador:", worker);
     setViewingWorker(worker);
   };
 

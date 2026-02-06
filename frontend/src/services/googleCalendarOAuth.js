@@ -123,7 +123,7 @@ export const initiateOAuth = async () => {
       }, 1000);
     });
   } catch (error) {
-    console.error("❌ [OAuth] Error al iniciar autenticación:", error);
+    console.error("[OAuth] Error al iniciar autenticación:", error);
     throw error;
   }
 };
@@ -179,10 +179,10 @@ export const exchangeCodeForTokens = async (code) => {
     // Limpiar code verifier
     sessionStorage.removeItem(STORAGE_KEYS.CODE_VERIFIER);
 
-    console.log("✅ [OAuth] Tokens obtenidos exitosamente");
+    console.log("[OAuth] Tokens obtenidos exitosamente");
     return tokens;
   } catch (error) {
-    console.error("❌ [OAuth] Error al intercambiar código por tokens:", error);
+    console.error("[OAuth] Error al intercambiar código por tokens:", error);
     throw error;
   }
 };
@@ -211,7 +211,7 @@ export const getValidAccessToken = async () => {
       const newToken = await refreshAccessToken(refreshToken);
       return newToken;
     } catch (error) {
-      console.error("❌ [OAuth] Error al renovar token:", error);
+      console.error("[OAuth] Error al renovar token:", error);
       // Si falla la renovación, limpiar tokens y pedir nueva autenticación
       clearTokens();
       throw new Error("Token expirado. Por favor autentícate nuevamente.");
@@ -259,7 +259,7 @@ const refreshAccessToken = async (refreshToken) => {
     const expiryTime = Date.now() + expiresIn * 1000;
     localStorage.setItem(STORAGE_KEYS.TOKEN_EXPIRY, expiryTime.toString());
 
-    console.log("✅ [OAuth] Token renovado exitosamente");
+    console.log("[OAuth] Token renovado exitosamente");
     return tokens.access_token;
   } catch (error) {
     console.error("❌ [OAuth] Error al renovar token:", error);
@@ -275,7 +275,7 @@ export const clearTokens = () => {
   localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
   localStorage.removeItem(STORAGE_KEYS.TOKEN_EXPIRY);
   sessionStorage.removeItem(STORAGE_KEYS.CODE_VERIFIER);
-  console.log("🗑️ [OAuth] Tokens limpiados");
+  console.log("[OAuth] Tokens limpiados");
 };
 
 /**

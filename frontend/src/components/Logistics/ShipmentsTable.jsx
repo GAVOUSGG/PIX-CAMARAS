@@ -12,6 +12,7 @@ import {
   Hash,
 } from "lucide-react";
 import StatusBadge from "../UI/StatusBadge";
+import ShipmentMobileCard from "./ShipmentMobileCard";
 
 const ShipmentsTable = ({
   shipments,
@@ -34,13 +35,11 @@ const ShipmentsTable = ({
   }, [actionMenu]);
 
   const handleEdit = (shipment) => {
-    console.log("✏️ Editando envío:", shipment);
     onEditShipment(shipment);
     setActionMenu(null);
   };
 
   const handleDelete = (shipmentId) => {
-    console.log("🗑️ Solicitando eliminar envío:", shipmentId);
     if (confirm("¿Estás seguro de que quieres eliminar este envío?")) {
       onDeleteShipment(shipmentId);
     }
@@ -48,7 +47,6 @@ const ShipmentsTable = ({
   };
 
   const handleView = (shipment) => {
-    console.log("👀 Viendo envío:", shipment);
     onViewShipment(shipment);
     setActionMenu(null);
   };
@@ -72,7 +70,27 @@ const ShipmentsTable = ({
 
   return (
     <>
-      <div className="bg-black/20 rounded-2xl border border-white/10 overflow-hidden">
+      {/* Mobile Card View */}
+      <div className="md:hidden space-y-3">
+        {shipments && shipments.length > 0 ? (
+          shipments.map((shipment) => (
+            <ShipmentMobileCard
+              key={shipment.id}
+              shipment={shipment}
+              onView={handleView}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+            />
+          ))
+        ) : (
+          <div className="bg-black/20 rounded-xl border border-white/10 p-8 text-center text-gray-400">
+            No hay envíos para mostrar
+          </div>
+        )}
+      </div>
+
+      {/* Desktop Table View */}
+      <div className="hidden md:block bg-black/20 rounded-2xl border border-white/10 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-white/5">
@@ -218,7 +236,6 @@ const ShipmentsTable = ({
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
-                            console.log("👀 Click en botón Ver envío");
                             handleView(shipment);
                           }}
                           className="text-emerald-400 hover:text-emerald-300 transition-colors p-1 rounded hover:bg-white/10"
@@ -232,7 +249,6 @@ const ShipmentsTable = ({
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
-                              console.log("📋 Click en menú acciones envío");
                               setActionMenu(
                                 actionMenu === shipment.id ? null : shipment.id
                               );

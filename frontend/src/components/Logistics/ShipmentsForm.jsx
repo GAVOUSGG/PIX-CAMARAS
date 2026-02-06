@@ -133,8 +133,6 @@ const ShipmentForm = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("🎯 ", isEditing ? "Editando" : "Creando", " envío:", formData);
-
     const shipmentData = {
       ...formData,
       ...(isEditing && { updatedAt: new Date().toISOString() }),
@@ -142,13 +140,7 @@ const ShipmentForm = ({
     };
 
     try {
-      console.log("🚀 Llamando a onSave...");
       const result = await onSave(shipmentData);
-      console.log(
-        "✅ Envío ",
-        isEditing ? "actualizado" : "guardado",
-        " exitosamente"
-      );
 
       setShowForm(false);
       if (!isEditing) {
@@ -167,12 +159,6 @@ const ShipmentForm = ({
         });
       }
     } catch (error) {
-      console.error(
-        "❌ Error ",
-        isEditing ? "actualizando" : "guardando",
-        " envío:",
-        error
-      );
       alert(
         `Error al ${
           isEditing ? "actualizar" : "guardar"
@@ -195,8 +181,8 @@ const ShipmentForm = ({
   }
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-      <div className="bg-slate-800/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-0 md:p-4 z-50">
+      <div className="bg-slate-800/90 backdrop-blur-xl rounded-none md:rounded-2xl border-x-0 border-t-0 md:border border-white/10 p-4 md:p-6 max-w-4xl w-full h-full md:h-auto md:max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-xl font-semibold text-white">
             {isEditing ? "Editar Envío" : "Nuevo Envío"}
@@ -403,11 +389,11 @@ const ShipmentForm = ({
               </select>
               <p className="text-xs text-gray-500 mt-1">
                 {formData.status === "enviado" &&
-                  '⚠️ Las cámaras cambiarán a estado "EN ENVIO" automáticamente'}
+                  'Las cámaras cambiarán a estado "EN ENVIO" automáticamente'}
                 {formData.status === "entregado" &&
-                  "✅ Las cámaras se asignarán automáticamente al destinatario"}
+                  "Las cámaras se asignarán automáticamente al destinatario"}
                 {formData.status === "cancelado" &&
-                  '↩️ Las cámaras volverán a estado "disponible"'}
+                  'Las cámaras volverán a estado "disponible"'}
               </p>
             </div>
 

@@ -12,6 +12,7 @@ import {
   UserX,
 } from "lucide-react";
 import StatusBadge from "../UI/StatusBadge";
+import CameraMobileCard from "./CameraMobileCard";
 
 const CamerasTable = ({
   cameras,
@@ -35,13 +36,11 @@ const CamerasTable = ({
   }, [actionMenu]);
 
   const handleEdit = (camera) => {
-    console.log("Editando cámara:", camera);
     onEditCamera(camera);
     setActionMenu(null);
   };
 
   const handleDelete = (cameraId) => {
-    console.log("Solicitando eliminar cámara:", cameraId);
     if (confirm("¿Estás seguro de que quieres eliminar esta cámara?")) {
       onDeleteCamera(cameraId);
     }
@@ -49,7 +48,6 @@ const CamerasTable = ({
   };
 
   const handleView = (camera) => {
-    console.log("👀 Viendo cámara:", camera);
     onViewCamera(camera);
     setActionMenu(null);
   };
@@ -97,7 +95,28 @@ const CamerasTable = ({
 
   return (
     <>
-      <div className="bg-black/20 rounded-2xl border border-white/10 overflow-hidden">
+      {/* Mobile Card View */}
+      <div className="md:hidden space-y-3">
+        {cameras && cameras.length > 0 ? (
+          cameras.map((camera) => (
+            <CameraMobileCard
+              key={camera.id}
+              camera={camera}
+              onView={handleView}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+              onInspect={onInspectCamera}
+            />
+          ))
+        ) : (
+          <div className="bg-black/20 rounded-xl border border-white/10 p-8 text-center text-gray-400">
+            No hay cámaras para mostrar
+          </div>
+        )}
+      </div>
+
+      {/* Desktop Table View */}
+      <div className="hidden md:block bg-black/20 rounded-2xl border border-white/10 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-white/5">
@@ -177,7 +196,6 @@ const CamerasTable = ({
                           camera.type
                         )}`}
                       >
-                        <span>☀️</span>
                         <span>{camera.type}</span>
                       </div>
                     </td>
@@ -238,7 +256,6 @@ const CamerasTable = ({
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
-                            console.log("👀 Click en botón Ver cámara");
                             handleView(camera);
                           }}
                           className="text-emerald-400 hover:text-emerald-300 transition-colors p-1 rounded hover:bg-white/10"
@@ -252,7 +269,6 @@ const CamerasTable = ({
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
-                              console.log("Click en menú acciones cámara");
                               setActionMenu(
                                 actionMenu === camera.id ? null : camera.id
                               );

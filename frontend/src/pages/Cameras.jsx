@@ -60,7 +60,6 @@ const Cameras = ({ camerasData, workersData, onCreateCamera, onUpdateCamera, onD
 
   // Funciones para manejar las acciones
   const handleSaveCamera = async (cameraData) => {
-    console.log("💾 Guardando cámara:", cameraData);
     try {
       if (editingCamera) {
         await onUpdateCamera(editingCamera.id, cameraData);
@@ -72,31 +71,26 @@ const Cameras = ({ camerasData, workersData, onCreateCamera, onUpdateCamera, onD
       setShowForm(false);
       setEditingCamera(null);
     } catch (error) {
-      console.error("❌ Error guardando cámara:", error);
       alert("Error al guardar la cámara");
     }
   };
 
   const handleEditCamera = (camera) => {
-    console.log("✏️ Editando cámara:", camera);
     setEditingCamera(camera);
     setShowForm(true);
     setViewingCamera(null);
   };
 
   const handleDeleteCamera = async (cameraId) => {
-    console.log("🗑️ Eliminando cámara:", cameraId);
     try {
       await onDeleteCamera(cameraId);
       alert("Cámara eliminada correctamente");
     } catch (error) {
-      console.error("❌ Error eliminando cámara:", error);
       alert("Error al eliminar la cámara");
     }
   };
 
   const handleViewCamera = (camera) => {
-    console.log("👀 Viendo cámara:", camera);
     setViewingCamera(camera);
   };
 
@@ -114,7 +108,7 @@ const Cameras = ({ camerasData, workersData, onCreateCamera, onUpdateCamera, onD
       {/* Header con título y botón */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-white">Inventario de Cámaras Solares Hikvision</h2>
+          <h2 className="text-2xl font-bold text-white">Inventario de Cámaras</h2>
           <p className="text-gray-400 text-sm">
             {filteredCameras.length} de {camerasData.length} cámaras mostradas
           </p>

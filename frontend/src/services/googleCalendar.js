@@ -241,12 +241,12 @@ export const createCalendarEvent = async (tournament) => {
 
     const createdEvent = await response.json();
     console.log(
-      "✅ [Google Calendar API] Evento creado exitosamente:",
+      "[Google Calendar API] Evento creado exitosamente:",
       createdEvent.id
     );
     return createdEvent;
   } catch (error) {
-    console.error("❌ [Google Calendar API] Error al crear evento:", error);
+    console.error("[Google Calendar API] Error al crear evento:", error);
     throw error;
   }
 };
@@ -288,13 +288,13 @@ export const updateCalendarEvent = async (tournament, eventId) => {
 
     const updatedEvent = await response.json();
     console.log(
-      "✅ [Google Calendar API] Evento actualizado exitosamente:",
+      "[Google Calendar API] Evento actualizado exitosamente:",
       updatedEvent.id
     );
     return updatedEvent;
   } catch (error) {
     console.error(
-      "❌ [Google Calendar API] Error al actualizar evento:",
+      "[Google Calendar API] Error al actualizar evento:",
       error
     );
     throw error;
@@ -334,12 +334,12 @@ export const deleteCalendarEvent = async (eventId) => {
     }
 
     console.log(
-      "✅ [Google Calendar API] Evento eliminado exitosamente:",
+      "[Google Calendar API] Evento eliminado exitosamente:",
       eventId
     );
     return true;
   } catch (error) {
-    console.error("❌ [Google Calendar API] Error al eliminar evento:", error);
+    console.error("[Google Calendar API] Error al eliminar evento:", error);
     throw error;
   }
 };
@@ -375,7 +375,7 @@ export const findCalendarEvent = async (tournamentName) => {
     const event = data.items?.find((item) => item.summary === tournamentName);
     return event || null;
   } catch (error) {
-    console.error("❌ [Google Calendar API] Error al buscar evento:", error);
+    console.error("[Google Calendar API] Error al buscar evento:", error);
     return null;
   }
 };
@@ -396,7 +396,7 @@ export const addToGoogleCalendarAuto = async (tournament) => {
     return await createCalendarEvent(tournament);
   } catch (error) {
     console.error(
-      "❌ [Google Calendar] Error al agregar evento automáticamente:",
+      "[Google Calendar] Error al agregar evento automáticamente:",
       error
     );
     // Si falla, usar el método manual como fallback

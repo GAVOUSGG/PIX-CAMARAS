@@ -161,16 +161,16 @@ const MexicoMap = ({ tournaments = [], workers = [], cameras = [], shipments = [
       <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-blue-500/5 pointer-events-none"></div>
       
       {/* Header & Controls */}
-      <div className="relative p-6 border-b border-emerald-500/20 bg-gradient-to-r from-slate-900/50 to-slate-800/50 backdrop-blur-sm">
+      <div className="relative p-4 md:p-6 border-b border-emerald-500/20 bg-gradient-to-r from-slate-900/50 to-slate-800/50 backdrop-blur-sm">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
-            <h3 className="text-2xl font-bold text-white flex items-center gap-3">
-              <div className="p-2 bg-emerald-500/20 rounded-xl border border-emerald-500/30">
-                <MapPin className="w-6 h-6 text-emerald-400" />
+            <h3 className="text-xl md:text-2xl font-bold text-white flex items-center gap-3">
+              <div className="p-1.5 md:p-2 bg-emerald-500/20 rounded-xl border border-emerald-500/30">
+                <MapPin className="w-5 h-5 md:w-6 h-6 text-emerald-400" />
               </div>
               Mapa de Operaciones
             </h3>
-            <p className="text-gray-400 text-sm mt-2 ml-14">
+            <p className="text-gray-400 text-xs md:text-sm mt-1 md:mt-2 ml-10 md:ml-14">
               Visualización en tiempo real de recursos y logística
             </p>
           </div>
@@ -225,7 +225,7 @@ const MexicoMap = ({ tournaments = [], workers = [], cameras = [], shipments = [
       </div>
 
       {/* Map Container */}
-      <div className="h-[550px] relative z-0">
+      <div className="h-[400px] md:h-[550px] relative z-0">
         <MapContainer
           center={[23.6345, -102.5528]}
           zoom={5}
@@ -327,6 +327,13 @@ const MexicoMap = ({ tournaments = [], workers = [], cameras = [], shipments = [
                                 }`}>
                                   {c.status}
                                 </span>
+                                <span className={`text-[10px] px-1 rounded ${
+                                  c.type === 'exterior' ? 'bg-yellow-100 text-yellow-700' : 
+                                  c.type === 'interior' ? 'bg-indigo-100 text-indigo-700' : 
+                                  'bg-gray-100 text-gray-700'
+                                }`}>
+                                  {c.type}
+                                </span>
                               </li>
                             ))}
                           </ul>
@@ -351,7 +358,7 @@ const MexicoMap = ({ tournaments = [], workers = [], cameras = [], shipments = [
         </MapContainer>
         
         {/* Legend Overlay */}
-        <div className="absolute bottom-4 right-4 bg-slate-900/90 backdrop-blur-xl p-4 rounded-2xl border border-emerald-500/30 z-[1000] text-xs space-y-2.5 shadow-2xl shadow-emerald-500/10">
+        <div className="absolute bottom-4 right-4 bg-slate-900/90 backdrop-blur-xl p-3 md:p-4 rounded-xl md:rounded-2xl border border-emerald-500/30 z-[1000] text-[10px] md:text-xs space-y-2 md:space-y-2.5 shadow-2xl shadow-emerald-500/10">
            <div className="font-bold text-white mb-2 flex items-center gap-2">
              <div className="w-1 h-4 bg-emerald-500 rounded-full"></div>
              Simbología

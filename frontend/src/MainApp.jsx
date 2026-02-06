@@ -52,17 +52,14 @@ const MainApp = ({ user, onLogout }) => {
 
   // Función para manejar el envío de cámaras
   const handleShipCameras = async (taskWithSelection) => {
-    console.log("🚀 Iniciando envío de cámaras:", taskWithSelection);
     try {
       const newShipment = await createShipmentFromTask(
         taskWithSelection,
         taskWithSelection.selectedCameras
       );
-      console.log("📦 Envío creado exitosamente:", newShipment);
-      alert(`✅ Envío creado exitosamente!`);
+      alert(`Envío creado exitosamente!`);
       setActiveTab("logistics");
     } catch (error) {
-      console.error("❌ Error creando envío:", error);
       alert("Error al crear el envío. Por favor intenta nuevamente.");
     }
   };
@@ -181,7 +178,6 @@ const MainApp = ({ user, onLogout }) => {
       >
         {!apiAvailable && (
           <div className="bg-yellow-500/20 border border-yellow-500/30 text-yellow-400 px-4 py-2 rounded-lg mb-4 mx-6 flex items-center space-x-2">
-            <span>⚠️</span>
             <span>Modo sin conexión - Los datos se guardan localmente</span>
           </div>
         )}

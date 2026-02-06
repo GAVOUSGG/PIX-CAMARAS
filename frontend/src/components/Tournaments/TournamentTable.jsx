@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Eye, MoreVertical, Edit, Trash2, Calendar } from 'lucide-react';
 import StatusBadge from '../UI/StatusBadge';
+import TournamentMobileCard from './TournamentMobileCard';
 
 const TournamentTable = ({ 
   tournaments, 
@@ -24,25 +25,21 @@ const TournamentTable = ({
   }, [actionMenu]);
 
   const handleStatusChange = (tournamentId, newStatus) => {
-    console.log("🔄 Cambiando estado del torneo:", tournamentId, newStatus);
     onUpdateStatus(tournamentId, newStatus);
     setActionMenu(null);
   };
 
   const handleEdit = (tournament) => {
-    console.log("✏️ Editando torneo:", tournament);
     onEditTournament(tournament);
     setActionMenu(null);
   };
 
   const handleDelete = (tournamentId) => {
-    console.log("🗑️ Solicitando eliminar torneo:", tournamentId);
     onDeleteTournament(tournamentId);
     setActionMenu(null);
   };
 
   const handleView = (tournament) => {
-    console.log("👀 Viendo detalles del torneo:", tournament);
     onViewDetails(tournament);
     setActionMenu(null);
   };
@@ -54,7 +51,28 @@ const TournamentTable = ({
 
   return (
     <>
-      <div className="bg-black/20 rounded-2xl border border-white/10 overflow-hidden"> {/* Quitado backdrop-blur-lg temporalmente */}
+      {/* Mobile Card View */}
+      <div className="md:hidden space-y-3">
+        {tournaments && tournaments.length > 0 ? (
+          tournaments.map((tournament) => (
+            <TournamentMobileCard
+              key={tournament.id}
+              tournament={tournament}
+              onView={handleView}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+              onUpdateStatus={handleStatusChange}
+            />
+          ))
+        ) : (
+          <div className="bg-black/20 rounded-xl border border-white/10 p-8 text-center text-gray-400">
+            No hay torneos para mostrar
+          </div>
+        )}
+      </div>
+
+      {/* Desktop Table View */}
+      <div className="hidden md:block bg-black/20 rounded-2xl border border-white/10 overflow-hidden"> {/* Quitado backdrop-blur-lg temporalmente */}
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-white/5">
@@ -114,7 +132,6 @@ const TournamentTable = ({
                       <button 
                         onClick={(e) => {
                           e.stopPropagation(); // Importante: prevenir propagación
-                          console.log("👀 Click en botón Ver torneo");
                           handleView(tournament);
                         }}
                         className="text-emerald-400 hover:text-emerald-300 transition-colors p-1 rounded hover:bg-white/10"
@@ -128,7 +145,6 @@ const TournamentTable = ({
                         <button
                           onClick={(e) => {
                             e.stopPropagation(); // Importante
-                            console.log("📋 Click en menú acciones torneo");
                             setActionMenu(actionMenu === tournament.id ? null : tournament.id);
                           }}
                           className="text-gray-400 hover:text-white transition-colors p-1 rounded hover:bg-white/10"

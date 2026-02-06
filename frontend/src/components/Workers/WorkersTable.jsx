@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
 import { Eye, MoreVertical, Edit, Trash2, User } from 'lucide-react';
 import StatusBadge from '../UI/StatusBadge';
+import WorkerMobileCard from './WorkerMobileCard';
 
 const WorkersTable = ({ workers, onEditWorker, onDeleteWorker, onViewWorker }) => {
   const [actionMenu, setActionMenu] = useState(null);
 
   const handleEdit = (worker) => {
-    console.log("📝 Editando trabajador:", worker);
     onEditWorker(worker);
     setActionMenu(null);
   };
 
   const handleDelete = (workerId) => {
-    console.log("🗑️ Solicitando eliminar trabajador:", workerId);
     if (confirm('¿Estás seguro de que quieres eliminar este trabajador?')) {
       onDeleteWorker(workerId);
     }
@@ -20,7 +19,6 @@ const WorkersTable = ({ workers, onEditWorker, onDeleteWorker, onViewWorker }) =
   };
 
   const handleView = (worker) => {
-    console.log("👀 Viendo trabajador:", worker);
     onViewWorker(worker);
     setActionMenu(null);
   };
@@ -39,7 +37,27 @@ const WorkersTable = ({ workers, onEditWorker, onDeleteWorker, onViewWorker }) =
 
   return (
     <>
-      <div className="bg-black/20 backdrop-blur-lg rounded-2xl border border-white/10 overflow-hidden">
+      {/* Mobile Card View */}
+      <div className="md:hidden space-y-3">
+        {workers && workers.length > 0 ? (
+          workers.map((worker) => (
+            <WorkerMobileCard
+              key={worker.id}
+              worker={worker}
+              onView={handleView}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+            />
+          ))
+        ) : (
+          <div className="bg-black/20 rounded-xl border border-white/10 p-8 text-center text-gray-400">
+            No hay trabajadores para mostrar
+          </div>
+        )}
+      </div>
+
+      {/* Desktop Table View */}
+      <div className="hidden md:block bg-black/20 backdrop-blur-lg rounded-2xl border border-white/10 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-white/5">
@@ -79,7 +97,6 @@ const WorkersTable = ({ workers, onEditWorker, onDeleteWorker, onViewWorker }) =
                         <button 
                           onClick={(e) => {
                             e.stopPropagation(); // Importante: prevenir propagación
-                            console.log("👀 Click en botón Ver");
                             handleView(worker);
                           }}
                           className="text-emerald-400 hover:text-emerald-300 transition-colors p-1 rounded hover:bg-white/10"
@@ -93,7 +110,6 @@ const WorkersTable = ({ workers, onEditWorker, onDeleteWorker, onViewWorker }) =
                           <button
                             onClick={(e) => {
                               e.stopPropagation(); // Importante
-                              console.log("📋 Click en menú acciones");
                               setActionMenu(actionMenu === worker.id ? null : worker.id);
                             }}
                             className="text-gray-400 hover:text-white transition-colors p-1 rounded hover:bg-white/10"

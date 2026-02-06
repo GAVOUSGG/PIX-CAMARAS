@@ -94,7 +94,6 @@ const Logistics = ({
 
   // Funciones para manejar las acciones
   const handleSaveShipment = async (shipmentData) => {
-    console.log("💾 Guardando envío:", shipmentData);
     try {
       if (editingShipment) {
         await onUpdateShipment(editingShipment.id, shipmentData);
@@ -106,31 +105,26 @@ const Logistics = ({
       setShowForm(false);
       setEditingShipment(null);
     } catch (error) {
-      console.error("❌ Error guardando envío:", error);
       alert("Error al guardar el envío");
     }
   };
 
   const handleEditShipment = (shipment) => {
-    console.log("✏️ Editando envío:", shipment);
     setEditingShipment(shipment);
     setShowForm(true);
     setViewingShipment(null);
   };
 
   const handleDeleteShipment = async (shipmentId) => {
-    console.log("🗑️ Eliminando envío:", shipmentId);
     try {
       await onDeleteShipment(shipmentId);
       alert("Envío eliminado correctamente");
     } catch (error) {
-      console.error("❌ Error eliminando envío:", error);
       alert("Error al eliminar el envío");
     }
   };
 
   const handleViewShipment = (shipment) => {
-    console.log("👀 Viendo envío:", shipment);
     setViewingShipment(shipment);
   };
 

@@ -8,12 +8,12 @@ const Header = ({ user, onLogout }) => {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-center justify-between w-full md:w-auto">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-emerald-400 to-blue-500 rounded-xl flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center">
                 <Camera className="w-6 h-6 text-white" />
               </div>
               <div>
                 <h1 className="text-xl md:text-2xl font-bold text-white">PixGolf</h1>
-                <p className="text-xs md:text-sm text-gray-400">Camaras</p>
+                
               </div>
             </div>
             {/* Mobile Date - Visible only on small screens */}

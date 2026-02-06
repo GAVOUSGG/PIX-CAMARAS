@@ -193,7 +193,6 @@ const LoginAttempt = sequelize.define('LoginAttempt', {
 const initDb = async () => {
   try {
     await sequelize.sync({ alter: true });
-    console.log('Database synchronized');
   } catch (error) {
     console.error('Error syncing database:', error);
   }

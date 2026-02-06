@@ -117,12 +117,6 @@ const WorkerForm = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log(
-      "🎯 Iniciando ",
-      isEditing ? "edición" : "creación",
-      " de trabajador..."
-    );
-
     // Para edición, usar el ID existente; para creación, generar nuevo
     const workerId = isEditing ? worker.id : Date.now().toString();
 
@@ -140,23 +134,8 @@ const WorkerForm = ({
       ...(!isEditing && { createdAt: new Date().toISOString() }),
     };
 
-    console.log(
-      "📦 Datos del trabajador a ",
-      isEditing ? "actualizar" : "guardar",
-      ":",
-      workerData
-    );
-    console.log("📷 Cámaras asignadas:", formData.camerasAssigned);
-
     try {
-      console.log("🚀 Llamando a onSave...");
       const result = await onSave(workerData);
-      console.log(
-        "✅ Trabajador ",
-        isEditing ? "actualizado" : "guardado",
-        " exitosamente. Resultado:",
-        result
-      );
 
       setShowForm(false);
       // Solo resetear el form si no estamos editando
@@ -172,12 +151,6 @@ const WorkerForm = ({
         });
       }
     } catch (error) {
-      console.error(
-        "❌ Error ",
-        isEditing ? "actualizando" : "guardando",
-        " trabajador:",
-        error
-      );
       alert(
         `Error al ${
           isEditing ? "actualizar" : "guardar"
@@ -210,8 +183,8 @@ const WorkerForm = ({
   }
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-      <div className="bg-slate-800/90 backdrop-blur-xl rounded-2xl border border-white/10 p-6 max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-0 md:p-4 z-50">
+      <div className="bg-slate-800/90 backdrop-blur-xl rounded-none md:rounded-2xl border-x-0 border-t-0 md:border border-white/10 p-4 md:p-6 max-w-4xl w-full h-full md:h-auto md:max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-xl font-semibold text-white">
             {isEditing ? "Editar Trabajador" : "Nuevo Trabajador"}

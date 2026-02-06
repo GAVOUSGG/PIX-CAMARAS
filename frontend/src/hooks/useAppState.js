@@ -91,17 +91,10 @@ export const useAppState = () => {
     const loadData = async () => {
       try {
         setLoading(true);
-        // console.log("🔄 [useAppState] Iniciando carga de datos...");
 
         // Intentar cargar desde API
         try {
-          // console.log("🌐 [useAppState] Intentando conectar con API...");
           const workers = await apiService.getWorkers();
-          // console.log(
-          //   "✅ [useAppState] Datos cargados desde API:",
-          //   workers.length,
-          //   "trabajadores"
-          // );
 
           setWorkersData(workers);
           setApiAvailable(true);
@@ -118,7 +111,7 @@ export const useAppState = () => {
           setShipmentsData(shipments);
         } catch (apiError) {
           console.warn(
-            "⚠️ [useAppState] Error cargando desde API, usando datos locales:",
+            "Error cargando desde API, usando datos locales:",
             apiError
           );
           setApiAvailable(false);
@@ -128,7 +121,7 @@ export const useAppState = () => {
           setShipmentsData(initialShipments);
         }
       } catch (error) {
-        console.error("❌ [useAppState] Error crítico:", error);
+        console.error("Error crítico:", error);
         setApiAvailable(false);
         setWorkersData(initialWorkers);
         setTournamentsData(initialTournaments);
@@ -136,7 +129,6 @@ export const useAppState = () => {
         setShipmentsData(initialShipments);
       } finally {
         setLoading(false);
-        // console.log("🏁 [useAppState] Carga de datos completada");
       }
     };
 
@@ -145,8 +137,6 @@ export const useAppState = () => {
   // ========== FUNCIONES PARA TRABAJADORES ==========
   const createWorker = async (workerData) => {
     try {
-      console.log("🎯 Creando trabajador:", workerData);
-
       let newWorker;
       let workerId;
 
@@ -156,9 +146,7 @@ export const useAppState = () => {
         workerId = nextId.toString();
         const workerWithId = { ...workerData, id: workerId };
 
-        console.log("📡 Enviando a API con ID:", nextId);
         newWorker = await apiService.createWorker(workerWithId);
-        console.log("✅ Trabajador creado en API:", newWorker);
         workerId = newWorker.id;
 
         // Actualizar estado local
@@ -182,26 +170,17 @@ export const useAppState = () => {
       const workerName = newWorker.name;
       const workerState = newWorker.state;
       if (camerasAssigned.length > 0 && workerName) {
-        console.log(
-          `👤 [createWorker] Asignando cámaras a trabajador: ${workerName}`
-        );
         await Promise.all(
           camerasAssigned.map(async (cameraId) => {
             try {
-              console.log(
-                `📷 [createWorker] Actualizando cámara ${cameraId} con assignedTo: ${workerName}`
-              );
               // Actualizar la cámara con el nombre del trabajador y su estado como ubicación
               await updateCamera(cameraId, {
                 assignedTo: workerName,
                 location: workerState, // Actualizar location con el state del trabajador
               });
-              console.log(
-                `✅ [createWorker] Cámara ${cameraId} actualizada exitosamente`
-              );
             } catch (error) {
               console.error(
-                `❌ [createWorker] Error actualizando cámara ${cameraId}:`,
+                `Error actualizando cámara ${cameraId}:`,
                 error
               );
             }
@@ -211,10 +190,10 @@ export const useAppState = () => {
 
       return newWorker;
     } catch (error) {
-      console.error("❌ Error creating worker:", error);
+      console.error("Error creating worker:", error);
       throw error;
     }
-  };
+  }
 
   // Función para obtener el próximo ID consecutivo desde la API
   const getNextWorkerId = async () => {
@@ -254,20 +233,10 @@ export const useAppState = () => {
 
   const updateWorker = async (id, workerData, skipCameraUpdate = false) => {
     try {
-      console.log(
-        "🔄 [updateWorker] Iniciando actualización de trabajador:",
-        id
-      );
-      console.log("📦 [updateWorker] Datos del trabajador:", workerData);
-      console.log(`🔄 [updateWorker] skipCameraUpdate: ${skipCameraUpdate}`);
-
       // Obtener el trabajador actual para comparar las cámaras asignadas
       const currentWorker = workersData.find((w) => w.id === id);
       const previousCameras = currentWorker?.camerasAssigned || [];
       const newCameras = workerData.camerasAssigned || [];
-
-      console.log("📷 [updateWorker] Cámaras anteriores:", previousCameras);
-      console.log("📷 [updateWorker] Cámaras nuevas:", newCameras);
 
       // Identificar cámaras agregadas y removidas
       const camerasAdded = newCameras.filter(
@@ -277,9 +246,6 @@ export const useAppState = () => {
         (cameraId) => !newCameras.includes(cameraId)
       );
 
-      console.log("➕ [updateWorker] Cámaras agregadas:", camerasAdded);
-      console.log("➖ [updateWorker] Cámaras removidas:", camerasRemoved);
-
       // Solo actualizar cámaras si no se está saltando (para evitar bucles infinitos)
       if (!skipCameraUpdate) {
         // Actualizar assignedTo en TODAS las cámaras nuevas (incluyendo las que ya estaban)
@@ -288,64 +254,37 @@ export const useAppState = () => {
         const workerName = workerData.name || currentWorker?.name;
         const workerState = workerData.state || currentWorker?.state;
         if (newCameras.length > 0 && workerName) {
-          console.log(
-            "🔄 [updateWorker] Actualizando assignedTo en cámaras:",
-            newCameras
-          );
-          console.log(
-            `👤 [updateWorker] Asignando cámaras a trabajador: ${workerName}`
-          );
           await Promise.all(
             newCameras.map(async (cameraId) => {
               try {
-                console.log(
-                  `📷 [updateWorker] Actualizando cámara ${cameraId} con assignedTo: ${workerName}`
-                );
                 // Actualizar la cámara con el nombre del trabajador y su estado como ubicación
                 await updateCamera(cameraId, {
                   assignedTo: workerName,
                   location: workerState, // Actualizar location con el state del trabajador
                 });
-                console.log(
-                  `✅ [updateWorker] Cámara ${cameraId} actualizada exitosamente`
-                );
               } catch (error) {
                 console.error(
-                  `❌ [updateWorker] Error actualizando cámara ${cameraId}:`,
+                  `Error actualizando cámara ${cameraId}:`,
                   error
                 );
               }
             })
           );
         }
-      } else {
-        console.log(
-          "⏭️ [updateWorker] Saltando actualización de cámaras para evitar bucle"
-        );
       }
 
       // Cámaras removidas: limpiar assignedTo
       // También protegemos este bloque con skipCameraUpdate para evitar bucles
       if (!skipCameraUpdate && camerasRemoved.length > 0) {
-        console.log(
-          "🔄 [updateWorker] Limpiando assignedTo en cámaras removidas:",
-          camerasRemoved
-        );
         await Promise.all(
           camerasRemoved.map(async (cameraId) => {
             try {
-              console.log(
-                `📷 [updateWorker] Limpiando assignedTo de cámara ${cameraId}`
-              );
               await updateCamera(cameraId, {
                 assignedTo: "",
               });
-              console.log(
-                `✅ [updateWorker] Cámara ${cameraId} limpiada exitosamente`
-              );
             } catch (error) {
               console.error(
-                `❌ [updateWorker] Error limpiando cámara ${cameraId}:`,
+                `Error limpiando cámara ${cameraId}:`,
                 error
               );
             }
@@ -378,7 +317,7 @@ export const useAppState = () => {
       console.error("Error updating worker:", error);
       throw error;
     }
-  };
+  }
 
   const deleteWorker = async (id) => {
     try {
@@ -403,7 +342,7 @@ export const useAppState = () => {
       console.error("Error deleting worker:", error);
       throw error;
     }
-  };
+  }
 
   // ========== FUNCIONES PARA TORNEOS ==========
   const createTournament = async (tournamentData) => {
@@ -442,8 +381,6 @@ export const useAppState = () => {
 
       // Agregar a Google Calendar después de crear el torneo
       try {
-        console.log("📅 [createTournament] Agregando torneo a Google Calendar");
-
         if (isAuthenticated()) {
           // Si está autenticado, crear evento automáticamente
           try {
@@ -459,15 +396,10 @@ export const useAppState = () => {
                   googleCalendarEventId: calendarEvent.id,
                 });
               }
-
-              console.log(
-                "✅ [createTournament] Evento creado en Google Calendar:",
-                calendarEvent.id
-              );
             }
           } catch (apiError) {
             console.warn(
-              "⚠️ [createTournament] Error con API de Google Calendar, usando método manual:",
+              "Error con API de Google Calendar, usando método manual:",
               apiError
             );
             // Fallback al método manual si falla la API
@@ -476,9 +408,6 @@ export const useAppState = () => {
         } else {
           // Si no está autenticado, intentar autenticar primero
           try {
-            console.log(
-              "🔐 [createTournament] Iniciando autenticación OAuth..."
-            );
             const code = await initiateOAuth();
             if (code) {
               await exchangeCodeForTokens(code);
@@ -492,14 +421,11 @@ export const useAppState = () => {
                     googleCalendarEventId: calendarEvent.id,
                   });
                 }
-                console.log(
-                  "✅ [createTournament] Autenticado y evento creado en Google Calendar"
-                );
               }
             }
           } catch (oauthError) {
             console.warn(
-              "⚠️ [createTournament] Error en OAuth, usando método manual:",
+              "Error en OAuth, usando método manual:",
               oauthError
             );
             // Si falla OAuth, usar método manual
@@ -509,7 +435,7 @@ export const useAppState = () => {
       } catch (calendarError) {
         // No fallar si hay error con Google Calendar, solo loguear
         console.warn(
-          "⚠️ [createTournament] Error al agregar a Google Calendar:",
+          "Error al agregar a Google Calendar:",
           calendarError
         );
       }
@@ -519,13 +445,11 @@ export const useAppState = () => {
       console.error("Error creating tournament:", error);
       throw error;
     }
-  };
+  }
 
   // En useAppState.js - corregir la función updateTournament
   const updateTournament = async (id, tournamentData) => {
     try {
-      console.log("🔄 Actualizando torneo:", id, tournamentData);
-
       // Encontrar el torneo actual para preservar los datos existentes
       const currentTournament = tournamentsData.find((t) => t.id === id);
       if (!currentTournament) {
@@ -538,8 +462,6 @@ export const useAppState = () => {
         ...tournamentData,
         updatedAt: new Date().toISOString(),
       };
-
-      console.log("📦 Datos combinados para actualizar:", updatedData);
 
       // Detectar cambios en cámaras
       const currentCameras = currentTournament.cameras || [];
@@ -599,10 +521,6 @@ export const useAppState = () => {
 
       // Actualizar en Google Calendar después de actualizar el torneo
       try {
-        console.log(
-          "📅 [updateTournament] Actualizando evento en Google Calendar"
-        );
-
         if (isAuthenticated() && updatedTournament.googleCalendarEventId) {
           // Si está autenticado y tiene eventId, actualizar evento existente
           try {
@@ -610,12 +528,9 @@ export const useAppState = () => {
               updatedTournament,
               updatedTournament.googleCalendarEventId
             );
-            console.log(
-              "✅ [updateTournament] Evento actualizado en Google Calendar"
-            );
           } catch (apiError) {
             console.warn(
-              "⚠️ [updateTournament] Error al actualizar evento, intentando crear uno nuevo:",
+              "Error al actualizar evento, intentando crear uno nuevo:",
               apiError
             );
             // Si falla la actualización, intentar crear uno nuevo
@@ -670,21 +585,20 @@ export const useAppState = () => {
       } catch (calendarError) {
         // No fallar si hay error con Google Calendar, solo loguear
         console.warn(
-          "⚠️ [updateTournament] Error al actualizar en Google Calendar:",
+          "Error al actualizar en Google Calendar:",
           calendarError
         );
       }
 
       return updatedTournament;
     } catch (error) {
-      console.error("❌ Error updating tournament:", error);
+      console.error("Error updating tournament:", error);
       throw error;
     }
-  };
+  }
 
   const deleteTournament = async (id) => {
     try {
-      console.log("🗑️ [useAppState] deleteTournament solicitado para ID:", id, typeof id);
       // Obtener el torneo antes de eliminarlo para mostrar información
       const tournamentToDelete = tournamentsData.find((t) => t.id === id);
 
@@ -700,9 +614,6 @@ export const useAppState = () => {
           );
 
           if (tournamentHistory.length > 0) {
-            console.log(
-              `🗑️ [deleteTournament] Eliminando ${tournamentHistory.length} entradas de historial`
-            );
             await Promise.all(
               tournamentHistory.map((entry) =>
                 apiService.deleteCameraHistory(entry.id)
@@ -711,7 +622,7 @@ export const useAppState = () => {
           }
         } catch (historyError) {
           console.warn(
-            "⚠️ [deleteTournament] Error al eliminar historial:",
+            "Error al eliminar historial:",
             historyError
           );
         }
@@ -725,21 +636,14 @@ export const useAppState = () => {
       // Eliminar de Google Calendar si está autenticado y tiene eventId
       if (tournamentToDelete) {
         try {
-          console.log(
-            "🗑️ [deleteTournament] Eliminando evento de Google Calendar"
-          );
-
           if (isAuthenticated() && tournamentToDelete.googleCalendarEventId) {
             try {
               await deleteCalendarEvent(
                 tournamentToDelete.googleCalendarEventId
               );
-              console.log(
-                "✅ [deleteTournament] Evento eliminado de Google Calendar"
-              );
             } catch (deleteError) {
               console.warn(
-                "⚠️ [deleteTournament] Error al eliminar evento de Google Calendar:",
+                "Error al eliminar evento de Google Calendar:",
                 deleteError
               );
               // Si falla, buscar el evento por nombre
@@ -749,9 +653,6 @@ export const useAppState = () => {
                 );
                 if (existingEvent) {
                   await deleteCalendarEvent(existingEvent.id);
-                  console.log(
-                    "✅ [deleteTournament] Evento encontrado y eliminado"
-                  );
                 } else {
                   alert(
                     `Torneo "${tournamentToDelete.name}" eliminado del sistema.\n\n` +
@@ -778,7 +679,7 @@ export const useAppState = () => {
         } catch (calendarError) {
           // No fallar si hay error con Google Calendar, solo loguear
           console.warn(
-            "⚠️ [deleteTournament] Error al eliminar de Google Calendar:",
+            "Error al eliminar de Google Calendar:",
             calendarError
           );
           alert(
@@ -791,7 +692,7 @@ export const useAppState = () => {
       console.error("Error deleting tournament:", error);
       throw error;
     }
-  };
+  }
 
   // ========== FUNCIONES PARA CÁMARAS ==========
   // En useAppState.js - agregar estas funciones
@@ -801,8 +702,6 @@ export const useAppState = () => {
   // ========== FUNCIONES PARA CÁMARAS ==========
   const createCamera = async (cameraData) => {
     try {
-      console.log("🎯 Creando cámara:", cameraData);
-
       if (apiAvailable) {
         const newCamera = await apiService.createCamera(cameraData);
         setCamerasData((prev) => [...prev, newCamera]);
@@ -817,15 +716,13 @@ export const useAppState = () => {
         return newCamera;
       }
     } catch (error) {
-      console.error("❌ Error creating camera:", error);
+      console.error("Error creating camera:", error);
       throw error;
     }
   };
 
   const updateCamera = async (id, cameraData, skipWorkerUpdate = false) => {
     try {
-      console.log("🔄 [updateCamera] Actualizando cámara:", id, cameraData);
-
       const currentCamera = camerasData.find((c) => c.id === id);
       if (!currentCamera) {
         throw new Error(`Cámara con ID ${id} no encontrada`);
@@ -836,10 +733,6 @@ export const useAppState = () => {
 
       // Detectar cambios en assignedTo (solo si no se salta la actualización del trabajador)
       if (previousAssignedTo !== newAssignedTo && !skipWorkerUpdate) {
-        console.log(
-          `🔄 [updateCamera] Cambio en assignedTo: "${previousAssignedTo}" -> "${newAssignedTo}"`
-        );
-
         // Si había un trabajador anterior, remover la cámara de su lista
         if (previousAssignedTo) {
           const previousWorker = workersData.find(
@@ -849,9 +742,6 @@ export const useAppState = () => {
             const updatedCamerasAssigned = (
               previousWorker.camerasAssigned || []
             ).filter((cameraId) => cameraId !== id);
-            console.log(
-              `➖ [updateCamera] Removiendo cámara ${id} del trabajador ${previousWorker.name}`
-            );
             await updateWorker(
               previousWorker.id,
               {
@@ -873,14 +763,8 @@ export const useAppState = () => {
             ].filter(
               (cameraId, index, self) => self.indexOf(cameraId) === index
             ); // Remover duplicados
-            console.log(
-              `➕ [updateCamera] Agregando cámara ${id} al trabajador ${newWorker.name}`
-            );
             // Actualizar la ubicación de la cámara con el estado del trabajador
             cameraData.location = newWorker.state;
-            console.log(
-              `📍 [updateCamera] Actualizando location de cámara a: ${newWorker.state}`
-            );
             await updateWorker(
               newWorker.id,
               {
@@ -891,7 +775,7 @@ export const useAppState = () => {
             ); // skipCameraUpdate = true para evitar bucle
           } else {
             console.warn(
-              `⚠️ [updateCamera] Trabajador "${newAssignedTo}" no encontrado`
+              `Trabajador "${newAssignedTo}" no encontrado`
             );
           }
         }
@@ -916,15 +800,13 @@ export const useAppState = () => {
         return updatedData;
       }
     } catch (error) {
-      console.error("❌ Error updating camera:", error);
+      console.error("Error updating camera:", error);
       throw error;
     }
   };
 
   const deleteCamera = async (id) => {
     try {
-      console.log("🗑️ [deleteCamera] Eliminando cámara:", id);
-
       // Buscar la cámara antes de eliminarla para obtener información del trabajador asignado
       const cameraToDelete = camerasData.find((c) => c.id === id);
 
@@ -935,10 +817,6 @@ export const useAppState = () => {
         );
 
         if (assignedWorker) {
-          console.log(
-            `🔄 [deleteCamera] Removiendo cámara ${id} del trabajador ${assignedWorker.name}`
-          );
-
           // Remover la cámara de la lista del trabajador
           const updatedCamerasAssigned = (
             assignedWorker.camerasAssigned || []
@@ -953,13 +831,9 @@ export const useAppState = () => {
             },
             true // skipCameraUpdate = true porque la cámara se está eliminando
           );
-
-          console.log(
-            `✅ [deleteCamera] Cámara ${id} removida del trabajador ${assignedWorker.name}`
-          );
         } else {
           console.warn(
-            `⚠️ [deleteCamera] Trabajador "${cameraToDelete.assignedTo}" no encontrado`
+            `Trabajador "${cameraToDelete.assignedTo}" no encontrado`
           );
         }
       }
@@ -969,20 +843,17 @@ export const useAppState = () => {
         try {
           const history = await apiService.getCameraHistoryById(id);
           if (history && history.length > 0) {
-            console.log(`🗑️ [deleteCamera] Eliminando ${history.length} entradas de historial`);
             await Promise.all(history.map(entry => apiService.deleteCameraHistory(entry.id)));
           }
         } catch (historyError) {
-          console.warn("⚠️ [deleteCamera] Error al eliminar historial:", historyError);
+          console.warn("Error al eliminar historial:", historyError);
         }
 
         await apiService.deleteCamera(id);
       }
       setCamerasData((prev) => prev.filter((camera) => camera.id !== id));
-
-      console.log(`✅ [deleteCamera] Cámara ${id} eliminada exitosamente`);
     } catch (error) {
-      console.error("❌ Error deleting camera:", error);
+      console.error("Error deleting camera:", error);
       throw error;
     }
   };
@@ -995,8 +866,6 @@ export const useAppState = () => {
   // ========== FUNCIÓN HELPER PARA HISTORIAL ==========
   const createCameraHistoryEntry = async (cameraId, type, title, details = {}) => {
     try {
-      console.log(`📝 [createCameraHistoryEntry] Creando entrada de historial para cámara ${cameraId}`);
-      
       const entry = {
         id: `${cameraId}-${Date.now()}`,
         cameraId,
@@ -1009,14 +878,12 @@ export const useAppState = () => {
 
       if (apiAvailable) {
         const createdEntry = await apiService.createCameraHistory(entry);
-        console.log(`✅ [createCameraHistoryEntry] Entrada creada:`, createdEntry);
         return createdEntry;
       } else {
-        console.log(`✅ [createCameraHistoryEntry] Modo offline, entrada lista:`, entry);
         return entry;
       }
     } catch (error) {
-      console.error(`❌ [createCameraHistoryEntry] Error:`, error);
+      console.error(`Error createCameraHistoryEntry:`, error);
       // No fallar la operación principal si falla el historial
       return null;
     }
@@ -1024,12 +891,11 @@ export const useAppState = () => {
 
   const deleteCameraHistoryEntry = async (id) => {
     try {
-      console.log(`🗑️ [deleteCameraHistoryEntry] Eliminando entrada de historial: ${id}`);
       if (apiAvailable) {
         await apiService.deleteCameraHistory(id);
       }
     } catch (error) {
-      console.error(`❌ [deleteCameraHistoryEntry] Error:`, error);
+      console.error(`Error deleteCameraHistoryEntry:`, error);
       throw error;
     }
   };
@@ -1037,8 +903,6 @@ export const useAppState = () => {
   // ========== FUNCIONES PARA ENVÍOS ==========
   const createShipment = async (shipmentData) => {
     try {
-      console.log("🎯 Creando envío:", shipmentData);
-
       if (apiAvailable) {
         const newShipment = await apiService.createShipment(shipmentData);
         setShipmentsData((prev) => [...prev, newShipment]);
@@ -1160,15 +1024,13 @@ export const useAppState = () => {
         return newShipment;
       }
     } catch (error) {
-      console.error("❌ Error creating shipment:", error);
+      console.error("Error creating shipment:", error);
       throw error;
     }
   };
 
   const updateShipment = async (id, shipmentData) => {
     try {
-      console.log("🔄 Actualizando envío:", id, shipmentData);
-
       const currentShipment = shipmentsData.find((s) => s.id === id);
       if (!currentShipment) {
         throw new Error(`Envío con ID ${id} no encontrado`);
@@ -1187,7 +1049,6 @@ export const useAppState = () => {
       // Cámaras removidas: siempre liberarlas
       const camerasRemoved = currentCameras.filter(c => !updatedCameras.includes(c));
       if (camerasRemoved.length > 0) {
-        console.log("➖ [updateShipment] Cámaras removidas del envío:", camerasRemoved);
         for (const cameraId of camerasRemoved) {
            // Revertir a estado disponible y limpiar asignación
            await updateCamera(cameraId, { 
@@ -1212,7 +1073,6 @@ export const useAppState = () => {
       // Cámaras agregadas: manejar si el estado NO cambia (si cambia, lo maneja handleShipmentStatusChange)
       const camerasAdded = updatedCameras.filter(c => !currentCameras.includes(c));
       if (camerasAdded.length > 0 && currentShipment.status === updatedData.status) {
-         console.log("➕ [updateShipment] Cámaras agregadas al envío:", camerasAdded);
          const status = updatedData.status;
          
          if (status === "enviado") {
@@ -1266,7 +1126,7 @@ export const useAppState = () => {
         return updatedData;
       }
     } catch (error) {
-      console.error("❌ Error updating shipment:", error);
+      console.error("Error updating shipment:", error);
       throw error;
     }
   };
@@ -1279,25 +1139,13 @@ export const useAppState = () => {
     const { cameras, recipient, status: newStatus, destination, id: shipmentId } = updatedShipment;
     const { status: oldStatus } = currentShipment;
 
-    console.log("🔄 Manejando cambio de estado de envío:", {
-      oldStatus,
-      newStatus,
-      cameras,
-      recipient,
-    });
-
     // Si no hay cámaras en el envío, no hacer nada
     if (!cameras || cameras.length === 0) return;
 
     // Caso 1: Cambio a "enviado" - Cámaras cambian a "EN ENVIO"
     if (newStatus === "enviado" && oldStatus !== "enviado") {
-      console.log('📦 Cambiando cámaras a estado "EN ENVIO":', cameras);
-      
       // Actualización por lotes de trabajadores
       const recipientName = recipient;
-      // Intentar deducir el remitente de las cámaras (asumiendo que todas vienen del mismo)
-      // O usar el remitente del envío si está disponible en updatedShipment (necesitaríamos pasarlo)
-      // Por ahora, nos enfocamos en asegurar que el destinatario las reciba
       
       if (recipientName) {
         const recipientWorker = workersData.find(w => w.name === recipientName);
@@ -1355,10 +1203,6 @@ export const useAppState = () => {
 
     // Caso 2: Cambio a "entregado" - Cámaras cambian a "disponible" y se asignan al destinatario
     if (newStatus === "entregado" && oldStatus !== "entregado") {
-      console.log(
-        '✅ Cambiando cámaras a estado "disponible" y asignando a:',
-        recipient
-      );
       for (const cameraId of cameras) {
         updateCamera(cameraId, {
           status: "disponible",
@@ -1386,7 +1230,6 @@ export const useAppState = () => {
       newStatus !== "enviado" &&
       newStatus !== "entregado"
     ) {
-      console.log('↩️ Revertiendo cámaras a estado "disponible":', cameras);
       for (const cameraId of cameras) {
         updateCamera(cameraId, { status: "disponible" });
         // Crear entrada de historial
@@ -1405,7 +1248,6 @@ export const useAppState = () => {
 
     // Caso 4: Cambio de "entregado" a otro estado - Revertir asignación
     if (oldStatus === "entregado" && newStatus !== "entregado") {
-      console.log("↩️ Revertiendo asignación de cámaras:", cameras);
       for (const cameraId of cameras) {
         updateCamera(cameraId, {
           status: "disponible",
@@ -1429,8 +1271,6 @@ export const useAppState = () => {
 
   const deleteShipment = async (id) => {
     try {
-      console.log("🗑️ Eliminando envío:", id);
-
       // Encontrar el envío para liberar las cámaras
       const shipmentToDelete = shipmentsData.find((s) => s.id === id);
 
@@ -1446,9 +1286,6 @@ export const useAppState = () => {
           );
 
           if (shipmentHistory.length > 0) {
-            console.log(
-              `🗑️ [deleteShipment] Eliminando ${shipmentHistory.length} entradas de historial`
-            );
             await Promise.all(
               shipmentHistory.map((entry) =>
                 apiService.deleteCameraHistory(entry.id)
@@ -1457,7 +1294,7 @@ export const useAppState = () => {
           }
         } catch (historyError) {
           console.warn(
-            "⚠️ [deleteShipment] Error al eliminar historial:",
+            "Error al eliminar historial:",
             historyError
           );
         }
@@ -1469,10 +1306,6 @@ export const useAppState = () => {
 
       // Liberar cámaras (cambiar estado a "disponible" y quitar asignación)
       if (shipmentToDelete && shipmentToDelete.cameras) {
-        console.log(
-          "🔄 Liberando cámaras del envío eliminado:",
-          shipmentToDelete.cameras
-        );
         shipmentToDelete.cameras.forEach((cameraId) => {
           updateCamera(cameraId, {
             status: "disponible",
@@ -1482,13 +1315,12 @@ export const useAppState = () => {
         });
       }
     } catch (error) {
-      console.error("❌ Error deleting shipment:", error);
+      console.error("Error deleting shipment:", error);
       throw error;
     }
   };
   // ========== FUNCIONES PARA TAREAS ==========
   const completeTask = async (taskId) => {
-    console.log(`Completando tarea: ${taskId}`);
     // Lógica para completar tareas
   };
 
