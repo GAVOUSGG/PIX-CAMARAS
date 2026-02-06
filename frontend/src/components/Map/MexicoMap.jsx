@@ -76,6 +76,47 @@ const MexicoMap = ({ tournaments = [], workers = [], cameras = [], shipments = [
     setFilters((prev) => ({ ...prev, [key]: !prev[key] }));
   };
 
+  // Función auxiliar para obtener la fecha como string YYYY-MM-DD en hora local
+  const getLocalDateString = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
+  // Función para obtener los días de la semana actual (Lunes a Domingo)
+  const getCurrentWeekDays = useMemo(() => {
+    const today = new Date();
+    const startOfWeek = new Date(today);
+    startOfWeek.setDate(today.getDate() - today.getDay() + 1); // Lunes
+
+    const days = [];
+    for (let i = 0; i < 7; i++) {
+      const day = new Date(startOfWeek);
+      day.setDate(startOfWeek.getDate() + i);
+      days.push(getLocalDateString(day));
+    }
+    return days;
+  }, []);
+
+  // Filtrar torneos de la semana actual cuando el filtro de torneos está activo
+  const tournamentsThisWeek = useMemo(() => {
+    if (!filters.tournaments) return tournaments;
+    
+    return tournaments.filter((tournament) => {
+      if (!tournament.date || !tournament.endDate) return false;
+      
+      const tournamentStart = tournament.date.split("T")[0];
+      const tournamentEnd = tournament.endDate.split("T")[0];
+      
+      // Verificar si el torneo se superpone con algún día de la semana actual
+      // Un torneo está en la semana si su rango se superpone con algún día de la semana
+      return getCurrentWeekDays.some((weekDay) => {
+        return weekDay >= tournamentStart && weekDay <= tournamentEnd;
+      });
+    });
+  }, [tournaments, filters.tournaments, getCurrentWeekDays]);
+
   // Agrupar datos por estado
   const mapData = useMemo(() => {
     const data = {};
@@ -90,8 +131,8 @@ const MexicoMap = ({ tournaments = [], workers = [], cameras = [], shipments = [
       };
     });
 
-    // Procesar torneos
-    tournaments.forEach((t) => {
+    // Procesar torneos (solo los de la semana si el filtro está activo)
+    tournamentsThisWeek.forEach((t) => {
       if (data[t.state]) {
         data[t.state].tournaments.push(t);
         if (t.status === "activo") {
@@ -115,7 +156,7 @@ const MexicoMap = ({ tournaments = [], workers = [], cameras = [], shipments = [
     });
 
     return data;
-  }, [tournaments, workers, cameras]);
+  }, [tournamentsThisWeek, workers, cameras]);
 
   // Procesar rutas de envíos
   const shipmentRoutes = useMemo(() => {
@@ -279,7 +320,7 @@ const MexicoMap = ({ tournaments = [], workers = [], cameras = [], shipments = [
                         <div>
                           <div className="flex items-center gap-2 text-purple-600 font-semibold text-sm mb-1">
                             <Trophy className="w-3 h-3" />
-                            <span>Torneos ({stateData.tournaments.length})</span>
+                            <span>Torneos de la semana ({stateData.tournaments.length})</span>
                           </div>
                           <ul className="text-xs text-gray-600 pl-5 list-disc">
                             {stateData.tournaments.slice(0, 3).map(t => (
@@ -316,24 +357,33 @@ const MexicoMap = ({ tournaments = [], workers = [], cameras = [], shipments = [
                             <Camera className="w-3 h-3" />
                             <span>Cámaras ({stateData.cameras.length})</span>
                           </div>
-                          <ul className="text-xs text-gray-600 pl-5 list-disc">
+                          <ul className="text-xs text-gray-600 pl-5 list-disc space-y-1">
                             {stateData.cameras.map(c => (
-                              <li key={c.id} className="truncate flex justify-between">
-                                <span>{c.model}</span>
-                                <span className={`text-[10px] px-1 rounded ${
-                                  c.status === 'en uso' ? 'bg-green-100 text-green-700' : 
-                                  c.status === 'disponible' ? 'bg-blue-100 text-blue-700' : 
-                                  'bg-gray-100 text-gray-700'
-                                }`}>
-                                  {c.status}
-                                </span>
-                                <span className={`text-[10px] px-1 rounded ${
-                                  c.type === 'exterior' ? 'bg-yellow-100 text-yellow-700' : 
-                                  c.type === 'interior' ? 'bg-indigo-100 text-indigo-700' : 
-                                  'bg-gray-100 text-gray-700'
-                                }`}>
-                                  {c.type}
-                                </span>
+                              <li key={c.id} className="flex items-center justify-between gap-2">
+                                <div className="flex-1 min-w-0">
+                                  <div className="font-semibold text-blue-700">{c.id}</div>
+                                  <div className="text-gray-500 truncate">{c.model}</div>
+                                </div>
+                                <div className="flex flex-col gap-1 items-end">
+                                  <span className={`text-[10px] px-1.5 py-0.5 rounded ${
+                                    c.status === 'en uso' ? 'bg-green-100 text-green-700' : 
+                                    c.status === 'disponible' ? 'bg-blue-100 text-blue-700' : 
+                                    c.status === 'mantenimiento' ? 'bg-orange-100 text-orange-700' :
+                                    'bg-gray-100 text-gray-700'
+                                  }`}>
+                                    {c.status}
+                                  </span>
+                                  {c.type && (
+                                    <span className={`text-[10px] px-1.5 py-0.5 rounded ${
+                                      c.type === 'Solar' ? 'bg-yellow-100 text-yellow-700' : 
+                                      c.type === 'Eléctrica' ? 'bg-indigo-100 text-indigo-700' : 
+                                      c.type === 'Híbrida' ? 'bg-green-100 text-green-700' :
+                                      'bg-gray-100 text-gray-700'
+                                    }`}>
+                                      {c.type}
+                                    </span>
+                                  )}
+                                </div>
                               </li>
                             ))}
                           </ul>
