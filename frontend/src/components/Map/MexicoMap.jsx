@@ -373,16 +373,7 @@ const MexicoMap = ({ tournaments = [], workers = [], cameras = [], shipments = [
                                   }`}>
                                     {c.status}
                                   </span>
-                                  {c.type && (
-                                    <span className={`text-[10px] px-1.5 py-0.5 rounded ${
-                                      c.type === 'Solar' ? 'bg-yellow-100 text-yellow-700' : 
-                                      c.type === 'Eléctrica' ? 'bg-indigo-100 text-indigo-700' : 
-                                      c.type === 'Híbrida' ? 'bg-green-100 text-green-700' :
-                                      'bg-gray-100 text-gray-700'
-                                    }`}>
-                                      {c.type}
-                                    </span>
-                                  )}
+                                  
                                 </div>
                               </li>
                             ))}
