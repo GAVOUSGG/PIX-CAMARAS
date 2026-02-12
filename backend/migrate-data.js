@@ -14,7 +14,7 @@ const sqliteDb = new Sequelize({
 
 // Conexión a PostgreSQL (Railway)
 // Pega aquí tu DATABASE_URL de Railway
-const DATABASE_URL = process.env.DATABASE_URL || 'postgresql://user:password@host:port/database';
+const DATABASE_URL = process.env.DATABASE_URL || 'postgresql://postgres:MHPmLZJLEFPCoQXTKSxYpcDqfIOQkybL@nozomi.proxy.rlwy.net:50012/railway';
 
 const postgresDb = new Sequelize(DATABASE_URL, {
   dialect: 'postgres',
