@@ -3,6 +3,7 @@ import StatsGrid from "../components/Dashboard/StatsGrid";
 import StatisticsSection from "../components/Dashboard/StatisticsSection";
 import ActiveTournaments from "../components/Dashboard/ActiveTournaments";
 import LogisticsSummary from "../components/Dashboard/LogisticsSummary";
+import UpcomingTournaments from "../components/Dashboard/UpcomingTournaments";
 import MexicoMap from "../components/Map/MexicoMap";
 
 const Dashboard = ({ tournamentsData, camerasData, workersData, shipmentsData }) => {
@@ -44,13 +45,13 @@ const Dashboard = ({ tournamentsData, camerasData, workersData, shipmentsData })
       </section>
 
       {/* 2. Operación y Logística */}
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
-        <div className="xl:col-span-2 space-y-8">
+      <div className="grid grid-cols-1 xl:grid-cols-4 gap-8">
+        <div className="xl:col-span-3 space-y-8">
           {/* Mapa de Operaciones */}
-          <section className="glass-card rounded-3xl overflow-hidden">
-            <div className="p-6 border-b border-white/5 flex items-center justify-between">
-              <h3 className="text-xl font-semibold text-white">Cobertura Nacional</h3>
-              <span className="text-xs font-medium px-2 py-1 bg-white/5 rounded-full text-gray-400">Tiempo Real</span>
+          <section className="glass-card rounded-3xl overflow-hidden shadow-2xl">
+            <div className="p-5 border-b border-white/5 flex items-center justify-between bg-white/5">
+              <h3 className="text-lg font-semibold text-white">Cobertura Nacional</h3>
+              <span className="text-[10px] font-medium px-2 py-0.5 bg-emerald-500/10 text-emerald-400 rounded-full border border-emerald-500/20">En Vivo</span>
             </div>
             <div className="p-2">
               <MexicoMap
@@ -62,16 +63,21 @@ const Dashboard = ({ tournamentsData, camerasData, workersData, shipmentsData })
             </div>
           </section>
 
-          {/* Torneos Activos */}
+          {/* Torneos Próximos (Semana) */}
           <section>
-            <ActiveTournaments tournaments={tournamentsData} />
+            <UpcomingTournaments tournaments={tournamentsData} />
           </section>
         </div>
 
         <div className="xl:col-span-1 space-y-8">
-          {/* Logística */}
-          <section className="h-full">
+          {/* Logística (Compacta) */}
+          <section>
             <LogisticsSummary shipments={shipmentsData} />
+          </section>
+
+          {/* Torneos Activos */}
+          <section>
+            <ActiveTournaments tournaments={tournamentsData} />
           </section>
         </div>
       </div>
@@ -87,6 +93,7 @@ const Dashboard = ({ tournamentsData, camerasData, workersData, shipmentsData })
     </div>
   );
 };
+
 
 export default Dashboard;
 
