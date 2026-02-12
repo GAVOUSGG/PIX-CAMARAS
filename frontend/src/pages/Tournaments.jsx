@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 
 const TournamentTable = lazy(() => import("../components/Tournaments/TournamentTable"));
-const TournamentForm = lazy(() => import("../components/Tournaments/TournamentForm"));
+const TournamentModal = lazy(() => import("../components/Tournaments/TournamentModal"));
 const WeeklyView = lazy(() => import("../components/Tournaments/WeeklyView"));
 const TournamentDetailsModal = lazy(() => import("../components/Dashboard/TournamentDetailsModal"));
 
@@ -301,7 +301,7 @@ const Tournaments = ({
             className="group bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white px-5 py-2.5 rounded-2xl transition-all duration-300 flex items-center space-x-2 shadow-lg shadow-emerald-500/10 hover:shadow-emerald-500/20 active:scale-95"
           >
             <Plus className="w-5 h-5" />
-            <span className="font-semibold">Nuevo Registro</span>
+            <span className="font-semibold">Nuevo Torneo</span>
           </button>
         </div>
       </div>
@@ -512,19 +512,17 @@ const Tournaments = ({
         </div>
       )}
 
-      {/* Formulario para crear/editar */}
-      {(showForm || editingTournament) && (
-        <Suspense fallback={null}>
-          <TournamentForm
-            onSave={handleSaveTournament}
-            onCancel={handleCancelForm}
-            workers={workersData}
-            cameras={camerasData}
-            tournament={editingTournament}
-            isOpen={true}
-          />
-        </Suspense>
-      )}
+      {/* Formulario para crear/editar (Modal con Portal) */}
+      <Suspense fallback={null}>
+        <TournamentModal
+          isOpen={showForm || !!editingTournament}
+          onClose={handleCancelForm}
+          onSave={handleSaveTournament}
+          workers={workersData}
+          cameras={camerasData}
+          tournament={editingTournament}
+        />
+      </Suspense>
 
       {selectedTournament && (
         <Suspense fallback={null}>
