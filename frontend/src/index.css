@@ -1,24 +1,128 @@
 @import "tailwindcss";
 
+:root {
+  --glass-bg: rgba(15, 23, 42, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --accent-gold: #fbbf24;
+  --accent-emerald: #10b981;
+  --accent-blue: #3b82f6;
+}
+
 /* Estilos base */
+/* Optimización de scroll global */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 100px; /* Para que al clickar anclas no quede tapado por el header */
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #0f172a;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.05) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(59, 130, 246, 0.05) 0px, transparent 50%);
+  overflow-x: hidden;
+  color: #f8fafc;
+  
+  /* Mejorar el scroll en móviles */
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: none;
 }
 
-/* Mejoras para backdrop blur */
-.backdrop-blur-lg {
-  backdrop-filter: blur(16px);
+/* Optimización de renderizado por secciones */
+section, .dashboard-grid-item {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 500px; /* Altura estimada para evitar saltos */
+  contain: layout style;
 }
 
-.backdrop-blur-xl {
-  backdrop-filter: blur(24px);
+
+/* Glassmorphism Premium Optimizado Agresivamente */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(4px); /* Reducido para máximos FPS */
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+  transform: translate3d(0, 0, 0); /* Force 3D context */
+  will-change: transform, opacity;
+  contain: paint layout; /* Aislar el repintado del resto del DOM */
 }
 
-.backdrop-blur-sm {
+
+@media (max-width: 768px) {
+  .glass-card {
+    backdrop-filter: blur(4px); /* Proyectos móviles necesitan menos blur */
+    -webkit-backdrop-filter: blur(4px);
+  }
+}
+
+
+.glass-card-hover {
+  transition: all 0.3s ease;
+}
+
+.glass-card-hover:hover {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.45);
+}
+
+/* Animaciones suaves */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* Optimización de transiciones */
+button, a, select, input {
+  transition: all 200ms ease;
+}
+
+
+/* Capas de hardware para elementos fijos/pesados */
+.MexicoMap, .StatsGrid, header, nav {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Scrollbar Premium y fluida */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.3);
   backdrop-filter: blur(4px);
 }
+
+::-webkit-scrollbar-thumb {
+  background: rgba(16, 185, 129, 0.2);
+  border-radius: 20px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(16, 185, 129, 0.5);
+  background-clip: content-box;
+}
+
+/* Evitar saltos de layout en imágenes y SVGs */
+img, svg {
+  content-visibility: auto;
+}
+

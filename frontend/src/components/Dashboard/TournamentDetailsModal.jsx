@@ -1,23 +1,24 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
 import { X, Calendar, MapPin, Flag, User, Camera, Layers, Clock } from 'lucide-react';
 import StatusBadge from '../UI/StatusBadge';
 
 const TournamentDetailsModal = ({ tournament, onClose }) => {
   if (!tournament) return null;
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+  return createPortal(
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
       {/* Backdrop */}
       <div 
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
+        className="absolute inset-0 bg-black/80 backdrop-blur-md transition-opacity"
         onClick={onClose}
       />
 
       {/* Modal Content */}
-      <div className="relative bg-slate-900 border border-white/10 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto animate-in fade-in zoom-in duration-200">
+      <div className="relative bg-slate-900 border border-white/10 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto animate-in fade-in zoom-in duration-300">
         
         {/* Header */}
-        <div className="sticky top-0 z-10 bg-slate-900/95 backdrop-blur border-b border-white/10 p-6 flex items-start justify-between">
+        <div className="sticky top-0 z-10 bg-slate-900 border-b border-white/10 p-6 flex items-start justify-between">
           <div>
             <div className="flex items-center gap-3 mb-2">
               <h2 className="text-2xl font-bold text-white">{tournament.name}</h2>
@@ -30,7 +31,7 @@ const TournamentDetailsModal = ({ tournament, onClose }) => {
           </div>
           <button 
             onClick={onClose}
-            className="p-2 hover:bg-white/10 rounded-lg transition-colors text-gray-400 hover:text-white"
+            className="p-2 hover:bg-white/10 rounded-xl transition-all text-gray-400 hover:text-white"
           >
             <X className="w-6 h-6" />
           </button>
@@ -129,7 +130,8 @@ const TournamentDetailsModal = ({ tournament, onClose }) => {
         </div>
 
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

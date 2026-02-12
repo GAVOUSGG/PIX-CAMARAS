@@ -212,84 +212,64 @@ const WeeklyView = ({
   const multiDayTournaments = tournaments.filter(isMultiDayTournament).length;
 
   return (
-    <div className="space-y-6">
-      {/* Header con navegación y stats */}
-      <div className="bg-gradient-to-br from-emerald-500/10 via-slate-800/20 to-blue-500/10 rounded-2xl border border-emerald-500/20 p-6 backdrop-blur-sm">
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center space-x-4">
-            <button
-              onClick={goToPreviousWeek}
-              className="p-2.5 hover:bg-white/10 rounded-xl transition-all hover:scale-105 text-gray-400 hover:text-white"
-            >
-              <ChevronLeft className="w-5 h-5" />
-            </button>
+    <div className="space-y-8">
+      {/* Header con navegación y stats premium */}
+      <div className="glass-card rounded-3xl p-8 relative overflow-hidden border-white/5 shadow-2xl">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 blur-[100px] rounded-full -mr-32 -mt-32"></div>
+        
+        <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8">
+          <div className="flex items-center gap-6">
+            <div className="flex bg-white/5 rounded-2xl p-1.5 border border-white/10 backdrop-blur-xl">
+              <button
+                onClick={goToPreviousWeek}
+                className="p-3 hover:bg-white/10 rounded-xl transition-all duration-300 text-gray-400 hover:text-white"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <button
+                onClick={goToNextWeek}
+                className="p-3 hover:bg-white/10 rounded-xl transition-all duration-300 text-gray-400 hover:text-white"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </div>
 
-            <div>
-              <h3 className="text-2xl font-bold text-white">
-                {weekDays[0].toLocaleDateString("es-MX", { month: "long" })}
+            <div className="space-y-1">
+              <h3 className="text-3xl font-bold text-white capitalize tracking-tight">
+                {weekDays[0].toLocaleDateString("es-MX", { month: "long", year: "numeric" })}
               </h3>
-              <p className="text-sm text-gray-400">
-                {weekDays[0].toLocaleDateString("es-MX", {
-                  day: "numeric",
-                  month: "short",
-                })}{" "}
-                -{" "}
-                {weekDays[6].toLocaleDateString("es-MX", {
-                  day: "numeric",
-                  month: "short",
-                  year: "numeric",
-                })}
+              <p className="text-gray-500 font-medium text-sm flex items-center gap-2">
+                <Calendar className="w-3.5 h-3.5 text-emerald-500/50" />
+                Semana: {weekDays[0].getDate()} - {weekDays[6].getDate()} de {weekDays[6].toLocaleDateString("es-MX", { month: "short" })}
               </p>
             </div>
+          </div>
 
+          <div className="flex flex-wrap justify-center gap-6">
+            {[
+              { label: 'Total', count: totalTournaments, color: 'blue' },
+              { label: 'Activos', count: activeTournaments, color: 'emerald' },
+              { label: 'Multidía', count: multiDayTournaments, color: 'purple' },
+            ].map((stat, i) => (
+              <div key={i} className="flex flex-col items-center">
+                <span className="text-2xl font-bold text-white leading-none">{stat.count}</span>
+                <span className={`text-[10px] font-bold uppercase tracking-[0.2em] text-${stat.color}-400/70 mt-2`}>{stat.label}</span>
+              </div>
+            ))}
+            <div className="h-10 w-px bg-white/10 hidden md:block"></div>
             <button
-              onClick={goToNextWeek}
-              className="p-2.5 hover:bg-white/10 rounded-xl transition-all hover:scale-105 text-gray-400 hover:text-white"
+               onClick={goToToday}
+               className="group flex items-center gap-2 bg-white/5 hover:bg-emerald-500 text-gray-300 hover:text-white px-5 py-2.5 rounded-2xl border border-white/10 hover:border-emerald-400/50 transition-all duration-300 font-bold text-sm shadow-xl"
             >
-              <ChevronRight className="w-5 h-5" />
+              <Clock className="w-4 h-4 group-hover:rotate-12 transition-transform" />
+              Semana Actual
             </button>
-          </div>
-
-          <button
-            onClick={goToToday}
-            className="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white px-5 py-2.5 rounded-xl transition-all hover:scale-105 font-medium shadow-lg shadow-emerald-500/20"
-          >
-            <Calendar className="w-4 h-4 inline mr-2" />
-            Hoy
-          </button>
-        </div>
-
-        {/* Mini stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="bg-white/5 rounded-xl p-4 border border-white/10">
-            <div className="text-3xl font-bold text-white mb-1">
-              {totalTournaments}
-            </div>
-            <div className="text-sm text-gray-400">Torneos esta semana</div>
-          </div>
-          <div className="bg-emerald-500/10 rounded-xl p-4 border border-emerald-500/20">
-            <div className="text-3xl font-bold text-emerald-400 mb-1">
-              {activeTournaments}
-            </div>
-            <div className="text-sm text-gray-400">Activos</div>
-          </div>
-          <div className="bg-yellow-500/10 rounded-xl p-4 border border-yellow-500/20">
-            <div className="text-3xl font-bold text-yellow-400 mb-1">
-              {pendingTournaments}
-            </div>
-            <div className="text-sm text-gray-400">Pendientes</div>
-          </div>
-          <div className="bg-blue-500/10 rounded-xl p-4 border border-blue-500/20">
-            <div className="text-3xl font-bold text-blue-400 mb-1">
-              {multiDayTournaments}
-            </div>
-            <div className="text-sm text-gray-400">Multi-día</div>
           </div>
         </div>
       </div>
 
-      {/* Vista de Calendario Mejorada */}
-      <div className="grid grid-cols-7 gap-3">
+      {/* Grid de Calendario Estilo Moderno */}
+      <div className="grid grid-cols-1 md:grid-cols-7 gap-4">
         {weekDays.map((day) => {
           const dateString = day.toISOString().split("T")[0];
           const dayTournaments = tournamentsByDay[dateString] || [];
@@ -299,107 +279,70 @@ const WeeklyView = ({
           return (
             <div
               key={dateString}
-              className={`relative group cursor-pointer transition-all duration-300 ${
-                isSelected ? "scale-105 z-10" : "hover:scale-102"
+              className={`group flex flex-col h-full min-h-[160px] cursor-pointer transition-all duration-500 ${
+                isSelected ? "scale-[1.02] z-10" : "hover:translate-y-[-4px]"
               }`}
               onClick={() => setSelectedDay(isSelected ? null : dateString)}
             >
               <div
-                className={`rounded-2xl border transition-all ${
+                className={`flex-grow rounded-3xl border transition-all duration-500 overflow-hidden relative ${
                   today
-                    ? "border-emerald-500 bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 shadow-lg shadow-emerald-500/20"
+                    ? "border-emerald-500/40 bg-emerald-500/5 shadow-[0_0_20px_rgba(16,185,129,0.1)]"
                     : isSelected
-                    ? "border-blue-500 bg-gradient-to-br from-blue-500/20 to-blue-600/10 shadow-lg shadow-blue-500/20"
-                    : "border-white/10 bg-slate-800/50 hover:border-white/20 hover:bg-slate-700/50"
-                } ${dayTournaments.length > 0 ? "pb-2" : "pb-4"}`}
+                    ? "border-blue-500 bg-blue-500/10 shadow-[0_0_20px_rgba(59,130,246,0.15)]"
+                    : "border-white/5 bg-white/[0.03] hover:bg-white/[0.06] hover:border-white/10"
+                }`}
               >
-                {/* Header del día */}
-                <div
-                  className={`p-4 rounded-t-2xl ${
-                    today
-                      ? "bg-emerald-500/20"
-                      : isSelected
-                      ? "bg-blue-500/20"
-                      : "bg-white/5"
-                  }`}
-                >
-                  <div className="text-center">
-                    <div
-                      className={`text-xs uppercase font-semibold tracking-wider mb-1 ${
-                        today
-                          ? "text-emerald-400"
-                          : isSelected
-                          ? "text-blue-400"
-                          : "text-gray-400"
-                      }`}
-                    >
-                      {day.toLocaleDateString("es-MX", { weekday: "short" })}
-                    </div>
-                    <div
-                      className={`text-2xl font-bold ${
-                        today
-                          ? "text-emerald-300"
-                          : isSelected
-                          ? "text-blue-300"
-                          : "text-white"
-                      }`}
-                    >
-                      {day.getDate()}
-                    </div>
-                    {today && (
-                      <div className="mt-2 text-xs bg-emerald-500 text-white px-2 py-0.5 rounded-full font-semibold">
-                        HOY
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                {/* Lista de torneos del día */}
-                {dayTournaments.length > 0 && (
-                  <div className="px-3 py-2 space-y-2 max-h-32 overflow-y-auto">
-                    {dayTournaments.map((tournament) => {
-                      const isMultiDay = isMultiDayTournament(tournament);
-                      const duration = getTournamentDuration(tournament);
-
-                      return (
-                        <div
-                          key={tournament.id}
-                          className={`p-2 rounded-lg border text-xs ${getTournamentColor(
-                            tournament
-                          )} ${isMultiDay ? "border-dashed" : ""}`}
-                        >
-                          <div className="font-semibold truncate">
-                            {tournament.name}
-                          </div>
-                          <div className="flex justify-between items-center mt-1">
-                            <span className="truncate flex-1 mr-2">
-                              {tournament.field}
-                            </span>
-                            {isMultiDay && (
-                              <Clock className="w-3 h-3 flex-shrink-0" />
-                            )}
-                          </div>
-                          {isMultiDay && (
-                            <div className="text-xs opacity-75 mt-1">
-                              {duration}d
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
+                {/* Indicador de Hoyt */}
+                {today && (
+                  <div className="absolute top-0 right-0 px-2.5 py-1 bg-emerald-500 text-[9px] font-black text-white rounded-bl-xl tracking-tighter shadow-lg shadow-emerald-500/20">
+                    HOY
                   </div>
                 )}
 
-                {dayTournaments.length === 0 && (
-                  <div className="px-3 py-4 text-center text-gray-500 text-xs">
-                    Sin torneos
-                  </div>
+                {/* Header del día compacto */}
+                <div className={`p-4 ${today ? "bg-emerald-500/10" : isSelected ? "bg-blue-500/10" : "bg-white/5"}`}>
+                  <p className={`text-[10px] font-black uppercase tracking-widest ${today ? "text-emerald-400" : isSelected ? "text-blue-400" : "text-gray-500"}`}>
+                    {day.toLocaleDateString("es-MX", { weekday: "short" })}
+                  </p>
+                  <p className={`text-2xl font-black mt-1 ${today ? "text-white" : isSelected ? "text-white" : "text-gray-300"}`}>
+                    {day.getDate()}
+                  </p>
+                </div>
+
+                {/* Lista de torneos con puntitos de color */}
+                <div className="p-3 space-y-2">
+                  {dayTournaments.length > 0 ? (
+                    dayTournaments.slice(0, 3).map((t, idx) => (
+                      <div key={idx} className="flex items-center gap-2 group/item">
+                         <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${
+                            t.status === 'activo' ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]' :
+                            t.status === 'pendiente' ? 'bg-yellow-500 shadow-[0_0_8px_rgba(234,179,8,0.6)]' :
+                            'bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.6)]'
+                         }`}></div>
+                         <p className="text-[10px] font-semibold text-gray-400 truncate group-hover/item:text-white transition-colors">{t.name}</p>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="h-10 flex items-center justify-center opacity-20 grayscale">
+                       <TrendingUp className="w-4 h-4 text-gray-500" />
+                    </div>
+                  )}
+                  {dayTournaments.length > 3 && (
+                    <p className="text-[9px] font-bold text-gray-500 pl-4">+{dayTournaments.length - 3} más</p>
+                  )}
+                </div>
+
+                {/* Sutil glow de selección */}
+                {isSelected && (
+                  <div className="absolute inset-0 border-2 border-blue-500/30 rounded-3xl pointer-events-none"></div>
                 )}
               </div>
             </div>
           );
         })}
       </div>
+
 
       {/* Panel de detalles del día seleccionado */}
       {selectedDay &&

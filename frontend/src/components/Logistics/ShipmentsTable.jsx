@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, memo } from "react";
 import {
   Eye,
   MoreVertical,
   Edit,
   Trash2,
   Truck,
-  Package,
   MapPin,
   Calendar,
   User,
@@ -14,63 +13,170 @@ import {
 import StatusBadge from "../UI/StatusBadge";
 import ShipmentMobileCard from "./ShipmentMobileCard";
 
+const ShipmentRow = memo(({ shipment, onEdit, onDelete, onView }) => {
+  const [showMenu, setShowMenu] = useState(false);
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "enviado": return "text-green-400";
+      case "preparando": return "text-yellow-400";
+      case "pendiente": return "text-orange-400";
+      case "entregado": return "text-blue-400";
+      case "cancelado": return "text-red-400";
+      default: return "text-gray-400";
+    }
+  };
+
+  return (
+    <tr className="hover:bg-white/5 transition-colors group">
+      <td className="px-6 py-4 whitespace-nowrap">
+        <div className="flex items-center space-x-2">
+          <Truck className="w-4 h-4 text-gray-400" />
+          <div>
+            <div className="text-sm font-medium text-white font-mono">{shipment.id}</div>
+            {shipment.sender && <div className="text-xs text-gray-400">{shipment.sender}</div>}
+          </div>
+        </div>
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap">
+        <div className="flex flex-wrap gap-1">
+          {shipment.cameras && shipment.cameras.map((cameraId) => (
+            <span key={cameraId} className="bg-blue-500/10 text-blue-400 px-2 py-0.5 rounded text-[10px] border border-blue-500/20">
+              {cameraId}
+            </span>
+          ))}
+        </div>
+        <div className="text-[10px] text-gray-500 mt-1 uppercase font-bold tracking-wider">
+          {shipment.cameras?.length || 0} unidades
+        </div>
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap">
+        <div className="flex items-center space-x-2">
+          <MapPin className="w-4 h-4 text-gray-400" />
+          <div className="text-sm text-gray-300">{shipment.destination}</div>
+        </div>
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap">
+        <div className="flex items-center space-x-2">
+          <User className="w-4 h-4 text-gray-400" />
+          <div className="text-sm text-gray-300">{shipment.recipient}</div>
+        </div>
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap">
+        <div className="flex items-center space-x-2">
+          <User className="w-4 h-4 text-gray-400" />
+          <div className="text-sm text-gray-300">
+            {shipment.shipper || <span className="text-gray-500 italic">No asignado</span>}
+          </div>
+        </div>
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap">
+        <div className="flex items-center space-x-2">
+          <Calendar className="w-4 h-4 text-gray-400" />
+          <div className="text-sm text-gray-300">{shipment.date}</div>
+        </div>
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap">
+        <StatusBadge status={shipment.status} />
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap font-mono text-xs text-gray-400">
+        {shipment.trackingNumber || "N/A"}
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap text-right">
+        <div className="flex items-center space-x-2 justify-end">
+          <button
+            onClick={() => onView(shipment)}
+            className="text-emerald-400 hover:text-emerald-300 transition-colors p-1 rounded hover:bg-white/10"
+            title="Ver detalles"
+          >
+            <Eye className="w-4 h-4" />
+          </button>
+
+          <div className="relative">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowMenu(!showMenu);
+              }}
+              className="text-gray-400 hover:text-white transition-colors p-1 rounded hover:bg-white/10"
+            >
+              <MoreVertical className="w-4 h-4" />
+            </button>
+
+            {showMenu && (
+              <>
+                <div className="fixed inset-0 z-40" onClick={() => setShowMenu(false)} />
+                <div className="absolute right-0 mt-2 w-48 bg-slate-800 border border-white/20 rounded-lg shadow-xl z-50 overflow-hidden">
+                  <div className="p-1">
+                    <button
+                      onClick={() => { onView(shipment); setShowMenu(false); }}
+                      className="w-full flex items-center space-x-3 px-3 py-2 text-sm text-white hover:bg-white/10 rounded-md transition-colors"
+                    >
+                      <Eye className="w-4 h-4" />
+                      <span>Ver detalles</span>
+                    </button>
+
+                    <button
+                      onClick={() => { onEdit(shipment); setShowMenu(false); }}
+                      className="w-full flex items-center space-x-3 px-3 py-2 text-sm text-blue-400 hover:bg-white/10 rounded-md transition-colors"
+                    >
+                      <Edit className="w-4 h-4" />
+                      <span>Editar</span>
+                    </button>
+
+                    <div className="border-t border-white/10 my-1"></div>
+                    <div className="px-3 py-1 text-[10px] text-gray-500 font-bold uppercase tracking-wider">Estado rápido</div>
+                    {["preparando", "enviado", "entregado"].map((status) => (
+                      <button
+                        key={status}
+                        onClick={() => {
+                          if (shipment.status !== status) onEdit({ ...shipment, status });
+                          setShowMenu(false);
+                        }}
+                        className={`w-full flex items-center space-x-3 px-3 py-1.5 text-sm rounded-md transition-colors ${
+                          shipment.status === status ? "bg-white/10 text-white" : "text-gray-400 hover:bg-white/10 hover:text-white"
+                        }`}
+                      >
+                        <div className={`w-2 h-2 rounded-full ${getStatusColor(status).replace("text-", "bg-")}`} />
+                        <span className="capitalize">{status}</span>
+                      </button>
+                    ))}
+
+                    <div className="border-t border-white/10 my-1"></div>
+                    <button
+                      onClick={() => { onDelete(shipment.id); setShowMenu(false); }}
+                      className="w-full flex items-center space-x-3 px-3 py-2 text-sm text-red-400 hover:bg-red-500/10 rounded-md transition-colors"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                      <span>Eliminar</span>
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      </td>
+    </tr>
+  );
+});
+
 const ShipmentsTable = ({
   shipments,
   onEditShipment,
   onDeleteShipment,
   onViewShipment,
 }) => {
-  const [actionMenu, setActionMenu] = useState(null);
-
-  // Cerrar menú cuando se hace clic fuera
-  React.useEffect(() => {
-    const handleClickOutside = () => {
-      setActionMenu(null);
-    };
-
-    if (actionMenu) {
-      document.addEventListener("click", handleClickOutside);
-      return () => document.removeEventListener("click", handleClickOutside);
-    }
-  }, [actionMenu]);
-
-  const handleEdit = (shipment) => {
-    onEditShipment(shipment);
-    setActionMenu(null);
-  };
-
+  const handleEdit = (shipment) => onEditShipment(shipment);
+  const handleView = (shipment) => onViewShipment(shipment);
   const handleDelete = (shipmentId) => {
     if (confirm("¿Estás seguro de que quieres eliminar este envío?")) {
       onDeleteShipment(shipmentId);
-    }
-    setActionMenu(null);
-  };
-
-  const handleView = (shipment) => {
-    onViewShipment(shipment);
-    setActionMenu(null);
-  };
-
-  const getStatusColor = (status) => {
-    switch (status) {
-      case "enviado":
-        return "text-green-400";
-      case "preparando":
-        return "text-yellow-400";
-      case "pendiente":
-        return "text-orange-400";
-      case "entregado":
-        return "text-blue-400";
-      case "cancelado":
-        return "text-red-400";
-      default:
-        return "text-gray-400";
     }
   };
 
   return (
     <>
-      {/* Mobile Card View */}
       <div className="md:hidden space-y-3">
         {shipments && shipments.length > 0 ? (
           shipments.map((shipment) => (
@@ -89,254 +195,36 @@ const ShipmentsTable = ({
         )}
       </div>
 
-      {/* Desktop Table View */}
-      <div className="hidden md:block bg-black/20 rounded-2xl border border-white/10 overflow-hidden">
-        <div className="overflow-x-auto">
+      <div className="hidden md:block bg-black/20 backdrop-blur-sm rounded-2xl border border-white/10 overflow-hidden">
+        <div className="overflow-x-auto min-h-[400px]">
           <table className="w-full">
             <thead className="bg-white/5">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  ID Envío
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Cámaras
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Destino
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Destinatario
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Envía
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Fecha
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Estado
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Tracking
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Acciones
-                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">ID Envío</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Cámaras</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Destino</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Destinatario</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Persona Envía</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Fecha</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Estado</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Tracking</th>
+                <th className="px-6 py-3 text-right text-xs font-medium text-gray-400 uppercase tracking-wider w-20">Acciones</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/10">
               {shipments && shipments.length > 0 ? (
                 shipments.map((shipment) => (
-                  <tr
+                  <ShipmentRow 
                     key={shipment.id}
-                    className="hover:bg-white/5 transition-colors"
-                  >
-                    {/* ID Envío */}
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center space-x-2">
-                        <Truck className="w-4 h-4 text-gray-400" />
-                        <div>
-                          <div className="text-sm font-medium text-white font-mono">
-                            {shipment.id}
-                          </div>
-                          {shipment.sender && (
-                            <div className="text-xs text-gray-400">
-                              {shipment.sender}
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </td>
-
-                    {/* Cámaras */}
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex flex-wrap gap-1">
-                        {shipment.cameras &&
-                          shipment.cameras.map((cameraId) => (
-                            <span
-                              key={cameraId}
-                              className="bg-blue-500/20 text-blue-400 px-2 py-1 rounded text-xs"
-                            >
-                              {cameraId}
-                            </span>
-                          ))}
-                      </div>
-                      <div className="text-xs text-gray-400 mt-1">
-                        {shipment.cameras?.length || 0} cámaras
-                      </div>
-                      {shipment.extraItems && (
-                        <div
-                          className="text-xs text-yellow-400 mt-1"
-                          title={shipment.extraItems}
-                        >
-                          + items extra
-                        </div>
-                      )}
-                    </td>
-
-                    {/* Destino */}
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center space-x-2">
-                        <MapPin className="w-4 h-4 text-gray-400" />
-                        <div className="text-sm text-gray-300">
-                          {shipment.destination}
-                        </div>
-                      </div>
-                    </td>
-
-                    {/* Destinatario */}
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center space-x-2">
-                        <User className="w-4 h-4 text-gray-400" />
-                        <div className="text-sm text-gray-300">
-                          {shipment.recipient}
-                        </div>
-                      </div>
-                    </td>
-
-                    {/* Persona que Envía */}
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center space-x-2">
-                        <User className="w-4 h-4 text-gray-400" />
-                        <div className="text-sm text-gray-300">
-                          {shipment.shipper}
-                        </div>
-                      </div>
-                    </td>
-
-                    {/* Fecha */}
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center space-x-2">
-                        <Calendar className="w-4 h-4 text-gray-400" />
-                        <div className="text-sm text-gray-300">
-                          {shipment.date}
-                        </div>
-                      </div>
-                    </td>
-
-                    {/* Estado */}
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <StatusBadge status={shipment.status} />
-                    </td>
-
-                    {/* Tracking */}
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center space-x-2">
-                        <Hash className="w-4 h-4 text-gray-400" />
-                        <div className="text-sm text-gray-300 font-mono">
-                          {shipment.trackingNumber || "N/A"}
-                        </div>
-                      </div>
-                    </td>
-
-                    {/* Acciones */}
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center space-x-2">
-                        {/* Botón Ver */}
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleView(shipment);
-                          }}
-                          className="text-emerald-400 hover:text-emerald-300 transition-colors p-1 rounded hover:bg-white/10"
-                          title="Ver detalles"
-                        >
-                          <Eye className="w-4 h-4" />
-                        </button>
-
-                        {/* Menú de acciones */}
-                        <div className="relative">
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setActionMenu(
-                                actionMenu === shipment.id ? null : shipment.id
-                              );
-                            }}
-                            className="text-gray-400 hover:text-white transition-colors p-1 rounded hover:bg-white/10"
-                          >
-                            <MoreVertical className="w-4 h-4" />
-                          </button>
-
-                          {actionMenu === shipment.id && (
-                            <div className="absolute right-0 mt-2 w-48 bg-slate-800 border border-white/20 rounded-lg shadow-xl z-50">
-                              <div className="p-2">
-                                {/* Ver detalles */}
-                                <button
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleView(shipment);
-                                  }}
-                                  className="w-full flex items-center space-x-3 px-3 py-2 text-sm text-white hover:bg-white/10 rounded-lg transition-colors"
-                                >
-                                  <Eye className="w-4 h-4" />
-                                  <span>Ver detalles</span>
-                                </button>
-
-                                {/* Editar */}
-                                <button
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleEdit(shipment);
-                                  }}
-                                  className="w-full flex items-center space-x-3 px-3 py-2 text-sm text-blue-400 hover:bg-white/10 rounded-lg transition-colors"
-                                >
-                                  <Edit className="w-4 h-4" />
-                                  <span>Editar envío</span>
-                                </button>
-
-                                {/* Cambiar Estado Rápido */}
-                                <div className="border-t border-white/10 my-1"></div>
-                                <div className="px-3 py-1 text-xs text-gray-400 font-medium">
-                                  Cambiar estado
-                                </div>
-                                {["preparando", "pendiente", "enviado", "entregado"].map((status) => (
-                                  <button
-                                    key={status}
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      if (shipment.status !== status) {
-                                        onEditShipment({ ...shipment, status });
-                                        setActionMenu(null);
-                                      }
-                                    }}
-                                    className={`w-full flex items-center space-x-3 px-3 py-2 text-sm rounded-lg transition-colors ${
-                                      shipment.status === status
-                                        ? "bg-white/10 text-white cursor-default"
-                                        : "text-gray-400 hover:bg-white/10 hover:text-white"
-                                    }`}
-                                  >
-                                    <div className={`w-2 h-2 rounded-full ${getStatusColor(status).replace('text-', 'bg-')}`} />
-                                    <span className="capitalize">{status}</span>
-                                  </button>
-                                ))}
-
-                                {/* Eliminar */}
-                                <div className="border-t border-white/10 my-1"></div>
-                                <button
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleDelete(shipment.id);
-                                  }}
-                                  className="w-full flex items-center space-x-3 px-3 py-2 text-sm text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
-                                >
-                                  <Trash2 className="w-4 h-4" />
-                                  <span>Eliminar envío</span>
-                                </button>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
+                    shipment={shipment}
+                    onView={handleView}
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
+                  />
                 ))
               ) : (
                 <tr>
-                  <td
-                    colSpan="9"
-                    className="px-6 py-4 text-center text-gray-400"
-                  >
+                  <td colSpan="9" className="px-6 py-4 text-center text-gray-400">
                     No hay envíos para mostrar
                   </td>
                 </tr>
@@ -349,4 +237,4 @@ const ShipmentsTable = ({
   );
 };
 
-export default ShipmentsTable;
+export default memo(ShipmentsTable);

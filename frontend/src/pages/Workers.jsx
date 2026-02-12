@@ -32,26 +32,28 @@ const Workers = ({
     return statuses.sort();
   }, [workersData]);
 
-  // Filtrar trabajadores
+  // Filtrar y ordenar trabajadores
   const filteredWorkers = useMemo(() => {
-    return workersData.filter((worker) => {
-      // Filtro por búsqueda en nombre, email o teléfono
-      const matchesSearch =
-        searchTerm === "" ||
-        worker.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        worker.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        worker.phone.toLowerCase().includes(searchTerm.toLowerCase());
+    return workersData
+      .filter((worker) => {
+        // Filtro por búsqueda en nombre, email o teléfono
+        const matchesSearch =
+          searchTerm === "" ||
+          worker.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          worker.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          worker.phone.toLowerCase().includes(searchTerm.toLowerCase());
 
-      // Filtro por estado
-      const matchesState =
-        stateFilter === "todos" || worker.state === stateFilter;
+        // Filtro por estado
+        const matchesState =
+          stateFilter === "todos" || worker.state === stateFilter;
 
-      // Filtro por status
-      const matchesStatus =
-        statusFilter === "todos" || worker.status === statusFilter;
+        // Filtro por status
+        const matchesStatus =
+          statusFilter === "todos" || worker.status === statusFilter;
 
-      return matchesSearch && matchesState && matchesStatus;
-    });
+        return matchesSearch && matchesState && matchesStatus;
+      })
+      .sort((a, b) => a.name.localeCompare(b.name));
   }, [workersData, searchTerm, stateFilter, statusFilter]);
 
   // Limpiar filtros

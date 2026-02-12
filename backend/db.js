@@ -108,10 +108,13 @@ const Shipment = sequelize.define('Shipment', {
   destination: DataTypes.STRING,
   recipient: DataTypes.STRING,
   sender: DataTypes.STRING,
+  shipper: DataTypes.STRING, // Nueva persona que envía
+  origin: DataTypes.STRING,  // Estado/Lugar de origen
   date: DataTypes.STRING,
   status: DataTypes.STRING,
   trackingNumber: DataTypes.STRING,
   originState: DataTypes.STRING,
+  extraItems: DataTypes.STRING, // Items adicionales
 }, {
   timestamps: true,
 });
