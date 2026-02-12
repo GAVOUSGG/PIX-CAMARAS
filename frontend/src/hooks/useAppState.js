@@ -865,20 +865,23 @@ export const useAppState = () => {
   const createCameraHistoryEntry = async (cameraId, type, title, details = {}) => {
     try {
       const entry = {
-        id: `${cameraId}-${Date.now()}`,
         cameraId,
         type, // 'shipment', 'tournament', 'return', 'maintenance', 'status_change', 'assignment'
         title,
         details,
         date: new Date().toISOString(),
-        createdAt: new Date().toISOString(),
       };
 
       if (apiAvailable) {
         const createdEntry = await apiService.createCameraHistory(entry);
         return createdEntry;
       } else {
-        return entry;
+        // En modo offline, sí necesitamos un ID temporal para la UI
+        return {
+          ...entry,
+          id: `temp-${Date.now()}`,
+          createdAt: new Date().toISOString(),
+        };
       }
     } catch (error) {
       console.error(`Error createCameraHistoryEntry:`, error);

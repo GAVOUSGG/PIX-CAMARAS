@@ -105,7 +105,11 @@ createCrudRoutes(Shipment, '/shipments');
 // Camera History Routes
 app.get('/camera-history', async (req, res) => {
   try {
+    const { cameraId } = req.query;
+    const where = cameraId ? { cameraId } : {};
+    
     const history = await CameraHistory.findAll({
+      where,
       order: [['date', 'DESC']]
     });
     res.json(history);
