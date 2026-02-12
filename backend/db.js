@@ -130,9 +130,10 @@ const CameraHistory = sequelize.define('CameraHistory', {
     allowNull: false
   },
   type: {
-    type: DataTypes.STRING, // 'tournament', 'maintenance', 'assignment', 'status_change'
+    type: DataTypes.STRING, // 'shipment', 'tournament', 'return', 'maintenance', 'status_change', 'assignment'
     allowNull: false
   },
+  title: DataTypes.STRING,
   description: DataTypes.STRING,
   date: {
     type: DataTypes.DATE,
