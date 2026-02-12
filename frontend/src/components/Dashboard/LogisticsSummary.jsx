@@ -46,10 +46,10 @@ const LogisticsSummary = ({ shipments }) => {
           { label: 'En Ruta', val: stats.transit, color: 'blue', icon: Truck },
           { label: 'Completado', val: stats.delivered, color: 'emerald', icon: CheckCircle }
         ].map((item, idx) => (
-          <div key={idx} className="group p-3 bg-white/5 rounded-2xl border border-white/5 hover:bg-white/10 transition-all duration-300">
+          <div key={idx} className="p-3 bg-white/5 rounded-2xl border border-white/5 transition-all duration-300">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
-                <div className={`p-2 bg-${item.color}-500/10 rounded-xl group-hover:bg-${item.color}-500/20 transition-colors`}>
+                <div className={`p-2 bg-${item.color}-500/10 rounded-xl transition-colors`}>
                   <item.icon className={`w-5 h-5 text-${item.color}-400`} />
                 </div>
                 <div>
@@ -57,7 +57,7 @@ const LogisticsSummary = ({ shipments }) => {
                   <p className="text-xl font-bold text-white leading-none mt-0.5">{item.val}</p>
                 </div>
               </div>
-              <div className={`text-[10px] font-bold text-${item.color}-400/50 group-hover:text-${item.color}-400 px-1.5 py-0.5 bg-${item.color}-500/5 rounded-md border border-${item.color}-500/10`}>
+              <div className={`text-[10px] font-bold text-${item.color}-400 px-1.5 py-0.5 bg-${item.color}-500/5 rounded-md border border-${item.color}-500/10`}>
                 {Math.round((item.val / (shipments.length || 1)) * 100)}%
               </div>
             </div>

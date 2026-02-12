@@ -80,7 +80,7 @@ const StatisticsSection = memo(({ tournaments }) => {
         {/* Tipos de Torneo Detallados */}
         <div className="md:col-span-2 glass-card rounded-3xl p-8 min-w-0">
            <div className="flex items-center justify-between mb-6">
-             <h4 className="text-white font-semibold">Configuraciones Populares</h4>
+             <h4 className="text-white font-semibold">Tipo de torneos</h4>
              <span className="text-[10px] uppercase font-bold text-gray-500 tracking-widest px-2 py-1 bg-white/5 rounded-lg border border-white/5">Días + Hoyos</span>
            </div>
            <div className="h-[350px] w-full">
@@ -177,7 +177,7 @@ const StatisticsSection = memo(({ tournaments }) => {
         {/* Actividad Reciente (Area) */}
         {stats.activity.length > 0 && (
           <div className="md:col-span-2 glass-card rounded-3xl p-8 min-w-0">
-            <h4 className="text-white font-semibold mb-6">Tendencia Histórica</h4>
+            <h4 className="text-white font-semibold mb-6">Tendencia Anual</h4>
             <div className="h-[350px] w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={stats.activity}>

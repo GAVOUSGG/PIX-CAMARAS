@@ -69,14 +69,15 @@ const MexicoMap = ({
   workers = [], 
   cameras = [], 
   shipments = [],
-  showStatistics = true 
-}) => {
-  const [filters, setFilters] = useState({
+  showStatistics = true,
+  initialFilters = {
     tournaments: true,
     workers: true,
     cameras: true,
     shipments: true,
-  });
+  }
+}) => {
+  const [filters, setFilters] = useState(initialFilters);
 
   const toggleFilter = (key) => {
     setFilters((prev) => ({ ...prev, [key]: !prev[key] }));

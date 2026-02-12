@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar, Camera, Package, Users, MapPin, History, Shield } from 'lucide-react';
+import { Calendar, Camera, Package, Users, MapPin, History, Shield, BarChart3 } from 'lucide-react';
 
 const Navigation = ({ activeTab, setActiveTab, user }) => {
   const menuItems = [
@@ -9,7 +9,8 @@ const Navigation = ({ activeTab, setActiveTab, user }) => {
     { id: 'cameras', label: 'Cámaras', icon: Camera },
     { id: 'history', label: 'Historial Camaras', icon: History },
     { id: 'logistics', label: 'Logística', icon: Package },
-    { id: 'map', label: 'Mapa', icon: MapPin }
+    { id: 'map', label: 'Mapa', icon: MapPin },
+    { id: 'statistics', label: 'Estadísticas', icon: BarChart3 }
   ];
 
   if (user?.role === 'admin') {

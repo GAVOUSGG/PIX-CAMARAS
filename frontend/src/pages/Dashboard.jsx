@@ -51,7 +51,9 @@ const Dashboard = memo(({ tournamentsData, camerasData, workersData, shipmentsDa
           workers={workersData}
         />
       </section>
-
+      <section className="dashboard-grid-item">
+        <UpcomingTournaments tournaments={tournamentsData} />
+      </section>
       {/* 2. Operación y Logística */}
       <div className="grid grid-cols-1 xl:grid-cols-4 gap-8">
         <div className="xl:col-span-3 space-y-8">
@@ -71,14 +73,18 @@ const Dashboard = memo(({ tournamentsData, camerasData, workersData, shipmentsDa
                 cameras={camerasData}
                 shipments={shipmentsData}
                 showStatistics={false}
+                initialFilters={{
+                  tournaments: false,
+                  workers: false,
+                  cameras: false,
+                  shipments: false,
+                }}
               />
             </React.Suspense>
           </section>
 
           {/* Torneos Próximos (Semana) */}
-          <section className="dashboard-grid-item">
-            <UpcomingTournaments tournaments={tournamentsData} />
-          </section>
+          
         </div>
 
         <div className="xl:col-span-1 space-y-8">
@@ -94,21 +100,6 @@ const Dashboard = memo(({ tournamentsData, camerasData, workersData, shipmentsDa
         </div>
       </div>
 
-      {/* 3. Análisis y Estadísticas */}
-      <section className="pt-8 border-t border-white/5 dashboard-grid-item">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-1.5 h-6 bg-emerald-500 rounded-full"></div>
-          <h3 className="text-2xl font-bold text-white">Análisis de Operaciones</h3>
-        </div>
-        <React.Suspense fallback={
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="h-[400px] glass-card animate-pulse rounded-3xl"></div>
-            <div className="h-[400px] glass-card animate-pulse rounded-3xl"></div>
-          </div>
-        }>
-          <StatisticsSection tournaments={tournamentsData} />
-        </React.Suspense>
-      </section>
     </div>
   );
 });

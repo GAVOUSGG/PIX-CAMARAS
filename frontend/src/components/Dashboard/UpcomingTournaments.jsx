@@ -47,7 +47,7 @@ const UpcomingTournaments = memo(({ tournaments }) => {
               return (
                 <div 
                   key={tournament.id} 
-                  className="bg-white/[0.03] rounded-2xl border border-white/5 p-4 hover:bg-white/10 transition-colors duration-200 group cursor-pointer relative overflow-hidden"
+                  className="bg-white/[0.03] rounded-2xl border border-white/5 p-4 transition-colors duration-200 cursor-pointer relative overflow-hidden"
                   onClick={() => setSelectedTournament(tournament)}
                 >
                   <div className="flex items-start justify-between relative z-10">
@@ -61,7 +61,7 @@ const UpcomingTournaments = memo(({ tournaments }) => {
                         </span>
                       </div>
                       <div className="min-w-0">
-                        <h4 className="font-semibold text-white group-hover:text-blue-400 transition-colors line-clamp-1 text-sm">{tournament.name}</h4>
+                        <h4 className="font-semibold text-white line-clamp-1 text-sm">{tournament.name}</h4>
                         <div className="flex items-center gap-1.5 mt-1 opacity-60">
                           <MapPin className="w-3 h-3 text-gray-400" />
                           <p className="text-gray-400 text-[10px] uppercase font-bold truncate">{tournament.location}</p>
@@ -70,7 +70,7 @@ const UpcomingTournaments = memo(({ tournaments }) => {
                     </div>
 
                     <button 
-                      className="p-2 rounded-xl bg-white/5 text-gray-400 group-hover:bg-blue-500 group-hover:text-white transition-colors shadow-lg"
+                      className="p-2 rounded-xl bg-white/5 text-gray-400 transition-colors shadow-lg"
                       title="Ver Detalles"
                     >
                       <Eye className="w-4 h-4" />

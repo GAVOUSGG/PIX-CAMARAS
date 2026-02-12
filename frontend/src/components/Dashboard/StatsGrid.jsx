@@ -54,7 +54,7 @@ const StatsGrid = memo(({ tournaments, cameras, workers }) => {
         return (
           <div 
             key={index} 
-            className="glass-card glass-card-hover rounded-3xl p-6 relative overflow-hidden group transform-gpu"
+            className="glass-card rounded-3xl p-6 relative overflow-hidden transform-gpu"
           >
             {/* Background Glow - Optimized: lower blur and opacity */}
             <div className={`absolute -right-6 -top-6 w-24 h-24 rounded-full blur-2xl transition-opacity duration-500 ${glowClasses[stat.color]}`}></div>
@@ -64,7 +64,7 @@ const StatsGrid = memo(({ tournaments, cameras, workers }) => {
                 <p className="text-gray-500 text-[10px] uppercase font-bold tracking-widest mb-1">{stat.title}</p>
                 <h3 className="text-3xl font-black text-white tracking-tight">{stat.value}</h3>
               </div>
-              <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${colorClasses[stat.color]} border transition-transform duration-300 group-hover:scale-110`}>
+              <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${colorClasses[stat.color]} border`}>
                 <Icon className="w-6 h-6" />
               </div>
             </div>

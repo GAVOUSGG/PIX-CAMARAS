@@ -11,6 +11,7 @@ const Workers = React.lazy(() => import("./pages/Workers"));
 const Cameras = React.lazy(() => import("./pages/Cameras"));
 const Logistics = React.lazy(() => import("./pages/Logistics"));
 const Map = React.lazy(() => import("./pages/Map"));
+const Statistics = React.lazy(() => import("./pages/Statistics"));
 const CameraHistory = React.lazy(() => import("./pages/CameraHistory"));
 const AdminPanel = React.lazy(() => import("./components/Admin/AdminPanel"));
 
@@ -143,6 +144,8 @@ const MainApp = ({ user, onLogout }) => {
             shipmentsData={shipmentsData}
           />
         );
+      case "statistics":
+        return <Statistics tournamentsData={tournamentsData} />;
       case "admin":
         return user.role === 'admin' ? <AdminPanel /> : <Dashboard />;
       default:

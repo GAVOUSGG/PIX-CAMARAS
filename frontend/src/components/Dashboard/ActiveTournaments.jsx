@@ -25,7 +25,7 @@ const ActiveTournaments = memo(({ tournaments }) => {
             activeTournaments.map(tournament => (
               <div 
                 key={tournament.id} 
-                className="bg-white/[0.03] rounded-2xl border border-white/5 p-4 hover:bg-white/10 transition-colors duration-200 group cursor-pointer"
+                className="bg-white/[0.03] rounded-2xl border border-white/5 p-4 transition-colors duration-200 cursor-pointer"
                 onClick={() => setSelectedTournament(tournament)}
               >
                 <div className="flex items-center justify-between">
@@ -34,7 +34,7 @@ const ActiveTournaments = memo(({ tournaments }) => {
                       <StatusBadge status={tournament.status} />
                     </div>
                     <div>
-                      <h4 className="font-semibold text-white group-hover:text-emerald-400 transition-colors">{tournament.name}</h4>
+                      <h4 className="font-semibold text-white">{tournament.name}</h4>
                       <p className="text-gray-500 text-[10px] flex items-center gap-1 mt-0.5 uppercase font-medium tracking-tight">
                         <span className="w-1 h-1 bg-emerald-500/50 rounded-full"></span>
                         {tournament.location}, {tournament.state}
@@ -51,7 +51,7 @@ const ActiveTournaments = memo(({ tournaments }) => {
                     </div>
                     
                     <button 
-                      className="p-2.5 rounded-xl bg-white/5 text-gray-400 group-hover:bg-emerald-500 group-hover:text-white transition-colors shadow-lg"
+                      className="p-2.5 rounded-xl bg-white/5 text-gray-400 transition-colors shadow-lg"
                       title="Ver Detalles"
                     >
                       <Eye className="w-4 h-4" />
