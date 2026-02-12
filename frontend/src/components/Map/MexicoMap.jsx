@@ -64,7 +64,13 @@ const stateCoordinates = {
   Querétaro: [20.5888, -100.3899],
 };
 
-const MexicoMap = ({ tournaments = [], workers = [], cameras = [], shipments = [] }) => {
+const MexicoMap = ({ 
+  tournaments = [], 
+  workers = [], 
+  cameras = [], 
+  shipments = [],
+  showStatistics = true 
+}) => {
   const [filters, setFilters] = useState({
     tournaments: true,
     workers: true,
@@ -127,6 +133,7 @@ const MexicoMap = ({ tournaments = [], workers = [], cameras = [], shipments = [
         tournaments: [],
         workers: [],
         cameras: [],
+        shipments: [],
         activeTournaments: 0,
       };
     });
@@ -155,8 +162,15 @@ const MexicoMap = ({ tournaments = [], workers = [], cameras = [], shipments = [
       }
     });
 
+    // Procesar envíos
+    shipments.forEach((s) => {
+      if (data[s.destination] && (s.status === "enviado" || s.status === "en envio")) {
+        data[s.destination].shipments.push(s);
+      }
+    });
+
     return data;
-  }, [tournamentsThisWeek, workers, cameras]);
+  }, [tournamentsThisWeek, workers, cameras, shipments]);
 
   // Procesar rutas de envíos
   const shipmentRoutes = useMemo(() => {
@@ -192,7 +206,8 @@ const MexicoMap = ({ tournaments = [], workers = [], cameras = [], shipments = [
     return (
       (filters.tournaments && stateData.tournaments.length > 0) ||
       (filters.workers && stateData.workers.length > 0) ||
-      (filters.cameras && stateData.cameras.length > 0)
+      (filters.cameras && stateData.cameras.length > 0) ||
+      (filters.shipments && stateData.shipments.length > 0)
     );
   };
 
@@ -427,6 +442,124 @@ const MexicoMap = ({ tournaments = [], workers = [], cameras = [], shipments = [
            </div>
         </div>
       </div>
+
+      {/* State Statistics Section */}
+      {showStatistics && (
+        <div className="p-4 md:p-8 border-t border-white/5 bg-slate-900/40 backdrop-blur-md">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+            <div>
+              <h4 className="text-xl font-bold text-white flex items-center gap-3">
+                <div className="w-1.5 h-6 bg-emerald-500 rounded-full shadow-[0_0_12px_rgba(16,185,129,0.5)]"></div>
+                Estadísticas por Estado
+              </h4>
+              <p className="text-gray-400 text-sm mt-1 ml-4">Desglose detallado de recursos y operaciones locales</p>
+            </div>
+            
+            <div className="flex items-center gap-2 bg-emerald-500/5 px-4 py-2 rounded-xl border border-emerald-500/10">
+              <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+              <span className="text-[11px] font-bold text-emerald-400 uppercase tracking-wider">Sincronizado en Vivo</span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+            {Object.entries(mapData)
+              .filter(([_, data]) => hasData(data))
+              .sort((a, b) => {
+                // Priority sorting: states with active tournaments first, then total count
+                const aActive = a[1].activeTournaments > 0 ? 1 : 0;
+                const bActive = b[1].activeTournaments > 0 ? 1 : 0;
+                if (aActive !== bActive) return bActive - aActive;
+                
+                const aTotal = a[1].tournaments.length + a[1].workers.length + a[1].cameras.length + a[1].shipments.length;
+                const bTotal = b[1].tournaments.length + b[1].workers.length + b[1].cameras.length + b[1].shipments.length;
+                if (aTotal !== bTotal) return bTotal - aTotal;
+                
+                return a[0].localeCompare(b[0]);
+              })
+              .map(([state, data]) => (
+                <div 
+                  key={state} 
+                  className="group relative bg-gradient-to-br from-white/[0.05] to-transparent border border-white/10 rounded-[2rem] p-6 transition-all duration-500"
+                >
+                  <div className="flex justify-between items-center mb-6">
+                    <span className="text-lg font-bold text-white uppercase tracking-tight">{state}</span>
+                    {data.activeTournaments > 0 ? (
+                      <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 shadow-[0_0_10px_rgba(16,185,129,0.1)]">
+                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
+                        <span className="text-[9px] font-black text-emerald-400 uppercase tracking-tighter">En Curso</span>
+                      </div>
+                    ) : (
+                      <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center border border-white/5 opacity-40">
+                         <MapPin className="w-4 h-4 text-gray-400" />
+                      </div>
+                    )}
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-3">
+                    {filters.tournaments && (
+                      <div className={`p-3 rounded-2xl border transition-all duration-300 ${
+                        data.tournaments.length > 0 
+                          ? "bg-purple-500/10 border-purple-500/20 shadow-lg shadow-purple-500/5" 
+                          : "bg-transparent border-white/5 opacity-40"
+                      }`}>
+                        <div className="flex items-center gap-2 mb-1.5">
+                          <Trophy className="w-3 h-3 text-purple-400" />
+                          <span className="text-[10px] uppercase font-bold text-gray-400">Torneos</span>
+                        </div>
+                        <div className="flex items-baseline gap-1">
+                          <div className="text-xl font-black text-white">{data.tournaments.length}</div>
+                          {data.activeTournaments > 0 && <span className="text-[10px] text-emerald-400 font-bold">({data.activeTournaments})</span>}
+                        </div>
+                      </div>
+                    )}
+                    
+                    {filters.workers && (
+                      <div className={`p-3 rounded-2xl border transition-all duration-300 ${
+                        data.workers.length > 0 
+                          ? "bg-orange-500/10 border-orange-500/20 shadow-lg shadow-orange-500/5" 
+                          : "bg-transparent border-white/5 opacity-40"
+                      }`}>
+                        <div className="flex items-center gap-2 mb-1.5">
+                          <Users className="w-3 h-3 text-orange-400" />
+                          <span className="text-[10px] uppercase font-bold text-gray-400">Personal</span>
+                        </div>
+                        <div className="text-xl font-black text-white">{data.workers.length}</div>
+                      </div>
+                    )}
+                    
+                    {filters.cameras && (
+                      <div className={`p-3 rounded-2xl border transition-all duration-300 ${
+                        data.cameras.length > 0 
+                          ? "bg-blue-500/10 border-blue-500/20 shadow-lg shadow-blue-500/5" 
+                          : "bg-transparent border-white/5 opacity-40"
+                      }`}>
+                        <div className="flex items-center gap-2 mb-1.5">
+                          <Camera className="w-3 h-3 text-blue-400" />
+                          <span className="text-[10px] uppercase font-bold text-gray-400">Cámaras</span>
+                        </div>
+                        <div className="text-xl font-black text-white">{data.cameras.length}</div>
+                      </div>
+                    )}
+                    
+                    {filters.shipments && (
+                      <div className={`p-3 rounded-2xl border transition-all duration-300 ${
+                        data.shipments.length > 0 
+                          ? "bg-emerald-500/10 border-emerald-500/20 shadow-lg shadow-emerald-500/5" 
+                          : "bg-transparent border-white/5 opacity-40"
+                      }`}>
+                        <div className="flex items-center gap-2 mb-1.5">
+                          <Truck className="w-3 h-3 text-emerald-400" />
+                          <span className="text-[10px] uppercase font-bold text-gray-400">Envíos</span>
+                        </div>
+                        <div className="text-xl font-black text-white">{data.shipments.length}</div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

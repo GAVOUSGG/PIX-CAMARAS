@@ -55,26 +55,24 @@ const Dashboard = memo(({ tournamentsData, camerasData, workersData, shipmentsDa
       {/* 2. Operación y Logística */}
       <div className="grid grid-cols-1 xl:grid-cols-4 gap-8">
         <div className="xl:col-span-3 space-y-8">
-          {/* Mapa de Operaciones */}
-          <section className="glass-card rounded-3xl overflow-hidden shadow-2xl dashboard-grid-item">
-            <div className="p-5 border-b border-white/5 flex items-center justify-between bg-white/5">
-              <h3 className="text-lg font-semibold text-white">Cobertura Nacional</h3>
-              <span className="text-[10px] font-medium px-2 py-0.5 bg-emerald-500/10 text-emerald-400 rounded-full border border-emerald-500/20">En Vivo</span>
-            </div>
-            <div className="p-2 min-h-[450px]">
-              <React.Suspense fallback={
-                <div className="h-[500px] w-full bg-slate-800/50 animate-pulse rounded-2xl flex items-center justify-center">
+          {/* Mapa de Operaciones y Estadísticas */}
+          <section className="dashboard-grid-item">
+            <React.Suspense fallback={
+              <div className="h-[600px] w-full bg-slate-800/50 animate-pulse rounded-3xl flex items-center justify-center border border-white/10">
+                <div className="flex flex-col items-center gap-4">
+                  <div className="w-12 h-12 border-4 border-emerald-500/30 border-t-emerald-500 rounded-full animate-spin"></div>
                   <div className="text-gray-500 text-sm font-medium">Cargando Mapa de Operaciones...</div>
                 </div>
-              }>
-                <MexicoMap
-                  tournaments={tournamentsData}
-                  workers={workersData}
-                  cameras={camerasData}
-                  shipments={shipmentsData}
-                />
-              </React.Suspense>
-            </div>
+              </div>
+            }>
+              <MexicoMap
+                tournaments={tournamentsData}
+                workers={workersData}
+                cameras={camerasData}
+                shipments={shipmentsData}
+                showStatistics={false}
+              />
+            </React.Suspense>
           </section>
 
           {/* Torneos Próximos (Semana) */}
