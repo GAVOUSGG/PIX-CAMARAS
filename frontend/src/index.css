@@ -8,17 +8,38 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #0f172a;
+  overflow-x: hidden;
+}
+
+/* Optimización de scroll */
+.tab-content {
+  will-change: transform;
+  content-visibility: auto;
 }
 
 /* Mejoras para backdrop blur */
 .backdrop-blur-lg {
-  backdrop-filter: blur(16px);
+  backdrop-filter: blur(8px); /* Reducido de 16px para mejor performance */
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .backdrop-blur-xl {
-  backdrop-filter: blur(24px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .backdrop-blur-sm {
   backdrop-filter: blur(4px);
+}
+
+/* Optimización de transiciones */
+* {
+  transition-duration: 200ms !important;
+}
+
+/* Capas de hardware para elementos fijos/pesados */
+.MexicoMap, .StatsGrid {
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }

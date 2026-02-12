@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, memo } from "react";
 import {
   MapContainer,
   TileLayer,
@@ -430,4 +430,4 @@ const MexicoMap = ({ tournaments = [], workers = [], cameras = [], shipments = [
   );
 };
 
-export default MexicoMap;
+export default memo(MexicoMap);
