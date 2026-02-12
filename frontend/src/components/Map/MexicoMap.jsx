@@ -13,7 +13,9 @@ import {
   Users,
   Trophy,
   Truck,
+  Flame,
 } from "lucide-react";
+import HeatmapLayer from "./HeatmapLayer";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
@@ -75,6 +77,7 @@ const MexicoMap = ({
     workers: true,
     cameras: true,
     shipments: true,
+    heatmap: false,
   }
 }) => {
   const [filters, setFilters] = useState(initialFilters);
@@ -194,6 +197,28 @@ const MexicoMap = ({
       })
       .filter(Boolean);
   }, [shipments, filters.shipments]);
+  
+  const heatmapData = useMemo(() => {
+    if (!filters.heatmap) return [];
+    
+    return Object.entries(mapData)
+      .map(([state, data]) => {
+        const coords = stateCoordinates[state];
+        let intensity = 0;
+        
+        // Sum intensity based on active filters
+        if (filters.tournaments) intensity += data.tournaments.length;
+        if (filters.workers) intensity += data.workers.length;
+        if (filters.cameras) intensity += data.cameras.length * 0.5;
+        if (filters.shipments) intensity += data.shipments.length;
+
+        if (coords && intensity > 0) {
+          return [...coords, intensity];
+        }
+        return null;
+      })
+      .filter(Boolean);
+  }, [mapData, filters.heatmap, filters.tournaments, filters.workers, filters.cameras, filters.shipments]);
 
   const getMarkerColor = (stateData) => {
     if (stateData.activeTournaments > 0) return "bg-emerald-500";
@@ -208,7 +233,8 @@ const MexicoMap = ({
       (filters.tournaments && stateData.tournaments.length > 0) ||
       (filters.workers && stateData.workers.length > 0) ||
       (filters.cameras && stateData.cameras.length > 0) ||
-      (filters.shipments && stateData.shipments.length > 0)
+      (filters.shipments && stateData.shipments.length > 0) ||
+      filters.heatmap
     );
   };
 
@@ -278,6 +304,17 @@ const MexicoMap = ({
               <Truck className="w-4 h-4" />
               Envíos
             </button>
+            <button
+              onClick={() => toggleFilter("heatmap")}
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all duration-300 border ${
+                filters.heatmap
+                  ? "bg-red-500/20 border-red-500/50 text-red-300 shadow-lg shadow-red-500/20"
+                  : "bg-white/5 border-white/10 text-gray-500 hover:bg-white/10 hover:border-white/20"
+              }`}
+            >
+              <Flame className="w-4 h-4" />
+              Mapa de Calor
+            </button>
           </div>
         </div>
       </div>
@@ -296,8 +333,16 @@ const MexicoMap = ({
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
           />
 
+          {/* Heatmap Layer */}
+          {filters.heatmap && (
+            <HeatmapLayer 
+              points={heatmapData} 
+              options={{ radius: 35, blur: 20, max: 10 }} 
+            />
+          )}
+
           {/* Shipment Routes */}
-          {shipmentRoutes.map((route) => (
+          {!filters.heatmap && shipmentRoutes.map((route) => (
             <React.Fragment key={route.id}>
               <Polyline
                 positions={route.positions}
@@ -319,7 +364,7 @@ const MexicoMap = ({
           ))}
 
           {/* State Markers */}
-          {Object.entries(stateCoordinates).map(([state, coords]) => {
+          {!filters.heatmap && Object.entries(stateCoordinates).map(([state, coords]) => {
             const stateData = mapData[state];
             if (!stateData || !hasData(stateData)) return null;
 
@@ -441,6 +486,19 @@ const MexicoMap = ({
               <div className="w-8 h-0.5 bg-gradient-to-r from-emerald-500 to-emerald-300 border-t border-dashed border-emerald-300 shadow-lg shadow-emerald-500/30"></div>
               <span className="text-gray-300 font-medium">Envío en curso</span>
            </div>
+            {filters.heatmap && (
+              <div className="space-y-1 pt-1 border-t border-white/10">
+                 <div className="text-[10px] text-gray-400 mb-1">Intensidad (Unidades)</div>
+                 <div className="flex items-center gap-2">
+                    <div className="flex-1 h-2 rounded-full bg-gradient-to-r from-blue-500 via-lime-500 to-red-500 opacity-80"></div>
+                 </div>
+                 <div className="flex justify-between text-[9px] text-gray-500 font-bold">
+                    <span>1</span>
+                    <span>5</span>
+                    <span>10+</span>
+                 </div>
+              </div>
+            )}
         </div>
       </div>
 
