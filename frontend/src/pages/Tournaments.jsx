@@ -41,7 +41,7 @@ const Tournaments = ({
   const [endDateFilter, setEndDateFilter] = useState("");
 
   // Nuevo estado para la vista (semana o tabla)
-  const [viewMode, setViewMode] = useState("semana"); // 'semana' o 'tabla'
+  const [viewMode, setViewMode] = useState("tabla"); // 'semana' o 'tabla'
 
   // Obtener datos únicos para los filtros
   const uniqueStatuses = useMemo(() => {
