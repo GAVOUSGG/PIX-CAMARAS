@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { memo, useMemo } from 'react';
 import { Calendar, Camera, Users, AlertCircle } from 'lucide-react';
 
-const StatsGrid = ({ tournaments, cameras, workers }) => {
-  const stats = [
+const StatsGrid = memo(({ tournaments, cameras, workers }) => {
+  const stats = useMemo(() => [
     {
       title: 'Torneos Activos',
       value: tournaments.filter(t => t.status === 'activo').length,
@@ -31,13 +31,20 @@ const StatsGrid = ({ tournaments, cameras, workers }) => {
       color: 'orange',
       description: 'Cámaras en servicio'
     }
-  ];
+  ], [tournaments, cameras, workers]);
 
   const colorClasses = {
-    emerald: 'bg-emerald-500/20 text-emerald-400',
-    red: 'bg-red-500/20 text-red-400',
-    blue: 'bg-blue-500/20 text-blue-400',
-    orange: 'bg-orange-500/20 text-orange-400'
+    emerald: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/10',
+    red: 'bg-red-500/20 text-red-400 border-red-500/10',
+    blue: 'bg-blue-500/20 text-blue-400 border-blue-500/10',
+    orange: 'bg-orange-500/20 text-orange-400 border-orange-500/10'
+  };
+
+  const glowClasses = {
+    emerald: 'bg-emerald-500/5',
+    red: 'bg-red-500/5',
+    blue: 'bg-blue-500/5',
+    orange: 'bg-orange-500/5'
   };
 
   return (
@@ -47,23 +54,23 @@ const StatsGrid = ({ tournaments, cameras, workers }) => {
         return (
           <div 
             key={index} 
-            className="glass-card glass-card-hover rounded-3xl p-6 relative overflow-hidden group"
+            className="glass-card glass-card-hover rounded-3xl p-6 relative overflow-hidden group transform-gpu"
           >
-            {/* Background Glow */}
-            <div className={`absolute -right-4 -top-4 w-24 h-24 rounded-full blur-3xl opacity-10 group-hover:opacity-20 transition-opacity ${colorClasses[stat.color].replace('bg-', 'bg-').split(' ')[0]}`}></div>
+            {/* Background Glow - Optimized: lower blur and opacity */}
+            <div className={`absolute -right-6 -top-6 w-24 h-24 rounded-full blur-2xl transition-opacity duration-500 ${glowClasses[stat.color]}`}></div>
             
             <div className="flex items-start justify-between relative z-10">
               <div>
-                <p className="text-gray-400 text-sm font-medium mb-1">{stat.title}</p>
-                <h3 className="text-3xl font-bold text-white tracking-tight">{stat.value}</h3>
+                <p className="text-gray-500 text-[10px] uppercase font-bold tracking-widest mb-1">{stat.title}</p>
+                <h3 className="text-3xl font-black text-white tracking-tight">{stat.value}</h3>
               </div>
-              <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${colorClasses[stat.color]} border border-white/5`}>
+              <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${colorClasses[stat.color]} border transition-transform duration-300 group-hover:scale-110`}>
                 <Icon className="w-6 h-6" />
               </div>
             </div>
             
             <div className="mt-4 flex items-center gap-2 relative z-10">
-              <span className="text-xs text-gray-500 font-medium px-2 py-0.5 bg-white/5 rounded-full border border-white/5">
+              <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider px-2.5 py-1 bg-white/[0.03] rounded-lg border border-white/5">
                 {stat.description}
               </span>
             </div>
@@ -72,7 +79,6 @@ const StatsGrid = ({ tournaments, cameras, workers }) => {
       })}
     </div>
   );
-};
-
+});
 
 export default StatsGrid;

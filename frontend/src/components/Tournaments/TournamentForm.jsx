@@ -368,10 +368,11 @@ const TournamentForm = ({
   const cameraStatus = getCameraStatusMessage();
 
   return (
-    <div className="fixed inset-0 bg-slate-950/60 backdrop-blur-md flex items-center justify-center p-0 md:p-6 z-[100] animate-fade-in">
-      <div className="glass-card rounded-none md:rounded-[2.5rem] border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)] w-full max-w-4xl h-full md:h-auto md:max-h-[85vh] overflow-hidden flex flex-col relative">
-        {/* Sutil background glow */}
-        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 via-blue-500 to-purple-500 opacity-50"></div>
+    <div className="fixed inset-0 bg-slate-950/40 backdrop-blur-[2px] flex items-center justify-center p-4 md:p-6 z-[100] animate-fade-in overflow-hidden will-change-[opacity,backdrop-filter]">
+      <div className="glass-card rounded-[2.5rem] border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)] w-full max-w-4xl h-auto max-h-[90vh] overflow-hidden flex flex-col relative transform-gpu">
+
+        {/* Glow background accent removed for performance */}
+        
         
         <div className="p-6 md:p-8 flex items-center justify-between border-b border-white/5 bg-white/[0.02]">
           <div>

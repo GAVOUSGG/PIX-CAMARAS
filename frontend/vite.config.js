@@ -18,11 +18,12 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          vendor: ['react', 'react-dom', 'react-router-dom'],
+          vendor: ['react', 'react-dom'],
+          charts: ['recharts'],
           ui: ['lucide-react'],
-          map: ['leaflet', 'react-leaflet'],
-          db: ['sequelize', 'sqlite3']
+          map: ['leaflet', 'react-leaflet']
         }
+
       }
     }
   }

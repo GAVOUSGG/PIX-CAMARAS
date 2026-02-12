@@ -90,47 +90,45 @@ export const useAppState = () => {
   useEffect(() => {
     const loadData = async () => {
       try {
-        setLoading(true);
-
+        // No bloqueamos todo el inicio si ya tenemos algo o queremos mostrar el UI base pronto
         // Intentar cargar desde API
+        setLoading(true);
+        
         try {
+          // Primero lo más ligero/crítico
           const workers = await apiService.getWorkers();
-
           setWorkersData(workers);
           setApiAvailable(true);
+          
+          // Una vez tenemos trabajadores, ya podemos mostrar el layout base
+          setLoading(false);
 
-          // Cargar también los otros datos
-          const [tournaments, cameras, shipments] = await Promise.all([
+          // Cargar el resto en "background"
+          Promise.all([
             apiService.getTournaments(),
             apiService.getCameras(),
             apiService.getShipments(),
-          ]);
+          ]).then(([tournaments, cameras, shipments]) => {
+            setTournamentsData(tournaments);
+            setCamerasData(cameras);
+            setShipmentsData(shipments);
+          });
 
-          setTournamentsData(tournaments);
-          setCamerasData(cameras);
-          setShipmentsData(shipments);
         } catch (apiError) {
-          console.warn(
-            "Error cargando desde API, usando datos locales:",
-            apiError
-          );
+          console.warn("API Error, Fallback to local", apiError);
           setApiAvailable(false);
           setWorkersData(initialWorkers);
           setTournamentsData(initialTournaments);
           setCamerasData(initialCameras);
           setShipmentsData(initialShipments);
+          setLoading(false);
         }
       } catch (error) {
-        console.error("Error crítico:", error);
-        setApiAvailable(false);
-        setWorkersData(initialWorkers);
-        setTournamentsData(initialTournaments);
-        setCamerasData(initialCameras);
-        setShipmentsData(initialShipments);
-      } finally {
+        console.error("Critical Error:", error);
         setLoading(false);
       }
     };
+
 
     loadData();
   }, []);

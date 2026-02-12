@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, memo } from 'react';
 import { 
   BarChart, 
   Bar, 
@@ -17,10 +17,10 @@ import {
 
 const COLORS = ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#6366f1'];
 
-const StatisticsSection = ({ tournaments }) => {
+const StatisticsSection = memo(({ tournaments }) => {
   // Procesamiento de datos para las gráficas
   const stats = useMemo(() => {
-    if (!tournaments) return null;
+    if (!tournaments || tournaments.length === 0) return null;
 
     // 1. Duración de torneos (1 día vs Más días)
     const durationStats = [
@@ -30,14 +30,8 @@ const StatisticsSection = ({ tournaments }) => {
 
     // 2. Distribución de Hoyos
     const holesMap = {};
-
-    // 3. Torneos por Estado
     const stateMap = {};
-
-    // 4. Actividad Mensual (para AreaChart)
     const monthlyActivity = {};
-
-    // 5. Tipo Detallado (Días + Hoyos)
     const typeMap = {};
 
     tournaments.forEach(t => {
@@ -68,55 +62,38 @@ const StatisticsSection = ({ tournaments }) => {
       typeMap[typeKey] = (typeMap[typeKey] || 0) + 1;
     });
 
-    // Formatear datos para Recharts
-    const holesData = Object.entries(holesMap)
-      .map(([name, value]) => ({ name, value }))
-      .sort((a, b) => parseInt(a.name) - parseInt(b.name));
-
-    const stateData = Object.entries(stateMap)
-      .map(([name, value]) => ({ name, value }))
-      .sort((a, b) => b.value - a.value)
-      .slice(0, 10); // Top 10 estados
-
-    const activityData = Object.entries(monthlyActivity)
-      .map(([name, value]) => ({ name, value }));
-      
-    const typeData = Object.entries(typeMap)
-      .map(([name, value]) => ({ name, value }))
-      .sort((a, b) => b.value - a.value);
-
     return {
       duration: durationStats.filter(d => d.value > 0),
-      holes: holesData,
-      states: stateData,
-      activity: activityData,
-      types: typeData
+      holes: Object.entries(holesMap).map(([name, value]) => ({ name, value })).sort((a, b) => parseInt(a.name) - parseInt(b.name)),
+      states: Object.entries(stateMap).map(([name, value]) => ({ name, value })).sort((a, b) => b.value - a.value).slice(0, 10),
+      activity: Object.entries(monthlyActivity).map(([name, value]) => ({ name, value })),
+      types: Object.entries(typeMap).map(([name, value]) => ({ name, value })).sort((a, b) => b.value - a.value).slice(0, 8)
     };
   }, [tournaments]);
 
-  if (!tournaments || tournaments.length === 0) return null;
+  if (!stats) return null;
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 transform-gpu">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         
         {/* Tipos de Torneo Detallados */}
         <div className="md:col-span-2 glass-card rounded-3xl p-8 min-w-0">
            <div className="flex items-center justify-between mb-6">
              <h4 className="text-white font-semibold">Configuraciones Populares</h4>
-             <span className="text-xs text-gray-500 bg-white/5 px-2 py-1 rounded-lg border border-white/5">Días + Hoyos</span>
+             <span className="text-[10px] uppercase font-bold text-gray-500 tracking-widest px-2 py-1 bg-white/5 rounded-lg border border-white/5">Días + Hoyos</span>
            </div>
            <div className="h-[350px] w-full">
              <ResponsiveContainer width="100%" height="100%">
                <BarChart data={stats.types} layout="vertical" margin={{ left: 40, right: 20 }}>
-                 <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" horizontal={false} />
-                 <XAxis type="number" stroke="#9ca3af" fontSize={12} />
-                 <YAxis type="category" dataKey="name" stroke="#9ca3af" width={120} fontSize={12} />
+                 <CartesianGrid strokeDasharray="3 3" stroke="#ffffff05" horizontal={false} />
+                 <XAxis type="number" stroke="#4b5563" fontSize={10} />
+                 <YAxis type="category" dataKey="name" stroke="#9ca3af" width={120} fontSize={10} />
                  <Tooltip 
-                   cursor={{ fill: 'rgba(255, 255, 255, 0.05)' }}
-                   contentStyle={{ backgroundColor: '#0f172a', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '12px' }}
+                   cursor={{ fill: 'rgba(255, 255, 255, 0.03)' }}
+                   contentStyle={{ backgroundColor: '#0f172a', borderColor: 'rgba(255,255,255,0.05)', borderRadius: '16px', backdropFilter: 'blur(10px)' }}
                  />
-                 <Bar dataKey="value" name="Cantidad" fill="#8b5cf6" radius={[0, 8, 8, 0]} barSize={24} />
+                 <Bar dataKey="value" name="Cantidad" fill="#8b5cf6" radius={[0, 8, 8, 0]} barSize={20} />
                </BarChart>
              </ResponsiveContainer>
            </div>
@@ -133,20 +110,19 @@ const StatisticsSection = ({ tournaments }) => {
                   cx="50%"
                   cy="50%"
                   innerRadius={60}
-                  outerRadius={100}
-                  paddingAngle={5}
-                  labelLine={false}
-                  label={({ name, percent }) => `${(percent * 100).toFixed(0)}%`}
+                  outerRadius={90}
+                  paddingAngle={8}
                   dataKey="value"
+                  stroke="none"
                 >
                   {stats.duration.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} cornerRadius={4} />
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} cornerRadius={10} />
                   ))}
                 </Pie>
                 <Tooltip 
-                  contentStyle={{ backgroundColor: '#0f172a', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '12px' }}
+                  contentStyle={{ backgroundColor: '#0f172a', borderColor: 'rgba(255,255,255,0.05)', borderRadius: '16px' }}
                 />
-                <Legend verticalAlign="bottom" height={36}/>
+                <Legend verticalAlign="bottom" iconType="circle" />
               </PieChart>
             </ResponsiveContainer>
           </div>
@@ -158,14 +134,14 @@ const StatisticsSection = ({ tournaments }) => {
           <div className="h-[300px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={stats.holes} margin={{ top: 10 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" vertical={false} />
-                <XAxis dataKey="name" stroke="#9ca3af" interval={0} fontSize={12} />
-                <YAxis stroke="#9ca3af" allowDecimals={false} fontSize={12} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#ffffff05" vertical={false} />
+                <XAxis dataKey="name" stroke="#4b5563" fontSize={10} />
+                <YAxis stroke="#4b5563" fontSize={10} />
                 <Tooltip 
-                  cursor={{ fill: 'rgba(255, 255, 255, 0.05)' }}
-                  contentStyle={{ backgroundColor: '#0f172a', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '12px' }}
+                   cursor={{ fill: 'rgba(255, 255, 255, 0.03)' }}
+                   contentStyle={{ backgroundColor: '#0f172a', borderColor: 'rgba(255,255,255,0.05)', borderRadius: '16px' }}
                 />
-                <Bar dataKey="value" name="Torneos" fill="#10b981" radius={[8, 8, 0, 0]} barSize={40} />
+                <Bar dataKey="value" name="Torneos" fill="#10b981" radius={[6, 6, 0, 0]} barSize={30} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -177,22 +153,22 @@ const StatisticsSection = ({ tournaments }) => {
           <div className="h-[350px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={stats.states} margin={{ bottom: 20 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" vertical={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#ffffff05" vertical={false} />
                 <XAxis 
                   dataKey="name" 
-                  stroke="#9ca3af" 
+                  stroke="#4b5563" 
                   angle={-45} 
                   textAnchor="end" 
                   height={60}
                   interval={0}
-                  fontSize={11}
+                  fontSize={10}
                 />
-                <YAxis stroke="#9ca3af" allowDecimals={false} fontSize={12} />
+                <YAxis stroke="#4b5563" fontSize={10} />
                 <Tooltip 
-                   cursor={{ fill: 'rgba(255, 255, 255, 0.05)' }}
-                   contentStyle={{ backgroundColor: '#0f172a', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '12px' }}
+                   cursor={{ fill: 'rgba(255, 255, 255, 0.03)' }}
+                   contentStyle={{ backgroundColor: '#0f172a', borderColor: 'rgba(255,255,255,0.05)', borderRadius: '16px' }}
                 />
-                <Bar dataKey="value" name="Torneos" fill="#3b82f6" radius={[8, 8, 0, 0]} barSize={40} />
+                <Bar dataKey="value" name="Torneos" fill="#3b82f6" radius={[6, 6, 0, 0]} barSize={30} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -207,22 +183,22 @@ const StatisticsSection = ({ tournaments }) => {
                 <AreaChart data={stats.activity}>
                   <defs>
                     <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#f59e0b" stopOpacity={0.3}/>
+                      <stop offset="5%" stopColor="#f59e0b" stopOpacity={0.2}/>
                       <stop offset="95%" stopColor="#f59e0b" stopOpacity={0}/>
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" vertical={false} />
-                  <XAxis dataKey="name" stroke="#9ca3af" fontSize={12} />
-                  <YAxis stroke="#9ca3af" allowDecimals={false} fontSize={12} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#ffffff05" vertical={false} />
+                  <XAxis dataKey="name" stroke="#4b5563" fontSize={10} />
+                  <YAxis stroke="#4b5563" fontSize={10} />
                   <Tooltip 
-                     contentStyle={{ backgroundColor: '#0f172a', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '12px' }}
+                     contentStyle={{ backgroundColor: '#0f172a', borderColor: 'rgba(255,255,255,0.05)', borderRadius: '16px' }}
                   />
                   <Area 
                     type="monotone" 
                     dataKey="value" 
                     name="Torneos"
                     stroke="#f59e0b" 
-                    strokeWidth={3}
+                    strokeWidth={2}
                     fillOpacity={1} 
                     fill="url(#colorValue)" 
                   />
@@ -231,11 +207,10 @@ const StatisticsSection = ({ tournaments }) => {
             </div>
           </div>
         )}
-
       </div>
     </div>
-
   );
-};
+});
 
 export default StatisticsSection;
+

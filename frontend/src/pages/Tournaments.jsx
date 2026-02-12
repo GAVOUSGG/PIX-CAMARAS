@@ -1,8 +1,4 @@
-// Tournaments.jsx - Versión actualizada con filtros de fecha
-import React, { useState, useMemo } from "react";
-import TournamentTable from "../components/Tournaments/TournamentTable";
-import TournamentForm from "../components/Tournaments/TournamentForm";
-import WeeklyView from "../components/Tournaments/WeeklyView";
+import React, { useState, useMemo, Suspense, lazy } from "react";
 import {
   Search,
   Filter,
@@ -14,7 +10,13 @@ import {
   X,
   Trophy,
 } from "lucide-react";
-import TournamentDetailsModal from "../components/Dashboard/TournamentDetailsModal";
+
+const TournamentTable = lazy(() => import("../components/Tournaments/TournamentTable"));
+const TournamentForm = lazy(() => import("../components/Tournaments/TournamentForm"));
+const WeeklyView = lazy(() => import("../components/Tournaments/WeeklyView"));
+const TournamentDetailsModal = lazy(() => import("../components/Dashboard/TournamentDetailsModal"));
+
+
 
 const Tournaments = ({
   tournamentsData,
@@ -460,27 +462,34 @@ const Tournaments = ({
 
       {/* Vista Semanal o Tabla */}
       <div className="relative">
-        {viewMode === "semana" ? (
-          <div className="animate-fade-in">
-            <WeeklyView
-              tournaments={filteredTournaments}
-              onViewDetails={handleViewDetails}
-              onEditTournament={handleEditTournament}
-              onDeleteTournament={handleDeleteTournament}
-              onUpdateStatus={handleUpdateStatus}
-            />
+        <Suspense fallback={
+          <div className="glass-card rounded-3xl p-12 flex flex-col items-center justify-center space-y-4 animate-pulse">
+            <div className="w-12 h-12 rounded-full border-4 border-emerald-500/30 border-t-emerald-500 animate-spin"></div>
+            <p className="text-gray-400 font-medium tracking-wide">Cargando vista de torneos...</p>
           </div>
-        ) : (
-          <div className="animate-fade-in shadow-2xl">
-            <TournamentTable
-              tournaments={filteredTournaments}
-              onViewDetails={handleViewDetails}
-              onEditTournament={handleEditTournament}
-              onDeleteTournament={handleDeleteTournament}
-              onUpdateStatus={handleUpdateStatus}
-            />
-          </div>
-        )}
+        }>
+          {viewMode === "semana" ? (
+            <div className="animate-fade-in">
+              <WeeklyView
+                tournaments={filteredTournaments}
+                onViewDetails={handleViewDetails}
+                onEditTournament={handleEditTournament}
+                onDeleteTournament={handleDeleteTournament}
+                onUpdateStatus={handleUpdateStatus}
+              />
+            </div>
+          ) : (
+            <div className="animate-fade-in shadow-2xl">
+              <TournamentTable
+                tournaments={filteredTournaments}
+                onViewDetails={handleViewDetails}
+                onEditTournament={handleEditTournament}
+                onDeleteTournament={handleDeleteTournament}
+                onUpdateStatus={handleUpdateStatus}
+              />
+            </div>
+          )}
+        </Suspense>
       </div>
 
 
@@ -505,22 +514,27 @@ const Tournaments = ({
 
       {/* Formulario para crear/editar */}
       {(showForm || editingTournament) && (
-        <TournamentForm
-          onSave={handleSaveTournament}
-          onCancel={handleCancelForm}
-          workers={workersData}
-          cameras={camerasData}
-          tournament={editingTournament}
-          isOpen={true}
-        />
+        <Suspense fallback={null}>
+          <TournamentForm
+            onSave={handleSaveTournament}
+            onCancel={handleCancelForm}
+            workers={workersData}
+            cameras={camerasData}
+            tournament={editingTournament}
+            isOpen={true}
+          />
+        </Suspense>
       )}
 
       {selectedTournament && (
-        <TournamentDetailsModal 
-          tournament={selectedTournament} 
-          onClose={() => setSelectedTournament(null)} 
-        />
+        <Suspense fallback={null}>
+          <TournamentDetailsModal 
+            tournament={selectedTournament} 
+            onClose={() => setSelectedTournament(null)} 
+          />
+        </Suspense>
       )}
+
     </div>
   );
 };
