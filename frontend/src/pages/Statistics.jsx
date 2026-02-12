@@ -1,7 +1,12 @@
 import React, { Suspense } from 'react';
 const StatisticsSection = React.lazy(() => import('../components/Dashboard/StatisticsSection'));
 
-const StatisticsPage = ({ tournamentsData }) => {
+const StatisticsPage = ({ 
+  tournamentsData, 
+  camerasData, 
+  workersData, 
+  shipmentsData 
+}) => {
   return (
     <div className="space-y-8 pb-12 animate-fade-in">
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
@@ -20,7 +25,12 @@ const StatisticsPage = ({ tournamentsData }) => {
             <div className="h-[400px] glass-card animate-pulse rounded-[2rem]"></div>
           </div>
         }>
-          <StatisticsSection tournaments={tournamentsData} />
+          <StatisticsSection 
+            tournaments={tournamentsData} 
+            cameras={camerasData}
+            workers={workersData}
+            shipments={shipmentsData}
+          />
         </Suspense>
       </div>
     </div>

@@ -145,7 +145,14 @@ const MainApp = ({ user, onLogout }) => {
           />
         );
       case "statistics":
-        return <Statistics tournamentsData={tournamentsData} />;
+        return (
+          <Statistics 
+            tournamentsData={tournamentsData} 
+            camerasData={camerasData}
+            workersData={workersData}
+            shipmentsData={shipmentsData}
+          />
+        );
       case "admin":
         return user.role === 'admin' ? <AdminPanel /> : <Dashboard />;
       default:
