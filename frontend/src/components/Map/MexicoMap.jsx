@@ -220,12 +220,52 @@ const MexicoMap = ({
       .filter(Boolean);
   }, [mapData, filters.heatmap, filters.tournaments, filters.workers, filters.cameras, filters.shipments]);
 
-  const getMarkerColor = (stateData) => {
-    if (stateData.activeTournaments > 0) return "bg-emerald-500";
-    if (stateData.tournaments.length > 0) return "bg-purple-500";
-    if (stateData.cameras.length > 0) return "bg-blue-500";
-    if (stateData.workers.length > 0) return "bg-orange-500";
-    return "bg-gray-500";
+
+
+  // Función para renderizar el icono personalizado del marcador
+  const renderCustomMarker = (state, data) => {
+    const totalItems = data.tournaments.length + data.workers.length + data.cameras.length;
+    const hasActiveTournament = data.activeTournaments > 0;
+    
+    // Determinar el icono principal
+    let MainIcon = MapPin;
+    let iconColor = "text-gray-400";
+    let ringColor = "rgba(148, 163, 184, 0.5)"; // slate-400
+
+    if (data.tournaments.length > 0) {
+      MainIcon = Trophy;
+      iconColor = hasActiveTournament ? "text-emerald-400" : "text-purple-400";
+      ringColor = hasActiveTournament ? "rgba(16, 185, 129, 0.5)" : "rgba(168, 85, 247, 0.5)";
+    } else if (data.cameras.length > 0) {
+      MainIcon = Camera;
+      iconColor = "text-blue-400";
+      ringColor = "rgba(59, 130, 246, 0.5)";
+    } else if (data.workers.length > 0) {
+      MainIcon = Users;
+      iconColor = "text-orange-400";
+      ringColor = "rgba(249, 115, 22, 0.5)";
+    }
+
+    return L.divIcon({
+      className: "custom-marker-container",
+      html: `
+        <div class="premium-marker" style="border-color: ${ringColor}">
+          ${hasActiveTournament ? '<div class="marker-pulse" style="background: rgba(16, 185, 129, 0.2)"></div>' : ''}
+          <div class="${iconColor}">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              ${MainIcon === Trophy ? '<path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22M18 2H6v7a6 6 0 0 0 12 0V2Z"/>' : 
+                MainIcon === Camera ? '<path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/>' :
+                MainIcon === Users ? '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>' :
+                '<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>'}
+            </svg>
+          </div>
+          ${totalItems > 0 ? `<div class="marker-badge">${totalItems}</div>` : ''}
+          <div class="marker-label">${state}</div>
+        </div>
+      `,
+      iconSize: [44, 44],
+      iconAnchor: [22, 22],
+    });
   };
 
   const hasData = (stateData) => {
@@ -369,90 +409,100 @@ const MexicoMap = ({
             if (!stateData || !hasData(stateData)) return null;
 
             return (
-              <Marker key={state} position={coords}>
+              <Marker 
+                key={state} 
+                position={coords} 
+                icon={renderCustomMarker(state, stateData)}
+              >
                 <Popup className="custom-popup">
-                  <div className="p-1 min-w-[200px]">
-                    <h4 className="font-bold text-lg mb-3 border-b border-gray-200 pb-2">
-                      {state}
-                    </h4>
+                  <div className="p-2 min-w-[240px]">
+                    <div className="flex items-center justify-between mb-4 border-b border-white/10 pb-3">
+                      <h4 className="font-black text-xl text-white tracking-tight">
+                        {state}
+                      </h4>
+                      {stateData.activeTournaments > 0 && (
+                        <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-[10px] font-black text-emerald-400 uppercase">
+                          En Vivo
+                        </span>
+                      )}
+                    </div>
                     
-                    <div className="space-y-3">
-                      {/* Tournaments Section */}
+                    <div className="space-y-4">
+                      {/* Torneos */}
                       {filters.tournaments && stateData.tournaments.length > 0 && (
-                        <div>
-                          <div className="flex items-center gap-2 text-purple-600 font-semibold text-sm mb-1">
-                            <Trophy className="w-3 h-3" />
-                            <span>Torneos de la semana ({stateData.tournaments.length})</span>
+                        <div className="bg-white/5 rounded-xl p-3 border border-white/5">
+                          <div className="flex items-center gap-2 text-purple-400 font-bold text-xs mb-2 uppercase tracking-wider">
+                            <Trophy className="w-3.5 h-3.5" />
+                            <span>Torneos ({stateData.tournaments.length})</span>
                           </div>
-                          <ul className="text-xs text-gray-600 pl-5 list-disc">
-                            {stateData.tournaments.slice(0, 3).map(t => (
-                              <li key={t.id} className="truncate">{t.name}</li>
+                          <div className="space-y-1.5">
+                            {stateData.tournaments.slice(0, 2).map(t => (
+                              <div key={t.id} className="text-sm text-gray-300 flex items-center gap-2">
+                                <div className={`w-1.5 h-1.5 rounded-full ${t.status === 'activo' ? 'bg-emerald-500 animate-pulse' : 'bg-purple-500'}`}></div>
+                                <span className="truncate">{t.name}</span>
+                              </div>
                             ))}
-                            {stateData.tournaments.length > 3 && (
-                              <li className="text-gray-400 italic">
-                                +{stateData.tournaments.length - 3} más...
-                              </li>
+                            {stateData.tournaments.length > 2 && (
+                              <div className="text-[10px] text-gray-500 italic pl-3">
+                                +{stateData.tournaments.length - 2} torneos adicionales
+                              </div>
                             )}
-                          </ul>
+                          </div>
                         </div>
                       )}
 
-                      {/* Workers Section */}
-                      {filters.workers && stateData.workers.length > 0 && (
-                        <div>
-                          <div className="flex items-center gap-2 text-orange-600 font-semibold text-sm mb-1">
-                            <Users className="w-3 h-3" />
-                            <span>Personal ({stateData.workers.length})</span>
+                      {/* Recursos Grid */}
+                      <div className="grid grid-cols-2 gap-2">
+                        {filters.workers && stateData.workers.length > 0 && (
+                          <div className="bg-orange-500/5 rounded-xl p-2.5 border border-orange-500/10">
+                            <div className="flex items-center gap-1.5 text-orange-400 font-bold text-[10px] mb-1 uppercase">
+                              <Users className="w-3 h-3" />
+                              <span>Personal</span>
+                            </div>
+                            <div className="text-lg font-black text-white">{stateData.workers.length}</div>
                           </div>
-                          <ul className="text-xs text-gray-600 pl-5 list-disc">
-                            {stateData.workers.slice(0, 3).map(w => (
-                              <li key={w.id} className="truncate">{w.name}</li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
+                        )}
+                        {filters.cameras && stateData.cameras.length > 0 && (
+                          <div className="bg-blue-500/5 rounded-xl p-2.5 border border-blue-500/10">
+                            <div className="flex items-center gap-1.5 text-blue-400 font-bold text-[10px] mb-1 uppercase">
+                              <Camera className="w-3 h-3" />
+                              <span>Cámaras</span>
+                            </div>
+                            <div className="text-lg font-black text-white">{stateData.cameras.length}</div>
+                          </div>
+                        )}
+                      </div>
 
-                      {/* Cameras Section */}
-                      {filters.cameras && stateData.cameras.length > 0 && (
-                        <div>
-                          <div className="flex items-center gap-2 text-blue-600 font-semibold text-sm mb-1">
-                            <Camera className="w-3 h-3" />
-                            <span>Cámaras ({stateData.cameras.length})</span>
+                      {/* Envíos */}
+                      {filters.shipments && stateData.shipments.length > 0 && (
+                        <div className="bg-emerald-500/5 rounded-xl p-3 border border-emerald-500/10">
+                          <div className="flex items-center gap-2 text-emerald-400 font-bold text-xs mb-2 uppercase">
+                            <Truck className="w-3.5 h-3.5" />
+                            <span>Envíos Activos</span>
                           </div>
-                          <ul className="text-xs text-gray-600 pl-5 list-disc space-y-1">
-                            {stateData.cameras.map(c => (
-                              <li key={c.id} className="flex items-center justify-between gap-2">
-                                <div className="flex-1 min-w-0">
-                                  <div className="font-semibold text-blue-700">{c.id}</div>
-                                  <div className="text-gray-500 truncate">{c.model}</div>
-                                </div>
-                                <div className="flex flex-col gap-1 items-end">
-                                  <span className={`text-[10px] px-1.5 py-0.5 rounded ${
-                                    c.status === 'en uso' ? 'bg-green-100 text-green-700' : 
-                                    c.status === 'disponible' ? 'bg-blue-100 text-blue-700' : 
-                                    c.status === 'mantenimiento' ? 'bg-orange-100 text-orange-700' :
-                                    'bg-gray-100 text-gray-700'
-                                  }`}>
-                                    {c.status}
-                                  </span>
-                                  
-                                </div>
-                              </li>
-                            ))}
-                          </ul>
+                          <div className="text-xs text-gray-400">
+                            {stateData.shipments.length} {stateData.shipments.length === 1 ? 'envío' : 'envíos'} en tránsito
+                          </div>
                         </div>
                       )}
+                    </div>
+
+                    <div className="mt-4 pt-3 border-t border-white/5 flex justify-center">
+                       <button className="text-[10px] font-bold text-emerald-400 hover:text-emerald-300 transition-colors uppercase tracking-widest px-4 py-1 rounded-lg hover:bg-emerald-500/10">
+                          Ver detalles completos
+                       </button>
                     </div>
                   </div>
                 </Popup>
                 
-                <Tooltip permanent direction="top" className="bg-transparent border-0 shadow-none">
-                  <div
-                    className={`px-3 py-1.5 rounded-full text-white text-[11px] font-bold shadow-lg backdrop-blur-sm border border-white/30 ${getMarkerColor(
-                      stateData
-                    )}`}
-                  >
-                    {state}
+                <Tooltip direction="top" offset={[0, -20]} opacity={1} className="custom-tooltip">
+                  <div className="bg-slate-900/95 backdrop-blur-md border border-white/10 px-3 py-1.5 rounded-xl shadow-2xl">
+                    <div className="text-xs font-black text-white">{state}</div>
+                    <div className="flex gap-2 mt-1">
+                      {stateData.tournaments.length > 0 && <span className="text-[9px] text-purple-400 font-bold">T:{stateData.tournaments.length}</span>}
+                      {stateData.cameras.length > 0 && <span className="text-[9px] text-blue-400 font-bold">C:{stateData.cameras.length}</span>}
+                      {stateData.workers.length > 0 && <span className="text-[9px] text-orange-400 font-bold">P:{stateData.workers.length}</span>}
+                    </div>
                   </div>
                 </Tooltip>
               </Marker>
