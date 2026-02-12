@@ -12,49 +12,48 @@ const TournamentRow = memo(({ tournament, onView, onEdit, onDelete, onUpdateStat
   };
 
   return (
-    <tr className="hover:bg-white/5 transition-colors group">
-      <td className="px-6 py-4 whitespace-nowrap">
-        <div className="text-sm font-medium text-white">{tournament.name}</div>
-        <div className="text-xs text-gray-400">{tournament.field}</div>
+    <tr className="hover:bg-white/[0.03] transition-all duration-300 group">
+      <td className="px-6 py-5 whitespace-nowrap">
+        <div className="text-sm font-bold text-white group-hover:text-emerald-400 transition-colors">{tournament.name}</div>
+        <div className="text-[11px] text-gray-500 mt-0.5 font-medium">{tournament.field}</div>
       </td>
-      <td className="px-6 py-4 whitespace-nowrap">
-        <div className="text-sm text-gray-300">{tournament.location}</div>
-        <div className="text-sm text-gray-400">{tournament.state}</div>
+      <td className="px-6 py-5 whitespace-nowrap">
+        <div className="text-sm text-gray-300 font-medium">{tournament.location}</div>
+        <div className="text-[11px] text-gray-500">{tournament.state}</div>
       </td>
-      <td className="px-6 py-4 whitespace-nowrap">
-        <div className="text-sm text-gray-300">{tournament.date}</div>
+      <td className="px-6 py-5 whitespace-nowrap">
+        <div className="flex items-center gap-2 text-sm text-gray-300 font-medium">
+          <Calendar className="w-3.5 h-3.5 text-emerald-500/50" />
+          {tournament.date}
+        </div>
         {tournament.endDate && tournament.endDate !== tournament.date && (
-          <div className="text-xs text-gray-400">al {tournament.endDate}</div>
+          <div className="text-[11px] text-gray-500 ml-5">al {tournament.endDate}</div>
         )}
       </td>
-      <td className="px-6 py-4 whitespace-nowrap">
+      <td className="px-6 py-5 whitespace-nowrap">
         <StatusBadge status={tournament.status} />
       </td>
-      <td className="px-6 py-4 whitespace-nowrap">
-        <div className="text-sm text-gray-300">{tournament.worker}</div>
+      <td className="px-6 py-5 whitespace-nowrap">
+        <div className="text-sm text-gray-300 font-medium">{tournament.worker}</div>
         {tournament.workerId && (
-          <div className="text-xs text-gray-400">ID: {tournament.workerId}</div>
+          <div className="text-[10px] text-gray-500 font-bold uppercase tracking-tighter mt-0.5">ID: {tournament.workerId}</div>
         )}
       </td>
-      <td className="px-6 py-4 whitespace-nowrap">
-        <div className="text-sm text-gray-300">
-          {tournament.cameras && tournament.cameras.length > 0 
-            ? `${tournament.cameras.length} cámaras`
-            : 'Sin asignar'
-          }
-        </div>
-        <div className="text-xs text-gray-400">
-          {tournament.holes > 0
-            ? `${tournament.holes} ${tournament.holes === 1 ? 'hoyo' : 'hoyos'}`
-            : 'Sin hoyos'
-          }
+      <td className="px-6 py-5 whitespace-nowrap">
+        <div className="flex flex-col gap-1">
+          <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-blue-500/10 text-blue-400 text-[10px] font-bold w-fit border border-blue-500/20">
+            {tournament.cameras?.length || 0} Cámaras
+          </span>
+          <span className="text-[10px] text-gray-500 font-medium ml-1">
+            {tournament.holes || 0} Hoyos
+          </span>
         </div>
       </td>
-      <td className="px-6 py-4 whitespace-nowrap text-right">
-        <div className="flex items-center space-x-2 justify-end">
+      <td className="px-6 py-5 whitespace-nowrap text-right">
+        <div className="flex items-center space-x-1 justify-end">
           <button 
             onClick={() => onView(tournament)}
-            className="text-emerald-400 hover:text-emerald-300 transition-colors p-1 rounded hover:bg-white/10"
+            className="p-2 text-gray-400 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-xl transition-all duration-300"
             title="Ver detalles"
           >
             <Eye className="w-4 h-4" />
@@ -66,7 +65,7 @@ const TournamentRow = memo(({ tournament, onView, onEdit, onDelete, onUpdateStat
                 e.stopPropagation();
                 setShowMenu(!showMenu);
               }}
-              className="text-gray-400 hover:text-white transition-colors p-1 rounded hover:bg-white/10"
+              className={`p-2 rounded-xl transition-all duration-300 ${showMenu ? 'bg-white/10 text-white' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}
             >
               <MoreVertical className="w-4 h-4" />
             </button>
@@ -74,26 +73,25 @@ const TournamentRow = memo(({ tournament, onView, onEdit, onDelete, onUpdateStat
             {showMenu && (
               <>
                 <div className="fixed inset-0 z-40" onClick={() => setShowMenu(false)} />
-                <div className="absolute right-0 mt-2 w-56 bg-slate-800 border border-white/20 rounded-lg shadow-xl z-50 overflow-hidden">
-                  <div className="p-1">
+                <div className="absolute right-0 mt-2 w-52 glass-card border-white/10 rounded-2xl shadow-2xl z-50 overflow-hidden animate-fade-in py-1.5">
                     <button
                       onClick={() => { onView(tournament); setShowMenu(false); }}
-                      className="w-full flex items-center space-x-3 px-3 py-2 text-sm text-white hover:bg-white/10 rounded-md transition-colors"
+                      className="w-full flex items-center space-x-3 px-4 py-2 text-xs font-semibold text-gray-300 hover:bg-white/5 hover:text-white transition-all"
                     >
-                      <Eye className="w-4 h-4" />
-                      <span>Ver detalles</span>
+                      <Eye className="w-4 h-4 text-emerald-400/70" />
+                      <span>Inspeccionar</span>
                     </button>
                     
                     <button
                       onClick={() => { onEdit(tournament); setShowMenu(false); }}
-                      className="w-full flex items-center space-x-3 px-3 py-2 text-sm text-blue-400 hover:bg-white/10 rounded-md transition-colors"
+                      className="w-full flex items-center space-x-3 px-4 py-2 text-xs font-semibold text-gray-300 hover:bg-white/5 hover:text-white transition-all"
                     >
-                      <Edit className="w-4 h-4" />
-                      <span>Editar</span>
+                      <Edit className="w-4 h-4 text-blue-400/70" />
+                      <span>Editar Registro</span>
                     </button>
                     
-                    <div className="border-t border-white/10 my-1"></div>
-                    <div className="px-3 py-1 text-[10px] text-gray-500 font-bold uppercase tracking-wider">Estado rápido</div>
+                    <div className="h-px bg-white/5 my-1.5 mx-2"></div>
+                    <div className="px-4 py-1.5 text-[9px] text-gray-500 font-black uppercase tracking-[0.2em]">Actualizar Fase</div>
                     {getStatusOptions(tournament.status).map(status => (
                       <button
                         key={status}
@@ -101,14 +99,18 @@ const TournamentRow = memo(({ tournament, onView, onEdit, onDelete, onUpdateStat
                           onUpdateStatus(tournament.id, status);
                           setShowMenu(false);
                         }}
-                        className="w-full flex items-center space-x-3 px-3 py-1.5 text-sm text-gray-300 hover:bg-white/10 rounded-md transition-colors"
+                        className="w-full flex items-center space-x-3 px-4 py-1.5 text-xs font-semibold text-gray-400 hover:bg-white/5 hover:text-white transition-all capitalize"
                       >
-                        <Calendar className="w-4 h-4" />
-                        <span className="capitalize">{status}</span>
+                        <div className={`w-1.5 h-1.5 rounded-full ${
+                          status === 'activo' ? 'bg-emerald-500' : 
+                          status === 'pendiente' ? 'bg-yellow-500' : 
+                          status === 'terminado' ? 'bg-blue-500' : 'bg-red-500'
+                        }`}></div>
+                        <span>{status}</span>
                       </button>
                     ))}
                     
-                    <div className="border-t border-white/10 my-1"></div>
+                    <div className="h-px bg-white/5 my-1.5 mx-2"></div>
                     <button
                       onClick={() => {
                         if (confirm('¿Estás seguro de que quieres eliminar este torneo?')) {
@@ -116,12 +118,11 @@ const TournamentRow = memo(({ tournament, onView, onEdit, onDelete, onUpdateStat
                         }
                         setShowMenu(false);
                       }}
-                      className="w-full flex items-center space-x-3 px-3 py-2 text-sm text-red-400 hover:bg-red-500/10 rounded-md transition-colors"
+                      className="w-full flex items-center space-x-3 px-4 py-2 text-xs font-semibold text-red-400/70 hover:bg-red-500/10 hover:text-red-400 transition-all"
                     >
                       <Trash2 className="w-4 h-4" />
                       <span>Eliminar</span>
                     </button>
-                  </div>
                 </div>
               </>
             )}
@@ -129,6 +130,7 @@ const TournamentRow = memo(({ tournament, onView, onEdit, onDelete, onUpdateStat
         </div>
       </td>
     </tr>
+
   );
 });
 
@@ -165,22 +167,22 @@ const TournamentTable = ({
         )}
       </div>
 
-      <div className="hidden md:block bg-black/20 backdrop-blur-sm rounded-2xl border border-white/10 overflow-hidden">
-        <div className="overflow-x-auto min-h-[400px]">
+      <div className="hidden md:block glass-card rounded-3xl overflow-hidden shadow-2xl border-white/5">
+        <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-white/5">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Torneo</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Ubicación</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Fecha</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Estado</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Trabajador</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Cámaras</th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-400 uppercase tracking-wider w-20">Acciones</th>
+            <thead>
+              <tr className="bg-white/5 border-b border-white/5">
+                <th className="px-6 py-5 text-left text-[10px] font-bold text-gray-500 uppercase tracking-widest">Información del Torneo</th>
+                <th className="px-6 py-5 text-left text-[10px] font-bold text-gray-500 uppercase tracking-widest">Ubicación</th>
+                <th className="px-6 py-5 text-left text-[10px] font-bold text-gray-500 uppercase tracking-widest">Cronograma</th>
+                <th className="px-6 py-5 text-left text-[10px] font-bold text-gray-500 uppercase tracking-widest">Estado Actual</th>
+                <th className="px-6 py-5 text-left text-[10px] font-bold text-gray-500 uppercase tracking-widest">Responsable</th>
+                <th className="px-6 py-5 text-left text-[10px] font-bold text-gray-500 uppercase tracking-widest">Recursos</th>
+                <th className="px-6 py-5 text-right text-[10px] font-bold text-gray-500 uppercase tracking-widest w-24">Acciones</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/10">
-              {tournaments.map(tournament => (
+            <tbody className="divide-y divide-white/5">
+              {tournaments.map((tournament, idx) => (
                 <TournamentRow 
                   key={tournament.id}
                   tournament={tournament}
@@ -194,6 +196,7 @@ const TournamentTable = ({
           </table>
         </div>
       </div>
+
     </>
   );
 };

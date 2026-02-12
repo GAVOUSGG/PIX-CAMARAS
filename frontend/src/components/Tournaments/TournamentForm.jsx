@@ -368,21 +368,29 @@ const TournamentForm = ({
   const cameraStatus = getCameraStatusMessage();
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-0 md:p-4 z-50">
-      <div className="bg-slate-800/90 backdrop-blur-xl rounded-none md:rounded-2xl border-x-0 border-t-0 md:border border-white/10 p-4 md:p-6 max-w-4xl w-full h-full md:h-auto md:max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between mb-6">
-          <h3 className="text-xl font-semibold text-white">
-            {isEditing ? "Editar Torneo" : "Nuevo Torneo"}
-          </h3>
+    <div className="fixed inset-0 bg-slate-950/60 backdrop-blur-md flex items-center justify-center p-0 md:p-6 z-[100] animate-fade-in">
+      <div className="glass-card rounded-none md:rounded-[2.5rem] border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)] w-full max-w-4xl h-full md:h-auto md:max-h-[85vh] overflow-hidden flex flex-col relative">
+        {/* Sutil background glow */}
+        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 via-blue-500 to-purple-500 opacity-50"></div>
+        
+        <div className="p-6 md:p-8 flex items-center justify-between border-b border-white/5 bg-white/[0.02]">
+          <div>
+            <h3 className="text-2xl font-black text-white tracking-tight">
+              {isEditing ? "Editar" : "Nuevo"} <span className="text-emerald-400">Torneo</span>
+            </h3>
+            <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-1">Configuración técnica y operativa</p>
+          </div>
           <button
             onClick={handleCancel}
-            className="text-gray-400 hover:text-white transition-colors"
+            className="p-2.5 bg-white/5 hover:bg-red-500/10 text-gray-400 hover:text-red-400 rounded-2xl transition-all duration-300 border border-white/5 hover:border-red-500/20"
           >
             <X className="w-6 h-6" />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="flex-grow overflow-y-auto p-6 md:p-10 space-y-10 custom-scrollbar">
+          <form onSubmit={handleSubmit} className="space-y-10">
+
           {/* Información Básica */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
@@ -782,7 +790,9 @@ const TournamentForm = ({
         </form>
       </div>
     </div>
+  </div>
   );
 };
+
 
 export default TournamentForm;

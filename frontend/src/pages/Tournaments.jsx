@@ -12,6 +12,7 @@ import {
   List,
   CalendarDays,
   X,
+  Trophy,
 } from "lucide-react";
 import TournamentDetailsModal from "../components/Dashboard/TournamentDetailsModal";
 
@@ -257,163 +258,132 @@ const Tournaments = ({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8 animate-fade-in pb-12">
       {/* Header con título y botones */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <h2 className="text-2xl font-bold text-white">Gestión de Torneos</h2>
-          <p className="text-gray-400 text-sm">
-            {filteredTournaments.length} de {tournamentsData.length} torneos
-            mostrados
-            {viewMode === "semana" &&
-              ` • ${tournamentStats.estaSemana} torneos esta semana`}
+          <h2 className="text-3xl font-bold text-white tracking-tight">Gestión de <span className="text-emerald-400">Torneos</span></h2>
+          <p className="text-gray-400 mt-1">
+            Visualización y control de eventos: {filteredTournaments.length} resultados encontrados.
           </p>
         </div>
 
-        <div className="flex items-center space-x-3">
-          {/* Selector de vista */}
-          <div className="flex bg-white/5 rounded-lg p-1 border border-white/10">
+        <div className="flex items-center gap-4">
+          <div className="flex bg-white/5 rounded-2xl p-1.5 border border-white/10 backdrop-blur-xl">
             <button
               onClick={() => setViewMode("semana")}
-              className={`px-3 py-2 rounded-md flex items-center space-x-2 transition-colors ${
+              className={`px-4 py-2 rounded-xl flex items-center space-x-2 transition-all duration-300 ${
                 viewMode === "semana"
-                  ? "bg-emerald-500 text-white"
-                  : "text-gray-400 hover:text-white"
+                  ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/20"
+                  : "text-gray-400 hover:text-white hover:bg-white/5"
               }`}
             >
               <Calendar className="w-4 h-4" />
-              <span className="text-sm">Semana</span>
+              <span className="text-sm font-medium">Cronograma</span>
             </button>
             <button
               onClick={() => setViewMode("tabla")}
-              className={`px-3 py-2 rounded-md flex items-center space-x-2 transition-colors ${
+              className={`px-4 py-2 rounded-xl flex items-center space-x-2 transition-all duration-300 ${
                 viewMode === "tabla"
-                  ? "bg-emerald-500 text-white"
-                  : "text-gray-400 hover:text-white"
+                  ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/20"
+                  : "text-gray-400 hover:text-white hover:bg-white/5"
               }`}
             >
               <List className="w-4 h-4" />
-              <span className="text-sm">Tabla</span>
+              <span className="text-sm font-medium">Tabla</span>
             </button>
           </div>
 
           <button
             onClick={() => setShowForm(true)}
-            className="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg transition-colors flex items-center space-x-2"
+            className="group bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white px-5 py-2.5 rounded-2xl transition-all duration-300 flex items-center space-x-2 shadow-lg shadow-emerald-500/10 hover:shadow-emerald-500/20 active:scale-95"
           >
             <Plus className="w-5 h-5" />
-            <span>Nuevo Torneo</span>
+            <span className="font-semibold">Nuevo Registro</span>
           </button>
         </div>
       </div>
 
-      {/* Buscador y Filtros - ACTUALIZADO */}
-      <div className="bg-black/20 backdrop-blur-lg rounded-2xl border border-white/10 p-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Primera fila de filtros */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {/* Buscador */}
-            <div className="lg:col-span-2">
-              <label className="block text-sm font-medium text-gray-400 mb-2">
-                <Search className="w-4 h-4 inline mr-2" />
-                Buscar torneo
-              </label>
-              <div className="relative">
-                <input
-                  type="text"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  placeholder="Buscar por nombre, ubicación, campo o trabajador..."
-                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 pl-10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                />
-                <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
-              </div>
-            </div>
+      {/* Estadísticas rápidas - Rediseño estilo Dashboard */}
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+        {[
+          { label: 'Total', val: tournamentStats.total, color: 'blue', icon: Grid },
+          { label: 'Activos', val: tournamentStats.activos, color: 'emerald', icon: Trophy },
+          { label: 'Pendientes', val: tournamentStats.pendientes, color: 'yellow', icon: CalendarDays },
+          { label: 'Terminados', val: tournamentStats.terminados, color: 'slate', icon: List },
+          { label: 'Esta Semana', val: tournamentStats.estaSemana, color: 'purple', icon: Calendar },
+        ].map((stat, i) => (
+          <div key={i} className="glass-card rounded-2xl p-4 relative overflow-hidden group hover:scale-[1.02] transition-transform duration-300">
+             <div className="flex items-center gap-3 relative z-10">
+               <div className={`w-8 h-8 rounded-lg flex items-center justify-center bg-${stat.color}-500/10 border border-${stat.color}-500/10`}>
+                 {<stat.icon className={`w-4 h-4 text-${stat.color}-400`} />}
+               </div>
+               <div>
+                 <p className="text-[10px] uppercase font-bold text-gray-500 tracking-wider leading-none">{stat.label}</p>
+                 <p className="text-xl font-bold text-white mt-1 leading-none">{stat.val}</p>
+               </div>
+             </div>
+             {/* Sutil brillo de fondo */}
+             <div className={`absolute -right-4 -bottom-4 w-12 h-12 bg-${stat.color}-500/5 blur-xl rounded-full`}></div>
+          </div>
+        ))}
+      </div>
 
-            {/* Filtro por Estado */}
-            <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">
-                Estado
-              </label>
-              <select
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              >
-                <option value="todos" className="text-white bg-gray-700">
-                  Todos los estados
-                </option>
-                {uniqueStatuses.map((status) => (
-                  <option
-                    key={status}
-                    value={status}
-                    className="text-white bg-gray-700 capitalize"
-                  >
-                    {status}
-                  </option>
-                ))}
-              </select>
+      {/* Buscador y Filtros - Rediseño Compacto y Premium */}
+      <div className="glass-card rounded-3xl p-6 border-white/5 shadow-2xl overflow-hidden relative">
+        <div className="absolute top-0 right-0 p-8 bg-emerald-500/5 blur-3xl rounded-full -mr-16 -mt-16 pointer-events-none"></div>
+        
+        <div className="grid grid-cols-1 xl:grid-cols-5 gap-6 relative z-10">
+          {/* Campo de Búsqueda Principal */}
+          <div className="xl:col-span-2">
+            <label className="flex items-center gap-2 text-xs font-bold text-gray-500 uppercase tracking-widest mb-2.5 ml-1">
+              <Search className="w-3.5 h-3.5" />
+              Buscador Inteligente
+            </label>
+            <div className="relative group">
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Nombre, club, estado o trabajador..."
+                className="w-full bg-white/5 border border-white/5 rounded-2xl px-5 py-3 pl-12 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 group-hover:bg-white/10 transition-all duration-300 text-sm"
+              />
+              <Search className="w-5 h-5 text-gray-500 absolute left-4 top-1/2 transform -translate-y-1/2 group-focus-within:text-emerald-400 transition-colors" />
             </div>
           </div>
 
-          {/* Segunda fila de filtros */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {/* Filtro por Estado (México) */}
+          {/* Grupo de Filtros Selectores */}
+          <div className="xl:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">
-                Estado (México)
-              </label>
+              <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2.5 ml-1">Fase Operativa</label>
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                className="w-full bg-white/5 border border-white/5 rounded-2xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/50 text-sm appearance-none outline-none hover:bg-white/10 transition-all cursor-pointer"
+              >
+                <option value="todos" className="bg-[#0f172a]">Todos los estados</option>
+                {uniqueStatuses.map((status) => (
+                  <option key={status} value={status} className="bg-[#0f172a] capitalize">{status}</option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2.5 ml-1">Zona Geográfica</label>
               <select
                 value={stateFilter}
                 onChange={(e) => setStateFilter(e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                className="w-full bg-white/5 border border-white/5 rounded-2xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/50 text-sm appearance-none outline-none hover:bg-white/10 transition-all cursor-pointer"
               >
-                <option value="todos" className="text-white bg-gray-700">
-                  Todos los estados
-                </option>
+                <option value="todos" className="bg-[#0f172a]">Toda la República</option>
                 {uniqueStates.map((state) => (
-                  <option
-                    key={state}
-                    value={state}
-                    className="text-white bg-gray-700"
-                  >
-                    {state}
-                  </option>
+                  <option key={state} value={state} className="bg-[#0f172a]">{state}</option>
                 ))}
               </select>
             </div>
 
-            {/* Filtro por Trabajador */}
             <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">
-                Trabajador
-              </label>
-              <select
-                value={workerFilter}
-                onChange={(e) => setWorkerFilter(e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              >
-                <option value="todos" className="text-white bg-gray-700">
-                  Todos los trabajadores
-                </option>
-                {uniqueWorkers.map((worker) => (
-                  <option
-                    key={worker}
-                    value={worker}
-                    className="text-white bg-gray-700"
-                  >
-                    {worker}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Filtro por Tipo de Fecha */}
-            <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">
-                <CalendarDays className="w-4 h-4 inline mr-2" />
-                Fecha
-              </label>
+              <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2.5 ml-1">Temporalidad</label>
               <select
                 value={dateFilterType}
                 onChange={(e) => {
@@ -422,189 +392,97 @@ const Tournaments = ({
                   setStartDateFilter("");
                   setEndDateFilter("");
                 }}
-                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                className="w-full bg-white/5 border border-white/5 rounded-2xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/50 text-sm appearance-none outline-none hover:bg-white/10 transition-all cursor-pointer"
               >
-                <option value="todos" className="text-white bg-gray-700">
-                  Todas las fechas
-                </option>
-                <option value="mes" className="text-white bg-gray-700">
-                  Por mes
-                </option>
-                <option value="rango" className="text-white bg-gray-700">
-                  Por rango
-                </option>
+                <option value="todos" className="bg-[#0f172a]">Cualquier fecha</option>
+                <option value="mes" className="bg-[#0f172a]">Por Mes</option>
+                <option value="rango" className="bg-[#0f172a]">Rango Personalizado</option>
               </select>
             </div>
           </div>
         </div>
 
-        {/* Filtros de fecha específicos */}
-        {dateFilterType === "mes" && (
-          <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">
-                Seleccionar mes
-              </label>
-              <select
-                value={monthFilter}
-                onChange={(e) => setMonthFilter(e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              >
-                <option value="" className="text-white bg-gray-700">
-                  Seleccionar mes
-                </option>
-                {uniqueMonths.map((month) => (
-                  <option
-                    key={month}
-                    value={month}
-                    className="text-white bg-gray-700"
+        {/* Expansión de Filtros de Fecha */}
+        {dateFilterType !== "todos" && (
+          <div className="mt-6 pt-6 border-t border-white/5 animate-fade-in relative z-10 flex flex-wrap gap-4 items-end">
+            {dateFilterType === "mes" ? (
+              <div className="w-full max-w-xs">
+                 <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2 ml-1">Seleccionar Periodo</label>
+                 <select
+                    value={monthFilter}
+                    onChange={(e) => setMonthFilter(e.target.value)}
+                    className="w-full bg-white/5 border border-white/5 rounded-2xl px-4 py-3 text-white text-sm outline-none hover:bg-white/10 transition-all"
                   >
-                    {formatMonth(month)}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-        )}
-
-        {dateFilterType === "rango" && (
-          <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">
-                Fecha inicial
-              </label>
-              <input
-                type="date"
-                value={startDateFilter}
-                onChange={(e) => setStartDateFilter(e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">
-                Fecha final
-              </label>
-              <input
-                type="date"
-                value={endDateFilter}
-                onChange={(e) => setEndDateFilter(e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              />
-            </div>
-            <div className="flex items-end">
-              {startDateFilter &&
-                endDateFilter &&
-                new Date(startDateFilter) > new Date(endDateFilter) && (
-                  <p className="text-red-400 text-sm">
-                    La fecha inicial no puede ser mayor a la final
-                  </p>
+                    <option value="" className="bg-[#0f172a]">Elegir mes...</option>
+                    {uniqueMonths.map((month) => (
+                      <option key={month} value={month} className="bg-[#0f172a]">{formatMonth(month)}</option>
+                    ))}
+                  </select>
+              </div>
+            ) : (
+              <>
+                <div className="w-full max-w-[180px]">
+                  <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2 ml-1">Desde</label>
+                  <input
+                    type="date"
+                    value={startDateFilter}
+                    onChange={(e) => setStartDateFilter(e.target.value)}
+                    className="w-full bg-white/5 border border-white/5 rounded-2xl px-4 py-2.5 text-white text-sm outline-none hover:bg-white/10 transition-all"
+                  />
+                </div>
+                <div className="w-full max-w-[180px]">
+                  <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2 ml-1">Hasta</label>
+                  <input
+                    type="date"
+                    value={endDateFilter}
+                    onChange={(e) => setEndDateFilter(e.target.value)}
+                    className="w-full bg-white/5 border border-white/5 rounded-2xl px-4 py-2.5 text-white text-sm outline-none hover:bg-white/10 transition-all"
+                  />
+                </div>
+                {startDateFilter && endDateFilter && new Date(startDateFilter) > new Date(endDateFilter) && (
+                  <p className="text-red-400 text-[10px] font-medium mb-3">La fecha inicial no puede ser mayor</p>
                 )}
-            </div>
+              </>
+            )}
           </div>
         )}
 
-        {/* Controles de filtros activos */}
+        {/* Chips de Filtros Activos Compactos */}
         {hasActiveFilters && (
-          <div className="mt-4 flex items-center justify-between">
-            <div className="flex items-center space-x-2 text-sm text-gray-400 flex-wrap gap-2">
-              <span>Filtros activos:</span>
-              {searchTerm && (
-                <span className="bg-emerald-500/20 text-emerald-400 px-2 py-1 rounded text-xs">
-                  Búsqueda: "{searchTerm}"
-                </span>
-              )}
-              {statusFilter !== "todos" && (
-                <span className="bg-blue-500/20 text-blue-400 px-2 py-1 rounded text-xs capitalize">
-                  Estado: {statusFilter}
-                </span>
-              )}
-              {stateFilter !== "todos" && (
-                <span className="bg-purple-500/20 text-purple-400 px-2 py-1 rounded text-xs">
-                  Estado: {stateFilter}
-                </span>
-              )}
-              {workerFilter !== "todos" && (
-                <span className="bg-orange-500/20 text-orange-400 px-2 py-1 rounded text-xs">
-                  Trabajador: {workerFilter}
-                </span>
-              )}
-              {dateFilterType === "mes" && monthFilter && (
-                <span className="bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded text-xs">
-                  Mes: {formatMonth(monthFilter)}
-                </span>
-              )}
-              {dateFilterType === "rango" &&
-                startDateFilter &&
-                endDateFilter && (
-                  <span className="bg-red-500/20 text-red-400 px-2 py-1 rounded text-xs">
-                    Rango:{" "}
-                    {new Date(startDateFilter).toLocaleDateString("es-MX")} -{" "}
-                    {new Date(endDateFilter).toLocaleDateString("es-MX")}
-                  </span>
-                )}
+          <div className="mt-6 flex items-center justify-between gap-4 pt-4 border-t border-white/5 relative z-10">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-[10px] font-bold text-gray-600 uppercase tracking-wider mr-2">Activos:</span>
+              <button onClick={clearFilters} className="text-[10px] font-bold text-emerald-500 hover:text-emerald-400 underline decoration-emerald-500/30 underline-offset-4">Limpiar todo</button>
             </div>
-            <button
-              onClick={clearFilters}
-              className="flex items-center space-x-2 text-gray-400 hover:text-white transition-colors text-sm"
-            >
-              <X className="w-4 h-4" />
-              <span>Limpiar filtros</span>
-            </button>
           </div>
         )}
-      </div>
-      {/* Estadísticas rápidas - Actualizadas */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-        <div className="bg-white/5 rounded-lg p-4 text-center">
-          <div className="text-2xl font-bold text-emerald-400">
-            {tournamentStats.total}
-          </div>
-          <div className="text-gray-400 text-sm">Total</div>
-        </div>
-        <div className="bg-white/5 rounded-lg p-4 text-center">
-          <div className="text-2xl font-bold text-green-400">
-            {tournamentStats.activos}
-          </div>
-          <div className="text-gray-400 text-sm">Activos</div>
-        </div>
-        <div className="bg-white/5 rounded-lg p-4 text-center">
-          <div className="text-2xl font-bold text-yellow-400">
-            {tournamentStats.pendientes}
-          </div>
-          <div className="text-gray-400 text-sm">Pendientes</div>
-        </div>
-        <div className="bg-white/5 rounded-lg p-4 text-center">
-          <div className="text-2xl font-bold text-blue-400">
-            {tournamentStats.terminados}
-          </div>
-          <div className="text-gray-400 text-sm">Terminados</div>
-        </div>
-        <div className="bg-white/5 rounded-lg p-4 text-center">
-          <div className="text-2xl font-bold text-purple-400">
-            {tournamentStats.estaSemana}
-          </div>
-          <div className="text-gray-400 text-sm">Esta Semana</div>
-        </div>
       </div>
 
       {/* Vista Semanal o Tabla */}
-      {viewMode === "semana" ? (
-        <WeeklyView
-          tournaments={filteredTournaments}
-          onViewDetails={handleViewDetails}
-          onEditTournament={handleEditTournament}
-          onDeleteTournament={handleDeleteTournament}
-          onUpdateStatus={handleUpdateStatus}
-        />
-      ) : (
-        <TournamentTable
-          tournaments={filteredTournaments}
-          onViewDetails={handleViewDetails}
-          onEditTournament={handleEditTournament}
-          onDeleteTournament={handleDeleteTournament}
-          onUpdateStatus={handleUpdateStatus}
-        />
-      )}
+      <div className="relative">
+        {viewMode === "semana" ? (
+          <div className="animate-fade-in">
+            <WeeklyView
+              tournaments={filteredTournaments}
+              onViewDetails={handleViewDetails}
+              onEditTournament={handleEditTournament}
+              onDeleteTournament={handleDeleteTournament}
+              onUpdateStatus={handleUpdateStatus}
+            />
+          </div>
+        ) : (
+          <div className="animate-fade-in shadow-2xl">
+            <TournamentTable
+              tournaments={filteredTournaments}
+              onViewDetails={handleViewDetails}
+              onEditTournament={handleEditTournament}
+              onDeleteTournament={handleDeleteTournament}
+              onUpdateStatus={handleUpdateStatus}
+            />
+          </div>
+        )}
+      </div>
+
 
       {/* Estado cuando no hay resultados */}
       {filteredTournaments.length === 0 && (
