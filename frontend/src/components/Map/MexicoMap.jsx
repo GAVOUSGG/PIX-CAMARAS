@@ -183,7 +183,7 @@ const MexicoMap = ({
     return shipments
       .filter((s) => s.status === "enviado" || s.status === "en envio")
       .map((s) => {
-        const originCoords = stateCoordinates["CDMX"]; 
+        const originCoords = stateCoordinates[s.origin] || stateCoordinates["CDMX"]; 
         const destCoords = stateCoordinates[s.destination];
 
         if (originCoords && destCoords) {
