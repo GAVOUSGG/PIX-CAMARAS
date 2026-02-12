@@ -57,8 +57,19 @@ section, .dashboard-grid-item {
 
 @media (max-width: 768px) {
   .glass-card {
-    backdrop-filter: blur(4px); /* Proyectos móviles necesitan menos blur */
-    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  
+  /* Reducir padding global en móviles para ganar espacio */
+  .max-w-7xl {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  /* Ocultar elementos no críticos en móvil para limpiar la UI */
+  .hide-on-mobile {
+    display: none !important;
   }
 }
 

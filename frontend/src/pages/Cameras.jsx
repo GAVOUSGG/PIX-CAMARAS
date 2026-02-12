@@ -156,18 +156,18 @@ const Cameras = ({ camerasData, workersData, onCreateCamera, onUpdateCamera, onD
   return (
     <div className="space-y-6">
       {/* Header con título y botones */}
-      <div className="flex items-center justify-between flex-wrap gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-white">Inventario de Cámaras</h2>
-          <p className="text-gray-400 text-sm">
-            {filteredCameras.length} de {camerasData.length} cámaras mostradas
+          <h2 className="text-2xl md:text-3xl font-bold text-white tracking-tight">Inventario de Cámaras</h2>
+          <p className="text-gray-400 text-sm mt-1">
+            <span className="text-emerald-400 font-bold">{filteredCameras.length}</span> de {camerasData.length} cámaras registradas
           </p>
         </div>
-        <div className="flex items-center space-x-2">
+        <div className="flex flex-col xs:flex-row items-stretch sm:items-center gap-2">
           <button
             onClick={handleAssignAllToWarehouse}
             disabled={isAssigningToWarehouse || (hasActiveFilters ? filteredCameras.length === 0 : camerasData.length === 0)}
-            className="bg-blue-500 hover:bg-blue-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white px-4 py-2 rounded-lg transition-colors flex items-center space-x-2"
+            className="bg-blue-500/10 hover:bg-blue-500/20 disabled:bg-gray-600/10 disabled:cursor-not-allowed text-blue-400 border border-blue-500/20 px-4 py-2.5 rounded-xl transition-all flex items-center justify-center space-x-2 font-bold text-sm"
             title={hasActiveFilters ? `Asignar ${filteredCameras.length} cámaras filtradas a Almacén` : `Asignar todas las ${camerasData.length} cámaras a Almacén`}
           >
             <Package className="w-5 h-5" />
@@ -175,16 +175,16 @@ const Cameras = ({ camerasData, workersData, onCreateCamera, onUpdateCamera, onD
               {isAssigningToWarehouse 
                 ? 'Asignando...' 
                 : hasActiveFilters 
-                  ? `Asignar ${filteredCameras.length} a Almacén`
-                  : 'Asignar Todas a Almacén'}
+                  ? `Resetear (${filteredCameras.length})`
+                  : 'Resetear Todo'}
             </span>
           </button>
           <button
             onClick={() => setShowForm(true)}
-            className="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg transition-colors flex items-center space-x-2"
+            className="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2.5 rounded-xl transition-all flex items-center justify-center space-x-2 font-bold text-sm shadow-lg shadow-emerald-500/20 active:scale-95"
           >
             <Plus className="w-5 h-5" />
-            <span>Agregar Cámara</span>
+            <span>Agregar</span>
           </button>
         </div>
       </div>

@@ -307,7 +307,7 @@ const Tournaments = ({
       </div>
 
       {/* Estadísticas rápidas - Rediseño estilo Dashboard */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4">
         {[
           { label: 'Total', val: tournamentStats.total, color: 'blue', icon: Grid },
           { label: 'Activos', val: tournamentStats.activos, color: 'emerald', icon: Trophy },
