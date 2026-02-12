@@ -165,16 +165,16 @@ export const exchangeCodeForTokens = async (code) => {
     const tokens = await response.json();
 
     // Guardar tokens
-    localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, tokens.access_token);
+    sessionStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, tokens.access_token);
 
     if (tokens.refresh_token) {
-      localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, tokens.refresh_token);
+      sessionStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, tokens.refresh_token);
     }
 
     // Calcular expiración (por defecto 3600 segundos)
     const expiresIn = tokens.expires_in || 3600;
     const expiryTime = Date.now() + expiresIn * 1000;
-    localStorage.setItem(STORAGE_KEYS.TOKEN_EXPIRY, expiryTime.toString());
+    sessionStorage.setItem(STORAGE_KEYS.TOKEN_EXPIRY, expiryTime.toString());
 
     // Limpiar code verifier
     sessionStorage.removeItem(STORAGE_KEYS.CODE_VERIFIER);
@@ -191,9 +191,9 @@ export const exchangeCodeForTokens = async (code) => {
  * Obtiene un token de acceso válido (renueva si es necesario)
  */
 export const getValidAccessToken = async () => {
-  const accessToken = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
-  const refreshToken = localStorage.getItem(STORAGE_KEYS.REFRESH_TOKEN);
-  const expiryTime = localStorage.getItem(STORAGE_KEYS.TOKEN_EXPIRY);
+  const accessToken = sessionStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
+  const refreshToken = sessionStorage.getItem(STORAGE_KEYS.REFRESH_TOKEN);
+  const expiryTime = sessionStorage.getItem(STORAGE_KEYS.TOKEN_EXPIRY);
 
   // Si no hay token, necesita autenticarse
   if (!accessToken) {
@@ -252,12 +252,12 @@ const refreshAccessToken = async (refreshToken) => {
     const tokens = await response.json();
 
     // Guardar nuevo access token
-    localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, tokens.access_token);
+    sessionStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, tokens.access_token);
 
     // Calcular nueva expiración
     const expiresIn = tokens.expires_in || 3600;
     const expiryTime = Date.now() + expiresIn * 1000;
-    localStorage.setItem(STORAGE_KEYS.TOKEN_EXPIRY, expiryTime.toString());
+    sessionStorage.setItem(STORAGE_KEYS.TOKEN_EXPIRY, expiryTime.toString());
 
     console.log("[OAuth] Token renovado exitosamente");
     return tokens.access_token;
@@ -271,9 +271,9 @@ const refreshAccessToken = async (refreshToken) => {
  * Limpia los tokens almacenados
  */
 export const clearTokens = () => {
-  localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
-  localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
-  localStorage.removeItem(STORAGE_KEYS.TOKEN_EXPIRY);
+  sessionStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
+  sessionStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
+  sessionStorage.removeItem(STORAGE_KEYS.TOKEN_EXPIRY);
   sessionStorage.removeItem(STORAGE_KEYS.CODE_VERIFIER);
   console.log("[OAuth] Tokens limpiados");
 };
@@ -282,7 +282,7 @@ export const clearTokens = () => {
  * Verifica si el usuario está autenticado
  */
 export const isAuthenticated = () => {
-  const accessToken = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
+  const accessToken = sessionStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
   return !!accessToken;
 };
 
