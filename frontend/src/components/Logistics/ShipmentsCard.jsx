@@ -115,8 +115,12 @@ const ShipmentCard = ({ shipment, onClose, onEdit }) => {
             <h4 className="font-semibold text-white mb-3">Información de Origen</h4>
             <div className="space-y-2">
               <div className="flex justify-between">
-                <span className="text-gray-400">Remitente:</span>
-                <span className="text-white">{shipment.sender || 'Almacén Central'}</span>
+                <span className="text-gray-400">Persona que envía:</span>
+                <span className="text-white font-medium">{shipment.shipper || 'Por definir'}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-400">Empresa/Transporte:</span>
+                <span className="text-white">{shipment.sender || 'Potosinos'}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-400">Estado:</span>

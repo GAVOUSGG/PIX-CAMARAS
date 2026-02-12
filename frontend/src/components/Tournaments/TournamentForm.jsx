@@ -135,10 +135,10 @@ const TournamentForm = ({
       <div className="flex items-center justify-between border-b border-white/5 pb-8">
         <div>
           <h3 className="text-2xl font-black text-white tracking-tight">
-            {isEditing ? "Editar" : "Nuevo"} <span className="text-emerald-400">Torneo</span>
+            {isEditing ? "Editar" : "Nuevo"} <span className="text-white">Torneo</span>
           </h3>
           <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-1">
-            Configuración técnica y operativa
+            Configuración del torneo
           </p>
         </div>
         <button
@@ -215,7 +215,7 @@ const TournamentForm = ({
         <section className="space-y-6">
           <div className="flex items-center gap-2 mb-2">
             <div className="w-1 h-4 bg-emerald-500 rounded-full"></div>
-            <h4 className="text-sm font-bold text-white uppercase tracking-wider">Logística y Tiempos</h4>
+            <h4 className="text-sm font-bold text-white uppercase tracking-wider">Fecha Torneo</h4>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="space-y-2">
@@ -255,7 +255,7 @@ const TournamentForm = ({
           <div className="space-y-2">
             <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Hoyos a cubrir * (2 cámaras por hoyo)</label>
             <div className="grid grid-cols-5 md:grid-cols-10 gap-2">
-              {[1,2,3,4,5,6,7,8,9,18].map(num => (
+              {[1,2,3,4,5,6,7,8,9].map(num => (
                 <button
                   key={num}
                   type="button"

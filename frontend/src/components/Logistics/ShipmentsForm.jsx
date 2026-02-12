@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
   X,
   Save,
@@ -78,16 +78,54 @@ const ShipmentForm = ({
   const [formData, setFormData] = useState({
     id: shipment?.id || getNextShipmentId(),
     cameras: shipment?.cameras || [],
-    origin: shipment?.origin || "", // Nuevo campo origen
+    origin: shipment?.origin || "",
     destination: shipment?.destination || "",
     recipient: shipment?.recipient || "",
     sender: shipment?.sender || "",
-    shipper: shipment?.shipper || "", // Nueva persona que envía
+    shipper: shipment?.shipper || "",
     date: shipment?.date || new Date().toISOString().split("T")[0],
     status: shipment?.status || "preparando",
     trackingNumber: shipment?.trackingNumber || `TRK${Date.now()}`,
-    extraItems: shipment?.extraItems || "", // Nuevo campo para items extra
+    extraItems: shipment?.extraItems || "",
   });
+
+  // Efecto para sincronizar el estado cuando cambia el envío a editar
+  useEffect(() => {
+    if (shipment) {
+      setFormData({
+        id: shipment.id || "",
+        cameras: shipment.cameras || [],
+        origin: shipment.origin || "",
+        destination: shipment.destination || "",
+        recipient: shipment.recipient || "",
+        sender: shipment.sender || "",
+        shipper: shipment.shipper || "",
+        date: shipment.date || new Date().toISOString().split("T")[0],
+        status: shipment.status || "preparando",
+        trackingNumber: shipment.trackingNumber || "",
+        extraItems: shipment.extraItems || "",
+      });
+    } else {
+      setFormData({
+        id: getNextShipmentId(),
+        cameras: [],
+        origin: "",
+        destination: "",
+        recipient: "",
+        sender: "",
+        shipper: "",
+        date: new Date().toISOString().split("T")[0],
+        status: "preparando",
+        trackingNumber: `TRK${Date.now()}`,
+        extraItems: "",
+      });
+    }
+  }, [shipment, shipmentsData]);
+
+  // Ordenar trabajadores alfabéticamente
+  const sortedWorkers = useMemo(() => {
+    return [...workers].sort((a, b) => a.name.localeCompare(b.name));
+  }, [workers]);
 
   // Cámaras disponibles (que no estén en uso)
   const availableCameras = useMemo(() => {
@@ -321,7 +359,7 @@ const ShipmentForm = ({
                 <option value="" className="text-white bg-gray-700">
                   Seleccionar destinatario
                 </option>
-                {workers.map((worker) => (
+                {sortedWorkers.map((worker) => (
                   <option
                     key={worker.id}
                     value={worker.name}
@@ -347,7 +385,7 @@ const ShipmentForm = ({
                 <option value="" className="text-white bg-gray-700">
                   Seleccionar remitente
                 </option>
-                {workers.map((worker) => (
+                {sortedWorkers.map((worker) => (
                   <option
                     key={worker.id}
                     value={worker.name}
@@ -406,7 +444,7 @@ const ShipmentForm = ({
                 value={formData.sender}
                 onChange={(e) => handleInputChange("sender", e.target.value)}
                 className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                placeholder="Ej: Almacén Central, Sucursal CDMX, etc."
+                placeholder="Ej: Potosinos"
               />
             </div>
           </div>
@@ -422,7 +460,7 @@ const ShipmentForm = ({
               onChange={(e) => handleInputChange("extraItems", e.target.value)}
               rows="3"
               className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none"
-              placeholder="Ej: 2 trípodes, 5 cables de alimentación, 1 maletín de herramientas, etc."
+              placeholder="Ej: Cargador"
             />
             <p className="text-xs text-gray-500 mt-1">
               Describe cualquier item adicional que se incluya en el envío

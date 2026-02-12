@@ -45,6 +45,8 @@ const Logistics = ({
         shipment.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
         shipment.destination.toLowerCase().includes(searchTerm.toLowerCase()) ||
         shipment.recipient.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (shipment.shipper && shipment.shipper.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (shipment.sender && shipment.sender.toLowerCase().includes(searchTerm.toLowerCase())) ||
         (shipment.trackingNumber &&
           shipment.trackingNumber
             .toLowerCase()

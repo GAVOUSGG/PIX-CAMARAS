@@ -65,7 +65,9 @@ const ShipmentRow = memo(({ shipment, onEdit, onDelete, onView }) => {
       <td className="px-6 py-4 whitespace-nowrap">
         <div className="flex items-center space-x-2">
           <User className="w-4 h-4 text-gray-400" />
-          <div className="text-sm text-gray-300">{shipment.shipper}</div>
+          <div className="text-sm text-gray-300">
+            {shipment.shipper || <span className="text-gray-500 italic">No asignado</span>}
+          </div>
         </div>
       </td>
       <td className="px-6 py-4 whitespace-nowrap">
