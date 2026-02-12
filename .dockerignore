@@ -1,0 +1,12 @@
+node_modules
+npm-debug.log
+frontend
+.git
+.gitignore
+.env
+.env.local
+*.md
+database.sqlite
+.vercel
+dist
+
