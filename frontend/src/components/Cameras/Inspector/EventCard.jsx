@@ -196,7 +196,7 @@ const EventCard = ({ event, onClick, onDelete }) => {
           {/* Footer */}
           <div className="flex items-center justify-between pt-3 border-t border-white/10">
             <div className={`text-xs font-semibold ${config.text}`}>
-              ID: {event.id.split("-")[0]}
+              ID: {String(event.id).split("-")[0]}
             </div>
             <div className="text-xs bg-white/10 text-gray-300 px-3 py-1.5 rounded-lg group-hover/button:bg-white/20 transition-all font-medium">
               Ver detalles →
