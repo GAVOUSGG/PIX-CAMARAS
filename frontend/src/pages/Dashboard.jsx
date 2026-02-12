@@ -26,18 +26,18 @@ const Dashboard = memo(({ tournamentsData, camerasData, workersData, shipmentsDa
   return (
     <div className="space-y-8 pb-12 animate-fade-in transform-gpu">
       {/* Dashboard Header */}
-      <header className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-2">
+      <header className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 mb-2">
         <div>
-          <h1 className="text-3xl font-bold text-white tracking-tight">
+          <h1 className="text-2xl md:text-3xl font-bold text-white tracking-tight">
             Bienvenido, <span className="text-emerald-400">{userName}</span>
           </h1>
-          <p className="text-gray-400 mt-1 capitalize">{currentDate}</p>
+          <p className="text-gray-400 mt-1 text-sm md:text-base capitalize">{currentDate}</p>
         </div>
-        <div className="flex gap-3">
-          <div className="px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-emerald-400 text-sm font-medium">
+        <div className="flex flex-wrap gap-2 md:gap-3">
+          <div className="px-3 py-1.5 md:px-4 md:py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-emerald-400 text-xs md:text-sm font-medium">
             PIX-GOLF
           </div>
-          <div className="px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-xl text-blue-400 text-sm font-medium">
+          <div className="px-3 py-1.5 md:px-4 md:py-2 bg-blue-500/10 border border-blue-500/20 rounded-xl text-blue-400 text-xs md:text-sm font-medium">
             {activeTournamentsCount} Torneos hoy
           </div>
         </div>
