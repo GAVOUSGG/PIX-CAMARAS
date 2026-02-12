@@ -41,24 +41,38 @@ const StatsGrid = ({ tournaments, cameras, workers }) => {
   };
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
       {stats.map((stat, index) => {
         const Icon = stat.icon;
         return (
-          <div key={index} className="bg-black/20 backdrop-blur-lg rounded-2xl border border-white/10 p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-white">{stat.title}</h3>
-              <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${colorClasses[stat.color]}`}>
+          <div 
+            key={index} 
+            className="glass-card glass-card-hover rounded-3xl p-6 relative overflow-hidden group"
+          >
+            {/* Background Glow */}
+            <div className={`absolute -right-4 -top-4 w-24 h-24 rounded-full blur-3xl opacity-10 group-hover:opacity-20 transition-opacity ${colorClasses[stat.color].replace('bg-', 'bg-').split(' ')[0]}`}></div>
+            
+            <div className="flex items-start justify-between relative z-10">
+              <div>
+                <p className="text-gray-400 text-sm font-medium mb-1">{stat.title}</p>
+                <h3 className="text-3xl font-bold text-white tracking-tight">{stat.value}</h3>
+              </div>
+              <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${colorClasses[stat.color]} border border-white/5`}>
                 <Icon className="w-6 h-6" />
               </div>
             </div>
-            <div className="text-3xl font-bold text-white mb-2">{stat.value}</div>
-            <p className="text-gray-400 text-sm">{stat.description}</p>
+            
+            <div className="mt-4 flex items-center gap-2 relative z-10">
+              <span className="text-xs text-gray-500 font-medium px-2 py-0.5 bg-white/5 rounded-full border border-white/5">
+                {stat.description}
+              </span>
+            </div>
           </div>
         );
       })}
     </div>
   );
 };
+
 
 export default StatsGrid;

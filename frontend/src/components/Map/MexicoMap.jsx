@@ -197,7 +197,8 @@ const MexicoMap = ({ tournaments = [], workers = [], cameras = [], shipments = [
   };
 
   return (
-    <div className="relative bg-gradient-to-br from-slate-900/95 via-slate-800/95 to-slate-900/95 backdrop-blur-2xl rounded-3xl border border-emerald-500/20 overflow-hidden shadow-[0_0_50px_rgba(16,185,129,0.15)]">
+    <div className="relative glass-card rounded-3xl overflow-hidden animate-fade-in shadow-2xl">
+
       {/* Decorative gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-blue-500/5 pointer-events-none"></div>
       
