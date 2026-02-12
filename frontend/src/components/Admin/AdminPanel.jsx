@@ -17,7 +17,7 @@ const AdminPanel = () => {
   }, []);
 
   const getAuthHeaders = () => {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     return {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
@@ -163,7 +163,7 @@ const AdminPanel = () => {
                 onClick={async () => {
                   if (window.confirm('¿Estás seguro de eliminar TODO el historial de cámaras? Esta acción no se puede deshacer.')) {
                      try {
-                       const token = localStorage.getItem('token');
+                       const token = sessionStorage.getItem('token');
                        const response = await fetch(`${API_URL}/camera-history`, {
                          method: 'DELETE',
                          headers: {

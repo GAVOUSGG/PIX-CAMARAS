@@ -9,7 +9,7 @@ const MexicoMap = React.lazy(() => import("../components/Map/MexicoMap"));
 const StatisticsSection = React.lazy(() => import("../components/Dashboard/StatisticsSection"));
 
 const Dashboard = memo(({ tournamentsData, camerasData, workersData, shipmentsData }) => {
-  const user = JSON.parse(localStorage.getItem('user'));
+  const user = JSON.parse(sessionStorage.getItem('user'));
   const userName = user?.name || 'Administrador';
   
   const currentDate = React.useMemo(() => new Date().toLocaleDateString('es-MX', { 
