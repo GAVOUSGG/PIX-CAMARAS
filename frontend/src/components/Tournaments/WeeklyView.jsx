@@ -94,6 +94,12 @@ const WeeklyView = ({
     return `${year}-${month}-${day}`;
   };
 
+  const parseLocalDate = (dateStr) => {
+    if (!dateStr) return new Date();
+    const [year, month, day] = dateStr.split('T')[0].split('-').map(Number);
+    return new Date(year, month - 1, day);
+  };
+
   // Función para obtener torneos que ocurren en un día específico (incluyendo multi-día)
   const getTournamentsForDay = (day) => {
     // Obtener la fecha como string YYYY-MM-DD en hora local (sin conversión a UTC)
@@ -187,16 +193,16 @@ const WeeklyView = ({
   // Función para ver si un torneo es multi-día
   const isMultiDayTournament = (tournament) => {
     if (!tournament.date || !tournament.endDate) return false;
-    const start = new Date(tournament.date);
-    const end = new Date(tournament.endDate);
+    const start = parseLocalDate(tournament.date);
+    const end = parseLocalDate(tournament.endDate);
     return end > start;
   };
 
   // Función para obtener la duración en días
   const getTournamentDuration = (tournament) => {
     if (!tournament.date || !tournament.endDate) return 1;
-    const start = new Date(tournament.date);
-    const end = new Date(tournament.endDate);
+    const start = parseLocalDate(tournament.date);
+    const end = parseLocalDate(tournament.endDate);
     const diffTime = Math.abs(end - start);
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     return diffDays + 1; // +1 para incluir ambos días
@@ -463,11 +469,11 @@ const WeeklyView = ({
                         <div className="mb-4 inline-flex items-center space-x-2 bg-blue-500/20 text-blue-400 px-3 py-1.5 rounded-lg text-sm">
                           <Calendar className="w-4 h-4" />
                           <span className="font-medium">
-                            {new Date(tournament.date).toLocaleDateString(
+                            {parseLocalDate(tournament.date).toLocaleDateString(
                               "es-MX"
                             )}{" "}
                             -{" "}
-                            {new Date(tournament.endDate).toLocaleDateString(
+                            {parseLocalDate(tournament.endDate).toLocaleDateString(
                               "es-MX"
                             )}
                           </span>
