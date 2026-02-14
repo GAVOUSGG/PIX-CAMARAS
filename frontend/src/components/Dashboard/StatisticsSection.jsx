@@ -60,7 +60,8 @@ const StatisticsSection = memo(({ tournaments = [], cameras = [], workers = [], 
         const map = {};
         tournaments.forEach(t => {
           if (t.date) {
-            const date = new Date(t.date);
+            const [year, month, day] = t.date.split('T')[0].split('-').map(Number);
+            const date = new Date(year, month - 1, day);
             const monthYear = `${date.toLocaleString('es-MX', { month: 'short' })} ${date.getFullYear()}`;
             map[monthYear] = (map[monthYear] || 0) + 1;
           }

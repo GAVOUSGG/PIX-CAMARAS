@@ -13,13 +13,19 @@ const UpcomingTournaments = memo(({ tournaments }) => {
     const nextWeek = new Date(today);
     nextWeek.setDate(today.getDate() + 7);
 
+    const parseLocalDate = (dateStr) => {
+      if (!dateStr) return new Date();
+      const [year, month, day] = dateStr.split('T')[0].split('-').map(Number);
+      return new Date(year, month - 1, day);
+    };
+
     return tournaments
       .filter(t => {
-        if (t.status === 'activo') return false;
-        const tournamentDate = new Date(t.date);
+        if (!t.date || t.status === 'activo') return false;
+        const tournamentDate = parseLocalDate(t.date);
         return tournamentDate >= today && tournamentDate <= nextWeek;
       })
-      .sort((a, b) => new Date(a.date) - new Date(b.date));
+      .sort((a, b) => parseLocalDate(a.date) - parseLocalDate(b.date));
   }, [tournaments]);
 
   return (
@@ -40,7 +46,8 @@ const UpcomingTournaments = memo(({ tournaments }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {upcomingTournaments.length > 0 ? (
             upcomingTournaments.map(tournament => {
-              const dateObj = new Date(tournament.date);
+              const [year, month, day] = tournament.date.split('T')[0].split('-').map(Number);
+              const dateObj = new Date(year, month - 1, day);
               const dayName = dateObj.toLocaleDateString('es-MX', { weekday: 'short' });
               const dayNum = dateObj.getDate();
 

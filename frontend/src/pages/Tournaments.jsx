@@ -46,6 +46,12 @@ const Tournaments = ({
   // Nuevo estado para la vista (semana o tabla)
   const [viewMode, setViewMode] = useState("tabla"); // 'semana' o 'tabla'
 
+  const parseLocalDate = (dateStr) => {
+    if (!dateStr) return new Date();
+    const [year, month, day] = dateStr.split('T')[0].split('-').map(Number);
+    return new Date(year, month - 1, day);
+  };
+
   // Obtener datos únicos para los filtros
   const uniqueStatuses = useMemo(() => {
     const statuses = [
@@ -76,7 +82,7 @@ const Tournaments = ({
 
     tournamentsData.forEach((tournament) => {
       if (tournament.date) {
-        const date = new Date(tournament.date);
+        const date = parseLocalDate(tournament.date);
         const monthYear = `${date.getFullYear()}-${String(
           date.getMonth() + 1
         ).padStart(2, "0")}`;
@@ -115,7 +121,7 @@ const Tournaments = ({
       let matchesDate = true;
 
       if (dateFilterType === "mes" && monthFilter && tournament.date) {
-        const tournamentDate = new Date(tournament.date);
+        const tournamentDate = parseLocalDate(tournament.date);
         const tournamentMonth = `${tournamentDate.getFullYear()}-${String(
           tournamentDate.getMonth() + 1
         ).padStart(2, "0")}`;
@@ -128,9 +134,9 @@ const Tournaments = ({
         endDateFilter &&
         tournament.date
       ) {
-        const tournamentDate = new Date(tournament.date);
-        const startDate = new Date(startDateFilter);
-        const endDate = new Date(endDateFilter);
+        const tournamentDate = parseLocalDate(tournament.date);
+        const startDate = parseLocalDate(startDateFilter);
+        const endDate = parseLocalDate(endDateFilter);
         matchesDate = tournamentDate >= startDate && tournamentDate <= endDate;
       }
 
@@ -184,8 +190,9 @@ const Tournaments = ({
         .length,
       estaSemana: filteredTournaments.filter((t) => {
         if (!t.date) return false;
-        const tournamentDate = new Date(t.date);
+        const tournamentDate = parseLocalDate(t.date);
         const today = new Date();
+        today.setHours(0, 0, 0, 0);
         const startOfWeek = new Date(today);
         startOfWeek.setDate(today.getDate() - today.getDay() + 1); // Lunes
         const endOfWeek = new Date(startOfWeek);
