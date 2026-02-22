@@ -75,14 +75,12 @@ section, .dashboard-grid-item {
 
 
 .glass-card-hover {
-  transition: all 0.3s ease;
+  transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 .glass-card-hover:hover {
   background: rgba(255, 255, 255, 0.03);
-  border-color: rgba(255, 255, 255, 0.15);
-  transform: translateY(-2px);
-  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.45);
+  border-color: rgba(255, 255, 255, 0.12);
 }
 
 /* Animaciones suaves */
@@ -157,13 +155,11 @@ img, svg {
   align-items: center;
   justify-content: center;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: border-color 0.3s ease;
 }
 
 .premium-marker:hover {
-  transform: scale(1.15);
-  border-color: rgba(255, 255, 255, 0.5);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+  border-color: rgba(255, 255, 255, 0.4);
   z-index: 1001;
 }
 

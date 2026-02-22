@@ -285,16 +285,16 @@ const MexicoMap = ({
       <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-blue-500/5 pointer-events-none"></div>
       
       {/* Header & Controls */}
-      <div className="relative p-4 md:p-6 border-b border-emerald-500/20 bg-gradient-to-r from-slate-900/50 to-slate-800/50 backdrop-blur-sm">
+      <div className="relative p-3 md:p-4 border-b border-emerald-500/20 bg-gradient-to-r from-slate-900/50 to-slate-800/50 backdrop-blur-sm">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
-            <h3 className="text-xl md:text-2xl font-bold text-white flex items-center gap-3">
-              <div className="p-1.5 md:p-2 bg-emerald-500/20 rounded-xl border border-emerald-500/30">
-                <MapPin className="w-5 h-5 md:w-6 h-6 text-emerald-400" />
+            <h3 className="text-lg font-bold text-white flex items-center gap-2.5">
+              <div className="p-1.5 bg-emerald-500/20 rounded-lg border border-emerald-500/30">
+                <MapPin className="w-4 h-4 text-emerald-400" />
               </div>
               Mapa de Operaciones
             </h3>
-            <p className="text-gray-400 text-xs md:text-sm mt-1 md:mt-2 ml-10 md:ml-14">
+            <p className="text-gray-400 text-[10px] mt-1 ml-10">
               Visualización en tiempo real de recursos y logística
             </p>
           </div>
