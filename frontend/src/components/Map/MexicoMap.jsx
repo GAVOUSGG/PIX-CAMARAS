@@ -78,7 +78,8 @@ const MexicoMap = ({
     cameras: true,
     shipments: true,
     heatmap: false,
-  }
+  },
+  darkMode = true
 }) => {
   const [filters, setFilters] = useState(initialFilters);
 
@@ -260,7 +261,7 @@ const MexicoMap = ({
             </svg>
           </div>
           ${totalItems > 0 ? `<div class="marker-badge">${totalItems}</div>` : ''}
-          <div class="marker-label">${state}</div>
+          <div class="marker-label ${darkMode ? 'text-white' : 'text-slate-900'}">${state}</div>
         </div>
       `,
       iconSize: [44, 44],
@@ -279,22 +280,30 @@ const MexicoMap = ({
   };
 
   return (
-    <div className="relative glass-card rounded-3xl overflow-hidden animate-fade-in shadow-2xl">
+    <div className={`relative rounded-3xl overflow-hidden animate-fade-in shadow-2xl transition-all duration-500 border ${
+      darkMode ? 'bg-transparent border-white/5' : 'bg-white border-black/5 shadow-slate-200'
+    }`}>
 
       {/* Decorative gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-blue-500/5 pointer-events-none"></div>
+      <div className={`absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-blue-500/5 pointer-events-none transition-opacity duration-500 ${darkMode ? 'opacity-100' : 'opacity-0'}`}></div>
       
       {/* Header & Controls */}
-      <div className="relative p-3 md:p-4 border-b border-emerald-500/20 bg-gradient-to-r from-slate-900/50 to-slate-800/50 backdrop-blur-sm">
+      <div className={`relative p-3 md:p-4 border-b transition-all duration-500 backdrop-blur-sm ${
+        darkMode 
+          ? 'border-emerald-500/20 bg-gradient-to-r from-slate-900/50 to-slate-800/50' 
+          : 'border-emerald-500/10 bg-gradient-to-r from-white to-slate-50 shadow-sm'
+      }`}>
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
-            <h3 className="text-lg font-bold text-white flex items-center gap-2.5">
-              <div className="p-1.5 bg-emerald-500/20 rounded-lg border border-emerald-500/30">
-                <MapPin className="w-4 h-4 text-emerald-400" />
+            <h3 className={`text-lg font-bold flex items-center gap-2.5 transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>
+              <div className={`p-1.5 rounded-lg border transition-all duration-500 ${
+                darkMode ? 'bg-emerald-500/20 border-emerald-500/30' : 'bg-emerald-50 border-emerald-100'
+              }`}>
+                <MapPin className={`w-4 h-4 transition-colors duration-500 ${darkMode ? 'text-emerald-400' : 'text-emerald-600'}`} />
               </div>
               Mapa de Operaciones
             </h3>
-            <p className="text-gray-400 text-[10px] mt-1 ml-10">
+            <p className="text-slate-500 text-[10px] mt-1 ml-10">
               Visualización en tiempo real de recursos y logística
             </p>
           </div>
@@ -304,8 +313,10 @@ const MexicoMap = ({
               onClick={() => toggleFilter("tournaments")}
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all duration-300 border ${
                 filters.tournaments
-                  ? "bg-purple-500/20 border-purple-500/50 text-purple-300 shadow-lg shadow-purple-500/20"
-                  : "bg-white/5 border-white/10 text-gray-500 hover:bg-white/10 hover:border-white/20"
+                  ? "bg-purple-500/20 border-purple-500/50 text-purple-400 shadow-lg shadow-purple-500/20"
+                  : darkMode 
+                    ? "bg-white/5 border-white/10 text-gray-500 hover:bg-white/10 hover:border-white/20"
+                    : "bg-slate-50 border-black/5 text-slate-400 hover:bg-white hover:border-black/10"
               }`}
             >
               <Trophy className="w-4 h-4" />
@@ -315,8 +326,10 @@ const MexicoMap = ({
               onClick={() => toggleFilter("workers")}
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all duration-300 border ${
                 filters.workers
-                  ? "bg-orange-500/20 border-orange-500/50 text-orange-300 shadow-lg shadow-orange-500/20"
-                  : "bg-white/5 border-white/10 text-gray-500 hover:bg-white/10 hover:border-white/20"
+                  ? "bg-orange-500/20 border-orange-500/50 text-orange-400 shadow-lg shadow-orange-500/20"
+                  : darkMode
+                    ? "bg-white/5 border-white/10 text-gray-500 hover:bg-white/10 hover:border-white/20"
+                    : "bg-slate-50 border-black/5 text-slate-400 hover:bg-white hover:border-black/10"
               }`}
             >
               <Users className="w-4 h-4" />
@@ -326,8 +339,10 @@ const MexicoMap = ({
               onClick={() => toggleFilter("cameras")}
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all duration-300 border ${
                 filters.cameras
-                  ? "bg-blue-500/20 border-blue-500/50 text-blue-300 shadow-lg shadow-blue-500/20"
-                  : "bg-white/5 border-white/10 text-gray-500 hover:bg-white/10 hover:border-white/20"
+                  ? "bg-blue-500/20 border-blue-500/50 text-blue-400 shadow-lg shadow-blue-500/20"
+                  : darkMode 
+                    ? "bg-white/5 border-white/10 text-gray-500 hover:bg-white/10 hover:border-white/20"
+                    : "bg-slate-50 border-black/5 text-slate-400 hover:bg-white hover:border-black/10"
               }`}
             >
               <Camera className="w-4 h-4" />
@@ -337,8 +352,10 @@ const MexicoMap = ({
               onClick={() => toggleFilter("shipments")}
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all duration-300 border ${
                 filters.shipments
-                  ? "bg-emerald-500/20 border-emerald-500/50 text-emerald-300 shadow-lg shadow-emerald-500/20"
-                  : "bg-white/5 border-white/10 text-gray-500 hover:bg-white/10 hover:border-white/20"
+                  ? "bg-emerald-500/20 border-emerald-500/50 text-emerald-400 shadow-lg shadow-emerald-500/20"
+                  : darkMode 
+                    ? "bg-white/5 border-white/10 text-gray-500 hover:bg-white/10 hover:border-white/20"
+                    : "bg-slate-50 border-black/5 text-slate-400 hover:bg-white hover:border-black/10"
               }`}
             >
               <Truck className="w-4 h-4" />
@@ -348,8 +365,10 @@ const MexicoMap = ({
               onClick={() => toggleFilter("heatmap")}
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all duration-300 border ${
                 filters.heatmap
-                  ? "bg-red-500/20 border-red-500/50 text-red-300 shadow-lg shadow-red-500/20"
-                  : "bg-white/5 border-white/10 text-gray-500 hover:bg-white/10 hover:border-white/20"
+                  ? "bg-red-500/20 border-red-500/50 text-red-500 shadow-lg shadow-red-500/20"
+                  : darkMode 
+                    ? "bg-white/5 border-white/10 text-gray-500 hover:bg-white/10 hover:border-white/20"
+                    : "bg-slate-50 border-black/5 text-slate-400 hover:bg-white hover:border-black/10"
               }`}
             >
               <Flame className="w-4 h-4" />
@@ -365,12 +384,14 @@ const MexicoMap = ({
           center={[23.6345, -102.5528]}
           zoom={5}
           scrollWheelZoom={false}
-          style={{ height: "100%", width: "100%", background: "#0f172a" }}
+          style={{ height: "100%", width: "100%", background: darkMode ? "#0f172a" : "#f8fafc" }}
         >
-          {/* Dark Mode Tiles */}
           <TileLayer
-            url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+            url={darkMode 
+              ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+              : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+            }
           />
 
           {/* Heatmap Layer */}
@@ -416,8 +437,8 @@ const MexicoMap = ({
               >
                 <Popup className="custom-popup">
                   <div className="p-2 min-w-[240px]">
-                    <div className="flex items-center justify-between mb-4 border-b border-white/10 pb-3">
-                      <h4 className="font-black text-xl text-white tracking-tight">
+                    <div className={`flex items-center justify-between mb-4 border-b pb-3 transition-colors duration-500 ${darkMode ? 'border-white/10' : 'border-slate-100'}`}>
+                      <h4 className={`font-black text-xl tracking-tight transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>
                         {state}
                       </h4>
                       {stateData.activeTournaments > 0 && (
@@ -430,21 +451,21 @@ const MexicoMap = ({
                     <div className="space-y-4">
                       {/* Torneos */}
                       {filters.tournaments && stateData.tournaments.length > 0 && (
-                        <div className="bg-white/5 rounded-xl p-3 border border-white/5">
+                        <div className={`rounded-xl p-3 border transition-colors duration-500 ${darkMode ? 'bg-white/5 border-white/5' : 'bg-slate-50 border-slate-100'}`}>
                           <div className="flex items-center gap-2 text-purple-400 font-bold text-xs mb-2 uppercase tracking-wider">
                             <Trophy className="w-3.5 h-3.5" />
                             <span>Torneos ({stateData.tournaments.length})</span>
                           </div>
                           <div className="space-y-1.5">
                             {stateData.tournaments.slice(0, 2).map(t => (
-                              <div key={t.id} className="text-sm text-gray-300 flex items-center gap-2">
+                              <div key={t.id} className={`text-sm flex items-center gap-2 transition-colors duration-500 ${darkMode ? 'text-gray-300' : 'text-slate-600'}`}>
                                 <div className={`w-1.5 h-1.5 rounded-full ${t.status === 'activo' ? 'bg-emerald-500 animate-pulse' : 'bg-purple-500'}`}></div>
                                 <span className="truncate">{t.name}</span>
                               </div>
                             ))}
                             {stateData.tournaments.length > 2 && (
                               <div className="text-[10px] text-gray-500 italic pl-3">
-                                +{stateData.tournaments.length - 2} torneos adicionales
+                                +{stateData.tournaments.length - 2} adicionales
                               </div>
                             )}
                           </div>
@@ -454,21 +475,21 @@ const MexicoMap = ({
                       {/* Recursos Grid */}
                       <div className="grid grid-cols-2 gap-2">
                         {filters.workers && stateData.workers.length > 0 && (
-                          <div className="bg-orange-500/5 rounded-xl p-2.5 border border-orange-500/10">
+                          <div className={`rounded-xl p-2.5 border transition-colors duration-500 ${darkMode ? 'bg-orange-500/5 border-orange-500/10' : 'bg-orange-50 border-orange-100'}`}>
                             <div className="flex items-center gap-1.5 text-orange-400 font-bold text-[10px] mb-1 uppercase">
                               <Users className="w-3 h-3" />
                               <span>Personal</span>
                             </div>
-                            <div className="text-lg font-black text-white">{stateData.workers.length}</div>
+                            <div className={`text-lg font-black transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>{stateData.workers.length}</div>
                           </div>
                         )}
                         {filters.cameras && stateData.cameras.length > 0 && (
-                          <div className="bg-blue-500/5 rounded-xl p-2.5 border border-blue-500/10">
+                          <div className={`rounded-xl p-2.5 border transition-colors duration-500 ${darkMode ? 'bg-blue-500/5 border-blue-500/10' : 'bg-blue-50 border-blue-100'}`}>
                             <div className="flex items-center gap-1.5 text-blue-400 font-bold text-[10px] mb-1 uppercase">
                               <Camera className="w-3 h-3" />
                               <span>Cámaras</span>
                             </div>
-                            <div className="text-lg font-black text-white">{stateData.cameras.length}</div>
+                            <div className={`text-lg font-black transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>{stateData.cameras.length}</div>
                           </div>
                         )}
                       </div>
@@ -511,14 +532,16 @@ const MexicoMap = ({
         </MapContainer>
         
         {/* Legend Overlay */}
-        <div className="absolute bottom-4 right-4 bg-slate-900/90 backdrop-blur-xl p-3 md:p-4 rounded-xl md:rounded-2xl border border-emerald-500/30 z-[1000] text-[10px] md:text-xs space-y-2 md:space-y-2.5 shadow-2xl shadow-emerald-500/10">
-           <div className="font-bold text-white mb-2 flex items-center gap-2">
+        <div className={`absolute bottom-4 right-4 backdrop-blur-xl p-3 md:p-4 rounded-xl md:rounded-2xl border z-[1000] text-[10px] md:text-xs space-y-2 md:space-y-2.5 shadow-2xl transition-all duration-500 ${
+          darkMode ? 'bg-slate-900/90 border-emerald-500/30 shadow-emerald-500/10' : 'bg-white/90 border-emerald-500/20 shadow-slate-200'
+        }`}>
+           <div className={`font-bold mb-2 flex items-center gap-2 transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>
              <div className="w-1 h-4 bg-emerald-500 rounded-full"></div>
              Simbología
            </div>
            <div className="flex items-center gap-2.5">
               <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shadow-lg shadow-emerald-500/50"></div>
-              <span className="text-gray-300 font-medium">Torneo Activo</span>
+              <span className={`font-medium transition-colors duration-500 ${darkMode ? 'text-gray-300' : 'text-slate-600'}`}>Torneo Activo</span>
            </div>
            <div className="flex items-center gap-2.5">
               <div className="w-2.5 h-2.5 rounded-full bg-purple-500 shadow-lg shadow-purple-500/50"></div>
@@ -554,19 +577,23 @@ const MexicoMap = ({
 
       {/* State Statistics Section */}
       {showStatistics && (
-        <div className="p-4 md:p-8 border-t border-white/5 bg-slate-900/40 backdrop-blur-md">
+        <div className={`p-4 md:p-8 border-t transition-all duration-500 backdrop-blur-md ${
+          darkMode ? 'border-white/5 bg-slate-900/40' : 'border-slate-100 bg-slate-50/50'
+        }`}>
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
             <div>
-              <h4 className="text-xl font-bold text-white flex items-center gap-3">
+              <h4 className={`text-xl font-bold flex items-center gap-3 transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>
                 <div className="w-1.5 h-6 bg-emerald-500 rounded-full shadow-[0_0_12px_rgba(16,185,129,0.5)]"></div>
                 Estadísticas por Estado
               </h4>
-              <p className="text-gray-400 text-sm mt-1 ml-4">Desglose detallado de recursos y operaciones locales</p>
+              <p className="text-slate-500 text-sm mt-1 ml-4">Desglose detallado de recursos y operaciones locales</p>
             </div>
             
-            <div className="flex items-center gap-2 bg-emerald-500/5 px-4 py-2 rounded-xl border border-emerald-500/10">
+            <div className={`flex items-center gap-2 px-4 py-2 rounded-xl border transition-all duration-500 ${
+              darkMode ? 'bg-emerald-500/5 border-emerald-500/10' : 'bg-emerald-50 border-emerald-100'
+            }`}>
               <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-              <span className="text-[11px] font-bold text-emerald-400 uppercase tracking-wider">Sincronizado en Vivo</span>
+              <span className={`text-[11px] font-bold uppercase tracking-wider transition-colors duration-500 ${darkMode ? 'text-emerald-400' : 'text-emerald-600'}`}>Sincronizado en Vivo</span>
             </div>
           </div>
 
@@ -588,10 +615,14 @@ const MexicoMap = ({
               .map(([state, data]) => (
                 <div 
                   key={state} 
-                  className="group relative bg-gradient-to-br from-white/[0.05] to-transparent border border-white/10 rounded-[2rem] p-6 transition-all duration-500"
+                  className={`group relative border rounded-[2rem] p-6 transition-all duration-500 shadow-sm ${
+                    darkMode 
+                      ? 'bg-gradient-to-br from-white/[0.05] to-transparent border-white/10 hover:border-white/20' 
+                      : 'bg-white border-black/5 hover:border-black/10'
+                  }`}
                 >
                   <div className="flex justify-between items-center mb-6">
-                    <span className="text-lg font-bold text-white uppercase tracking-tight">{state}</span>
+                    <span className={`text-lg font-bold uppercase tracking-tight transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-800'}`}>{state}</span>
                     {data.activeTournaments > 0 ? (
                       <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 shadow-[0_0_10px_rgba(16,185,129,0.1)]">
                         <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
@@ -609,14 +640,14 @@ const MexicoMap = ({
                       <div className={`p-3 rounded-2xl border transition-all duration-300 ${
                         data.tournaments.length > 0 
                           ? "bg-purple-500/10 border-purple-500/20 shadow-lg shadow-purple-500/5" 
-                          : "bg-transparent border-white/5 opacity-40"
+                          : darkMode ? "bg-transparent border-white/5 opacity-40" : "bg-transparent border-slate-100 opacity-40"
                       }`}>
                         <div className="flex items-center gap-2 mb-1.5">
                           <Trophy className="w-3 h-3 text-purple-400" />
-                          <span className="text-[10px] uppercase font-bold text-gray-400">Torneos</span>
+                          <span className={`text-[10px] uppercase font-bold transition-colors duration-500 ${darkMode ? 'text-gray-400' : 'text-slate-500'}`}>Torneos</span>
                         </div>
                         <div className="flex items-baseline gap-1">
-                          <div className="text-xl font-black text-white">{data.tournaments.length}</div>
+                          <div className={`text-xl font-black transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>{data.tournaments.length}</div>
                           {data.activeTournaments > 0 && <span className="text-[10px] text-emerald-400 font-bold">({data.activeTournaments})</span>}
                         </div>
                       </div>
@@ -626,13 +657,13 @@ const MexicoMap = ({
                       <div className={`p-3 rounded-2xl border transition-all duration-300 ${
                         data.workers.length > 0 
                           ? "bg-orange-500/10 border-orange-500/20 shadow-lg shadow-orange-500/5" 
-                          : "bg-transparent border-white/5 opacity-40"
+                          : darkMode ? "bg-transparent border-white/5 opacity-40" : "bg-transparent border-slate-100 opacity-40"
                       }`}>
                         <div className="flex items-center gap-2 mb-1.5">
                           <Users className="w-3 h-3 text-orange-400" />
-                          <span className="text-[10px] uppercase font-bold text-gray-400">Personal</span>
+                          <span className={`text-[10px] uppercase font-bold transition-colors duration-500 ${darkMode ? 'text-gray-400' : 'text-slate-500'}`}>Personal</span>
                         </div>
-                        <div className="text-xl font-black text-white">{data.workers.length}</div>
+                        <div className={`text-xl font-black transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>{data.workers.length}</div>
                       </div>
                     )}
                     
@@ -640,13 +671,13 @@ const MexicoMap = ({
                       <div className={`p-3 rounded-2xl border transition-all duration-300 ${
                         data.cameras.length > 0 
                           ? "bg-blue-500/10 border-blue-500/20 shadow-lg shadow-blue-500/5" 
-                          : "bg-transparent border-white/5 opacity-40"
+                          : darkMode ? "bg-transparent border-white/5 opacity-40" : "bg-transparent border-slate-100 opacity-40"
                       }`}>
                         <div className="flex items-center gap-2 mb-1.5">
                           <Camera className="w-3 h-3 text-blue-400" />
-                          <span className="text-[10px] uppercase font-bold text-gray-400">Cámaras</span>
+                          <span className={`text-[10px] uppercase font-bold transition-colors duration-500 ${darkMode ? 'text-gray-400' : 'text-slate-500'}`}>Cámaras</span>
                         </div>
-                        <div className="text-xl font-black text-white">{data.cameras.length}</div>
+                        <div className={`text-xl font-black transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>{data.cameras.length}</div>
                       </div>
                     )}
                     
@@ -654,13 +685,13 @@ const MexicoMap = ({
                       <div className={`p-3 rounded-2xl border transition-all duration-300 ${
                         data.shipments.length > 0 
                           ? "bg-emerald-500/10 border-emerald-500/20 shadow-lg shadow-emerald-500/5" 
-                          : "bg-transparent border-white/5 opacity-40"
+                          : darkMode ? "bg-transparent border-white/5 opacity-40" : "bg-transparent border-slate-100 opacity-40"
                       }`}>
                         <div className="flex items-center gap-2 mb-1.5">
                           <Truck className="w-3 h-3 text-emerald-400" />
-                          <span className="text-[10px] uppercase font-bold text-gray-400">Envíos</span>
+                          <span className={`text-[10px] uppercase font-bold transition-colors duration-500 ${darkMode ? 'text-gray-400' : 'text-slate-500'}`}>Envíos</span>
                         </div>
-                        <div className="text-xl font-black text-white">{data.shipments.length}</div>
+                        <div className={`text-xl font-black transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>{data.shipments.length}</div>
                       </div>
                     )}
                   </div>

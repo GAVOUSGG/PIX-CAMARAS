@@ -16,43 +16,18 @@ const WorkerForm = ({
   worker = null,
   isOpen = false,
   camerasData = [],
+  darkMode = true,
 }) => {
   const isEditing = !!worker;
   const [showForm, setShowForm] = useState(isOpen);
 
   const estadosMexico = [
-    "Aguascalientes",
-    "Baja California",
-    "Baja California Sur",
-    "Campeche",
-    "Chiapas",
-    "Chihuahua",
-    "CDMX",
-    "Coahuila",
-    "Colima",
-    "Durango",
-    "Estado de México",
-    "Guanajuato",
-    "Guerrero",
-    "Hidalgo",
-    "Jalisco",
-    "Michoacán",
-    "Morelos",
-    "Nayarit",
-    "Nuevo León",
-    "Oaxaca",
-    "Puebla",
-    "Querétaro",
-    "Quintana Roo",
-    "San Luis Potosí",
-    "Sinaloa",
-    "Sonora",
-    "Tabasco",
-    "Tamaulipas",
-    "Tlaxcala",
-    "Veracruz",
-    "Yucatán",
-    "Zacatecas",
+    "Aguascalientes", "Baja California", "Baja California Sur", "Campeche", "Chiapas",
+    "Chihuahua", "CDMX", "Coahuila", "Colima", "Durango", "Estado de México",
+    "Guanajuato", "Guerrero", "Hidalgo", "Jalisco", "Michoacán", "Morelos",
+    "Nayarit", "Nuevo León", "Oaxaca", "Puebla", "Querétaro", "Quintana Roo",
+    "San Luis Potosí", "Sinaloa", "Sonora", "Tabasco", "Tamaulipas", "Tlaxcala",
+    "Veracruz", "Yucatán", "Zacatecas",
   ];
 
   const [formData, setFormData] = useState({
@@ -62,18 +37,14 @@ const WorkerForm = ({
     email: worker?.email || "",
     status: worker?.status || "disponible",
     specialty: worker?.specialty || "Instalación cámaras solares",
-    camerasAssigned: worker?.camerasAssigned || [], // Nuevo campo para cámaras asignadas
+    camerasAssigned: worker?.camerasAssigned || [],
   });
 
-  // Obtener cámaras disponibles (que no estén asignadas a otros trabajadores y estén en Almacén)
   const availableCameras = useMemo(() => {
-    // Primero, obtener todas las cámaras que están en Almacén y disponibles
     const allAvailable = camerasData.filter(
-      (camera) =>
-        camera.status === "disponible" && camera.location === "Almacén"
+      (camera) => camera.status === "disponible" && camera.location === "Almacén"
     );
 
-    // Si estamos editando, incluir también las cámaras que ya están asignadas a este trabajador
     if (isEditing && worker) {
       const currentlyAssigned = camerasData.filter((camera) =>
         worker.camerasAssigned?.includes(camera.id)
@@ -88,74 +59,45 @@ const WorkerForm = ({
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  // Función para manejar la selección de cámaras
   const handleCameraSelection = (cameraId) => {
-    setFormData((prev) => {
-      const isSelected = prev.camerasAssigned.includes(cameraId);
-      const camerasAssigned = isSelected
+    setFormData((prev) => ({
+      ...prev,
+      camerasAssigned: prev.camerasAssigned.includes(cameraId)
         ? prev.camerasAssigned.filter((id) => id !== cameraId)
-        : [...prev.camerasAssigned, cameraId];
-
-      return { ...prev, camerasAssigned };
-    });
+        : [...prev.camerasAssigned, cameraId]
+    }));
   };
 
-  // Función para seleccionar/deseleccionar todas las cámaras
   const handleSelectAllCameras = () => {
-    if (formData.camerasAssigned.length === availableCameras.length) {
-      // Deseleccionar todas
-      setFormData((prev) => ({ ...prev, camerasAssigned: [] }));
-    } else {
-      // Seleccionar todas las disponibles
-      setFormData((prev) => ({
-        ...prev,
-        camerasAssigned: availableCameras.map((camera) => camera.id),
-      }));
-    }
+    setFormData((prev) => ({
+      ...prev,
+      camerasAssigned: prev.camerasAssigned.length === availableCameras.length
+        ? []
+        : availableCameras.map((camera) => camera.id)
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Para edición, usar el ID existente; para creación, generar nuevo
     const workerId = isEditing ? worker.id : Date.now().toString();
-
     const workerData = {
       ...(isEditing && { id: workerId }),
-      name: formData.name,
-      state: formData.state,
-      phone: formData.phone,
-      email: formData.email,
-      status: formData.status,
-      specialty: formData.specialty,
-      camerasAssigned: formData.camerasAssigned, // Incluir cámaras asignadas
+      ...formData,
       photo: worker?.photo || "",
-      ...(isEditing && { updatedAt: new Date().toISOString() }),
-      ...(!isEditing && { createdAt: new Date().toISOString() }),
+      ...(isEditing ? { updatedAt: new Date().toISOString() } : { createdAt: new Date().toISOString() }),
     };
 
     try {
-      const result = await onSave(workerData);
-
+      await onSave(workerData);
       setShowForm(false);
-      // Solo resetear el form si no estamos editando
       if (!isEditing) {
         setFormData({
-          name: "",
-          state: "",
-          phone: "",
-          email: "",
-          status: "disponible",
-          specialty: "Instalación cámaras solares",
-          camerasAssigned: [],
+          name: "", state: "", phone: "", email: "", status: "disponible",
+          specialty: "Instalación cámaras solares", camerasAssigned: [],
         });
       }
     } catch (error) {
-      alert(
-        `Error al ${
-          isEditing ? "actualizar" : "guardar"
-        } el trabajador. Por favor intenta nuevamente.`
-      );
+      alert(`Error al ${isEditing ? "actualizar" : "guardar"} el trabajador.`);
     }
   };
 
@@ -164,367 +106,279 @@ const WorkerForm = ({
     onCancel?.();
   };
 
-  // Si el formulario no está abierto y estamos en modo creación, mostrar botón
   if (!showForm && !isEditing) {
     return (
       <button
         onClick={() => setShowForm(true)}
-        className="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg transition-colors flex items-center space-x-2"
+        className={`group px-6 py-4 rounded-2xl border font-black uppercase tracking-[0.2em] text-xs transition-all duration-300 flex items-center gap-3 shadow-xl ${
+          darkMode 
+            ? 'bg-emerald-500 border-emerald-400 text-white hover:bg-emerald-400 shadow-emerald-500/20' 
+            : 'bg-emerald-500 border-emerald-600 text-white hover:bg-emerald-600 shadow-emerald-500/10'
+        }`}
       >
-        <User className="w-5 h-5" />
-        <span>Agregar Trabajador</span>
+        <User className="w-5 h-5 transition-transform group-hover:scale-110" />
+        Registrar Operador
       </button>
     );
   }
 
-  // Si estamos en modo edición pero el formulario no está abierto, no mostrar nada
-  if (isEditing && !showForm) {
-    return null;
-  }
+  if (isEditing && !showForm) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-0 md:p-4 z-50">
-      <div className="bg-slate-800/90 backdrop-blur-xl rounded-none md:rounded-2xl border-x-0 border-t-0 md:border border-white/10 p-4 md:p-6 max-w-4xl w-full h-full md:h-auto md:max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between mb-6">
-          <h3 className="text-xl font-semibold text-white">
-            {isEditing ? "Editar Trabajador" : "Nuevo Trabajador"}
-          </h3>
-          <button
-            onClick={handleCancel}
-            className="text-gray-400 hover:text-white transition-colors"
-          >
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-0 md:p-4 z-50 animate-fade-in text-left">
+      {/* Overlay */}
+      <div 
+        className={`fixed inset-0 transition-colors duration-500 ${
+          darkMode ? 'bg-slate-950/40' : 'bg-slate-900/10'
+        }`} 
+        onClick={handleCancel} 
+      />
+
+      <div className={`w-full max-w-4xl relative z-10 shadow-2xl rounded-[2.5rem] border transition-all duration-500 overflow-hidden h-full md:h-auto md:max-h-[90vh] flex flex-col ${
+        darkMode ? 'bg-slate-900 border-white/5' : 'bg-white border-black/5 shadow-slate-300'
+      }`}>
+        {/* Header */}
+        <div className={`p-8 border-b transition-colors duration-500 flex items-center justify-between ${darkMode ? 'border-white/5 bg-white/[0.02]' : 'border-slate-50 bg-slate-50/50'}`}>
+          <div className="flex items-center gap-4">
+            <div className={`p-3 rounded-2xl ${darkMode ? 'bg-emerald-500/10 text-emerald-400' : 'bg-emerald-500 text-white'}`}>
+              <User className="w-6 h-6" />
+            </div>
+            <div>
+              <h3 className={`text-xl font-black uppercase tracking-widest ${darkMode ? 'text-white' : 'text-slate-900'}`}>
+                {isEditing ? "Modificar Operador" : "Registro de Operador"}
+              </h3>
+              <p className="text-xs font-bold text-slate-500 tracking-tight mt-0.5">Complete el expediente profesional del colaborador</p>
+            </div>
+          </div>
+          <button onClick={handleCancel} className={`p-2 rounded-xl transition-all ${darkMode ? 'text-slate-500 hover:text-white hover:bg-white/5' : 'text-slate-400 hover:text-slate-900 hover:bg-slate-100'}`}>
             <X className="w-6 h-6" />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Información Personal */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">
-                <User className="w-4 h-4 inline mr-2" />
-                Nombre Completo *
-              </label>
-              <input
-                type="text"
-                required
-                value={formData.name}
-                onChange={(e) => handleInputChange("name", e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                placeholder="Ej: Juan Pérez"
-              />
+        <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto custom-scrollbar p-8 space-y-10">
+          {/* Información General */}
+          <section className="space-y-6">
+            <div className="flex items-center gap-3">
+              <div className={`w-1 h-4 rounded-full ${darkMode ? 'bg-blue-500/50' : 'bg-blue-500'}`}></div>
+              <h4 className={`text-[10px] font-black uppercase tracking-[0.2em] ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>Información General</h4>
             </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>Nombre Completo</label>
+                <div className="relative group">
+                  <User className={`absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 transition-colors ${darkMode ? 'text-slate-500' : 'text-slate-400'}`} />
+                  <input
+                    type="text" required value={formData.name}
+                    onChange={(e) => handleInputChange("name", e.target.value)}
+                    className={`w-full pl-12 pr-4 py-4 rounded-2xl border font-bold text-sm transition-all focus:ring-2 outline-none ${
+                      darkMode ? 'bg-white/5 border-white/5 text-white focus:ring-emerald-500/50' : 'bg-slate-50 border-slate-100 text-slate-900 focus:ring-emerald-500/30'
+                    }`}
+                    placeholder="Ej: Alejandro Gonzalez"
+                  />
+                </div>
+              </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">
-                <MapPin className="w-4 h-4 inline mr-2" />
-                Estado *
-              </label>
-              <select
-                required
-                value={formData.state}
-                onChange={(e) => handleInputChange("state", e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              >
-                <option className="text-white bg-gray-700" value="">
-                  Seleccionar estado
-                </option>
-                {estadosMexico.map((estado) => (
-                  <option
-                    className="text-white bg-gray-700"
-                    key={estado}
-                    value={estado}
+              <div className="space-y-2">
+                <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>Entidad Federativa</label>
+                <div className="relative group">
+                  <MapPin className={`absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 transition-colors ${darkMode ? 'text-slate-500' : 'text-slate-400'}`} />
+                  <select
+                    required value={formData.state}
+                    onChange={(e) => handleInputChange("state", e.target.value)}
+                    className={`w-full pl-12 pr-4 py-4 rounded-2xl border font-bold text-sm appearance-none transition-all focus:ring-2 outline-none cursor-pointer ${
+                      darkMode ? 'bg-white/5 border-white/5 text-white focus:ring-emerald-500/50' : 'bg-slate-50 border-slate-100 text-slate-900 focus:ring-emerald-500/30'
+                    }`}
                   >
-                    {estado}
-                  </option>
-                ))}
-              </select>
+                    <option value="" disabled className={darkMode ? 'bg-slate-900' : 'bg-white'}>Seleccionar...</option>
+                    {estadosMexico.map((estado) => (
+                      <option key={estado} value={estado} className={darkMode ? 'bg-slate-900' : 'bg-white'}>{estado}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
             </div>
-          </div>
+          </section>
 
-          {/* Contacto */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">
-                <Phone className="w-4 h-4 inline mr-2" />
-                Número de Teléfono *
-              </label>
-              <input
-                type="tel"
-                required
-                value={formData.phone}
-                onChange={(e) => handleInputChange("phone", e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                placeholder="Ej: 55-1234-5678"
-              />
+          {/* Contacto & Perfil */}
+          <section className="space-y-6">
+            <div className="flex items-center gap-3">
+              <div className={`w-1 h-4 rounded-full ${darkMode ? 'bg-purple-500/50' : 'bg-purple-500'}`}></div>
+              <h4 className={`text-[10px] font-black uppercase tracking-[0.2em] ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>Medios de Contacto</h4>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">
-                <Mail className="w-4 h-4 inline mr-2" />
-                Email *
-              </label>
-              <input
-                type="email"
-                optional
-                value={formData.email}
-                onChange={(e) => handleInputChange("email", e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                placeholder="Ej: juan@pxgolf.com"
-              />
-            </div>
-          </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>Contacto Telefónico</label>
+                <div className="relative group">
+                  <Phone className={`absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 transition-colors ${darkMode ? 'text-slate-500' : 'text-slate-400'}`} />
+                  <input
+                    type="tel" required value={formData.phone}
+                    onChange={(e) => handleInputChange("phone", e.target.value)}
+                    className={`w-full pl-12 pr-4 py-4 rounded-2xl border font-mono font-bold text-sm transition-all focus:ring-2 outline-none ${
+                      darkMode ? 'bg-white/5 border-white/5 text-white focus:ring-emerald-500/50' : 'bg-slate-50 border-slate-100 text-slate-900 focus:ring-emerald-500/30'
+                    }`}
+                    placeholder="+52 000-000-000"
+                  />
+                </div>
+              </div>
 
-          {/* Estado y Especialidad */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">
-                Estado Laboral
-              </label>
-              <select
-                value={formData.status}
-                onChange={(e) => handleInputChange("status", e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              >
-                <option value="disponible" className="text-white bg-gray-700">
-                  Disponible
-                </option>
-                <option value="activo" className="text-white bg-gray-700">
-                  Activo
-                </option>
-                <option value="ocupado" className="text-white bg-gray-700">
-                  Ocupado
-                </option>
-                <option value="vacaciones" className="text-white bg-gray-700">
-                  Vacaciones
-                </option>
-              </select>
+              <div className="space-y-2">
+                <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>Email Corporativo</label>
+                <div className="relative group">
+                  <Mail className={`absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 transition-colors ${darkMode ? 'text-slate-500' : 'text-slate-400'}`} />
+                  <input
+                    type="email" required value={formData.email}
+                    onChange={(e) => handleInputChange("email", e.target.value)}
+                    className={`w-full pl-12 pr-4 py-4 rounded-2xl border font-bold text-sm transition-all focus:ring-2 outline-none ${
+                      darkMode ? 'bg-white/5 border-white/5 text-white focus:ring-emerald-500/50' : 'bg-slate-50 border-slate-100 text-slate-900 focus:ring-emerald-500/30'
+                    }`}
+                    placeholder="operador@pxgolf.com"
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Estatus Laboral & Especialidad */}
+          <section className="space-y-6">
+            <div className="flex items-center gap-3">
+              <div className={`w-1 h-4 rounded-full ${darkMode ? 'bg-amber-500/50' : 'bg-amber-500'}`}></div>
+              <h4 className={`text-[10px] font-black uppercase tracking-[0.2em] ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>Estatus & Roles</h4>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">
-                Especialidad
-              </label>
-              <select
-                value={formData.specialty}
-                onChange={(e) => handleInputChange("specialty", e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              >
-                <option
-                  value="Instalación cámaras solares"
-                  className="text-white bg-gray-700"
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 rounded-[2rem] border transition-all duration-500 shadow-inner ${darkMode ? 'bg-white/[0.01] border-white/5 shadow-black/20' : 'bg-slate-50/50 border-slate-100 shadow-slate-100'}">
+              <div className="space-y-2">
+                <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>Situación Laboral</label>
+                <select
+                  value={formData.status}
+                  onChange={(e) => handleInputChange("status", e.target.value)}
+                  className={`w-full px-4 py-4 rounded-2xl border font-bold text-sm transition-all appearance-none outline-none cursor-pointer ${
+                    darkMode ? 'bg-slate-900 border-white/5 text-white focus:ring-emerald-500/50' : 'bg-white border-slate-100 text-slate-900 focus:ring-emerald-500/30'
+                  }`}
                 >
-                  Instalación cámaras solares
-                </option>
-                <option
-                  value="Coordinación torneos"
-                  className="text-white bg-gray-700"
-                >
-                  Coordinación torneos
-                </option>
-                <option
-                  value="Mantenimiento equipos"
-                  className="text-white bg-gray-700"
-                >
-                  Mantenimiento equipos
-                </option>
-                <option
-                  value="Logística envíos"
-                  className="text-white bg-gray-700"
-                >
-                  Logística envíos
-                </option>
-                <option
-                  value="Soporte técnico"
-                  className="text-white bg-gray-700"
-                >
-                  Soporte técnico
-                </option>
-              </select>
-            </div>
-          </div>
+                  <option value="disponible">Deseable / Disponible</option>
+                  <option value="activo">Activo en Misión</option>
+                  <option value="ocupado">Ocupado / Otros</option>
+                  <option value="vacaciones">Inhabilitado / Vacaciones</option>
+                </select>
+              </div>
 
-          {/* Asignación de Cámaras - NUEVA SECCIÓN */}
-          <div className="bg-white/5 rounded-lg p-4 border border-white/10">
-            <div className="flex items-center justify-between mb-4">
-              <h4 className="font-semibold text-white flex items-center space-x-2">
-                <Camera className="w-4 h-4" />
-                <span>Asignación de Cámaras</span>
-              </h4>
+              <div className="space-y-2">
+                <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>Especialización</label>
+                <select
+                  value={formData.specialty}
+                  onChange={(e) => handleInputChange("specialty", e.target.value)}
+                  className={`w-full px-4 py-4 rounded-2xl border font-bold text-sm transition-all appearance-none outline-none cursor-pointer ${
+                    darkMode ? 'bg-slate-900 border-white/5 text-white focus:ring-emerald-500/50' : 'bg-white border-slate-100 text-slate-900 focus:ring-emerald-500/30'
+                  }`}
+                >
+                  <option value="Instalación cámaras solares">Instalación PIX GOLD (Solar)</option>
+                  <option value="Coordinación torneos">Coordinación de Torneos</option>
+                  <option value="Mantenimiento equipos">Mantenimiento de Unidades</option>
+                  <option value="Logística envíos">Logística & Embarques</option>
+                  <option value="Soporte técnico">IT & Soporte Técnico</option>
+                </select>
+              </div>
+            </div>
+          </section>
+
+          {/* Asignación de Inventario */}
+          <section className="space-y-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className={`w-1 h-4 rounded-full ${darkMode ? 'bg-emerald-500/50' : 'bg-emerald-500'}`}></div>
+                <h4 className={`text-[10px] font-black uppercase tracking-[0.2em] ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>Inventario Asignado</h4>
+              </div>
               {availableCameras.length > 0 && (
-                <button
-                  type="button"
-                  onClick={handleSelectAllCameras}
-                  className="text-sm text-emerald-400 hover:text-emerald-300 transition-colors flex items-center space-x-1"
-                >
-                  <CheckCircle className="w-4 h-4" />
-                  <span>
-                    {formData.camerasAssigned.length === availableCameras.length
-                      ? "Deseleccionar todas"
-                      : "Seleccionar todas"}
-                  </span>
+                <button type="button" onClick={handleSelectAllCameras} className={`text-[10px] font-black uppercase tracking-widest flex items-center gap-2 transition-colors ${darkMode ? 'text-emerald-500 hover:text-emerald-400' : 'text-emerald-600 hover:text-emerald-700'}`}>
+                   <CheckCircle className="w-4 h-4" />
+                   {formData.camerasAssigned.length === availableCameras.length ? "Liberar Todo" : "Vincular Todo"}
                 </button>
               )}
             </div>
 
             {availableCameras.length > 0 ? (
-              <>
-                <div className="mb-3">
-                  <p className="text-sm text-gray-400">
-                    Selecciona las cámaras que tendrá asignadas este trabajador.
-                    Solo se muestran cámaras disponibles en el almacén.
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-64 overflow-y-auto bg-white/5 rounded-lg p-4">
+              <div className="space-y-4">
+                <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1 opacity-70">Seleccione las Unidades PIX disponibles en almacén</p>
+                <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-72 overflow-y-auto p-4 rounded-3xl border transition-all ${darkMode ? 'bg-white/[0.01] border-white/5' : 'bg-slate-50 border-slate-100'}`}>
                   {availableCameras.map((camera) => (
-                    <label
-                      key={camera.id}
-                      className={`flex items-center space-x-3 p-3 rounded border transition-colors cursor-pointer ${
+                    <button
+                      key={camera.id} type="button"
+                      onClick={() => handleCameraSelection(camera.id)}
+                      className={`flex items-start text-left gap-4 p-4 rounded-2xl border transition-all duration-300 transform active:scale-95 ${
                         formData.camerasAssigned.includes(camera.id)
-                          ? "bg-emerald-500/20 border-emerald-500/50 text-emerald-400"
-                          : "bg-white/5 border-white/10 text-gray-300 hover:border-emerald-500/30"
+                          ? darkMode ? 'bg-emerald-500 border-emerald-400 text-white shadow-lg shadow-emerald-500/20' : 'bg-emerald-500 border-emerald-600 text-white shadow-lg'
+                          : darkMode ? 'bg-slate-900 border-white/5 text-slate-400 hover:border-emerald-500/50' : 'bg-white border-slate-200 text-slate-600 hover:border-emerald-500'
                       }`}
                     >
-                      <input
-                        type="checkbox"
-                        checked={formData.camerasAssigned.includes(camera.id)}
-                        onChange={() => handleCameraSelection(camera.id)}
-                        className="rounded border-white/20 bg-white/5"
-                      />
-                      <div className="flex-1 min-w-0">
-                        <div className="text-sm font-medium truncate">
-                          {camera.id}
-                        </div>
-                        <div className="text-xs text-gray-400 truncate">
-                          {camera.model}
-                        </div>
-                        <div className="text-xs text-gray-500">
-                          {camera.serialNumber &&
-                            `Serie: ${camera.serialNumber}`}
-                        </div>
+                      <div className={`p-2 rounded-xl transition-colors ${formData.camerasAssigned.includes(camera.id) ? 'bg-white/20' : darkMode ? 'bg-white/5' : 'bg-slate-50'}`}>
+                        <Camera className="w-4 h-4" />
                       </div>
-                    </label>
+                      <div className="flex-1 min-w-0">
+                        <p className={`text-xs font-black font-mono tracking-tighter transition-colors ${formData.camerasAssigned.includes(camera.id) ? 'text-white' : darkMode ? 'text-slate-200' : 'text-slate-900'}`}>{camera.id}</p>
+                        <p className={`text-[9px] font-bold uppercase tracking-widest mt-0.5 opacity-60 ${formData.camerasAssigned.includes(camera.id) ? 'text-white' : 'text-slate-500'}`}>{camera.model}</p>
+                      </div>
+                    </button>
                   ))}
                 </div>
-
-                {/* Resumen de asignación */}
-                <div className="mt-4 p-3 bg-white/5 rounded-lg">
-                  <div className="grid grid-cols-2 gap-4 text-sm">
-                    <div>
-                      <span className="text-gray-400">
-                        Cámaras disponibles:
-                      </span>
-                      <span className="text-white ml-2">
-                        {availableCameras.length}
-                      </span>
-                    </div>
-                    <div>
-                      <span className="text-gray-400">Cámaras asignadas:</span>
-                      <span
-                        className={`ml-2 ${
-                          formData.camerasAssigned.length > 0
-                            ? "text-emerald-400"
-                            : "text-gray-400"
-                        }`}
-                      >
-                        {formData.camerasAssigned.length}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </>
+              </div>
             ) : (
-              <div className="text-center py-6">
-                <Camera className="w-12 h-12 text-gray-500 mx-auto mb-2" />
-                <p className="text-gray-400 text-sm">
-                  No hay cámaras disponibles en el almacén para asignar.
-                </p>
-                <p className="text-gray-500 text-xs mt-1">
-                  Las cámaras deben estar en estado "disponible" y ubicación
-                  "Almacén".
-                </p>
+              <div className={`text-center py-10 rounded-3xl border border-dashed flex flex-col items-center gap-3 ${darkMode ? 'bg-white/[0.02] border-white/10' : 'bg-slate-50 border-slate-200'}`}>
+                <Camera className="w-10 h-10 text-slate-600 opacity-30" />
+                <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">Sin unidades PIX disponibles en Almacén</p>
               </div>
             )}
-          </div>
+          </section>
 
-          {/* Resumen */}
-          <div className="bg-white/5 rounded-lg p-4">
-            <h4 className="font-semibold text-white mb-2">
-              Resumen del Trabajador
-            </h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-              <div>
-                <span className="text-gray-400">Nombre:</span>
-                <span className="text-white ml-2">
-                  {formData.name || "No especificado"}
-                </span>
+          {/* Resumen Final */}
+          <section className={`p-6 rounded-[2.5rem] border transition-all duration-500 ${darkMode ? 'bg-[#0B1120] border-white/10 shadow-emerald-500/5 shadow-2xl' : 'bg-slate-50 border-slate-200 shadow-xl shadow-slate-200'}`}>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              <div className="space-y-1">
+                <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest block">Colaborador</span>
+                <p className={`text-xs font-bold font-mono transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>{formData.name || 'SIN REGISTRO'}</p>
               </div>
-              <div>
-                <span className="text-gray-400">Estado:</span>
-                <span className="text-white ml-2">
-                  {formData.state || "No especificado"}
-                </span>
+              <div className="space-y-1">
+                <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest block">Ubicación Actual</span>
+                <p className={`text-xs font-bold transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>{formData.state || 'N/A'}</p>
               </div>
-              <div>
-                <span className="text-gray-400">Teléfono:</span>
-                <span className="text-white ml-2">
-                  {formData.phone || "No especificado"}
-                </span>
+              <div className="space-y-1">
+                <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest block">Situación</span>
+                <p className="text-xs font-black uppercase text-emerald-500 tracking-tighter">{formData.status}</p>
               </div>
-              <div>
-                <span className="text-gray-400">Email:</span>
-                <span className="text-white ml-2">
-                  {formData.email || "No especificado"}
-                </span>
-              </div>
-              <div>
-                <span className="text-gray-400">Estado Laboral:</span>
-                <span className="text-white ml-2 capitalize">
-                  {formData.status}
-                </span>
-              </div>
-              <div>
-                <span className="text-gray-400">Especialidad:</span>
-                <span className="text-white ml-2">{formData.specialty}</span>
-              </div>
-              <div className="md:col-span-2">
-                <span className="text-gray-400">Cámaras asignadas:</span>
-                <span className="text-white ml-2">
-                  {formData.camerasAssigned.length > 0
-                    ? formData.camerasAssigned.join(", ")
-                    : "Ninguna"}
-                </span>
+              <div className="space-y-1">
+                <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest block">Equipos Vinculados</span>
+                <p className={`text-xs font-black transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>{formData.camerasAssigned.length} PIX</p>
               </div>
             </div>
-          </div>
-
-          {/* Botones */}
-          <div className="flex space-x-4 pt-4">
-            <button
-              type="submit"
-              disabled={
-                !formData.name ||
-                !formData.state ||
-                !formData.phone ||
-                !formData.email
-              }
-              className="bg-emerald-500 hover:bg-emerald-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white px-6 py-3 rounded-lg transition-colors flex items-center space-x-2"
-            >
-              <Save className="w-5 h-5" />
-              <span>
-                {isEditing ? "Actualizar Trabajador" : "Crear Trabajador"}
-              </span>
-            </button>
-            <button
-              type="button"
-              onClick={handleCancel}
-              className="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg transition-colors"
-            >
-              Cancelar
-            </button>
-          </div>
+          </section>
         </form>
+
+        {/* Footer */}
+        <div className={`p-8 border-t transition-colors duration-500 flex flex-col md:flex-row gap-4 ${darkMode ? 'border-white/5 bg-white/[0.02]' : 'border-slate-50 bg-slate-50/20'}`}>
+          <button
+            type="submit" onClick={handleSubmit}
+            disabled={!formData.name || !formData.state || !formData.phone || !formData.email}
+            className={`flex-grow py-5 rounded-2xl font-black uppercase tracking-[0.2em] text-xs transition-all flex items-center justify-center gap-3 shadow-2xl disabled:opacity-30 disabled:cursor-not-allowed ${
+              darkMode 
+                ? 'bg-emerald-500 border border-emerald-400 text-white hover:bg-emerald-400 shadow-emerald-500/20' 
+                : 'bg-emerald-500 border border-emerald-600 text-white hover:bg-emerald-600 shadow-emerald-500/20'
+            }`}
+          >
+            <Save className="w-5 h-5" />
+            {isEditing ? "Actualizar Expediente" : "Finalizar Registro"}
+          </button>
+          <button
+            type="button" onClick={handleCancel}
+            className={`px-10 py-5 rounded-2xl font-black uppercase tracking-widest text-xs transition-all duration-300 border ${
+              darkMode 
+                ? 'bg-white/5 border-white/5 text-slate-400 hover:bg-white/10 hover:text-white' 
+                : 'bg-slate-100 border-slate-200 text-slate-500 hover:bg-slate-200 hover:text-slate-900'
+            }`}
+          >
+            Descartar
+          </button>
+        </div>
       </div>
     </div>
   );

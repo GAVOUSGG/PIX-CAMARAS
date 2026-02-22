@@ -17,6 +17,7 @@ const TournamentForm = ({
   workers = [],
   cameras = [],
   tournament = null,
+  darkMode = true
 }) => {
   const isEditing = !!tournament;
 
@@ -130,20 +131,24 @@ const TournamentForm = ({
   };
 
   return (
-    <div className="space-y-10 animate-fade-in py-2">
+    <div className={`space-y-10 animate-fade-in py-2 ${darkMode ? 'text-white' : 'text-slate-900'}`}>
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-white/5 pb-8">
+      <div className={`flex items-center justify-between border-b pb-8 transition-colors duration-500 ${darkMode ? 'border-white/5' : 'border-slate-100'}`}>
         <div>
-          <h3 className="text-2xl font-black text-white tracking-tight">
-            {isEditing ? "Editar" : "Nuevo"} <span className="text-white">Torneo</span>
+          <h3 className={`text-2xl font-black transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'} tracking-tight`}>
+            {isEditing ? "Editar" : "Nuevo"} <span className="text-emerald-500">Expediente de Torneo</span>
           </h3>
-          <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-1">
-            Configuración del torneo
+          <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">
+            Gestión y seguimiento de logística deportiva
           </p>
         </div>
         <button
           onClick={onCancel}
-          className="p-2.5 bg-white/5 hover:bg-red-500/10 text-gray-400 hover:text-red-400 rounded-2xl transition-all border border-white/5"
+          className={`p-3 rounded-2xl transition-all duration-300 border ${
+            darkMode 
+              ? 'bg-white/5 border-white/5 text-slate-400 hover:bg-white/10 hover:text-white' 
+              : 'bg-slate-100 border-slate-200 text-slate-500 hover:bg-slate-200 hover:text-slate-900'
+          }`}
         >
           <X className="w-6 h-6" />
         </button>
@@ -152,60 +157,76 @@ const TournamentForm = ({
       <form onSubmit={handleSubmit} className="space-y-10">
         {/* Información Básica */}
         <section className="space-y-6">
-          <div className="flex items-center gap-2 mb-2">
-            <div className="w-1 h-4 bg-emerald-500 rounded-full"></div>
-            <h4 className="text-sm font-bold text-white uppercase tracking-wider">Información General</h4>
+          <div className="flex items-center gap-3 mb-2">
+            <div className={`w-1.5 h-6 rounded-full ${darkMode ? 'bg-emerald-500/50' : 'bg-emerald-500'}`}></div>
+            <h4 className={`text-xs font-black uppercase tracking-[0.2em] ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>Información Primaria</h4>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="space-y-2">
-              <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Nombre del Torneo *</label>
+              <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>Identificador del Torneo *</label>
               <input
                 type="text"
                 required
                 value={formData.name}
                 onChange={(e) => handleInputChange("name", e.target.value)}
-                className="w-full bg-slate-800/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-emerald-500/50 outline-none transition-all"
-                placeholder="Ej: Torneo Empresarial CDMX"
+                className={`w-full border rounded-2xl px-5 py-4 transition-all duration-300 outline-none focus:ring-2 focus:ring-emerald-500/50 ${
+                  darkMode 
+                    ? 'bg-slate-950/50 border-white/5 text-white placeholder-slate-600 focus:bg-slate-950' 
+                    : 'bg-slate-50 border-slate-200 text-slate-900 placeholder-slate-400 focus:bg-white'
+                }`}
+                placeholder="Nombre del evento deportivo"
               />
             </div>
             <div className="space-y-2">
-              <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Estado *</label>
+              <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>Zona de Cobertura *</label>
               <select
                 required
                 value={formData.state}
                 onChange={(e) => handleInputChange("state", e.target.value)}
-                className="w-full bg-slate-800/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-emerald-500/50 outline-none"
+                className={`w-full border rounded-2xl px-5 py-4 transition-all duration-300 outline-none ${
+                  darkMode 
+                    ? 'bg-slate-950/50 border-white/5 text-white' 
+                    : 'bg-slate-50 border-slate-200 text-slate-900'
+                }`}
               >
-                <option value="">Seleccionar estado</option>
+                <option value="">Seleccionar estado federativo</option>
                 {estadosMexico.map(s => <option key={s} value={s}>{s}</option>)}
               </select>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="space-y-2">
-              <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Campo de Golf *</label>
-              <div className="relative">
-                <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+              <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>Instalaciones (Campo de Golf) *</label>
+              <div className="relative group">
+                <MapPin className={`absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 transition-colors ${darkMode ? 'text-slate-600 group-focus-within:text-emerald-500' : 'text-slate-400 group-focus-within:text-emerald-600'}`} />
                 <input
                   type="text"
                   required
                   value={formData.field}
                   onChange={(e) => handleInputChange("field", e.target.value)}
-                  className="w-full bg-slate-800/40 border border-white/10 rounded-xl pl-12 pr-4 py-3 text-white focus:ring-2 focus:ring-emerald-500/50 outline-none"
-                  placeholder="Ej: Club de Golf Chapultepec"
+                  className={`w-full border rounded-2xl pl-12 pr-5 py-4 transition-all duration-300 outline-none focus:ring-2 focus:ring-emerald-500/50 ${
+                    darkMode 
+                      ? 'bg-slate-950/50 border-white/5 text-white placeholder-slate-600' 
+                      : 'bg-slate-50 border-slate-200 text-slate-900 placeholder-slate-400'
+                  }`}
+                  placeholder="Ubicación técnica del campo"
                 />
               </div>
             </div>
             <div className="space-y-2">
-              <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Ciudad/Localidad *</label>
+              <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>Sede Ciudad/Localidad *</label>
               <input
                 type="text"
                 required
                 value={formData.location}
                 onChange={(e) => handleInputChange("location", e.target.value)}
-                className="w-full bg-slate-800/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-emerald-500/50 outline-none"
-                placeholder="Ej: Ciudad de México"
+                className={`w-full border rounded-2xl px-5 py-4 transition-all duration-300 outline-none focus:ring-2 focus:ring-emerald-500/50 ${
+                  darkMode 
+                    ? 'bg-slate-950/50 border-white/5 text-white placeholder-slate-600' 
+                    : 'bg-slate-50 border-slate-200 text-slate-900 placeholder-slate-400'
+                }`}
+                placeholder="Entidad municipal"
               />
             </div>
           </div>
@@ -213,124 +234,161 @@ const TournamentForm = ({
 
         {/* Logística y Fechas */}
         <section className="space-y-6">
-          <div className="flex items-center gap-2 mb-2">
-            <div className="w-1 h-4 bg-emerald-500 rounded-full"></div>
-            <h4 className="text-sm font-bold text-white uppercase tracking-wider">Fecha Torneo</h4>
+          <div className="flex items-center gap-3 mb-2">
+            <div className={`w-1.5 h-6 rounded-full ${darkMode ? 'bg-blue-500/50' : 'bg-blue-500'}`}></div>
+            <h4 className={`text-xs font-black uppercase tracking-[0.2em] ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>Tiempos y Operación</h4>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="space-y-2">
-              <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1 flex items-center gap-2">
-                <Calendar className="w-3 h-3" /> Fecha de Inicio *
+              <label className={`text-[10px] font-black uppercase tracking-widest ml-1 flex items-center gap-2 ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>
+                <Calendar className="w-3.5 h-3.5" /> Inicio de Operaciones *
               </label>
               <input
                 type="date"
                 required
                 value={formData.startDate}
                 onChange={(e) => handleInputChange("startDate", e.target.value)}
-                className="w-full bg-slate-800/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-emerald-500/50 outline-none"
+                className={`w-full border rounded-2xl px-5 py-4 transition-all duration-300 outline-none ${
+                  darkMode 
+                    ? 'bg-slate-950/50 border-white/5 text-white scheme-dark' 
+                    : 'bg-slate-50 border-slate-200 text-slate-900'
+                }`}
               />
             </div>
             <div className="space-y-2">
-              <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Días de Duración *</label>
+              <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>Plazo de Duración (Días) *</label>
               <input
                 type="number"
                 min="1"
                 required
                 value={formData.days}
                 onChange={(e) => handleInputChange("days", e.target.value)}
-                className="w-full bg-slate-800/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-emerald-500/50 outline-none"
+                className={`w-full border rounded-2xl px-5 py-4 transition-all duration-300 outline-none ${
+                   darkMode 
+                  ? 'bg-slate-950/50 border-white/5 text-white' 
+                  : 'bg-slate-50 border-slate-200 text-slate-900'
+                }`}
               />
             </div>
             <div className="space-y-2">
-              <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Fecha de Fin</label>
+              <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>Cierre Previsto (Fin de Obra)</label>
               <input
                 type="date"
                 readOnly
                 value={endDate}
-                className="w-full bg-white/5 border border-white/5 rounded-xl px-4 py-3 text-gray-500 cursor-not-allowed"
+                className={`w-full border rounded-2xl px-5 py-4 transition-all duration-300 outline-none cursor-not-allowed ${
+                  darkMode 
+                  ? 'bg-white/5 border-white/5 text-slate-500' 
+                  : 'bg-slate-100 border-slate-100 text-slate-400'
+                }`}
               />
             </div>
           </div>
 
-          <div className="space-y-2">
-            <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Hoyos a cubrir * (2 cámaras por hoyo)</label>
-            <div className="grid grid-cols-5 md:grid-cols-10 gap-2">
+          <div className="space-y-3">
+            <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>Configuración de Hoyos Logística *</label>
+            <div className="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-10 gap-3">
               {[1,2,3,4,5,6,7,8,9].map(num => (
                 <button
                   key={num}
                   type="button"
                   onClick={() => handleInputChange("holes", num)}
-                  className={`py-3 rounded-xl font-bold text-xs transition-all ${
+                  className={`py-4 rounded-2xl font-black text-xs transition-all duration-300 border ${
                     formData.holes === num
-                      ? 'bg-emerald-500 text-slate-950 shadow-lg shadow-emerald-500/20'
-                      : 'bg-white/5 text-gray-400 hover:bg-white/10'
+                      ? darkMode
+                        ? 'bg-emerald-500/10 border-emerald-500/50 text-emerald-400 shadow-xl shadow-emerald-500/10'
+                        : 'bg-emerald-500 border-emerald-600 text-white shadow-xl shadow-emerald-500/20'
+                      : darkMode
+                        ? 'bg-slate-950/50 border-white/5 text-slate-500 hover:bg-slate-950 hover:text-white'
+                        : 'bg-slate-50 border-slate-200 text-slate-400 hover:bg-white hover:text-slate-900'
                   }`}
                 >
                   {num}
                 </button>
               ))}
             </div>
-            <p className="text-[10px] text-gray-500 font-bold mt-2 ml-1">
-              Cámaras necesarias: <span className="text-emerald-500">{requiredCameras}</span>
-            </p>
+            <div className={`mt-4 p-4 rounded-2xl border flex items-center gap-4 transition-colors duration-500 ${darkMode ? 'bg-white/[0.02] border-white/5' : 'bg-slate-50/50 border-slate-100'}`}>
+              <Camera className={`w-4 h-4 ${darkMode ? 'text-emerald-400' : 'text-emerald-600'}`} />
+              <p className="text-[10px] font-black uppercase tracking-[0.1em]">
+                Unidades requeridas para despliegue: <span className={`${darkMode ? 'text-white' : 'text-slate-900'} text-xs ml-1`}>{requiredCameras} DISPOSITIVOS</span>
+              </p>
+            </div>
           </div>
         </section>
 
         {/* Asignación de Recursos */}
         <section className="space-y-6">
-          <div className="flex items-center gap-2 mb-2">
-            <div className="w-1 h-4 bg-emerald-500 rounded-full"></div>
-            <h4 className="text-sm font-bold text-white uppercase tracking-wider">Recursos Asignados</h4>
+          <div className="flex items-center gap-3 mb-2">
+            <div className={`w-1.5 h-6 rounded-full ${darkMode ? 'bg-purple-500/50' : 'bg-purple-500'}`}></div>
+            <h4 className={`text-xs font-black uppercase tracking-[0.2em] ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>Recursos Maestros</h4>
           </div>
           
-          <div className="space-y-4">
+          <div className="space-y-8">
             <div className="space-y-2">
-              <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1 flex items-center gap-2">
-                <Users className="w-3 h-3" /> Visor/Trabajador {formData.state && `(Disponibles en ${formData.state})`}
+              <label className={`text-[10px] font-black uppercase tracking-widest ml-1 flex items-center gap-2 ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>
+                <Users className="w-3.5 h-3.5" /> Visor de Campo Asignado
               </label>
               <select
                 value={formData.workerId}
                 onChange={(e) => handleInputChange("workerId", e.target.value)}
-                className="w-full bg-slate-800/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-emerald-500/50 outline-none"
+                className={`w-full border rounded-2xl px-5 py-4 transition-all duration-300 outline-none ${
+                    darkMode 
+                  ? 'bg-slate-950/50 border-white/5 text-white' 
+                  : 'bg-slate-50 border-slate-200 text-slate-900'
+                }`}
               >
-                <option value="">Seleccionar trabajador (opcional)</option>
+                <option value="">Seleccionar responsable táctico</option>
                 {availableWorkers.map(w => (
-                  <option key={w.id} value={w.id}>{w.name} - {w.phone} ({w.camerasAssigned?.length || 0} cámaras)</option>
+                  <option key={w.id} value={w.id}>{w.name} - {w.phone} ({w.camerasAssigned?.length || 0} unidades)</option>
                 ))}
               </select>
+              <p className="text-[9px] font-black uppercase tracking-widest text-slate-600 ml-1">
+                Mostrando personal disponible en {formData.state || "la zona seleccionada"}
+              </p>
             </div>
 
             {formData.workerId && (
-              <div className="bg-slate-900/50 rounded-2xl p-6 border border-white/5 space-y-4">
-                <div className="flex items-center justify-between">
-                  <h5 className="text-xs font-black text-gray-400 uppercase tracking-widest flex items-center gap-2">
-                    <Camera className="w-3.5 h-3.5" /> Selección de Cámaras
+              <div className={`rounded-3xl p-8 border transition-all duration-500 space-y-6 ${darkMode ? 'bg-white/[0.02] border-white/5 shadow-2xl' : 'bg-slate-50/50 border-slate-200 shadow-sm'}`}>
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                  <h5 className={`text-[10px] font-black uppercase tracking-[0.2em] flex items-center gap-3 ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+                    <Camera className="w-4 h-4" /> Selección Táctica de Hardware
                   </h5>
-                  <span className={`text-[10px] font-black px-3 py-1 rounded-full ${formData.assignedCameras.length >= requiredCameras ? 'bg-emerald-500/10 text-emerald-400' : 'bg-yellow-500/10 text-yellow-400'}`}>
-                    {formData.assignedCameras.length} / {requiredCameras} ASIGNADAS
-                  </span>
+                  <div className={`px-4 py-2 rounded-xl text-[10px] font-black tracking-widest border transition-all duration-500 ${
+                    formData.assignedCameras.length >= requiredCameras 
+                      ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500' 
+                      : 'bg-amber-500/10 border-amber-500/20 text-amber-500'
+                  }`}>
+                    {formData.assignedCameras.length} / {requiredCameras} UNIDADES VINCULADAS
+                  </div>
                 </div>
 
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 max-h-48 overflow-y-auto pr-2 custom-scrollbar">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 max-h-64 overflow-y-auto pr-4 custom-scrollbar">
                   {workerCameras.map(cam => (
                     <button
                       key={cam.id}
                       type="button"
                       onClick={() => handleCameraSelection(cam.id)}
-                      className={`p-3 rounded-xl border text-left transition-all group ${
+                      className={`p-4 rounded-2xl border text-left transition-all duration-300 group relative ${
                         formData.assignedCameras.includes(cam.id)
-                          ? 'bg-emerald-500/10 border-emerald-500/50 text-emerald-400'
-                          : 'bg-white/5 border-white/5 text-gray-500 hover:border-white/20'
+                          ? darkMode 
+                            ? 'bg-emerald-500/10 border-emerald-500/50 text-emerald-400 ring-2 ring-emerald-500/20' 
+                            : 'bg-emerald-500 border-emerald-600 text-white shadow-lg shadow-emerald-500/20'
+                          : darkMode
+                            ? 'bg-slate-950/50 border-white/5 text-slate-500 hover:border-white/20 hover:text-white'
+                            : 'bg-white border-slate-200 text-slate-500 hover:border-slate-400 hover:text-slate-900 shadow-sm'
                       }`}
                     >
-                      <div className="text-xs font-black group-hover:text-white transition-colors">{cam.id}</div>
-                      <div className="text-[9px] opacity-50 truncate">{cam.model}</div>
+                      <div className="text-[11px] font-black transition-colors duration-300 mb-1">{cam.id}</div>
+                      <div className="text-[9px] font-bold opacity-60 truncate uppercase tracking-tighter">{cam.model}</div>
+                      {formData.assignedCameras.includes(cam.id) && (
+                        <CheckCircle className="absolute top-2 right-2 w-3.5 h-3.5" />
+                      )}
                     </button>
                   ))}
                   {workerCameras.length === 0 && (
-                    <div className="col-span-full py-8 text-center bg-white/5 rounded-xl border border-dashed border-white/10">
-                      <Package className="w-8 h-8 text-gray-600 mx-auto mb-2" />
-                      <p className="text-xs text-gray-500 font-bold uppercase tracking-widest">Sin cámaras disponibles</p>
+                    <div className={`col-span-full py-12 text-center rounded-3xl border border-dashed transition-all duration-500 ${darkMode ? 'bg-white/[0.01] border-white/10' : 'bg-slate-100/50 border-slate-200'}`}>
+                      <Package className={`w-12 h-12 mx-auto mb-4 opacity-20 ${darkMode ? 'text-white' : 'text-slate-900'}`} />
+                      <p className="text-[10px] text-slate-500 font-black uppercase tracking-widest">El responsable no tiene unidades asignadas en inventario</p>
                     </div>
                   )}
                 </div>
@@ -340,44 +398,54 @@ const TournamentForm = ({
         </section>
 
         {/* Resumen Final y Acciones */}
-        <section className="bg-emerald-500/[0.03] rounded-3xl p-8 border border-emerald-500/10 space-y-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+        <section className={`rounded-[2.5rem] p-10 border transition-all duration-500 space-y-8 ${
+          darkMode ? 'bg-emerald-500/[0.02] border-emerald-500/10' : 'bg-slate-50 border-slate-100 shadow-xl shadow-slate-200/50'
+        }`}>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
             <div>
-              <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Estado Sugerido</p>
-              <div className="flex items-center gap-2">
-                <div className={`w-2 h-2 rounded-full ${currentStatus === 'activo' ? 'bg-emerald-500' : 'bg-yellow-500'} animate-pulse`}></div>
-                <span className="text-sm font-black text-white uppercase">{currentStatus}</span>
+              <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Estado Previsto</p>
+              <div className="flex items-center gap-3">
+                <div className={`w-2.5 h-2.5 rounded-full ${currentStatus === 'activo' ? 'bg-emerald-500 shadow-lg shadow-emerald-500/40' : 'bg-amber-500 shadow-lg shadow-amber-500/40'} animate-pulse`}></div>
+                <span className={`text-sm font-black uppercase tracking-tight transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>{currentStatus}</span>
               </div>
             </div>
             <div>
-              <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Cámaras</p>
-              <span className={`text-sm font-black ${formData.assignedCameras.length >= requiredCameras ? 'text-emerald-400' : 'text-red-400'}`}>
-                {formData.assignedCameras.length} de {requiredCameras}
+              <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Cuota Unidades</p>
+              <span className={`text-lg font-black tracking-tighter ${formData.assignedCameras.length >= requiredCameras ? 'text-emerald-500' : 'text-amber-500'}`}>
+                {formData.assignedCameras.length} <span className="text-xs text-slate-500 ml-1">/ {requiredCameras}</span>
               </span>
             </div>
             <div>
-              <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Operación</p>
-              <span className="text-sm font-black text-white">{formData.holes || 0} Hoyos</span>
+              <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Complejidad</p>
+              <span className={`text-lg font-black tracking-tighter transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>
+                {formData.holes || 0} <span className="text-xs text-slate-500 ml-1">HOYOS</span>
+              </span>
             </div>
             <div>
-              <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Periodo</p>
-              <span className="text-sm font-black text-white">{formData.days || 0} Días</span>
+              <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Extensión</p>
+              <span className={`text-lg font-black tracking-tighter transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>
+                {formData.days || 0} <span className="text-xs text-slate-500 ml-1">DÍAS</span>
+              </span>
             </div>
           </div>
 
-          <div className="flex flex-col md:flex-row gap-4 pt-4">
+          <div className="flex flex-col md:flex-row gap-5 pt-6">
             <button
               type="submit"
-              className="flex-grow bg-emerald-500 text-slate-950 font-black py-4 rounded-2xl hover:bg-emerald-400 transition-all shadow-xl shadow-emerald-500/10 active:scale-[0.98]"
+              className="flex-grow bg-emerald-500 text-white font-black py-5 rounded-2xl hover:bg-emerald-400 transition-all shadow-2xl shadow-emerald-500/20 active:scale-[0.98] uppercase tracking-[0.2em] text-xs"
             >
-              {isEditing ? "ACTUALIZAR DATOS DEL TORNEO" : "FINALIZAR Y CREAR TORNEO"}
+              {isEditing ? "Consolidar Cambios Maestros" : "Autorizar y Generar Expediente"}
             </button>
             <button
               type="button"
               onClick={onCancel}
-              className="px-10 py-4 bg-white/5 text-gray-400 font-bold rounded-2xl hover:text-white hover:bg-white/10 transition-all"
+              className={`px-12 py-5 rounded-2xl font-black uppercase tracking-widest text-xs transition-all duration-300 border ${
+                darkMode 
+                  ? 'bg-white/5 border-white/5 text-slate-400 hover:bg-white/10 hover:text-white' 
+                  : 'bg-slate-100 border-slate-200 text-slate-500 hover:bg-slate-200 hover:text-slate-900'
+              }`}
             >
-              Cancelar
+              Descartar
             </button>
           </div>
         </section>

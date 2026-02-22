@@ -2,30 +2,34 @@ import React from 'react';
 import { Truck, MapPin, User, Calendar, Hash, Eye, Edit, Trash2, MoreVertical } from 'lucide-react';
 import StatusBadge from '../UI/StatusBadge';
 
-const ShipmentMobileCard = ({ shipment, onView, onEdit, onDelete }) => {
+const ShipmentMobileCard = ({ shipment, onView, onEdit, onDelete, darkMode = true }) => {
   const [showMenu, setShowMenu] = React.useState(false);
 
   const getStatusColor = (status) => {
     switch (status) {
-      case "enviado": return "text-green-400";
-      case "preparando": return "text-yellow-400";
+      case "enviado": return "text-emerald-400";
+      case "preparando": return "text-amber-400";
       case "pendiente": return "text-orange-400";
       case "entregado": return "text-blue-400";
       case "cancelado": return "text-red-400";
-      default: return "text-gray-400";
+      default: return "text-slate-400 text-slate-500";
     }
   };
 
   return (
-    <div className="bg-black/20 rounded-xl border border-white/10 p-4 hover:bg-white/5 transition-colors">
+    <div className={`p-6 rounded-3xl border transition-all duration-300 ${
+      darkMode ? 'bg-white/[0.02] border-white/5 shadow-2xl' : 'bg-white border-black/5 shadow-xl shadow-slate-200'
+    }`}>
       {/* Header */}
-      <div className="flex items-start justify-between mb-3">
-        <div className="flex items-center space-x-2 flex-1 min-w-0">
-          <Truck className="w-5 h-5 text-gray-400 flex-shrink-0" />
+      <div className="flex items-start justify-between mb-5">
+        <div className="flex items-center space-x-3 flex-1 min-w-0">
+          <div className={`p-2.5 rounded-xl transition-colors duration-500 ${darkMode ? 'bg-white/5 text-slate-400' : 'bg-slate-50 text-slate-500'}`}>
+            <Truck className="w-5 h-5 flex-shrink-0" />
+          </div>
           <div className="min-w-0">
-            <div className="text-base font-semibold text-white font-mono truncate">{shipment.id}</div>
+            <div className={`text-base font-black transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'} font-mono truncate`}>{shipment.id}</div>
             {shipment.sender && (
-              <div className="text-xs text-gray-400 truncate">{shipment.sender}</div>
+              <div className="text-[10px] font-bold text-slate-500 uppercase tracking-tight truncate">{shipment.sender}</div>
             )}
           </div>
         </div>
@@ -34,7 +38,9 @@ const ShipmentMobileCard = ({ shipment, onView, onEdit, onDelete }) => {
         <div className="flex items-center space-x-2 ml-2">
           <button
             onClick={() => onView(shipment)}
-            className="p-2 text-emerald-400 hover:bg-white/10 rounded-lg transition-colors"
+            className={`p-2.5 rounded-xl transition-all duration-300 ${
+              darkMode ? 'bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500 hover:text-white' : 'bg-emerald-50 text-emerald-600 hover:bg-emerald-500 hover:text-white'
+            }`}
           >
             <Eye className="w-5 h-5" />
           </button>
@@ -42,106 +48,117 @@ const ShipmentMobileCard = ({ shipment, onView, onEdit, onDelete }) => {
           <div className="relative">
             <button
               onClick={() => setShowMenu(!showMenu)}
-              className="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+              className={`p-2.5 rounded-xl transition-all duration-300 ${
+                darkMode ? 'bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white' : 'bg-slate-50 text-slate-500 hover:bg-slate-100'
+              }`}
             >
               <MoreVertical className="w-5 h-5" />
             </button>
             
             {showMenu && (
-              <div className="absolute right-0 mt-2 w-56 bg-slate-800 border border-white/20 rounded-lg shadow-xl z-50">
-                <div className="p-2">
-                  <button
-                    onClick={() => {
-                      onView(shipment);
-                      setShowMenu(false);
-                    }}
-                    className="w-full flex items-center space-x-3 px-3 py-2 text-sm text-white hover:bg-white/10 rounded-lg"
-                  >
-                    <Eye className="w-4 h-4" />
-                    <span>Ver detalles</span>
-                  </button>
-                  <button
-                    onClick={() => {
-                      onEdit(shipment);
-                      setShowMenu(false);
-                    }}
-                    className="w-full flex items-center space-x-3 px-3 py-2 text-sm text-blue-400 hover:bg-white/10 rounded-lg"
-                  >
-                    <Edit className="w-4 h-4" />
-                    <span>Editar</span>
-                  </button>
-                  
-                  <div className="border-t border-white/10 my-1"></div>
-                  <div className="px-3 py-2 text-xs text-gray-400 font-medium">Cambiar estado</div>
-                  {["preparando", "pendiente", "enviado", "entregado"].map((status) => (
+              <>
+                <div className="fixed inset-0 z-40" onClick={() => setShowMenu(false)} />
+                <div className={`absolute right-0 mt-3 w-56 rounded-2xl border shadow-2xl z-50 overflow-hidden transform origin-top-right transition-all duration-300 ${
+                  darkMode ? 'bg-slate-900 border-white/10 shadow-black' : 'bg-white border-black/5'
+                }`}>
+                  <div className="p-2 space-y-1">
                     <button
-                      key={status}
+                      onClick={() => { onView(shipment); setShowMenu(false); }}
+                      className={`w-full flex items-center space-x-3 px-4 py-3 text-xs font-black uppercase tracking-widest rounded-xl transition-colors ${
+                        darkMode ? 'text-white hover:bg-white/10' : 'text-slate-700 hover:bg-slate-50'
+                      }`}
+                    >
+                      <Eye className="w-4 h-4 text-emerald-500" />
+                      <span>Ver Detalles</span>
+                    </button>
+                    <button
+                      onClick={() => { onEdit(shipment); setShowMenu(false); }}
+                      className={`w-full flex items-center space-x-3 px-4 py-3 text-xs font-black uppercase tracking-widest rounded-xl transition-colors ${
+                        darkMode ? 'text-blue-400 hover:bg-white/10' : 'text-blue-600 hover:bg-slate-50'
+                      }`}
+                    >
+                      <Edit className="w-4 h-4" />
+                      <span>Modificar</span>
+                    </button>
+                    
+                    <div className={`border-t my-1 ${darkMode ? 'border-white/10' : 'border-slate-100'}`}></div>
+                    <div className="px-4 py-2 text-[9px] text-slate-500 font-black uppercase tracking-widest">Estado Rápido</div>
+                    {["preparando", "pendiente", "enviado", "entregado"].map((status) => (
+                      <button
+                        key={status}
+                        onClick={() => {
+                          if (shipment.status !== status) onEdit({ ...shipment, status });
+                          setShowMenu(false);
+                        }}
+                        className={`w-full flex items-center space-x-3 px-4 py-2 text-xs font-bold rounded-xl transition-colors ${
+                          shipment.status === status 
+                            ? darkMode ? "bg-white/10 text-white" : "bg-slate-100 text-slate-900" 
+                            : darkMode ? "text-slate-400 hover:bg-white/10 hover:text-white" : "text-slate-400 hover:bg-slate-50 hover:text-slate-700"
+                        }`}
+                      >
+                        <div className={`w-2 h-2 rounded-full ${getStatusColor(status).replace('text-', 'bg-')}`} />
+                        <span className="capitalize">{status}</span>
+                      </button>
+                    ))}
+
+                    <div className={`border-t my-1 ${darkMode ? 'border-white/10' : 'border-slate-100'}`}></div>
+                    <button
                       onClick={() => {
-                        if (shipment.status !== status) {
-                          onEdit({ ...shipment, status });
+                        if (confirm('¿Confirmar eliminación de expediente logístico?')) {
+                          onDelete(shipment.id);
                         }
                         setShowMenu(false);
                       }}
-                      className="w-full flex items-center space-x-3 px-3 py-2 text-sm text-gray-300 hover:bg-white/10 rounded-lg"
+                      className={`w-full flex items-center space-x-3 px-4 py-3 text-xs font-black uppercase tracking-widest rounded-xl transition-colors ${
+                        darkMode ? 'text-red-400 hover:bg-red-500/10' : 'text-red-500 hover:bg-red-50'
+                      }`}
                     >
-                      <div className={`w-2 h-2 rounded-full ${getStatusColor(status).replace('text-', 'bg-')}`} />
-                      <span className="capitalize">{status}</span>
+                      <Trash2 className="w-4 h-4" />
+                      <span>Eliminar</span>
                     </button>
-                  ))}
-
-                  <div className="border-t border-white/10 my-1"></div>
-                  <button
-                    onClick={() => {
-                      if (confirm('¿Estás seguro de que quieres eliminar este envío?')) {
-                        onDelete(shipment.id);
-                      }
-                      setShowMenu(false);
-                    }}
-                    className="w-full flex items-center space-x-3 px-3 py-2 text-sm text-red-400 hover:bg-red-500/10 rounded-lg"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                    <span>Eliminar</span>
-                  </button>
+                  </div>
                 </div>
-              </div>
+              </>
             )}
           </div>
         </div>
       </div>
 
       {/* Badges */}
-      <div className="flex flex-wrap gap-2 mb-3">
+      <div className="flex flex-wrap gap-2 mb-5">
         <StatusBadge status={shipment.status} />
-        <span className="bg-blue-500/20 text-blue-400 px-2 py-1 rounded text-xs">
-          {shipment.cameras?.length || 0} cámaras
+        <span className={`px-2 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest border ${
+          darkMode ? 'bg-blue-500/10 border-blue-500/20 text-blue-400' : 'bg-blue-50 border-blue-100 text-blue-600'
+        }`}>
+          {shipment.cameras?.length || 0} UNIDADES PIX
         </span>
       </div>
 
       {/* Info Grid */}
-      <div className="space-y-2 text-sm">
-        <div className="flex items-center space-x-2 text-gray-300">
-          <MapPin className="w-4 h-4 text-gray-400 flex-shrink-0" />
-          <span className="truncate">{shipment.destination}</span>
+      <div className="space-y-4">
+        <div className="flex items-center space-x-3">
+          <MapPin className="w-4 h-4 text-slate-500 flex-shrink-0" />
+          <span className={`text-[11px] font-bold transition-colors duration-500 ${darkMode ? 'text-slate-300' : 'text-slate-600'} truncate`}>{shipment.destination}</span>
         </div>
 
-        <div className="flex items-center space-x-2 text-gray-300">
-          <User className="w-4 h-4 text-gray-400 flex-shrink-0" />
-          <span className="truncate">{shipment.recipient}</span>
+        <div className="flex items-center space-x-3">
+          <User className="w-4 h-4 text-slate-500 flex-shrink-0" />
+          <span className={`text-[11px] font-bold transition-colors duration-500 ${darkMode ? 'text-slate-300' : 'text-slate-600'} truncate`}>{shipment.recipient}</span>
         </div>
 
-        <div className="flex items-center space-x-2 text-gray-300">
-          <Calendar className="w-4 h-4 text-gray-400 flex-shrink-0" />
-          <span>{shipment.date}</span>
+        <div className="flex items-center space-x-3">
+          <Calendar className="w-4 h-4 text-slate-500 flex-shrink-0" />
+          <span className={`text-[11px] font-bold transition-colors duration-500 ${darkMode ? 'text-slate-300' : 'text-slate-600'}`}>{shipment.date}</span>
         </div>
 
-        <div className="flex items-center justify-between pt-2 border-t border-white/10">
-          <div className="flex items-center space-x-2 text-gray-300 font-mono text-xs">
-            <Hash className="w-4 h-4 text-gray-400" />
-            <span>{shipment.trackingNumber || "No tracking"}</span>
+        <div className={`pt-4 mt-2 border-t flex items-center justify-between transition-colors duration-500 ${darkMode ? 'border-white/5' : 'border-slate-100'}`}>
+          <div className="flex items-center space-x-2 font-mono text-[10px] font-black uppercase tracking-tighter text-slate-500">
+            <Hash className="w-4 h-4" />
+            <span>{shipment.trackingNumber || "PENDIENTE"}</span>
           </div>
           {shipment.shipper && (
-            <div className="text-xs text-gray-500">
-              Por: {shipment.shipper}
+            <div className="text-[10px] font-black uppercase tracking-widest text-slate-500 opacity-60">
+              LOG: {shipment.shipper.split(' ')[0]}
             </div>
           )}
         </div>

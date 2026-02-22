@@ -3,33 +3,42 @@ import { Eye, MoreVertical, Edit, Trash2 } from 'lucide-react';
 import StatusBadge from '../UI/StatusBadge';
 import WorkerMobileCard from './WorkerMobileCard';
 
-const WorkerRow = memo(({ worker, onEdit, onDelete, onView }) => {
+const WorkerRow = memo(({ worker, onEdit, onDelete, onView, darkMode = true }) => {
   const [showMenu, setShowMenu] = useState(false);
 
   return (
-    <tr className="hover:bg-white/5 transition-colors group">
-      <td className="px-6 py-4 whitespace-nowrap">
-        <div className="text-sm font-medium text-white">{worker.name}</div>
-        <div className="text-xs text-gray-400">ID: {worker.id}</div>
-        {worker.specialty && (
-          <div className="text-xs text-gray-500">{worker.specialty}</div>
-        )}
+    <tr className={`transition-colors duration-300 ${darkMode ? 'hover:bg-white/[0.02]' : 'hover:bg-slate-50'}`}>
+      <td className="px-6 py-5 whitespace-nowrap">
+        <div className="flex flex-col">
+          <div className={`text-sm font-black transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>{worker.name}</div>
+          <div className="flex items-center gap-2 mt-0.5">
+            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-tight">ID: {worker.id}</span>
+            {worker.specialty && (
+              <>
+                <span className="text-slate-700 font-black text-[10px]">•</span>
+                <span className={`text-[10px] font-black uppercase tracking-widest ${darkMode ? 'text-emerald-500/70' : 'text-emerald-600'}`}>{worker.specialty}</span>
+              </>
+            )}
+          </div>
+        </div>
       </td>
-      <td className="px-6 py-4 whitespace-nowrap">
-        <div className="text-sm text-gray-300">{worker.state}</div>
+      <td className="px-6 py-5 whitespace-nowrap">
+        <div className={`text-xs font-bold transition-colors duration-500 ${darkMode ? 'text-slate-300' : 'text-slate-700'}`}>{worker.state}</div>
       </td>
-      <td className="px-6 py-4 whitespace-nowrap">
-        <div className="text-sm text-gray-300">{worker.phone}</div>
+      <td className="px-6 py-5 whitespace-nowrap">
+        <div className={`text-xs font-mono font-bold transition-colors duration-500 ${darkMode ? 'text-slate-300' : 'text-slate-700'}`}>{worker.phone}</div>
       </td>
-      <td className="px-6 py-4 whitespace-nowrap">
+      <td className="px-6 py-5 whitespace-nowrap">
         <StatusBadge status={worker.status} />
       </td>
-      <td className="px-6 py-4 whitespace-nowrap">
-        <div className="flex items-center space-x-2">
+      <td className="px-6 py-5 whitespace-nowrap text-right">
+        <div className="flex items-center space-x-2 justify-end">
           <button 
             onClick={() => onView(worker)}
-            className="text-emerald-400 hover:text-emerald-300 transition-colors p-1 rounded hover:bg-white/10"
-            title="Ver detalles"
+            className={`p-2.5 rounded-xl transition-all duration-300 ${
+              darkMode ? 'bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500 hover:text-white' : 'bg-emerald-50 text-emerald-600 hover:bg-emerald-500 hover:text-white'
+            }`}
+            title="Visualizar Perfil"
           >
             <Eye className="w-4 h-4" />
           </button>
@@ -40,7 +49,9 @@ const WorkerRow = memo(({ worker, onEdit, onDelete, onView }) => {
                 e.stopPropagation();
                 setShowMenu(!showMenu);
               }}
-              className="text-gray-400 hover:text-white transition-colors p-1 rounded hover:bg-white/10"
+              className={`p-2.5 rounded-xl transition-all duration-300 ${
+                darkMode ? 'bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white' : 'bg-slate-50 text-slate-500 hover:bg-slate-100'
+              }`}
             >
               <MoreVertical className="w-4 h-4" />
             </button>
@@ -51,17 +62,21 @@ const WorkerRow = memo(({ worker, onEdit, onDelete, onView }) => {
                   className="fixed inset-0 z-40" 
                   onClick={() => setShowMenu(false)}
                 />
-                <div className="absolute right-0 mt-2 w-48 bg-slate-800 border border-white/20 rounded-lg shadow-xl z-50 overflow-hidden">
-                  <div className="p-1">
+                <div className={`absolute right-0 mt-3 w-56 rounded-[1.5rem] border shadow-2xl z-50 overflow-hidden transform origin-top-right transition-all duration-300 ${
+                  darkMode ? 'bg-slate-900 border-white/10 shadow-black/50' : 'bg-white border-black/5'
+                }`}>
+                  <div className="p-2 space-y-1">
                     <button
                       onClick={() => {
                         onView(worker);
                         setShowMenu(false);
                       }}
-                      className="w-full flex items-center space-x-3 px-3 py-2 text-sm text-white hover:bg-white/10 rounded-md transition-colors"
+                      className={`w-full flex items-center space-x-3 px-4 py-3 text-xs font-black uppercase tracking-widest rounded-xl transition-colors ${
+                        darkMode ? 'text-white hover:bg-white/5' : 'text-slate-700 hover:bg-slate-50'
+                      }`}
                     >
-                      <Eye className="w-4 h-4" />
-                      <span>Ver detalles</span>
+                      <Eye className="w-4 h-4 text-emerald-500" />
+                      <span>Ver Perfil</span>
                     </button>
                     
                     <button
@@ -69,19 +84,23 @@ const WorkerRow = memo(({ worker, onEdit, onDelete, onView }) => {
                         onEdit(worker);
                         setShowMenu(false);
                       }}
-                      className="w-full flex items-center space-x-3 px-3 py-2 text-sm text-blue-400 hover:bg-white/10 rounded-md transition-colors"
+                      className={`w-full flex items-center space-x-3 px-4 py-3 text-xs font-black uppercase tracking-widest rounded-xl transition-colors ${
+                        darkMode ? 'text-blue-400 hover:bg-white/5' : 'text-blue-600 hover:bg-slate-50'
+                      }`}
                     >
                       <Edit className="w-4 h-4" />
-                      <span>Editar</span>
+                      <span>Modificar</span>
                     </button>
                     
-                    <div className="border-t border-white/10 my-1"></div>
+                    <div className={`border-t my-1 ${darkMode ? 'border-white/5' : 'border-slate-100'}`}></div>
                     <button
                       onClick={() => {
                         onDelete(worker.id);
                         setShowMenu(false);
                       }}
-                      className="w-full flex items-center space-x-3 px-3 py-2 text-sm text-red-400 hover:bg-red-500/10 rounded-md transition-colors"
+                      className={`w-full flex items-center space-x-3 px-4 py-3 text-xs font-black uppercase tracking-widest rounded-xl transition-colors ${
+                        darkMode ? 'text-red-400 hover:bg-red-500/10' : 'text-red-600 hover:bg-red-50'
+                      }`}
                     >
                       <Trash2 className="w-4 h-4" />
                       <span>Eliminar</span>
@@ -97,18 +116,18 @@ const WorkerRow = memo(({ worker, onEdit, onDelete, onView }) => {
   );
 });
 
-const WorkersTable = ({ workers, onEditWorker, onDeleteWorker, onViewWorker }) => {
+const WorkersTable = ({ workers, onEditWorker, onDeleteWorker, onViewWorker, darkMode = true }) => {
   const handleEdit = (worker) => onEditWorker(worker);
   const handleView = (worker) => onViewWorker(worker);
   const handleDelete = (workerId) => {
-    if (confirm('¿Estás seguro de que quieres eliminar este trabajador?')) {
+    if (confirm('¿Confirmar baja definitiva del operador en el sistema?')) {
       onDeleteWorker(workerId);
     }
   };
 
   return (
     <>
-      <div className="md:hidden space-y-3">
+      <div className="md:hidden space-y-4 p-4">
         {workers && workers.length > 0 ? (
           workers.map((worker) => (
             <WorkerMobileCard
@@ -117,48 +136,50 @@ const WorkersTable = ({ workers, onEditWorker, onDeleteWorker, onViewWorker }) =
               onView={handleView}
               onEdit={handleEdit}
               onDelete={handleDelete}
+              darkMode={darkMode}
             />
           ))
         ) : (
-          <div className="bg-black/20 rounded-xl border border-white/10 p-8 text-center text-gray-400">
-            No hay trabajadores para mostrar
+          <div className={`text-center py-10 rounded-2xl border border-dashed ${darkMode ? 'bg-white/5 border-white/10' : 'bg-slate-50 border-slate-200'}`}>
+            <p className="text-xs font-black text-slate-500 uppercase tracking-widest">Sin operadores registrados</p>
           </div>
         )}
       </div>
 
-      <div className="hidden md:block bg-black/20 backdrop-blur-sm rounded-2xl border border-white/10 overflow-hidden">
-        <div className="overflow-x-auto min-h-[400px]">
-          <table className="w-full">
-            <thead className="bg-white/5">
+      <div className="hidden md:block overflow-x-auto min-h-[500px]">
+        <table className="w-full border-collapse">
+          <thead className={darkMode ? 'bg-white/[0.02]' : 'bg-slate-50/50'}>
+            <tr>
+              {[
+                "Información del Operador", "Entidad Federativa", "Contacto", "Estatus Laboral", "Acciones"
+              ].map((h, i) => (
+                <th key={h} className={`px-6 py-4 text-left text-[10px] font-black uppercase tracking-[0.2em] ${darkMode ? 'text-slate-500' : 'text-slate-400'} ${i === 4 ? 'text-right' : ''}`}>
+                  {h}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody className={`divide-y ${darkMode ? 'divide-white/5' : 'divide-slate-100'}`}>
+            {workers && workers.length > 0 ? (
+              workers.map(worker => (
+                <WorkerRow 
+                  key={worker.id}
+                  worker={worker}
+                  onView={handleView}
+                  onEdit={handleEdit}
+                  onDelete={handleDelete}
+                  darkMode={darkMode}
+                />
+              ))
+            ) : (
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Nombre</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Estado</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Teléfono</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Estatus</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider w-20">Acciones</th>
+                <td colSpan="5" className="px-6 py-20 text-center">
+                  <p className="text-[10px] font-black uppercase tracking-widest md:tracking-[0.4em] text-slate-500 opacity-20">Base de datos vacía</p>
+                </td>
               </tr>
-            </thead>
-            <tbody className="divide-y divide-white/10">
-              {workers && workers.length > 0 ? (
-                workers.map(worker => (
-                  <WorkerRow 
-                    key={worker.id}
-                    worker={worker}
-                    onView={handleView}
-                    onEdit={handleEdit}
-                    onDelete={handleDelete}
-                  />
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="5" className="px-6 py-4 text-center text-gray-400">
-                    No hay trabajadores para mostrar
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+            )}
+          </tbody>
+        </table>
       </div>
     </>
   );

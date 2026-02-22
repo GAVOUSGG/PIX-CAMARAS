@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Users, Clock, Shield, Plus, Edit2, Trash2, X, Save } from 'lucide-react';
 import { API_URL } from '../../config';
 
-const AdminPanel = () => {
+const AdminPanel = ({ darkMode = true }) => {
   const [history, setHistory] = useState([]);
   const [activeView, setActiveView] = useState('users'); // 'users' or 'history'
   const [users, setUsers] = useState([]);
@@ -123,297 +123,258 @@ const AdminPanel = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
+      <div className="flex items-center justify-center p-20">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-in">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl md:text-2xl font-bold text-white">Panel de Administración</h2>
-          <p className="text-sm md:text-base text-slate-400">Gestión de usuarios y monitoreo de actividad</p>
+          <h2 className={`text-xl md:text-2xl font-bold transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>Panel de Administración</h2>
+          <p className="text-sm md:text-base text-slate-500">Gestión de usuarios y monitoreo de actividad</p>
         </div>
         <div className="flex flex-wrap gap-2 md:space-x-3">
-          <div className="flex bg-slate-800 rounded-lg p-1 mr-0 md:mr-4 w-full md:w-auto overflow-x-auto">
+          <div className={`flex rounded-xl p-1 transition-colors duration-500 ${darkMode ? 'bg-slate-900 border border-white/5' : 'bg-slate-100 border border-black/5'}`}>
             <button
               onClick={() => setActiveView('users')}
-              className={`flex-1 md:flex-none px-3 md:px-4 py-1.5 rounded-md text-sm font-medium transition-all whitespace-nowrap ${
+              className={`px-4 py-1.5 rounded-lg text-sm font-bold transition-all whitespace-nowrap ${
                 activeView === 'users' 
-                  ? 'bg-emerald-600 text-white shadow-lg' 
-                  : 'text-slate-400 hover:text-white'
+                  ? darkMode 
+                    ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' 
+                    : 'bg-emerald-500 text-white shadow-lg' 
+                  : 'text-slate-500 hover:text-slate-400'
               }`}
             >
               Usuarios
             </button>
             <button
               onClick={() => setActiveView('history')}
-              className={`flex-1 md:flex-none px-3 md:px-4 py-1.5 rounded-md text-sm font-medium transition-all whitespace-nowrap ${
+              className={`px-4 py-1.5 rounded-lg text-sm font-bold transition-all whitespace-nowrap ${
                 activeView === 'history' 
-                  ? 'bg-emerald-600 text-white shadow-lg' 
-                  : 'text-slate-400 hover:text-white'
+                  ? darkMode 
+                    ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' 
+                    : 'bg-emerald-500 text-white shadow-lg' 
+                  : 'text-slate-500 hover:text-slate-400'
               }`}
             >
               Historial
             </button>
-            {activeView === 'history' && (
-              <button
-                onClick={async () => {
-                  if (window.confirm('¿Estás seguro de eliminar TODO el historial de cámaras? Esta acción no se puede deshacer.')) {
-                     try {
-                       const token = sessionStorage.getItem('token');
-                       const response = await fetch(`${API_URL}/camera-history`, {
-                         method: 'DELETE',
-                         headers: {
-                           'Content-Type': 'application/json',
-                           'Authorization': `Bearer ${token}`
-                         }
-                       });
-
-                       if (response.ok) {
-                         fetchHistory();
-                         alert('Historial eliminado exitosamente');
-                       } else {
-                         const data = await response.json();
-                         alert(data.error || 'Error al eliminar historial');
-                       }
-                     } catch (error) {
-                       console.error(error);
-                       alert('Error de conexión al eliminar historial');
-                     }
-                  }
-                }}
-                className="ml-2 px-3 md:px-4 py-1.5 rounded-md text-sm font-medium transition-all bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white border border-red-500/20"
-              >
-                Eliminar Historial
-              </button>
-            )}
           </div>
           
           {activeView === 'users' && (
             <button 
               onClick={() => openModal()}
-              className="flex-1 md:flex-none flex items-center justify-center px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors text-sm font-medium whitespace-nowrap"
+              className="flex items-center justify-center px-6 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl transition-all text-sm font-bold shadow-lg shadow-emerald-500/20 group uppercase tracking-widest"
             >
-              <Plus className="w-4 h-4 mr-2" />
-              Crear Usuario
+              <Plus className="w-4 h-4 mr-2 transition-transform group-hover:rotate-90" />
+              Nuevo Usuario
             </button>
           )}
         </div>
       </div>
 
       {error && (
-        <div className="bg-red-500/10 border border-red-500/20 text-red-400 px-4 py-3 rounded-lg">
+        <div className={`border p-4 rounded-xl text-sm font-medium transition-colors ${darkMode ? 'bg-red-500/10 border-red-500/20 text-red-400' : 'bg-red-50 border-red-100 text-red-600'}`}>
           {error}
         </div>
       )}
 
-      {activeView === 'users' ? (
-        <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left">
-              <thead>
-                <tr className="bg-slate-900/50 border-b border-slate-700">
-                  <th className="px-4 py-3 md:px-6 md:py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                    Usuario
-                  </th>
-                  <th className="px-4 py-3 md:px-6 md:py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider hidden md:table-cell">
-                    Rol
-                  </th>
-                  <th className="px-4 py-3 md:px-6 md:py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                    Estado
-                  </th>
-                  <th className="px-4 py-3 md:px-6 md:py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider hidden sm:table-cell">
-                    Último Acceso
-                  </th>
-                  <th className="px-4 py-3 md:px-6 md:py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider text-right">
-                    Acciones
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-700">
-                {users.map((user) => (
-                  <tr key={user.id} className="hover:bg-slate-700/30 transition-colors">
-                    <td className="px-4 py-3 md:px-6 md:py-4 whitespace-nowrap">
+      <div className={`rounded-3xl border overflow-hidden transition-all duration-500 ${
+        darkMode ? 'bg-[#0B1120] border-white/5 shadow-2xl' : 'bg-white border-black/5 shadow-xl shadow-slate-200'
+      }`}>
+        <div className="overflow-x-auto">
+          <table className="w-full text-left">
+            <thead>
+              <tr className={`border-b transition-colors duration-500 ${darkMode ? 'bg-white/[0.02] border-white/5' : 'bg-slate-50 border-slate-100'}`}>
+                {activeView === 'users' ? (
+                  <>
+                    <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">Usuario</th>
+                    <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest hidden md:table-cell">Rol</th>
+                    <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">Estado</th>
+                    <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest hidden sm:table-cell">Último Acceso</th>
+                    <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Acciones</th>
+                  </>
+                ) : (
+                  <>
+                    <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">Fecha</th>
+                    <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">Usuario</th>
+                    <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">IP</th>
+                    <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">Resultado</th>
+                  </>
+                )}
+              </tr>
+            </thead>
+            <tbody className={`divide-y transition-colors duration-500 ${darkMode ? 'divide-white/5' : 'divide-slate-100'}`}>
+              {activeView === 'users' ? (
+                users.map((user) => (
+                  <tr key={user.id} className={`transition-colors hover:bg-emerald-500/[0.02]`}>
+                    <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
-                        <div className="h-8 w-8 rounded-full bg-emerald-500/10 flex items-center justify-center mr-3">
-                          <UserIcon className="h-4 w-4 text-emerald-500" />
+                        <div className={`h-10 w-10 rounded-xl flex items-center justify-center mr-3 transition-colors duration-500 ${darkMode ? 'bg-white/5' : 'bg-slate-100'}`}>
+                          <UserIcon className={`h-5 w-5 ${darkMode ? 'text-emerald-400' : 'text-emerald-600'}`} />
                         </div>
-                        <span className="text-sm font-medium text-white">{user.username}</span>
+                        <span className={`text-sm font-bold ${darkMode ? 'text-white' : 'text-slate-900'}`}>{user.username}</span>
                       </div>
                     </td>
-                    <td className="px-4 py-3 md:px-6 md:py-4 whitespace-nowrap hidden md:table-cell">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                    <td className="px-6 py-4 whitespace-nowrap hidden md:table-cell">
+                      <span className={`inline-flex items-center px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border transition-colors ${
                         user.role === 'admin' 
-                          ? 'bg-purple-500/10 text-purple-400 border border-purple-500/20' 
-                          : 'bg-blue-500/10 text-blue-400 border border-blue-500/20'
+                          ? 'bg-purple-500/10 text-purple-400 border-purple-500/20' 
+                          : 'bg-blue-500/10 text-blue-400 border-blue-500/20'
                       }`}>
-                        {user.role === 'admin' ? <Shield className="w-3 h-3 mr-1" /> : null}
+                        {user.role === 'admin' && <Shield className="w-3 h-3 mr-1" />}
                         {user.role}
                       </span>
                     </td>
-                    <td className="px-4 py-3 md:px-6 md:py-4 whitespace-nowrap">
+                    <td className="px-6 py-4 whitespace-nowrap">
                       {user.lockoutUntil && new Date(user.lockoutUntil) > new Date() ? (
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-500/10 text-red-400 border border-red-500/20">
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-red-500/10 text-red-400 border border-red-500/20">
                           Bloqueado
                         </span>
                       ) : (
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                           Activo
                         </span>
                       )}
                     </td>
-                    <td className="px-4 py-3 md:px-6 md:py-4 whitespace-nowrap text-sm text-slate-300 hidden sm:table-cell">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 hidden sm:table-cell font-medium">
                       <div className="flex items-center">
-                        <Clock className="h-3 w-3 mr-1.5 text-slate-500" />
+                        <Clock className="h-4 w-4 mr-2 opacity-50" />
                         {user.lastLogin ? new Date(user.lastLogin).toLocaleString() : 'Nunca'}
                       </div>
                     </td>
-                    <td className="px-4 py-3 md:px-6 md:py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <button 
-                        onClick={() => openModal(user)}
-                        className="text-blue-400 hover:text-blue-300 mr-3"
-                      >
-                        <Edit2 className="w-4 h-4" />
-                      </button>
-                      <button 
-                        onClick={() => handleDelete(user.id)}
-                        className="text-red-400 hover:text-red-300"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <div className="flex items-center justify-end space-x-2">
+                        <button 
+                          onClick={() => openModal(user)}
+                          className={`p-2 rounded-lg transition-colors ${darkMode ? 'text-slate-400 hover:text-blue-400 hover:bg-blue-500/10' : 'text-slate-400 hover:text-blue-600 hover:bg-blue-50'}`}
+                        >
+                          <Edit2 className="w-4 h-4" />
+                        </button>
+                        <button 
+                          onClick={() => handleDelete(user.id)}
+                          className={`p-2 rounded-lg transition-colors ${darkMode ? 'text-slate-400 hover:text-red-400 hover:bg-red-500/10' : 'text-slate-400 hover:text-red-600 hover:bg-red-50'}`}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
                     </td>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      ) : (
-        <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left">
-              <thead>
-                <tr className="bg-slate-900/50 border-b border-slate-700">
-                  <th className="px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                    Fecha
-                  </th>
-                  <th className="px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                    Usuario
-                  </th>
-                  <th className="px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                    IP
-                  </th>
-                  <th className="px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                    Resultado
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-700">
-                {history.map((attempt) => (
-                  <tr key={attempt.id} className="hover:bg-slate-700/30 transition-colors">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-300">
+                ))
+              ) : (
+                history.map((attempt) => (
+                  <tr key={attempt.id} className={`transition-colors hover:bg-emerald-500/[0.02]`}>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-500">
                       {new Date(attempt.timestamp).toLocaleString()}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
+                    <td className={`px-6 py-4 whitespace-nowrap text-sm font-bold ${darkMode ? 'text-white' : 'text-slate-900'}`}>
                       {attempt.username}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-400">
+                    <td className="px-6 py-4 whitespace-nowrap text-[10px] font-black text-slate-500 uppercase tracking-widest">
                       {attempt.ip}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       {attempt.success ? (
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                           Exitoso
                         </span>
                       ) : (
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-500/10 text-red-400 border border-red-500/20">
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-red-500/10 text-red-400 border border-red-500/20">
                           Fallido
                         </span>
                       )}
                     </td>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                ))
+              )}
+            </tbody>
+          </table>
         </div>
-      )}
+      </div>
 
       {/* Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-slate-800 border border-slate-700 rounded-xl shadow-2xl w-full max-w-md p-6">
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="text-xl font-bold text-white">
-                {editingUser ? 'Editar Usuario' : 'Crear Usuario'}
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4 animate-fade-in">
+          <div className={`w-full max-w-md p-8 rounded-[2rem] border shadow-2xl transition-all duration-500 ${
+            darkMode ? 'bg-slate-900 border-white/10' : 'bg-white border-black/5'
+          }`}>
+            <div className="flex justify-between items-center mb-8">
+              <h3 className={`text-2xl font-black tracking-tight ${darkMode ? 'text-white' : 'text-slate-900'}`}>
+                {editingUser ? 'Editar' : 'Nuevo'} <span className="text-emerald-500">Usuario</span>
               </h3>
               <button 
                 onClick={() => setShowModal(false)}
-                className="text-slate-400 hover:text-white"
+                className={`p-2 rounded-xl transition-colors ${darkMode ? 'hover:bg-white/5 text-slate-500 hover:text-white' : 'hover:bg-slate-100 text-slate-400 hover:text-slate-900'}`}
               >
-                <X className="w-5 h-5" />
+                <X className="w-6 h-6" />
               </button>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-slate-300 mb-1">
-                  Usuario
-                </label>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="space-y-2">
+                <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-1">Identificador de Usuario</label>
                 <input
                   type="text"
                   value={formData.username}
                   onChange={(e) => setFormData({...formData, username: e.target.value})}
-                  className="w-full bg-slate-900/50 border border-slate-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  className={`w-full px-4 py-3 rounded-xl border text-sm font-medium outline-none transition-all focus:ring-2 focus:ring-emerald-500/50 ${
+                    darkMode ? 'bg-white/5 border-white/10 text-white placeholder-slate-500' : 'bg-slate-50 border-slate-200 text-slate-900'
+                  }`}
+                  placeholder="ej. JuanPerez"
                   required
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-slate-300 mb-1">
-                  Contraseña {editingUser && '(Dejar en blanco para no cambiar)'}
+              <div className="space-y-2">
+                <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-1">
+                  Contraseña {editingUser && '(opcional)'}
                 </label>
                 <input
                   type="password"
                   value={formData.password}
                   onChange={(e) => setFormData({...formData, password: e.target.value})}
-                  className="w-full bg-slate-900/50 border border-slate-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  className={`w-full px-4 py-3 rounded-xl border text-sm font-medium outline-none transition-all focus:ring-2 focus:ring-emerald-500/50 ${
+                    darkMode ? 'bg-white/5 border-white/10 text-white placeholder-slate-500' : 'bg-slate-50 border-slate-200 text-slate-900'
+                  }`}
+                  placeholder="••••••••"
                   required={!editingUser}
                   autoComplete="new-password"
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-slate-300 mb-1">
-                  Rol
-                </label>
+              <div className="space-y-2">
+                <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-1">Nivel de Acceso</label>
                 <select
                   value={formData.role}
                   onChange={(e) => setFormData({...formData, role: e.target.value})}
-                  className="w-full bg-slate-900/50 border border-slate-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  className={`w-full px-4 py-3 rounded-xl border text-sm font-bold outline-none appearance-none transition-all focus:ring-2 focus:ring-emerald-500/50 cursor-pointer ${
+                    darkMode ? 'bg-white/5 border-white/10 text-white' : 'bg-slate-50 border-slate-200 text-slate-900'
+                  }`}
                 >
-                  <option value="user">Usuario</option>
-                  <option value="admin">Administrador</option>
+                  <option value="user" className={darkMode ? 'bg-slate-900' : 'bg-white'}>Colaborador (Ventas)</option>
+                  <option value="admin" className={darkMode ? 'bg-slate-900' : 'bg-white'}>Administrador (Total)</option>
                 </select>
               </div>
 
-              <div className="flex justify-end space-x-3 mt-6">
+              <div className="flex gap-3 pt-4">
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-colors"
+                  className={`flex-1 px-6 py-3 rounded-xl text-sm font-bold transition-all border ${
+                    darkMode ? 'bg-white/5 border-white/10 text-slate-400 hover:bg-white/10 hover:text-white' : 'bg-slate-100 border-slate-200 text-slate-600 hover:bg-slate-200'
+                  }`}
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors flex items-center"
+                  className="flex-[1.5] px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl text-sm font-black uppercase tracking-widest shadow-xl shadow-emerald-500/20 active:scale-95 transition-all flex items-center justify-center space-x-2"
                 >
-                  <Save className="w-4 h-4 mr-2" />
-                  Guardar
+                  <Save className="w-4 h-4" />
+                  <span>Guardar</span>
                 </button>
               </div>
             </form>
@@ -430,7 +391,7 @@ const UserIcon = ({ className }) => (
     viewBox="0 0 24 24" 
     fill="none" 
     stroke="currentColor" 
-    strokeWidth="2" 
+    strokeWidth="2.5" 
     strokeLinecap="round" 
     strokeLinejoin="round" 
     className={className}

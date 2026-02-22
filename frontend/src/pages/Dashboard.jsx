@@ -8,7 +8,7 @@ import UpcomingTournaments from "../components/Dashboard/UpcomingTournaments";
 const MexicoMap = React.lazy(() => import("../components/Map/MexicoMap"));
 const StatisticsSection = React.lazy(() => import("../components/Dashboard/StatisticsSection"));
 
-const Dashboard = memo(({ tournamentsData, camerasData, workersData, shipmentsData }) => {
+const Dashboard = memo(({ tournamentsData, camerasData, workersData, shipmentsData, darkMode }) => {
   const user = JSON.parse(sessionStorage.getItem('user'));
   const userName = user?.username || 'Usuario';
   
@@ -21,16 +21,16 @@ const Dashboard = memo(({ tournamentsData, camerasData, workersData, shipmentsDa
       {/* Dashboard Header */}
       <header className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 mb-4">
         <div>
-          <h1 className="text-2xl md:text-3xl font-black text-white tracking-tight">
+          <h1 className={`text-2xl md:text-3xl font-black tracking-tight transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>
             Bienvenido, <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-600">{userName}</span>
           </h1>
-          <p className="text-slate-400 mt-1 text-[10px] uppercase tracking-widest font-bold">Resumen General de Operaciones</p>
+          <p className="text-slate-500 mt-1 text-[10px] uppercase tracking-widest font-bold">Resumen General de Operaciones</p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <div className="px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-lg text-emerald-400 text-[10px] font-black tracking-widest uppercase shadow-[0_0_15px_rgba(16,185,129,0.1)]">
+          <div className={`px-3 py-1 border rounded-lg text-emerald-400 text-[10px] font-black tracking-widest uppercase shadow-[0_0_15px_rgba(16,185,129,0.1)] transition-all duration-500 ${darkMode ? 'bg-emerald-500/10 border-emerald-500/20' : 'bg-emerald-50 border-emerald-200'}`}>
             PIX-GOLF
           </div>
-          <div className="flex items-center gap-2 px-3 py-1 bg-blue-500/10 border border-blue-500/20 rounded-lg text-blue-400 text-[10px] font-black tracking-widest uppercase shadow-[0_0_15px_rgba(59,130,246,0.1)]">
+          <div className={`flex items-center gap-2 px-3 py-1 border rounded-lg text-blue-400 text-[10px] font-black tracking-widest uppercase shadow-[0_0_15px_rgba(59,130,246,0.1)] transition-all duration-500 ${darkMode ? 'bg-blue-500/10 border-blue-500/20' : 'bg-blue-50 border-blue-200'}`}>
             <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse"></span>
             {activeTournamentsCount} Torneos hoy
           </div>
@@ -43,6 +43,7 @@ const Dashboard = memo(({ tournamentsData, camerasData, workersData, shipmentsDa
           tournaments={tournamentsData}
           cameras={camerasData}
           workers={workersData}
+          darkMode={darkMode}
         />
       </section>
 
@@ -81,7 +82,7 @@ const Dashboard = memo(({ tournamentsData, camerasData, workersData, shipmentsDa
 
           {/* Torneos Próximos (Semana) */}
           <section className="dashboard-grid-item">
-            <UpcomingTournaments tournaments={tournamentsData} />
+            <UpcomingTournaments tournaments={tournamentsData} darkMode={darkMode} />
           </section>
           
         </div>
@@ -89,12 +90,12 @@ const Dashboard = memo(({ tournamentsData, camerasData, workersData, shipmentsDa
         <div className="xl:col-span-1 space-y-6 md:space-y-8 flex flex-col">
           {/* Torneos Activos */}
           <section className="dashboard-grid-item">
-            <ActiveTournaments tournaments={tournamentsData} />
+            <ActiveTournaments tournaments={tournamentsData} darkMode={darkMode} />
           </section>
           
           {/* Logística (Compacta) */}
           <section className="dashboard-grid-item">
-            <LogisticsSummary shipments={shipmentsData} />
+            <LogisticsSummary shipments={shipmentsData} darkMode={darkMode} />
           </section>
         </div>
       </div>

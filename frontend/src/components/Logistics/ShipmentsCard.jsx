@@ -2,7 +2,7 @@ import React from 'react';
 import { X, Truck, Package, MapPin, Calendar, User, Hash, Camera } from 'lucide-react';
 import StatusBadge from '../UI/StatusBadge';
 
-const ShipmentCard = ({ shipment, onClose, onEdit }) => {
+const ShipmentCard = ({ shipment, onClose, onEdit, darkMode = true }) => {
   if (!shipment) return null;
 
   const handleModalClick = (e) => {
@@ -11,162 +11,205 @@ const ShipmentCard = ({ shipment, onClose, onEdit }) => {
 
   const getStatusColor = (status) => {
     switch(status) {
-      case 'enviado': return 'text-green-400';
-      case 'preparando': return 'text-yellow-400';
+      case 'enviado': return 'text-emerald-400';
+      case 'preparando': return 'text-amber-400';
       case 'pendiente': return 'text-orange-400';
       case 'entregado': return 'text-blue-400';
       case 'cancelado': return 'text-red-400';
-      default: return 'text-gray-400';
+      default: return 'text-slate-400';
     }
   };
 
   const formatDate = (dateString) => {
     if (!dateString) return 'No especificado';
-    return new Date(dateString).toLocaleDateString('es-MX');
+    return new Date(dateString).toLocaleDateString('es-MX', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
   };
 
   return (
-    <div 
-      className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50"
-      onClick={onClose}
-    >
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 z-50 animate-fade-in text-left">
+      {/* Overlay */}
       <div 
-        className="bg-slate-800 border border-white/20 rounded-2xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+        className={`fixed inset-0 transition-colors duration-500 ${
+          darkMode ? 'bg-slate-950/40' : 'bg-slate-900/10'
+        }`} 
+        onClick={onClose} 
+      />
+
+      <div 
+        className={`w-full max-w-2xl relative z-10 shadow-2xl rounded-[2.5rem] border transition-all duration-500 overflow-hidden ${
+          darkMode 
+            ? 'bg-slate-900 border-white/5' 
+            : 'bg-white border-black/5 shadow-slate-300'
+        }`}
         onClick={handleModalClick}
       >
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center space-x-3">
-            <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-600 rounded-full flex items-center justify-center">
-              <Truck className="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <h3 className="text-xl font-semibold text-white">{shipment.id}</h3>
-              <StatusBadge status={shipment.status} />
-            </div>
+        {/* Header Visual */}
+        <div className={`h-32 relative overflow-hidden ${darkMode ? 'bg-slate-950/50' : 'bg-slate-50'}`}>
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute top-0 left-0 w-full h-full" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, gray 1px, transparent 0)', backgroundSize: '24px 24px' }}></div>
           </div>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-white transition-colors p-1 rounded hover:bg-white/10"
-          >
-            <X className="w-6 h-6" />
-          </button>
+          <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-inherit to-transparent"></div>
         </div>
 
-        {/* Información del envío */}
-        <div className="space-y-4">
-          {/* Información de Envío */}
-          <div className="bg-white/5 rounded-lg p-4">
-            <h4 className="font-semibold text-white mb-3">Información de Envío</h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="flex items-center space-x-3">
-                <MapPin className="w-4 h-4 text-gray-400" />
-                <div>
-                  <span className="text-gray-400 text-sm">Destino</span>
-                  <p className="text-white">{shipment.destination}</p>
-                </div>
+        {/* Content Container */}
+        <div className="px-8 pb-8 -mt-16 relative z-10">
+          <div className="flex items-end justify-between mb-8 group">
+            <div className="flex items-end space-x-6">
+              <div className="w-24 h-24 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-[2rem] flex items-center justify-center shadow-2xl shadow-emerald-500/20 transform transition-transform group-hover:scale-105 duration-500">
+                <Truck className="w-10 h-10 text-white" />
               </div>
-              <div className="flex items-center space-x-3">
-                <User className="w-4 h-4 text-gray-400" />
-                <div>
-                  <span className="text-gray-400 text-sm">Destinatario</span>
-                  <p className="text-white">{shipment.recipient}</p>
-                </div>
-              </div>
-              <div className="flex items-center space-x-3">
-                <Calendar className="w-4 h-4 text-gray-400" />
-                <div>
-                  <span className="text-gray-400 text-sm">Fecha</span>
-                  <p className="text-white">{shipment.date}</p>
-                </div>
-              </div>
-              <div className="flex items-center space-x-3">
-                <Hash className="w-4 h-4 text-gray-400" />
-                <div>
-                  <span className="text-gray-400 text-sm">Tracking</span>
-                  <p className="text-white font-mono">{shipment.trackingNumber || 'No asignado'}</p>
+              <div className="pb-2">
+                <h3 className={`text-3xl font-black transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'} tracking-tighter font-mono`}>{shipment.id}</h3>
+                <div className="mt-1">
+                  <StatusBadge status={shipment.status} />
                 </div>
               </div>
             </div>
+            <button
+              onClick={onClose}
+              className={`p-3 rounded-2xl transition-all duration-300 mb-2 ${
+                darkMode ? 'bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white' : 'bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-slate-900'
+              }`}
+            >
+              <X className="w-6 h-6" />
+            </button>
           </div>
 
-          {/* Cámaras Incluidas */}
-          <div className="bg-white/5 rounded-lg p-4">
-            <h4 className="font-semibold text-white mb-3 flex items-center space-x-2">
-              <Camera className="w-4 h-4" />
-              <span>Cámaras Incluidas ({shipment.cameras?.length || 0})</span>
-            </h4>
-            <div className="flex flex-wrap gap-2">
-              {shipment.cameras && shipment.cameras.length > 0 ? (
-                shipment.cameras.map(cameraId => (
-                  <span key={cameraId} className="bg-blue-500/20 text-blue-400 px-3 py-2 rounded-lg text-sm flex items-center space-x-2">
-                    <Camera className="w-4 h-4" />
-                    <span>{cameraId}</span>
-                  </span>
-                ))
-              ) : (
-                <span className="text-gray-400 text-sm">No hay cámaras en este envío</span>
+          <div className="space-y-8 max-h-[55vh] overflow-y-auto custom-scrollbar pr-2">
+            {/* Sección Ruta */}
+            <section className="space-y-4">
+              <div className="flex items-center gap-3">
+                <div className={`w-1 h-4 rounded-full ${darkMode ? 'bg-blue-500/50' : 'bg-blue-500'}`}></div>
+                <h4 className={`text-[10px] font-black uppercase tracking-[0.2em] ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>Ruta de Transferencia</h4>
+              </div>
+              <div className={`grid grid-cols-1 md:grid-cols-2 gap-4 p-6 rounded-3xl border transition-all duration-500 ${darkMode ? 'bg-white/[0.01] border-white/5' : 'bg-slate-50/50 border-slate-100'}`}>
+                <div className="flex items-center space-x-4">
+                  <div className={`p-2.5 rounded-xl ${darkMode ? 'bg-blue-500/10 text-blue-400' : 'bg-blue-50 text-blue-600'}`}>
+                    <MapPin className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-0.5">Destino Final</span>
+                    <p className={`text-sm font-bold transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>{shipment.destination}</p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-4">
+                  <div className={`p-2.5 rounded-xl ${darkMode ? 'bg-purple-500/10 text-purple-400' : 'bg-purple-50 text-purple-600'}`}>
+                    <User className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-0.5">Agente Receptor</span>
+                    <p className={`text-sm font-bold transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>{shipment.recipient}</p>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* Sección Unidades */}
+            <section className="space-y-4">
+              <div className="flex items-center gap-3">
+                <div className={`w-1 h-4 rounded-full ${darkMode ? 'bg-emerald-500/50' : 'bg-emerald-500'}`}></div>
+                <h4 className={`text-[10px] font-black uppercase tracking-[0.2em] ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>Unidades Vinculadas</h4>
+              </div>
+              <div className={`p-6 rounded-3xl border transition-all duration-500 ${darkMode ? 'bg-white/[0.01] border-white/5' : 'bg-slate-50/50 border-slate-100'}`}>
+                <div className="flex flex-wrap gap-2">
+                  {shipment.cameras && shipment.cameras.length > 0 ? (
+                    shipment.cameras.map(cameraId => (
+                      <div key={cameraId} className={`px-4 py-3 rounded-2xl border transition-all duration-300 flex items-center space-x-3 group/item ${
+                        darkMode ? 'bg-slate-950/50 border-white/5 hover:border-emerald-500/30' : 'bg-white border-slate-200 hover:border-emerald-500'
+                      }`}>
+                        <Camera className={`w-4 h-4 transition-colors ${darkMode ? 'text-slate-600 group-hover/item:text-emerald-500' : 'text-slate-400 group-hover/item:text-emerald-600'}`} />
+                        <span className={`text-xs font-black font-mono transition-colors duration-500 ${darkMode ? 'text-slate-300' : 'text-slate-700'}`}>{cameraId}</span>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-xs font-bold text-slate-500 italic uppercase tracking-widest w-full text-center py-4">No se declararon unidades PIX</p>
+                  )}
+                </div>
+              </div>
+            </section>
+
+            {/* Sección Logística */}
+            <section className="space-y-4">
+              <div className="flex items-center gap-3">
+                <div className={`w-1 h-4 rounded-full ${darkMode ? 'bg-orange-500/50' : 'bg-orange-500'}`}></div>
+                <h4 className={`text-[10px] font-black uppercase tracking-[0.2em] ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>Información Logística</h4>
+              </div>
+              <div className={`grid grid-cols-1 md:grid-cols-2 gap-6 p-6 rounded-3xl border transition-all duration-500 ${darkMode ? 'bg-white/[0.01] border-white/5' : 'bg-slate-50/50 border-slate-100'}`}>
+                <div className="space-y-4">
+                  <div>
+                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-1">Agente Remitente</span>
+                    <p className={`text-sm font-bold transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>{shipment.shipper || 'S/A'}</p>
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-1">Paquetería</span>
+                    <div className="flex items-center space-x-2">
+                      <Truck className="w-3.5 h-3.5 text-emerald-500" />
+                      <p className={`text-sm font-bold transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>{shipment.sender || 'No declarada'}</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="space-y-4">
+                  <div>
+                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-1">Guía de Seguimiento</span>
+                    <div className="flex items-center space-x-2">
+                      <Hash className="w-3.5 h-3.5 text-blue-500" />
+                      <p className={`text-sm font-black font-mono transition-colors duration-500 ${darkMode ? 'text-blue-400' : 'text-blue-600'}`}>{shipment.trackingNumber || 'PENDIENTE'}</p>
+                    </div>
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-1">Items Extra</span>
+                    <div className="flex items-center space-x-2">
+                      <Package className="w-3.5 h-3.5 text-slate-500" />
+                      <p className={`text-[11px] font-bold transition-colors duration-500 ${darkMode ? 'text-slate-400' : 'text-slate-600'} line-clamp-1`}>{shipment.extraItems || 'Ninguno'}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* Metadata */}
+            <div className={`p-6 rounded-3xl border transition-all duration-500 flex flex-col md:flex-row justify-between gap-4 ${darkMode ? 'bg-slate-950/30 border-white/5' : 'bg-slate-100/50 border-slate-200'}`}>
+              <div>
+                <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest block mb-1">Fecha de Registro</span>
+                <div className="flex items-center space-x-2">
+                  <Calendar className="w-3.5 h-3.5 text-slate-500" />
+                  <p className={`text-[11px] font-bold transition-colors duration-500 ${darkMode ? 'text-slate-400' : 'text-slate-600'}`}>{formatDate(shipment.createdAt || shipment.date)}</p>
+                </div>
+              </div>
+              {shipment.updatedAt && (
+                <div className="text-right md:text-right">
+                  <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest block mb-1">Última Modificación</span>
+                  <p className={`text-[11px] font-bold transition-colors duration-500 ${darkMode ? 'text-slate-400' : 'text-slate-600'}`}>{formatDate(shipment.updatedAt)}</p>
+                </div>
               )}
             </div>
           </div>
 
-          {/* Información de Origen */}
-          <div className="bg-white/5 rounded-lg p-4">
-            <h4 className="font-semibold text-white mb-3">Información de Origen</h4>
-            <div className="space-y-2">
-              <div className="flex justify-between">
-                <span className="text-gray-400">Persona que envía:</span>
-                <span className="text-white font-medium">{shipment.shipper || 'Por definir'}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-400">Empresa/Transporte:</span>
-                <span className="text-white">{shipment.sender || 'Potosinos'}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-400">Estado:</span>
-                <span className={`capitalize ${getStatusColor(shipment.status)}`}>
-                  {shipment.status}
-                </span>
-              </div>
-            </div>
+          {/* Actions */}
+          <div className="flex gap-4 mt-8">
+            <button
+              onClick={() => onEdit(shipment)}
+              className="flex-grow bg-emerald-500 text-white font-black py-4 rounded-2xl hover:bg-emerald-400 transition-all shadow-xl shadow-emerald-500/20 active:scale-[0.98] uppercase tracking-[0.2em] text-xs"
+            >
+              Modificar Expediente
+            </button>
+            <button
+              onClick={onClose}
+              className={`px-10 py-4 rounded-2xl font-black uppercase tracking-widest text-xs transition-all duration-300 border ${
+                darkMode 
+                  ? 'bg-white/5 border-white/5 text-slate-400 hover:bg-white/10 hover:text-white' 
+                  : 'bg-slate-100 border-slate-200 text-slate-500 hover:bg-slate-200 hover:text-slate-900'
+              }`}
+            >
+              Cerrar
+            </button>
           </div>
-
-          {/* Información de Registro */}
-          {(shipment.createdAt || shipment.updatedAt) && (
-            <div className="bg-white/5 rounded-lg p-4">
-              <h4 className="font-semibold text-white mb-3">Información de Registro</h4>
-              <div className="space-y-2 text-sm">
-                {shipment.createdAt && (
-                  <div className="flex justify-between">
-                    <span className="text-gray-400">Creado:</span>
-                    <span className="text-gray-300">{formatDate(shipment.createdAt)}</span>
-                  </div>
-                )}
-                {shipment.updatedAt && (
-                  <div className="flex justify-between">
-                    <span className="text-gray-400">Actualizado:</span>
-                    <span className="text-gray-300">{formatDate(shipment.updatedAt)}</span>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Botones de acción */}
-        <div className="flex space-x-3 mt-6">
-          <button
-            onClick={() => onEdit(shipment)}
-            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors flex items-center justify-center space-x-2"
-          >
-            <span>Editar Envío</span>
-          </button>
-          <button
-            onClick={onClose}
-            className="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors"
-          >
-            Cerrar
-          </button>
         </div>
       </div>
     </div>

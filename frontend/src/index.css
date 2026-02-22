@@ -6,13 +6,25 @@
   --accent-gold: #fbbf24;
   --accent-emerald: #10b981;
   --accent-blue: #3b82f6;
+  --scroll-track: rgba(15, 23, 42, 0.3);
+  --scroll-thumb: rgba(16, 185, 129, 0.2);
+  --marker-bg: rgba(15, 23, 42, 0.7);
+  --body-bg: #0f172a;
+}
+
+:root:not(.dark) {
+  --glass-bg: rgba(255, 255, 255, 0.8);
+  --glass-border: rgba(0, 0, 0, 0.05);
+  --scroll-track: rgba(0, 0, 0, 0.05);
+  --scroll-thumb: rgba(16, 185, 129, 0.4);
+  --marker-bg: rgba(255, 255, 255, 0.9);
+  --body-bg: #f8fafc;
 }
 
 /* Estilos base */
-/* Optimización de scroll global */
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 100px; /* Para que al clickar anclas no quede tapado por el header */
+  scroll-padding-top: 100px;
 }
 
 body {
@@ -22,68 +34,60 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #0f172a;
-  background-image: 
-    radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.05) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(59, 130, 246, 0.05) 0px, transparent 50%);
+  background-color: var(--body-bg);
+  transition: background-color 0.5s ease;
   overflow-x: hidden;
-  color: #f8fafc;
   
   /* Mejorar el scroll en móviles */
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-y: none;
 }
 
-/* Optimización de renderizado por secciones */
-section, .dashboard-grid-item {
-  content-visibility: auto;
-  contain-intrinsic-size: 1px 500px; /* Altura estimada para evitar saltos */
-  contain: layout style;
-}
-
-
-/* Glassmorphism Premium Optimizado Agresivamente */
+/* Glassmorphism Premium Optimizado */
 .glass-card {
   background: var(--glass-bg);
-  backdrop-filter: blur(4px); /* Reducido para máximos FPS */
-  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border: 1px solid var(--glass-border);
-  box-shadow: 0 4px 15px 0 rgba(0, 0, 0, 0.15);
-  transform: translate3d(0, 0, 0); /* Force 3D context */
+  box-shadow: 0 4px 15px 0 rgba(0, 0, 0, 0.05);
+  transform: translate3d(0, 0, 0);
   will-change: transform, opacity;
-  contain: paint layout; /* Aislar el repintado del resto del DOM */
+  contain: paint layout;
+  transition: background 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
 }
 
-
 @media (max-width: 768px) {
-  .glass-card {
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-  }
-  
-  /* Reducir padding global en móviles para ganar espacio */
+  /* Reducir padding global en móviles */
   .max-w-7xl {
     padding-left: 1rem !important;
     padding-right: 1rem !important;
   }
-
-  /* Ocultar elementos no críticos en móvil para limpiar la UI */
-  .hide-on-mobile {
-    display: none !important;
-  }
 }
 
-
-.glass-card-hover {
-  transition: background 0.3s ease, border-color 0.3s ease;
+/* Scrollbar Premium */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
 }
 
-.glass-card-hover:hover {
-  background: rgba(255, 255, 255, 0.03);
-  border-color: rgba(255, 255, 255, 0.12);
+::-webkit-scrollbar-track {
+  background: var(--scroll-track);
 }
 
-/* Animaciones suaves */
+::-webkit-scrollbar-thumb {
+  background: var(--scroll-thumb);
+  border-radius: 20px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(16, 185, 129, 0.6);
+  background-clip: content-box;
+}
+
+/* Animations */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
@@ -93,147 +97,26 @@ section, .dashboard-grid-item {
   animation: fadeIn 0.5s ease-out forwards;
 }
 
-/* Optimización de transiciones */
-button, a, select, input {
-  transition: all 200ms ease;
-}
-
-
-/* Capas de hardware para elementos fijos/pesados */
-.MexicoMap, .StatsGrid, header, nav {
-  transform: translateZ(0);
-  backface-visibility: hidden;
-  perspective: 1000px;
-}
-
-/* Scrollbar Premium y fluida */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: rgba(15, 23, 42, 0.3);
-  backdrop-filter: blur(4px);
-}
-
-::-webkit-scrollbar-thumb {
-  background: rgba(16, 185, 129, 0.2);
-  border-radius: 20px;
-  border: 2px solid transparent;
-  background-clip: content-box;
-  transition: background 0.3s ease;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(16, 185, 129, 0.5);
-  background-clip: content-box;
-}
-
-/* Evitar saltos de layout en imágenes y SVGs */
-img, svg {
-  content-visibility: auto;
-}
-
-/* Premium Map Markers & Popups */
-.custom-marker-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
+/* Premium Map Markers */
 .premium-marker {
   position: relative;
   width: 44px;
   height: 44px;
-  background: rgba(15, 23, 42, 0.7);
+  background: var(--marker-bg);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  border: 2px solid var(--glass-border);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-  transition: border-color 0.3s ease;
-}
-
-.premium-marker:hover {
-  border-color: rgba(255, 255, 255, 0.4);
-  z-index: 1001;
-}
-
-.marker-pulse {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border-radius: 50%;
-  animation: markerPulse 2s infinite ease-out;
-  pointer-events: none;
-}
-
-@keyframes markerPulse {
-  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-  70% { transform: scale(1.4); box-shadow: 0 0 0 15px rgba(16, 185, 129, 0); }
-  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
-}
-
-.marker-badge {
-  position: absolute;
-  top: -6px;
-  right: -6px;
-  background: #ef4444;
-  color: white;
-  font-size: 10px;
-  font-weight: 800;
-  padding: 2px 6px;
-  border-radius: 10px;
-  border: 2px solid #0f172a;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
 }
 
 .marker-label {
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  margin-top: 8px;
-  background: rgba(15, 23, 42, 0.9);
+  background: var(--marker-bg);
   backdrop-filter: blur(4px);
-  color: white;
-  font-size: 10px;
-  font-weight: 700;
-  padding: 4px 10px;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  white-space: nowrap;
-  pointer-events: none;
-  opacity: 0.8;
-  transition: opacity 0.3s ease;
-}
-
-.premium-marker:hover .marker-label {
-  opacity: 1;
-}
-
-/* Custom Leaflet Popup overrides */
-.leaflet-popup-content-wrapper {
-  background: rgba(15, 23, 42, 0.9) !important;
-  backdrop-filter: blur(12px) !important;
-  -webkit-backdrop-filter: blur(12px) !important;
-  border: 1px solid rgba(255, 255, 255, 125.1);
-  color: white !important;
-  border-radius: 1.5rem !important;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8) !important;
-}
-
-.leaflet-popup-tip {
-  background: rgba(15, 23, 42, 0.9) !important;
-}
-
-.leaflet-popup-content {
-  margin: 16px !important;
-  line-height: normal !important;
+  color: inherit;
+  border: 1px solid var(--glass-border);
 }

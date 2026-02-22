@@ -5,24 +5,25 @@ const StatisticsPage = ({
   tournamentsData, 
   camerasData, 
   workersData, 
-  shipmentsData 
+  shipmentsData,
+  darkMode = true 
 }) => {
   return (
     <div className="space-y-8 pb-12 animate-fade-in">
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-white tracking-tight">
+          <h1 className={`text-3xl font-bold tracking-tight transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>
             Análisis y <span className="text-emerald-400">Estadísticas</span>
           </h1>
-          <p className="text-gray-400 mt-1">Métricas detalladas del rendimiento y cobertura de torneos</p>
+          <p className="text-slate-500 mt-1">Métricas detalladas del rendimiento y cobertura de torneos</p>
         </div>
       </header>
 
-      <div className="pt-4 border-t border-white/5">
+      <div className={`pt-4 border-t transition-colors duration-500 ${darkMode ? 'border-white/5' : 'border-slate-100'}`}>
         <Suspense fallback={
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="h-[400px] glass-card animate-pulse rounded-[2rem]"></div>
-            <div className="h-[400px] glass-card animate-pulse rounded-[2rem]"></div>
+            <div className={`h-[400px] animate-pulse rounded-[2rem] ${darkMode ? 'bg-white/5' : 'bg-slate-100'}`}></div>
+            <div className={`h-[400px] animate-pulse rounded-[2rem] ${darkMode ? 'bg-white/5' : 'bg-slate-100'}`}></div>
           </div>
         }>
           <StatisticsSection 
@@ -30,6 +31,7 @@ const StatisticsPage = ({
             cameras={camerasData}
             workers={workersData}
             shipments={shipmentsData}
+            darkMode={darkMode}
           />
         </Suspense>
       </div>

@@ -11,6 +11,7 @@ const TournamentModal = ({
   onSave,
   workers,
   cameras,
+  darkMode = true
 }) => {
   if (!isOpen) return null;
   
@@ -19,13 +20,22 @@ const TournamentModal = ({
   };
 
   return createPortal(
-    <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4">
-      {/* Overlay - cierra al hacer clic */}
-      <div className="fixed inset-0 bg-slate-950/80" onClick={onClose} />
-      
-      {/* Modal - previene que el clic cierre */}
+    <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4 animate-fade-in">
+      {/* Overlay */}
       <div 
-        className="bg-slate-900 border border-white/5 p-6 rounded-3xl w-full max-w-4xl relative z-10 shadow-2xl max-h-[95vh] overflow-y-auto"
+        className={`fixed inset-0 backdrop-blur-sm transition-colors duration-500 ${
+          darkMode ? 'bg-slate-950/80' : 'bg-slate-900/40'
+        }`} 
+        onClick={onClose} 
+      />
+      
+      {/* Modal */}
+      <div 
+        className={`w-full max-w-4xl relative z-10 shadow-2xl rounded-[2.5rem] border transition-all duration-500 p-8 max-h-[90vh] overflow-y-auto custom-scrollbar ${
+          darkMode 
+            ? 'bg-slate-900 border-white/5' 
+            : 'bg-white border-black/5 shadow-slate-300'
+        }`}
         onClick={handleModalClick}
       >
         <TournamentForm
@@ -34,6 +44,7 @@ const TournamentModal = ({
           onCancel={onClose}
           workers={workers}
           cameras={cameras}
+          darkMode={darkMode}
         />
       </div>
     </div>,
