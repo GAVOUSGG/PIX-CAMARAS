@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
+import { createPortal } from "react-dom";
 import {
   X,
   Save,
@@ -124,34 +125,31 @@ const WorkerForm = ({
 
   if (isEditing && !showForm) return null;
 
-  return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-0 md:p-4 z-50 animate-fade-in text-left">
-      {/* Overlay */}
+  return createPortal(
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 animate-fade-in text-left">
       <div 
-        className={`fixed inset-0 transition-colors duration-500 ${
-          darkMode ? 'bg-slate-950/40' : 'bg-slate-900/10'
-        }`} 
+        className="absolute inset-0 bg-black/60 backdrop-blur-md cursor-pointer" 
         onClick={handleCancel} 
       />
 
-      <div className={`w-full max-w-4xl relative z-10 shadow-2xl rounded-[2.5rem] border transition-all duration-500 overflow-hidden h-full md:h-auto md:max-h-[90vh] flex flex-col ${
-        darkMode ? 'bg-slate-900 border-white/5' : 'bg-white border-black/5 shadow-slate-300'
+      <div className={`relative w-full max-w-4xl rounded-[2rem] border shadow-2xl flex flex-col max-h-[95vh] sm:max-h-[90vh] overflow-hidden transition-all duration-500 ${
+        darkMode ? 'bg-slate-900 border-white/10 shadow-black' : 'bg-white border-black/5 shadow-slate-300'
       }`}>
         {/* Header */}
-        <div className={`p-8 border-b transition-colors duration-500 flex items-center justify-between ${darkMode ? 'border-white/5 bg-white/[0.02]' : 'border-slate-50 bg-slate-50/50'}`}>
+        <div className={`flex items-center justify-between p-6 md:p-8 border-b transition-colors duration-500 flex-shrink-0 ${darkMode ? 'border-white/5 bg-white/[0.02]' : 'border-slate-100 bg-slate-50/50'}`}>
           <div className="flex items-center gap-4">
             <div className={`p-3 rounded-2xl ${darkMode ? 'bg-emerald-500/10 text-emerald-400' : 'bg-emerald-500 text-white'}`}>
               <User className="w-6 h-6" />
             </div>
             <div>
-              <h3 className={`text-xl font-black uppercase tracking-widest ${darkMode ? 'text-white' : 'text-slate-900'}`}>
+              <h3 className={`text-xl font-black uppercase tracking-widest transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>
                 {isEditing ? "Modificar Operador" : "Registro de Operador"}
               </h3>
               <p className="text-xs font-bold text-slate-500 tracking-tight mt-0.5">Complete el expediente profesional del colaborador</p>
             </div>
           </div>
-          <button onClick={handleCancel} className={`p-2 rounded-xl transition-all ${darkMode ? 'text-slate-500 hover:text-white hover:bg-white/5' : 'text-slate-400 hover:text-slate-900 hover:bg-slate-100'}`}>
-            <X className="w-6 h-6" />
+          <button onClick={handleCancel} className={`p-3 rounded-2xl transition-all duration-300 ${darkMode ? 'text-slate-500 hover:text-white hover:bg-white/5' : 'text-slate-400 hover:text-slate-900 hover:bg-slate-100'}`}>
+            <X className="w-5 h-5" />
           </button>
         </div>
 
@@ -247,7 +245,7 @@ const WorkerForm = ({
               <h4 className={`text-[10px] font-black uppercase tracking-[0.2em] ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>Estatus & Roles</h4>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 rounded-[2rem] border transition-all duration-500 shadow-inner ${darkMode ? 'bg-white/[0.01] border-white/5 shadow-black/20' : 'bg-slate-50/50 border-slate-100 shadow-slate-100'}">
+            <div className={`grid grid-cols-1 md:grid-cols-2 gap-6 p-6 rounded-2xl border transition-all duration-500 ${darkMode ? 'bg-white/5 border-white/5' : 'bg-slate-50 border-slate-100'}`}>
               <div className="space-y-2">
                 <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>Situación Laboral</label>
                 <select
@@ -331,8 +329,7 @@ const WorkerForm = ({
             )}
           </section>
 
-          {/* Resumen Final */}
-          <section className={`p-6 rounded-[2.5rem] border transition-all duration-500 ${darkMode ? 'bg-[#0B1120] border-white/10 shadow-emerald-500/5 shadow-2xl' : 'bg-slate-50 border-slate-200 shadow-xl shadow-slate-200'}`}>
+          <section className={`p-6 rounded-2xl border transition-all duration-500 ${darkMode ? 'bg-white/5 border-white/10' : 'bg-slate-50 border-slate-200'}`}>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               <div className="space-y-1">
                 <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest block">Colaborador</span>
@@ -355,32 +352,33 @@ const WorkerForm = ({
         </form>
 
         {/* Footer */}
-        <div className={`p-8 border-t transition-colors duration-500 flex flex-col md:flex-row gap-4 ${darkMode ? 'border-white/5 bg-white/[0.02]' : 'border-slate-50 bg-slate-50/20'}`}>
+        <div className={`flex items-center justify-end px-6 md:px-8 py-5 border-t transition-colors duration-500 flex-shrink-0 gap-4 ${darkMode ? 'border-white/5 bg-slate-900/50' : 'border-slate-100 bg-white'}`}>
+          <button
+            type="button" onClick={handleCancel}
+            className={`px-6 py-2.5 rounded-xl font-bold text-sm transition-all duration-300 ${
+              darkMode 
+                ? 'bg-white/5 text-slate-300 hover:bg-white/10 hover:text-white' 
+                : 'bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-900'
+            }`}
+          >
+            Cancelar
+          </button>
           <button
             type="submit" onClick={handleSubmit}
             disabled={!formData.name || !formData.state || !formData.phone || !formData.email}
-            className={`flex-grow py-5 rounded-2xl font-black uppercase tracking-[0.2em] text-xs transition-all flex items-center justify-center gap-3 shadow-2xl disabled:opacity-30 disabled:cursor-not-allowed ${
+            className={`group px-6 py-2.5 rounded-xl font-bold text-sm text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 flex items-center justify-center space-x-2 ${
               darkMode 
-                ? 'bg-emerald-500 border border-emerald-400 text-white hover:bg-emerald-400 shadow-emerald-500/20' 
-                : 'bg-emerald-500 border border-emerald-600 text-white hover:bg-emerald-600 shadow-emerald-500/20'
+                ? 'bg-emerald-500 hover:bg-emerald-400' 
+                : 'bg-emerald-500 hover:bg-emerald-600'
             }`}
           >
-            <Save className="w-5 h-5" />
-            {isEditing ? "Actualizar Expediente" : "Finalizar Registro"}
-          </button>
-          <button
-            type="button" onClick={handleCancel}
-            className={`px-10 py-5 rounded-2xl font-black uppercase tracking-widest text-xs transition-all duration-300 border ${
-              darkMode 
-                ? 'bg-white/5 border-white/5 text-slate-400 hover:bg-white/10 hover:text-white' 
-                : 'bg-slate-100 border-slate-200 text-slate-500 hover:bg-slate-200 hover:text-slate-900'
-            }`}
-          >
-            Descartar
+            <Save className="w-4 h-4 transition-transform group-hover:scale-110" />
+            <span>{isEditing ? "Actualizar Expediente" : "Finalizar Registro"}</span>
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

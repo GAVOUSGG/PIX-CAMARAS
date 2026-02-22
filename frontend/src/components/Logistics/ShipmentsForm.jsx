@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
+import { createPortal } from "react-dom";
 import {
   X,
   Save,
@@ -176,11 +177,15 @@ const ShipmentForm = ({
 
   if (!showForm) return null;
 
-  return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-0 md:p-6 z-50 animate-fade-in">
+  return createPortal(
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 animate-fade-in text-left">
       <div 
-        className={`w-full max-w-5xl h-full md:h-auto md:max-h-[90vh] overflow-hidden flex flex-col transition-all duration-500 rounded-none md:rounded-[2.5rem] border shadow-2xl ${
-          darkMode ? 'bg-slate-900 border-white/5' : 'bg-white border-black/5 shadow-slate-300'
+        className="absolute inset-0 bg-black/60 backdrop-blur-md cursor-pointer" 
+        onClick={handleCancel} 
+      />
+      <div 
+        className={`relative w-full max-w-5xl rounded-[2rem] border shadow-2xl flex flex-col max-h-[95vh] sm:max-h-[90vh] overflow-hidden transition-all duration-500 ${
+          darkMode ? 'bg-slate-900 border-white/10 shadow-black' : 'bg-white border-black/5 shadow-slate-300'
         }`}
       >
         {/* Header */}
@@ -539,7 +544,8 @@ const ShipmentForm = ({
           </section>
         </form>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

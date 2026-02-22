@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { createPortal } from "react-dom";
 import {
   X,
   Save,
@@ -15,6 +16,7 @@ const CameraForm = ({
   camera = null,
   isOpen = false,
   workers = [],
+  darkMode = true,
 }) => {
   const isEditing = !!camera;
   const [showForm, setShowForm] = useState(isOpen);
@@ -128,309 +130,276 @@ const CameraForm = ({
     return null;
   }
 
-  return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-0 md:p-4 z-50">
-      <div className="bg-slate-800/90 backdrop-blur-xl rounded-none md:rounded-2xl border-x-0 border-t-0 md:border border-white/10 p-4 md:p-6 max-w-2xl w-full h-full md:h-auto md:max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between mb-6">
-          <h3 className="text-xl font-semibold text-white">
-            {isEditing ? "Editar Cámara" : "Nueva Cámara Solar"}
-          </h3>
+  return createPortal(
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 animate-fade-in">
+      <div 
+        className="absolute inset-0 bg-black/60 backdrop-blur-md"
+        onClick={handleCancel}
+      />
+      
+      <div className={`relative w-full max-w-3xl rounded-[2rem] border shadow-2xl flex flex-col max-h-[95vh] sm:max-h-[90vh] overflow-hidden transition-all duration-500 ${
+        darkMode ? 'bg-slate-900 border-white/10 shadow-black' : 'bg-white border-black/5 shadow-slate-300'
+      }`}>
+        <div className={`flex items-center justify-between p-6 md:p-8 border-b transition-colors duration-500 flex-shrink-0 ${
+          darkMode ? 'border-white/5 bg-white/[0.02]' : 'border-slate-100 bg-slate-50/50'
+        }`}>
+          <div>
+            <h3 className={`text-xl md:text-2xl font-black tracking-tight transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>
+              {isEditing ? "Modificar Unidad PIX" : "Registro de Nueva Unidad"}
+            </h3>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mt-1">
+              Configure los parámetros técnicos de la cámara
+            </p>
+          </div>
           <button
             onClick={handleCancel}
-            className="text-gray-400 hover:text-white transition-colors"
+            className={`p-3 rounded-2xl transition-all duration-300 ${
+              darkMode ? 'hover:bg-white/5 text-slate-500 hover:text-white' : 'hover:bg-slate-100 text-slate-400 hover:text-slate-900'
+            }`}
           >
-            <X className="w-6 h-6" />
+            <X className="w-5 h-5" />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* ID y Número de Serie */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">
-                ID de Cámara *
-              </label>
-              <input
-                type="text"
-                required
-                value={formData.id}
-                onChange={(e) => handleInputChange("id", e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                placeholder="Ej: CS15"
-                disabled={isEditing}
-              />
+        <div className="p-6 md:p-8 overflow-y-auto custom-scrollbar flex-1">
+          <form id="camera-form" onSubmit={handleSubmit} className="space-y-8">
+            {/* ID y Número de Serie */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2">
+                  ID de Cámara *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={formData.id}
+                  onChange={(e) => handleInputChange("id", e.target.value)}
+                  className={`w-full rounded-xl px-4 py-3 text-sm font-bold font-mono transition-all duration-300 outline-none border focus:ring-2 focus:ring-emerald-500/50 ${
+                    darkMode 
+                      ? 'bg-white/5 border-white/10 text-white placeholder-slate-600 focus:border-emerald-500/50 hover:bg-white/10' 
+                      : 'bg-slate-50 border-slate-200 text-slate-900 placeholder-slate-400 focus:border-emerald-500/50 hover:bg-slate-100'
+                  } ${isEditing ? 'opacity-60 cursor-not-allowed' : ''}`}
+                  placeholder="Ej: CS15"
+                  disabled={isEditing}
+                />
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2">
+                  Número de Serie *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={formData.serialNumber}
+                  onChange={(e) => handleInputChange("serialNumber", e.target.value)}
+                  className={`w-full rounded-xl px-4 py-3 text-sm font-bold font-mono transition-all duration-300 outline-none border focus:ring-2 focus:ring-emerald-500/50 ${
+                    darkMode 
+                      ? 'bg-white/5 border-white/10 text-white placeholder-slate-600 focus:border-emerald-500/50 hover:bg-white/10' 
+                      : 'bg-slate-50 border-slate-200 text-slate-900 placeholder-slate-400 focus:border-emerald-500/50 hover:bg-slate-100'
+                  }`}
+                  placeholder="Ej: HIK123456789"
+                />
+              </div>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">
-                Número de Serie *
-              </label>
-              <input
-                type="text"
-                required
-                value={formData.serialNumber}
-                onChange={(e) =>
-                  handleInputChange("serialNumber", e.target.value)
-                }
-                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                placeholder="Ej: HIK123456789"
-              />
-            </div>
-          </div>
-
-          {/* Modelo y Tipo */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">
-                <Camera className="w-4 h-4 inline mr-2" />
-                Modelo *
-              </label>
-              <select
-                required
-                value={formData.model}
-                onChange={(e) => handleInputChange("model", e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              >
-                {modelosHikvision.map((modelo) => (
-                  <option
-                    key={modelo}
-                    value={modelo}
-                    className="text-white bg-gray-700"
+            {/* Modelo y Tipo */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2 flex items-center">
+                  <Camera className="w-3.5 h-3.5 mr-1.5" />
+                  Modelo *
+                </label>
+                <div className="relative">
+                  <select
+                    required
+                    value={formData.model}
+                    onChange={(e) => handleInputChange("model", e.target.value)}
+                    className={`w-full rounded-xl px-4 py-3 text-sm font-bold transition-all duration-300 outline-none border appearance-none focus:ring-2 focus:ring-emerald-500/50 ${
+                      darkMode 
+                        ? 'bg-white/5 border-white/10 text-emerald-400 focus:border-emerald-500/50 hover:bg-white/10' 
+                        : 'bg-slate-50 border-slate-200 text-emerald-600 focus:border-emerald-500/50 hover:bg-slate-100'
+                    }`}
                   >
-                    {modelo}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">
-                Tipo
-              </label>
-              <select
-                value={formData.type}
-                onChange={(e) => handleInputChange("type", e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              >
-                <option value="Solar" className="text-white bg-gray-700">
-                  Solar
-                </option>
-                <option value="Eléctrica" className="text-white bg-gray-700">
-                  Eléctrica
-                </option>
-                <option value="Híbrida" className="text-white bg-gray-700">
-                  Híbrida
-                </option>
-              </select>
-            </div>
-          </div>
-
-          {/* Estado y Ubicación */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">
-                Estado
-              </label>
-              <select
-                value={formData.status}
-                onChange={(e) => handleInputChange("status", e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              >
-                <option value="disponible" className="text-white bg-gray-700">
-                  Disponible
-                </option>
-                <option value="en uso" className="text-white bg-gray-700">
-                  En uso
-                </option>
-                <option value="en envio" className="text-white bg-gray-700">
-                  En envío
-                </option>
-                <option
-                  value="mantenimiento"
-                  className="text-white bg-gray-700"
-                >
-                  Mantenimiento
-                </option>
-                <option value="reparación" className="text-white bg-gray-700">
-                  Reparación
-                </option>
-                <option value="dañada" className="text-white bg-gray-700">
-                  Dañada
-                </option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">
-                <MapPin className="w-4 h-4 inline mr-2" />
-                Ubicación *
-              </label>
-              <select
-                required
-                value={formData.location}
-                onChange={(e) => handleInputChange("location", e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              >
-                <option value="" className="text-white bg-gray-700">
-                  Seleccionar ubicación
-                </option>
-                {estadosMexico.map((estado) => (
-                  <option
-                    key={estado}
-                    value={estado}
-                    className="text-white bg-gray-700"
-                  >
-                    {estado}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          {/* SIM y Persona Asignada */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">
-                <MessageCircle className="w-4 h-4 inline mr-2" />
-                Número de SIM
-              </label>
-              <input
-                type="text"
-                value={formData.simNumber}
-                onChange={(e) => handleInputChange("simNumber", e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                placeholder="Ej: 521234567890"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">
-                <User className="w-4 h-4 inline mr-2" />
-                Asignada a
-              </label>
-              <select
-                value={formData.assignedTo}
-                onChange={(e) =>
-                  handleInputChange("assignedTo", e.target.value)
-                }
-                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              >
-                <option value="" className="text-white bg-gray-700">
-                  No asignada
-                </option>
-                {workers.map((worker) => (
-                  <option
-                    key={worker.id}
-                    value={worker.name}
-                    className="text-white bg-gray-700"
-                  >
-                    {worker.name} - {worker.state}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          {/* Notas/Observaciones */}
-          <div>
-            <label className="block text-sm font-medium text-gray-400 mb-2">
-              Observaciones / Estado de la cámara
-            </label>
-            <textarea
-              value={formData.notes}
-              onChange={(e) => handleInputChange("notes", e.target.value)}
-              rows="3"
-              className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none"
-              placeholder="Ej: Antena rota, necesita mantenimiento, funciona correctamente, etc."
-            />
-            <p className="text-xs text-gray-500 mt-1">
-              Describe el estado actual de la cámara, problemas, observaciones,
-              etc.
-            </p>
-          </div>
-
-          {/* Resumen */}
-          <div className="bg-white/5 rounded-lg p-4">
-            <h4 className="font-semibold text-white mb-2">
-              Resumen de la Cámara
-            </h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-              <div>
-                <span className="text-gray-400">ID:</span>
-                <span className="text-white ml-2">
-                  {formData.id || "Por asignar"}
-                </span>
-              </div>
-              <div>
-                <span className="text-gray-400">Número de Serie:</span>
-                <span className="text-white ml-2">
-                  {formData.serialNumber || "No especificado"}
-                </span>
-              </div>
-              <div>
-                <span className="text-gray-400">Modelo:</span>
-                <span className="text-white ml-2">{formData.model}</span>
-              </div>
-              <div>
-                <span className="text-gray-400">Tipo:</span>
-                <span className="text-white ml-2">{formData.type}</span>
-              </div>
-              <div>
-                <span className="text-gray-400">Estado:</span>
-                <span className="text-white ml-2 capitalize">
-                  {formData.status}
-                </span>
-              </div>
-              <div>
-                <span className="text-gray-400">Ubicación:</span>
-                <span className="text-white ml-2">
-                  {formData.location || "No especificada"}
-                </span>
-              </div>
-              <div>
-                <span className="text-gray-400">SIM:</span>
-                <span className="text-white ml-2">
-                  {formData.simNumber || "No especificado"}
-                </span>
-              </div>
-              <div>
-                <span className="text-gray-400">Asignada a:</span>
-                <span className="text-white ml-2">
-                  {formData.assignedTo || "No asignada"}
-                </span>
-              </div>
-              {formData.notes && (
-                <div className="md:col-span-2">
-                  <span className="text-gray-400">Observaciones:</span>
-                  <span className="text-white ml-2">{formData.notes}</span>
+                    {modelosHikvision.map((modelo) => (
+                      <option key={modelo} value={modelo} className={darkMode ? "bg-slate-800 text-white" : "bg-white text-slate-900"}>
+                        {modelo}
+                      </option>
+                    ))}
+                  </select>
                 </div>
-              )}
-            </div>
-          </div>
+              </div>
 
-          {/* Botones */}
-          <div className="flex space-x-4 pt-4">
-            <button
-              type="submit"
-              disabled={
-                !formData.id || !formData.location || !formData.serialNumber
-              }
-              className="bg-emerald-500 hover:bg-emerald-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white px-6 py-3 rounded-lg transition-colors flex items-center space-x-2"
-            >
-              <Save className="w-5 h-5" />
-              <span>{isEditing ? "Actualizar Cámara" : "Crear Cámara"}</span>
-            </button>
-            <button
-              type="button"
-              onClick={handleCancel}
-              className="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg transition-colors"
-            >
-              Cancelar
-            </button>
-          </div>
-        </form>
+              <div>
+                <label className="block text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2">
+                  Tipo Energético
+                </label>
+                <div className="relative">
+                  <select
+                    value={formData.type}
+                    onChange={(e) => handleInputChange("type", e.target.value)}
+                    className={`w-full rounded-xl px-4 py-3 text-sm font-bold transition-all duration-300 outline-none border appearance-none focus:ring-2 focus:ring-emerald-500/50 ${
+                      darkMode 
+                        ? 'bg-white/5 border-white/10 text-white focus:border-emerald-500/50 hover:bg-white/10' 
+                        : 'bg-slate-50 border-slate-200 text-slate-900 focus:border-emerald-500/50 hover:bg-slate-100'
+                    }`}
+                  >
+                    <option value="Solar" className={darkMode ? "bg-slate-800 text-white" : "bg-white text-slate-900"}>Autónoma Solar</option>
+                    <option value="Eléctrica" className={darkMode ? "bg-slate-800 text-white" : "bg-white text-slate-900"}>Cableada Eléctrica</option>
+                    <option value="Híbrida" className={darkMode ? "bg-slate-800 text-white" : "bg-white text-slate-900"}>Mixta Híbrida</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            {/* Estado y Ubicación */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2">
+                  Estatus Operativo
+                </label>
+                <div className="relative">
+                  <select
+                    value={formData.status}
+                    onChange={(e) => handleInputChange("status", e.target.value)}
+                    className={`w-full rounded-xl px-4 py-3 text-sm font-bold transition-all duration-300 outline-none border appearance-none focus:ring-2 focus:ring-emerald-500/50 ${
+                      darkMode 
+                        ? 'bg-white/5 border-white/10 text-white focus:border-emerald-500/50 hover:bg-white/10' 
+                        : 'bg-slate-50 border-slate-200 text-slate-900 focus:border-emerald-500/50 hover:bg-slate-100'
+                    }`}
+                  >
+                    <option value="disponible" className={darkMode ? "bg-slate-800 text-white" : "bg-white text-slate-900"}>Disponible en Almacén</option>
+                    <option value="en uso" className={darkMode ? "bg-slate-800 text-white" : "bg-white text-slate-900"}>Activa / En Uso</option>
+                    <option value="en envio" className={darkMode ? "bg-slate-800 text-white" : "bg-white text-slate-900"}>En Tránsito / Envío</option>
+                    <option value="mantenimiento" className={darkMode ? "bg-slate-800 text-white" : "bg-white text-slate-900"}>Mantenimiento Preventivo</option>
+                    <option value="reparación" className={darkMode ? "bg-slate-800 text-white" : "bg-white text-slate-900"}>Reparación Mayor</option>
+                    <option value="dañada" className={darkMode ? "bg-slate-800 text-white" : "bg-white text-slate-900"}>Baja Definitiva / Dañada</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2 flex items-center">
+                  <MapPin className="w-3.5 h-3.5 mr-1.5" />
+                  Base de Ubicación *
+                </label>
+                <div className="relative">
+                  <select
+                    required
+                    value={formData.location}
+                    onChange={(e) => handleInputChange("location", e.target.value)}
+                    className={`w-full rounded-xl px-4 py-3 text-sm font-bold transition-all duration-300 outline-none border appearance-none focus:ring-2 focus:ring-emerald-500/50 ${
+                      darkMode 
+                        ? 'bg-white/5 border-white/10 text-white focus:border-emerald-500/50 hover:bg-white/10' 
+                        : 'bg-slate-50 border-slate-200 text-slate-900 focus:border-emerald-500/50 hover:bg-slate-100'
+                    }`}
+                  >
+                    <option value="" disabled className={darkMode ? "bg-slate-800 text-slate-400" : "bg-white text-slate-400"}>Seleccionar zona...</option>
+                    {estadosMexico.map((estado) => (
+                      <option key={estado} value={estado} className={darkMode ? "bg-slate-800 text-white" : "bg-white text-slate-900"}>
+                        {estado}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            {/* SIM y Persona Asignada */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2 flex items-center">
+                  <MessageCircle className="w-3.5 h-3.5 mr-1.5" />
+                  Conectividad SIM (Si aplica)
+                </label>
+                <input
+                  type="text"
+                  value={formData.simNumber}
+                  onChange={(e) => handleInputChange("simNumber", e.target.value)}
+                  className={`w-full rounded-xl px-4 py-3 text-sm font-bold font-mono transition-all duration-300 outline-none border focus:ring-2 focus:ring-emerald-500/50 ${
+                    darkMode 
+                      ? 'bg-white/5 border-white/10 text-white placeholder-slate-600 focus:border-emerald-500/50 hover:bg-white/10' 
+                      : 'bg-slate-50 border-slate-200 text-slate-900 placeholder-slate-400 focus:border-emerald-500/50 hover:bg-slate-100'
+                  }`}
+                  placeholder="Ej: 52 1234 567 890"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2 flex items-center">
+                  <User className="w-3.5 h-3.5 mr-1.5" />
+                  Responsable Asignado
+                </label>
+                <div className="relative">
+                  <select
+                    value={formData.assignedTo}
+                    onChange={(e) => handleInputChange("assignedTo", e.target.value)}
+                    className={`w-full rounded-xl px-4 py-3 text-sm font-bold transition-all duration-300 outline-none border appearance-none focus:ring-2 focus:ring-emerald-500/50 ${
+                      darkMode 
+                        ? 'bg-white/5 border-white/10 text-white focus:border-emerald-500/50 hover:bg-white/10' 
+                        : 'bg-slate-50 border-slate-200 text-slate-900 focus:border-emerald-500/50 hover:bg-slate-100'
+                    }`}
+                  >
+                    <option value="" className={darkMode ? "bg-slate-800 text-white" : "bg-white text-slate-900"}>Ninguno (En Almacén)</option>
+                    {workers.map((worker) => (
+                      <option key={worker.id} value={worker.name} className={darkMode ? "bg-slate-800 text-white" : "bg-white text-slate-900"}>
+                        {worker.name} ({worker.state})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            {/* Notas/Observaciones */}
+            <div className={`p-6 rounded-2xl border transition-colors duration-500 ${darkMode ? 'bg-white/[0.02] border-white/5' : 'bg-slate-50/50 border-slate-100'}`}>
+              <label className="block text-[10px] font-black uppercase tracking-widest text-slate-500 mb-3">
+                Bitácora de Observaciones
+              </label>
+              <textarea
+                value={formData.notes}
+                onChange={(e) => handleInputChange("notes", e.target.value)}
+                rows="3"
+                className={`w-full rounded-xl px-4 py-3 text-sm font-medium transition-all duration-300 outline-none border focus:ring-2 focus:ring-emerald-500/50 resize-none ${
+                  darkMode 
+                    ? 'bg-white/5 border-white/10 text-white placeholder-slate-600 focus:border-emerald-500/50 hover:bg-white/10' 
+                    : 'bg-white border-slate-200 text-slate-900 placeholder-slate-400 focus:border-emerald-500/50 hover:bg-slate-50'
+                }`}
+                placeholder="Redacte aquí novedades operativas, incidentes, mantenimientos o estado físico del equipo..."
+              />
+            </div>
+            
+          </form>
+        </div>
+
+        {/* Botones - Footer */}
+        <div className={`flex items-center justify-end px-6 md:px-8 py-5 border-t transition-colors duration-500 flex-shrink-0 gap-4 ${
+          darkMode ? 'border-white/5 bg-slate-900/50' : 'border-slate-100 bg-white'
+        }`}>
+          <button
+            type="button"
+            onClick={handleCancel}
+            className={`px-6 py-2.5 rounded-xl font-bold text-sm transition-all duration-300 ${
+              darkMode 
+                ? 'bg-white/5 text-slate-300 hover:bg-white/10 hover:text-white' 
+                : 'bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-900'
+            }`}
+          >
+            Cancelar
+          </button>
+          <button
+            type="submit"
+            form="camera-form"
+            disabled={!formData.id || !formData.location || !formData.serialNumber}
+            className="group px-6 py-2.5 rounded-xl font-bold text-sm bg-emerald-500 hover:bg-emerald-600 text-white disabled:bg-slate-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-xl shadow-emerald-500/20 active:scale-95 flex items-center justify-center space-x-2"
+          >
+            <Save className="w-4 h-4 transition-transform group-hover:scale-110" />
+            <span>{isEditing ? "Guardar Cambios" : "Confirmar Registro"}</span>
+          </button>
+        </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 
