@@ -7,6 +7,7 @@ import {
   PointerSensor, 
   useSensor, 
   useSensors,
+  useDroppable,
   defaultDropAnimationSideEffects
 } from '@dnd-kit/core';
 import { 
@@ -78,7 +79,7 @@ const SortableCameraCard = ({ camera, darkMode }) => {
 };
 
 const WorkerColumn = ({ worker, cameras, darkMode }) => {
-  const { setNodeRef } = useSortable({
+  const { setNodeRef: setDroppableNodeRef, isOver } = useDroppable({
     id: worker ? worker.id : 'pool',
     data: {
       type: 'Column',
@@ -88,11 +89,12 @@ const WorkerColumn = ({ worker, cameras, darkMode }) => {
 
   return (
     <div 
+      ref={setDroppableNodeRef}
       className={`flex flex-col h-full rounded-3xl border transition-colors duration-500 ${
         darkMode 
           ? 'bg-[#0B1120] border-white/5' 
           : 'bg-slate-50/50 border-black/5 shadow-sm'
-      }`}
+      } ${isOver ? (darkMode ? 'ring-2 ring-emerald-500/50' : 'ring-2 ring-emerald-400') : ''}`}
     >
       {/* Header de la columna */}
       <div className={`p-5 rounded-t-3xl border-b transition-colors duration-500 ${
@@ -137,7 +139,6 @@ const WorkerColumn = ({ worker, cameras, darkMode }) => {
 
       {/* Área droppable */}
       <div 
-        ref={setNodeRef}
         className="flex-1 p-4 overflow-y-auto custom-scrollbar flex flex-col gap-3 min-h-[150px]"
       >
         <SortableContext items={cameras.map(c => c.id)} strategy={verticalListSortingStrategy}>
@@ -249,7 +250,7 @@ const QuickAssign = ({ camerasData, workersData, onUpdateCamera, darkMode }) => 
       targetWorkerName = worker.name;
     } else {
       // Si se soltó sobre OTRA cámara, buscar a quién pertenece esa cámara
-      const targetCamera = localCameras.find(c => c.id === targetId);
+      const targetCamera = localCameras.find(c => String(c.id) === String(targetId));
       if (targetCamera) {
         targetWorkerName = targetCamera.assignedTo || '';
       }
