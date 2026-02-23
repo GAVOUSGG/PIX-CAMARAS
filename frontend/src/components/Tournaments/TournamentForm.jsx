@@ -64,9 +64,8 @@ const TournamentForm = ({
   }, [formData.startDate, formData.days]);
 
   const availableWorkers = useMemo(() => {
-    if (!formData.state) return [];
-    return workers.filter(w => w.state === formData.state && w.status === "disponible");
-  }, [formData.state, workers]);
+    return workers.filter(w => w.status === "disponible");
+  }, [workers]);
 
   const selectedWorker = useMemo(() => 
     workers.find(w => w.id.toString() === formData.workerId)
@@ -343,7 +342,7 @@ const TournamentForm = ({
                 ))}
               </select>
               <p className="text-[9px] font-black uppercase tracking-widest text-slate-600 ml-1">
-                Mostrando personal disponible en {formData.state || "la zona seleccionada"}
+                Mostrando todo el personal táctico disponible
               </p>
             </div>
 
