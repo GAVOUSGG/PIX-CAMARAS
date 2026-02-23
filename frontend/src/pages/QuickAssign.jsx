@@ -344,10 +344,10 @@ const QuickAssign = ({ camerasData, workersData, onUpdateCamera, onCreateCameraH
       </div>
 
       {/* PANEL PRINCIPAL 3 COLUMNAS */}
-      <div className="flex flex-col xl:flex-row gap-6 flex-1 min-h-0">
+      <div className="flex flex-col lg:flex-row gap-6 flex-1 min-h-0 lg:overflow-hidden overflow-y-auto pb-4 custom-scrollbar">
         
         {/* COLUMNA 1: LISTA DE ACTIVOS */}
-        <div className={`w-full xl:w-[350px] shrink-0 flex flex-col rounded-3xl border shadow-sm ${darkMode ? 'bg-[#0B1120] border-white/5' : 'bg-slate-50 border-black/5'}`}>
+        <div className={`w-full lg:w-[300px] xl:w-[350px] shrink-0 flex flex-col rounded-3xl border shadow-sm h-[500px] lg:h-full ${darkMode ? 'bg-[#0B1120] border-white/5' : 'bg-slate-50 border-black/5'}`}>
           <div className="p-5 border-b border-inherit space-y-4">
             <h3 className="font-black text-lg flex items-center gap-2">
               <Box className="w-5 h-5 opacity-70" /> Activos
@@ -463,7 +463,7 @@ const QuickAssign = ({ camerasData, workersData, onUpdateCamera, onCreateCameraH
         </div>
 
         {/* COLUMNA 2: PANEL DE ACCIÓN CENTRAL */}
-        <div className="flex-1 flex flex-col justify-center items-center gap-8 py-8 px-4 rounded-3xl border border-dashed border-emerald-500/30 bg-emerald-500/[0.02]">
+        <div className="flex-1 flex flex-col justify-center items-center gap-8 py-8 px-4 rounded-3xl border border-dashed border-emerald-500/30 bg-emerald-500/[0.02] min-h-[400px] lg:min-h-0">
           
           {/* Progress Bar */}
           <div className="w-full max-w-sm shrink-0 mb-4">
@@ -504,7 +504,7 @@ const QuickAssign = ({ camerasData, workersData, onUpdateCamera, onCreateCameraH
               )}
             </div>
 
-            <ArrowRight className={`w-6 h-6 rotate-90 xl:rotate-0 transition-colors duration-500 ${
+            <ArrowRight className={`w-6 h-6 rotate-90 lg:rotate-0 transition-colors duration-500 ${
               selectedCameraObj && selectedWorkerObj ? 'text-emerald-500' : 'opacity-20'
             }`} />
 
@@ -570,7 +570,7 @@ const QuickAssign = ({ camerasData, workersData, onUpdateCamera, onCreateCameraH
         </div>
 
         {/* COLUMNA 3: LISTA DE PERSONAS */}
-        <div className={`w-full xl:w-[350px] shrink-0 flex flex-col rounded-3xl border shadow-sm ${darkMode ? 'bg-[#0B1120] border-white/5' : 'bg-slate-50 border-black/5'}`}>
+        <div className={`w-full lg:w-[300px] xl:w-[350px] shrink-0 flex flex-col rounded-3xl border shadow-sm h-[500px] lg:h-full ${darkMode ? 'bg-[#0B1120] border-white/5' : 'bg-slate-50 border-black/5'}`}>
           <div className="p-5 border-b border-inherit space-y-4">
              <h3 className="font-black text-lg flex items-center gap-2">
               <User className="w-5 h-5 opacity-70" /> Personas
