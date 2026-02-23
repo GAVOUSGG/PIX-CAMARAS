@@ -351,7 +351,7 @@ const TournamentForm = ({
                   </optgroup>
                 )}
                 {otherWorkers.length > 0 && (
-                  <optgroup label={formData.state ? "Personal en otros estados" : "Todo el personal disponible"}>
+                  <optgroup label={formData.state ? "Trabajadores en otros estados" : "Todo el personal disponible"}>
                     {otherWorkers.map(w => (
                       <option key={w.id} value={w.id}>{w.name} - {w.phone} ({w.camerasAssigned?.length || 0} unidades)</option>
                     ))}
@@ -359,7 +359,7 @@ const TournamentForm = ({
                 )}
               </select>
               <p className="text-[9px] font-black uppercase tracking-widest text-slate-600 ml-1">
-                Mostrando todo el personal táctico disponible
+                Mostrando todo el personal disponible
               </p>
             </div>
 
