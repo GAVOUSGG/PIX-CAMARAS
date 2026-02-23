@@ -236,17 +236,17 @@ const QuickAssign = ({ camerasData, workersData, onUpdateCamera, darkMode }) => 
     const targetId = over.id; // Puede ser ID de otro sortable(camera) o ID de colum(worker / 'pool')
 
     // Encontrar cámara arrastrada
-    const camera = localCameras.find(c => c.id === cameraId);
+    const camera = localCameras.find(c => String(c.id) === String(cameraId));
     if (!camera) return;
 
     // Determinar destino
     let targetWorkerName = '';
     
     // Si se soltó sobre una columna explícita
-    if (targetId === 'pool') {
+    if (String(targetId) === 'pool') {
       targetWorkerName = '';
-    } else if (workersData.find(w => w.id === targetId)) {
-      const worker = workersData.find(w => w.id === targetId);
+    } else if (workersData.find(w => String(w.id) === String(targetId))) {
+      const worker = workersData.find(w => String(w.id) === String(targetId));
       targetWorkerName = worker.name;
     } else {
       // Si se soltó sobre OTRA cámara, buscar a quién pertenece esa cámara
@@ -261,11 +261,11 @@ const QuickAssign = ({ camerasData, workersData, onUpdateCamera, darkMode }) => 
 
     // --- ACTUALIZACIÓN OPTIMISTA (UI INMEDIATA) ---
     setLocalCameras(prev => prev.map(c => {
-      if (c.id === cameraId) {
+      if (String(c.id) === String(cameraId)) {
         return {
           ...c,
-          assignedTo: targetWorkerName,
-          status: targetWorkerName ? 'en uso' : 'disponible'
+          assignedTo: targetWorkerName
+          // Mantenemos el status original según requerimiento
         };
       }
       return c;
@@ -274,9 +274,12 @@ const QuickAssign = ({ camerasData, workersData, onUpdateCamera, darkMode }) => 
     // --- ACTUALIZACIÓN BACKEND ---
     try {
       const updates = {
-        assignedTo: targetWorkerName,
-        status: targetWorkerName ? 'en uso' : 'disponible'
+        assignedTo: targetWorkerName
       };
+      // Si se envía al pool, regresamos ubicación al almacén
+      if (!targetWorkerName) {
+        updates.location = 'Almacén';
+      }
       // Aquí llamamos a onUpdateCamera del hook (MainApp lo pasa)
       await onUpdateCamera(cameraId, updates);
 
