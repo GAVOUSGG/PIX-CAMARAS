@@ -463,7 +463,7 @@ const QuickAssign = ({ camerasData, workersData, onUpdateCamera, onCreateCameraH
         </div>
 
         {/* COLUMNA 2: PANEL DE ACCIÓN CENTRAL */}
-        <div className="flex-1 flex flex-col justify-center items-center gap-8 py-8 px-4 rounded-3xl border border-dashed border-emerald-500/30 bg-emerald-500/[0.02] min-h-[400px] lg:min-h-0">
+        <div className="flex-1 flex flex-col justify-start items-center gap-8 py-8 px-4 rounded-3xl border border-dashed border-emerald-500/30 bg-emerald-500/[0.02] min-h-[400px] lg:min-h-0">
           
           {/* Progress Bar */}
           <div className="w-full max-w-sm shrink-0 mb-4">
