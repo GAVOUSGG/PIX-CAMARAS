@@ -58,6 +58,19 @@ const createCrudRoutes = (model, path) => {
     }
   });
 
+  app.get(`${path}/:id`, async (req, res) => {
+    try {
+      const item = await model.findByPk(req.params.id);
+      if (item) {
+        res.json(item);
+      } else {
+        res.status(404).json({ error: 'Item not found' });
+      }
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
   app.post(path, async (req, res) => {
     try {
       const newItem = await model.create(req.body);
@@ -120,7 +133,11 @@ app.get('/camera-history', async (req, res) => {
 
 app.post('/camera-history', async (req, res) => {
   try {
-    const newEntry = await CameraHistory.create(req.body);
+    const entryData = {
+      ...req.body,
+      id: req.body.id || `hist-${Date.now()}-${Math.floor(Math.random() * 1000)}`
+    };
+    const newEntry = await CameraHistory.create(entryData);
     res.json(newEntry);
   } catch (error) {
     res.status(500).json({ error: error.message });

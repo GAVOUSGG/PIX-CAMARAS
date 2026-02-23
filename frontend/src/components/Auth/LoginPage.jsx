@@ -37,54 +37,61 @@ const LoginPage = ({ onLogin }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
-      <div className="bg-slate-800/50 backdrop-blur-xl border border-slate-700 p-8 rounded-2xl shadow-2xl w-full max-w-md">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">PixGolf</h1>
-          <p className="text-slate-400">Inicia sesión para continuar</p>
+    <div 
+      className="min-h-screen flex items-center justify-center p-4 bg-cover bg-center bg-no-repeat relative"
+      style={{ backgroundImage: "url('/login-bg.png')" }}
+    >
+      {/* Overlay to ensure text readability */}
+      <div className="absolute inset-0 bg-emerald-950/20 backdrop-blur-[2px]"></div>
+
+      <div className="bg-white/60 backdrop-blur-2xl border border-white/60 p-8 md:p-12 rounded-sm shadow-[0_8px_32px_rgba(0,0,0,0.15)] w-full max-w-md relative z-10 transition-all duration-500 hover:shadow-[0_16px_48px_rgba(16,185,129,0.15)]">
+        <div className="text-center mb-10">
+          
+          <h1 className="text-4xl font-black text-emerald-950 mb-2 tracking-tight">PIXGOLF</h1>
+          <p className="text-emerald-800/80 font-medium">Inicio de Sesión</p>
         </div>
 
         {error && (
-          <div className="bg-red-500/10 border border-red-500/20 text-red-400 px-4 py-3 rounded-lg mb-6 text-sm">
+          <div className="bg-red-500/10 border border-red-500/20 text-red-600 px-4 py-3 rounded-sm mb-6 text-sm font-bold text-center animate-fade-in shadow-inner">
             {error}
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2">
-              Usuario
+          <div className="space-y-1.5">
+            <label className="block text-xs font-black uppercase tracking-widest text-emerald-900/70 ml-2">
+              Usuario de red
             </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <User className="h-5 w-5 text-slate-500" />
+            <div className="relative group">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-transform group-focus-within:scale-110 duration-300">
+                <User className="h-5 w-5 text-emerald-600/60 group-focus-within:text-emerald-600 transition-colors" />
               </div>
               <input
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="block w-full pl-10 pr-3 py-2.5 bg-slate-900/50 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
-                placeholder="Ingresa tu usuario"
+                className="block w-full pl-12 pr-4 py-3.5 bg-white/40 border-2 border-white/50 rounded-sm text-emerald-950 placeholder-emerald-900/30 focus:outline-none focus:ring-0 focus:border-emerald-500 focus:bg-white/80 transition-all duration-300 shadow-inner font-medium text-lg"
+                placeholder="Usuario"
                 required
                 autoComplete="username"
               />
             </div>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2">
+          <div className="space-y-1.5">
+            <label className="block text-xs font-black uppercase tracking-widest text-emerald-900/70 ml-2">
               Contraseña
             </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Lock className="h-5 w-5 text-slate-500" />
+            <div className="relative group">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-transform group-focus-within:scale-110 duration-300">
+                <Lock className="h-5 w-5 text-emerald-600/60 group-focus-within:text-emerald-600 transition-colors" />
               </div>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="block w-full pl-10 pr-3 py-2.5 bg-slate-900/50 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
-                placeholder="••••••••"
+                className="block w-full pl-12 pr-4 py-3.5 bg-white/40 border-2 border-white/50 rounded-sm text-emerald-950 placeholder-emerald-900/30 focus:outline-none focus:ring-0 focus:border-emerald-500 focus:bg-white/80 transition-all duration-300 shadow-inner font-medium text-lg tracking-widest"
+                placeholder="••••••••••"
                 required
                 autoComplete="current-password"
               />
@@ -94,13 +101,16 @@ const LoginPage = ({ onLogin }) => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+            className="w-full relative mt-8 flex justify-center py-4 px-4 border border-transparent shadow-xl shadow-emerald-600/20 text-base font-black uppercase tracking-widest text-white bg-lime-700 hover:bg-lime-500 hover:shadow-emerald-500/30 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 overflow-hidden group"
           >
-            {loading ? (
-              <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-            ) : (
-              'Iniciar Sesión'
-            )}
+            <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
+            <span className="relative z-10 flex items-center gap-2">
+              {loading ? (
+                <div className="w-5 h-5 border-2 border-emerald-200 border-t-white rounded-full animate-spin" />
+              ) : (
+                'Ingresar al Sistema'
+              )}
+            </span>
           </button>
         </form>
       </div>

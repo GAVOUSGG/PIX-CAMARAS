@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
+import { createPortal } from "react-dom";
 import {
   X,
   Save,
@@ -20,43 +21,18 @@ const ShipmentForm = ({
   workers = [],
   shipmentsData = [],
   isOpen = false,
+  darkMode = true
 }) => {
   const isEditing = !!shipment;
   const [showForm, setShowForm] = useState(isOpen);
 
   const estadosMexico = [
-    "Aguascalientes",
-    "Baja California",
-    "Baja California Sur",
-    "Campeche",
-    "Chiapas",
-    "Chihuahua",
-    "CDMX",
-    "Coahuila",
-    "Colima",
-    "Durango",
-    "Estado de México",
-    "Guanajuato",
-    "Guerrero",
-    "Hidalgo",
-    "Jalisco",
-    "Michoacán",
-    "Morelos",
-    "Nayarit",
-    "Nuevo León",
-    "Oaxaca",
-    "Puebla",
-    "Querétaro",
-    "Quintana Roo",
-    "San Luis Potosí",
-    "Sinaloa",
-    "Sonora",
-    "Tabasco",
-    "Tamaulipas",
-    "Tlaxcala",
-    "Veracruz",
-    "Yucatán",
-    "Zacatecas",
+    "Aguascalientes", "Baja California", "Baja California Sur", "Campeche", "Chiapas",
+    "Chihuahua", "CDMX", "Coahuila", "Colima", "Durango", "Estado de México",
+    "Guanajuato", "Guerrero", "Hidalgo", "Jalisco", "Michoacán", "Morelos",
+    "Nayarit", "Nuevo León", "Oaxaca", "Puebla", "Querétaro", "Quintana Roo",
+    "San Luis Potosí", "Sinaloa", "Sonora", "Tabasco", "Tamaulipas", "Tlaxcala",
+    "Veracruz", "Yucatán", "Zacatecas",
   ];
 
   // Calcular el próximo ID consecutivo
@@ -127,10 +103,8 @@ const ShipmentForm = ({
     return [...workers].sort((a, b) => a.name.localeCompare(b.name));
   }, [workers]);
 
-  // Cámaras disponibles (que no estén en uso)
+  // Cámaras disponibles
   const availableCameras = useMemo(() => {
-    // Si no hay remitente seleccionado, no mostrar ninguna cámara
-    // Esto previene que se muestre "todo el inventario" por defecto
     if (!formData.shipper) return [];
 
     return cameras.filter((camera) => {
@@ -139,7 +113,6 @@ const ShipmentForm = ({
 
       if (!isAvailable) return false;
 
-      // Filtrar estrictamente por asignación al remitente
       return camera.assignedTo === formData.shipper;
     });
   }, [cameras, formData.cameras, formData.shipper]);
@@ -147,12 +120,9 @@ const ShipmentForm = ({
   const handleInputChange = (field, value) => {
     setFormData((prev) => {
       const newData = { ...prev, [field]: value };
-
-      // Si cambia el remitente, limpiar las cámaras seleccionadas para evitar inconsistencias
       if (field === "shipper") {
         newData.cameras = [];
       }
-
       return newData;
     });
   };
@@ -178,8 +148,7 @@ const ShipmentForm = ({
     };
 
     try {
-      const result = await onSave(shipmentData);
-
+      await onSave(shipmentData);
       setShowForm(false);
       if (!isEditing) {
         setFormData({
@@ -197,11 +166,7 @@ const ShipmentForm = ({
         });
       }
     } catch (error) {
-      alert(
-        `Error al ${
-          isEditing ? "actualizar" : "guardar"
-        } el envío. Por favor intenta nuevamente.`
-      );
+      alert(`Error al ${isEditing ? "actualizar" : "guardar"} el envío.`);
     }
   };
 
@@ -210,412 +175,377 @@ const ShipmentForm = ({
     onCancel?.();
   };
 
-  if (!showForm && !isEditing) {
-    return null;
-  }
+  if (!showForm) return null;
 
-  if (isEditing && !showForm) {
-    return null;
-  }
-
-  return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-0 md:p-4 z-50">
-      <div className="bg-slate-800/90 backdrop-blur-xl rounded-none md:rounded-2xl border-x-0 border-t-0 md:border border-white/10 p-4 md:p-6 max-w-4xl w-full h-full md:h-auto md:max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between mb-6">
-          <h3 className="text-xl font-semibold text-white">
-            {isEditing ? "Editar Envío" : "Nuevo Envío"}
-          </h3>
+  return createPortal(
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 animate-fade-in text-left">
+      <div 
+        className="absolute inset-0 bg-black/60 backdrop-blur-md cursor-pointer" 
+        onClick={handleCancel} 
+      />
+      <div 
+        className={`relative w-full max-w-5xl border shadow-2xl flex flex-col max-h-[95vh] sm:max-h-[90vh] overflow-hidden transition-all duration-500 ${
+          darkMode ? 'bg-slate-900 border-white/10 shadow-black' : 'bg-white border-black/5 shadow-slate-300'
+        }`}
+      >
+        {/* Header */}
+        <div className={`p-8 border-b flex items-center justify-between transition-colors duration-500 ${darkMode ? 'border-white/5 bg-white/[0.02]' : 'border-slate-50 bg-slate-50/50'}`}>
+          <div>
+            <h3 className={`text-2xl font-black transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'} tracking-tight`}>
+              {isEditing ? "Gestión de" : "Nuevo"} <span className="text-emerald-500">Envío</span>
+            </h3>
+            <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">
+              Logística y control de envíos
+            </p>
+          </div>
           <button
             onClick={handleCancel}
-            className="text-gray-400 hover:text-white transition-colors"
+            className={`p-3 transition-all duration-300 ${
+              darkMode ? 'bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white' : 'bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-slate-900'
+            }`}
           >
             <X className="w-6 h-6" />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Información Básica */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">
-                <Truck className="w-4 h-4 inline mr-2" />
+        <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto custom-scrollbar p-8 space-y-10">
+          {/* Fila 1: ID, Tracking, Fecha */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="space-y-2">
+              <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-white' : 'text-slate-400'}`}>
+                <Hash className="w-3.5 h-3.5 inline mr-1" />
                 ID de Envío
               </label>
               <input
                 type="text"
                 value={formData.id}
                 onChange={(e) => handleInputChange("id", e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                disabled={isEditing}
+                className={`w-full border px-5 py-4 transition-all duration-300 outline-none font-mono ${
+                  darkMode 
+                    ? 'bg-slate-950/50 border-white/5 text-slate-400' 
+                    : 'bg-slate-50 border-slate-200 text-slate-500'
+                }`}
+                disabled
               />
-              <p className="text-xs text-gray-500 mt-1">
-                ID consecutivo automático: {getNextShipmentId()}
-              </p>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">
-                <Hash className="w-4 h-4 inline mr-2" />
-                Número de Tracking
+            <div className="space-y-2">
+              <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-white' : 'text-slate-400'}`}>
+                <Hash className="w-3.5 h-3.5 inline mr-1" />
+                Guía de Seguimiento
               </label>
               <input
                 type="text"
                 value={formData.trackingNumber}
-                onChange={(e) =>
-                  handleInputChange("trackingNumber", e.target.value)
-                }
-                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                placeholder="TRK123456789"
+                onChange={(e) => handleInputChange("trackingNumber", e.target.value)}
+                className={`w-full border px-5 py-4 transition-all duration-300 outline-none focus:ring-2 focus:ring-emerald-500/50 ${
+                  darkMode 
+                    ? 'bg-slate-950/50 border-white/5 text-slate-400 placeholder-slate-700' 
+                    : 'bg-slate-50 border-slate-200 text-slate-900 placeholder-slate-400'
+                }`}
+                placeholder="TRK_CODE_PIX"
               />
             </div>
-          </div>
 
-          {/* Origen, Destino y Fecha */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">
-                <MapPin className="w-4 h-4 inline mr-2" />
-                Origen *
-              </label>
-              <select
-                required
-                value={formData.origin}
-                onChange={(e) =>
-                  handleInputChange("origin", e.target.value)
-                }
-                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              >
-                <option value="" className="text-white bg-gray-700">
-                  Seleccionar origen
-                </option>
-                {estadosMexico.map((estado) => (
-                  <option
-                    key={estado}
-                    value={estado}
-                    className="text-white bg-gray-700"
-                  >
-                    {estado}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">
-                <MapPin className="w-4 h-4 inline mr-2" />
-                Destino *
-              </label>
-              <select
-                required
-                value={formData.destination}
-                onChange={(e) =>
-                  handleInputChange("destination", e.target.value)
-                }
-                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              >
-                <option value="" className="text-white bg-gray-700">
-                  Seleccionar destino
-                </option>
-                {estadosMexico.map((estado) => (
-                  <option
-                    key={estado}
-                    value={estado}
-                    className="text-white bg-gray-700"
-                  >
-                    {estado}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">
-                <Calendar className="w-4 h-4 inline mr-2" />
-                Fecha de Envío *
+            <div className="space-y-2">
+              <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-white' : 'text-slate-400'}`}>
+                <Calendar className="w-3.5 h-3.5 inline mr-1" />
+                Fecha de envío
               </label>
               <input
                 type="date"
                 required
                 value={formData.date}
                 onChange={(e) => handleInputChange("date", e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                className={`w-full border px-5 py-4 transition-all duration-300 outline-none ${
+                   darkMode 
+                  ? 'bg-slate-950/50 border-white/5 text-slate-400 scheme-dark' 
+                  : 'bg-slate-50 border-slate-200 text-slate-900'
+                }`}
               />
             </div>
           </div>
 
-          {/* Personas: Destinatario y Remitente */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">
-                <User className="w-4 h-4 inline mr-2" />
-                Destinatario *
-              </label>
-              <select
-                required
-                value={formData.recipient}
-                onChange={(e) => handleInputChange("recipient", e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              >
-                <option value="" className="text-white bg-gray-700">
-                  Seleccionar destinatario
-                </option>
-                {sortedWorkers.map((worker) => (
-                  <option
-                    key={worker.id}
-                    value={worker.name}
-                    className="text-white bg-gray-700"
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+            {/* Sección Ruta */}
+            <div className="space-y-6">
+              <div className="flex items-center gap-3 mb-2">
+                <div className={`w-1.5 h-6 ${darkMode ? 'bg-blue-500/50' : 'bg-blue-500'}`}></div>
+                <h4 className={`text-xs font-black uppercase tracking-[0.2em] ${darkMode ? 'text-white' : 'text-slate-500'}`}>Información Logística</h4>
+              </div>
+              
+              <div className="space-y-6">
+                <div className="space-y-2">
+                  <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-white' : 'text-slate-400'}`}>Punto de Origen *</label>
+                  <select
+                    required
+                    value={formData.origin}
+                    onChange={(e) => handleInputChange("origin", e.target.value)}
+                    className={`w-full border px-5 py-4 transition-all duration-300 outline-none ${
+                      darkMode 
+                        ? 'bg-slate-950/50 border-white/5 text-slate-400' 
+                        : 'bg-slate-50 border-slate-200 text-slate-900'
+                    }`}
                   >
-                    {worker.name} - {worker.state}
-                  </option>
-                ))}
-              </select>
+                    <option value="">Seleccionar procedencia</option>
+                    {estadosMexico.map(estado => <option key={estado} value={estado}>{estado}</option>)}
+                  </select>
+                </div>
+
+                <div className="space-y-2">
+                  <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-white' : 'text-slate-400'}`}>Punto de Destino *</label>
+                  <select
+                    required
+                    value={formData.destination}
+                    onChange={(e) => handleInputChange("destination", e.target.value)}
+                    className={`w-full border px-5 py-4 transition-all duration-300 outline-none ${
+                        darkMode 
+                      ? 'bg-slate-950/50 border-white/5 text-slate-400' 
+                      : 'bg-slate-50 border-slate-200 text-slate-900'
+                    }`}
+                  >
+                    <option value="">Seleccionar punto de destino</option>
+                    {estadosMexico.map(estado => <option key={estado} value={estado}>{estado}</option>)}
+                  </select>
+                </div>
+              </div>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">
-                <User className="w-4 h-4 inline mr-2" />
-                Persona que Envía *
-              </label>
-              <select
-                required
-                value={formData.shipper}
-                onChange={(e) => handleInputChange("shipper", e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              >
-                <option value="" className="text-white bg-gray-700">
-                  Seleccionar remitente
-                </option>
-                {sortedWorkers.map((worker) => (
-                  <option
-                    key={worker.id}
-                    value={worker.name}
-                    className="text-white bg-gray-700"
+            {/* Sección Agentes */}
+            <div className="space-y-6">
+              <div className="flex items-center gap-3 mb-2">
+                <div className={`w-1.5 h-6 ${darkMode ? 'bg-purple-500/50' : 'bg-purple-500'}`}></div>
+                <h4 className={`text-xs font-black uppercase tracking-[0.2em] ${darkMode ? 'text-white' : 'text-slate-500'}`}>Personas Involucradas</h4>
+              </div>
+
+              <div className="space-y-6">
+                <div className="space-y-2">
+                  <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-white' : 'text-slate-400'}`}>Persona *</label>
+                  <select
+                    required
+                    value={formData.shipper}
+                    onChange={(e) => handleInputChange("shipper", e.target.value)}
+                    className={`w-full border px-5 py-4 transition-all duration-300 outline-none ${
+                        darkMode 
+                      ? 'bg-slate-950/50 border-white/5 text-slate-400' 
+                      : 'bg-slate-50 border-slate-200 text-slate-900'
+                    }`}
                   >
-                    {worker.name} - {worker.state}
-                  </option>
-                ))}
-              </select>
+                    <option value="">Seleccionar responsable de salida</option>
+                    {sortedWorkers.map(worker => (
+                      <option key={worker.id} value={worker.name}>{worker.name} - {worker.state}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="space-y-2">
+                  <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-white' : 'text-slate-400'}`}>Persona Destinataria *</label>
+                  <select
+                    required
+                    value={formData.recipient}
+                    onChange={(e) => handleInputChange("recipient", e.target.value)}
+                    className={`w-full border px-5 py-4 transition-all duration-300 outline-none ${
+                      darkMode 
+                        ? 'bg-slate-950/50 border-white/5 text-slate-400' 
+                        : 'bg-slate-50 border-slate-200 text-slate-900'
+                    }`}
+                  >
+                    <option value="">Seleccionar responsable de recepción</option>
+                    {sortedWorkers.map(worker => (
+                      <option key={worker.id} value={worker.name}>{worker.name} - {worker.state}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Estado y Remitente (Empresa) */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">
-                Estado
-              </label>
+          {/* Estado y Empresa */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+            <div className="space-y-2">
+              <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-white' : 'text-slate-400'}`}>Estado Logístico Actual</label>
               <select
                 value={formData.status}
                 onChange={(e) => handleInputChange("status", e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                className={`w-full border px-5 py-4 transition-all duration-300 outline-none ${
+                    darkMode 
+                  ? 'bg-slate-950/50 border-white/5 text-slate-400' 
+                  : 'bg-slate-50 border-slate-200 text-slate-900'
+                }`}
               >
-                <option value="preparando" className="text-white bg-gray-700">
-                  Preparando
-                </option>
-                <option value="pendiente" className="text-white bg-gray-700">
-                  Pendiente
-                </option>
-                <option value="enviado" className="text-white bg-gray-700">
-                  Enviado
-                </option>
-                <option value="entregado" className="text-white bg-gray-700">
-                  Entregado
-                </option>
-                <option value="cancelado" className="text-white bg-gray-700">
-                  Cancelado
-                </option>
+                <option value="preparando">Preparando (Picking)</option>
+                <option value="pendiente">Pendiente (A la espera)</option>
+                <option value="enviado">Enviado (En Tránsito)</option>
+                <option value="entregado">Entregado (Almacenado)</option>
+                <option value="cancelado">Cancelado (Anulado)</option>
               </select>
-              <p className="text-xs text-gray-500 mt-1">
-                {formData.status === "enviado" &&
-                  'Las cámaras cambiarán a estado "EN ENVIO" automáticamente'}
-                {formData.status === "entregado" &&
-                  "Las cámaras se asignarán automáticamente al destinatario"}
-                {formData.status === "cancelado" &&
-                  'Las cámaras volverán a estado "disponible"'}
-              </p>
+              <div className={`mt-3 p-4 border flex items-center gap-3 transition-colors duration-500 ${darkMode ? 'bg-white/[0.01] border-white/5' : 'bg-slate-50/50 border-slate-100'}`}>
+                <MessageCircle className="w-3.5 h-3.5 text-blue-500" />
+                <p className="text-[9px] font-bold uppercase tracking-tight text-slate-500">
+                  {formData.status === "enviado" && 'En camino a su destino'}
+                  {formData.status === "entregado" && "Visor recogio las camaras"}
+                  {formData.status === "preparando" && "preparando envio"}
+                  {formData.status === "pendiente" && "Por definir"}
+                  {formData.status === "cancelado" && 'reasignar camaras'}
+                </p>
+              </div>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">
-                Empresa/Remitente
-              </label>
-              <input
-                type="text"
-                value={formData.sender}
-                onChange={(e) => handleInputChange("sender", e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                placeholder="Ej: Potosinos"
-              />
+            <div className="space-y-2">
+              <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-white' : 'text-slate-400'}`}>Empresa logística</label>
+              <div className="relative group">
+                <Truck className={`absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 transition-colors ${darkMode ? 'text-slate-600 group-focus-within:text-emerald-500' : 'text-slate-400 group-focus-within:text-emerald-600'}`} />
+                <input
+                  type="text"
+                  value={formData.sender}
+                  onChange={(e) => handleInputChange("sender", e.target.value)}
+                  className={`w-full border pl-12 pr-5 py-4 transition-all duration-300 outline-none focus:ring-2 focus:ring-emerald-500/50 ${
+                     darkMode 
+                    ? 'bg-slate-950/50 border-white/5 text-white' 
+                    : 'bg-slate-50 border-slate-200 text-slate-900'
+                  }`}
+                  placeholder="Potosinos, tres guerras, etc..."
+                />
+              </div>
             </div>
           </div>
 
           {/* Items Extra */}
-          <div>
-            <label className="block text-sm font-medium text-gray-400 mb-2">
-              <Package className="w-4 h-4 inline mr-2" />
-              Items Extra Incluidos
-            </label>
-            <textarea
-              value={formData.extraItems}
-              onChange={(e) => handleInputChange("extraItems", e.target.value)}
-              rows="3"
-              className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none"
-              placeholder="Ej: Cargador"
-            />
-            <p className="text-xs text-gray-500 mt-1">
-              Describe cualquier item adicional que se incluya en el envío
-            </p>
+          <div className="space-y-3">
+            <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>Items Adicionales</label>
+            <div className="relative group">
+              <Package className={`absolute left-5 top-6 w-4 h-4 transition-colors ${darkMode ? 'text-slate-600 group-focus-within:text-emerald-500' : 'text-slate-400 group-focus-within:text-emerald-600'}`} />
+              <textarea
+                value={formData.extraItems}
+                onChange={(e) => handleInputChange("extraItems", e.target.value)}
+                rows="3"
+                className={`w-full border pl-12 pr-6 py-5 transition-all duration-300 outline-none focus:ring-2 focus:ring-emerald-500/50 resize-none ${
+                    darkMode 
+                  ? 'bg-slate-950/50 border-white/5 text-white placeholder-slate-700' 
+                  : 'bg-slate-50 border-slate-200 text-slate-900 placeholder-slate-400'
+                }`}
+                placeholder="Escribe aqui cualquier item adicional"
+              />
+            </div>
           </div>
 
           {/* Selección de Cámaras */}
-          <div>
-            <label className="block text-sm font-medium text-gray-400 mb-4">
-              <Camera className="w-4 h-4 inline mr-2" />
-              Cámaras a Incluir ({formData.cameras.length} seleccionadas)
-            </label>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-48 overflow-y-auto bg-white/5 rounded-lg p-4">
-              {availableCameras.length > 0 ? (
-                availableCameras.map((camera) => (
-                  <label
-                    key={camera.id}
-                    className="flex items-center space-x-3 p-3 bg-white/5 rounded border border-white/10 hover:bg-white/10 cursor-pointer transition-colors"
-                  >
-                    <input
-                      type="checkbox"
-                      checked={formData.cameras.includes(camera.id)}
-                      onChange={() => handleCameraSelection(camera.id)}
-                      className="rounded border-white/20"
-                    />
-                    <div className="flex-1">
-                      <div className="text-white text-sm font-medium">
-                        {camera.id}
-                      </div>
-                      <div className="text-gray-400 text-xs">
-                        {camera.model}
-                      </div>
-                      <div className="text-gray-500 text-xs">
-                        {camera.location}
-                      </div>
-                      <div
-                        className={`text-xs ${
-                          camera.status === "disponible"
-                            ? "text-green-400"
-                            : "text-blue-400"
-                        }`}
-                      >
-                        {camera.status}
-                      </div>
-                    </div>
-                  </label>
-                ))
-              ) : (
-                <div className="col-span-3 text-center py-4 text-gray-400">
-                  No hay cámaras disponibles para enviar
-                </div>
-              )}
+          <div className="space-y-6">
+            <div className="flex items-center gap-3 mb-2">
+              <div className={`w-1.5 h-6 ${darkMode ? 'bg-emerald-500/50' : 'bg-emerald-500'}`}></div>
+              <h4 className={`text-xs font-black uppercase tracking-[0.2em] ${darkMode ? 'text-white' : 'text-slate-500'}`}>Camaras a enviar</h4>
             </div>
-            <p className="text-xs text-gray-500 mt-2">
-              Solo se muestran cámaras con estado "disponible"
-            </p>
-          </div>
 
-          {/* Resumen */}
-          <div className="bg-white/5 rounded-lg p-4">
-            <h4 className="font-semibold text-white mb-2">Resumen del Envío</h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-              <div>
-                <span className="text-gray-400">ID:</span>
-                <span className="text-white ml-2 font-mono">{formData.id}</span>
+            <div className={`border transition-all duration-500 ${darkMode ? 'bg-white/[0.01] border-white/5' : 'bg-slate-50/50 border-slate-200'}`}>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-8 max-h-[350px] overflow-y-auto custom-scrollbar">
+                {availableCameras.length > 0 ? (
+                  availableCameras.map((camera) => (
+                    <button
+                      key={camera.id}
+                      type="button"
+                      onClick={() => handleCameraSelection(camera.id)}
+                      className={`p-5 border text-left transition-all duration-300 group relative flex items-start gap-4 ${
+                        formData.cameras.includes(camera.id)
+                          ? darkMode 
+                            ? 'bg-emerald-500/10 border-emerald-500/50 text-emerald-400 ring-2 ring-emerald-500/20' 
+                            : 'bg-emerald-500 border-emerald-600 text-white shadow-xl shadow-emerald-500/20'
+                          : darkMode
+                            ? 'bg-slate-950/50 border-white/5 text-white hover:border-white/20'
+                            : 'bg-white border-slate-200 text-slate-900 hover:border-slate-400 shadow-sm'
+                      }`}
+                    >
+                      <div className={`p-2 transition-colors duration-300 ${
+                         formData.cameras.includes(camera.id)
+                         ? darkMode ? 'bg-emerald-500/20' : 'bg-white/20'
+                         : darkMode ? 'bg-white/5' : 'bg-slate-100'
+                      }`}>
+                        <Camera className="w-5 h-5" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="text-xs font-black transition-colors duration-300 mb-0.5">{camera.id}</div>
+                        <div className="text-[10px] font-bold opacity-60 truncate uppercase tracking-tighter mb-1">{camera.model}</div>
+                        <div className="flex items-center gap-2">
+                          <span className={`text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 ${
+                            camera.status === 'disponible' 
+                              ? formData.cameras.includes(camera.id) && !darkMode ? 'bg-white/20 text-white' : 'bg-emerald-500/20 text-emerald-500'
+                              : formData.cameras.includes(camera.id) && !darkMode ? 'bg-white/20 text-white' : 'bg-blue-500/20 text-blue-500'
+                          }`}>
+                            {camera.status}
+                          </span>
+                        </div>
+                      </div>
+                    </button>
+                  ))
+                ) : (
+                  <div className="col-span-full py-20 text-center">
+                    <Package className={`w-16 h-16 mx-auto mb-6 opacity-20 ${darkMode ? 'text-white' : 'text-slate-900'}`} />
+                    <p className="text-[10px] text-slate-500 font-black uppercase tracking-widest">
+                      {formData.shipper 
+                        ? `El responsable "${formData.shipper}" no posee unidades disponibles para este traspaso` 
+                        : "Seleccione un remitente para listar unidades disponibles"}
+                    </p>
+                  </div>
+                )}
               </div>
-              <div>
-                <span className="text-gray-400">Tracking:</span>
-                <span className="text-white ml-2 font-mono">
-                  {formData.trackingNumber}
-                </span>
-              </div>
-              <div>
-                <span className="text-gray-400">Origen:</span>
-                <span className="text-white ml-2">
-                  {formData.origin || "No especificado"}
-                </span>
-              </div>
-              <div>
-                <span className="text-gray-400">Destino:</span>
-                <span className="text-white ml-2">
-                  {formData.destination || "No especificado"}
-                </span>
-              </div>
-              <div>
-                <span className="text-gray-400">Destinatario:</span>
-                <span className="text-white ml-2">
-                  {formData.recipient || "No especificado"}
-                </span>
-              </div>
-              <div>
-                <span className="text-gray-400">Remitente:</span>
-                <span className="text-white ml-2">
-                  {formData.shipper || "No especificado"}
-                </span>
-              </div>
-              <div>
-                <span className="text-gray-400">Empresa:</span>
-                <span className="text-white ml-2">
-                  {formData.sender || "No especificada"}
-                </span>
-              </div>
-              <div>
-                <span className="text-gray-400">Fecha:</span>
-                <span className="text-white ml-2">{formData.date}</span>
-              </div>
-              <div>
-                <span className="text-gray-400">Estado:</span>
-                <span className="text-white ml-2 capitalize">
-                  {formData.status}
-                </span>
-              </div>
-              <div className="md:col-span-2">
-                <span className="text-gray-400">Cámaras incluidas:</span>
-                <span className="text-white ml-2">
-                  {formData.cameras.length > 0
-                    ? formData.cameras.join(", ")
-                    : "Ninguna"}
-                </span>
-              </div>
-              {formData.extraItems && (
-                <div className="md:col-span-2">
-                  <span className="text-gray-400">Items extra:</span>
-                  <span className="text-white ml-2">{formData.extraItems}</span>
-                </div>
-              )}
             </div>
           </div>
 
-          {/* Botones */}
-          <div className="flex space-x-4 pt-4">
-            <button
-              type="submit"
-              disabled={
-                !formData.destination ||
-                !formData.recipient ||
-                !formData.date ||
-                !formData.shipper
-              }
-              className="bg-emerald-500 hover:bg-emerald-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white px-6 py-3 rounded-lg transition-colors flex items-center space-x-2"
-            >
-              <Save className="w-5 h-5" />
-              <span>{isEditing ? "Actualizar Envío" : "Crear Envío"}</span>
-            </button>
-            <button
-              type="button"
-              onClick={handleCancel}
-              className="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg transition-colors"
-            >
-              Cancelar
-            </button>
-          </div>
+          {/* Panel de Consolidación */}
+          <section className={`p-10 border transition-all duration-500 ${
+            darkMode ? 'bg-emerald-500/[0.02] border-emerald-500/10' : 'bg-slate-50 border-slate-100 shadow-xl shadow-slate-200/50'
+          }`}>
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-10">
+              <div>
+                <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-3">Expediente</p>
+                <span className={`text-sm font-black font-mono transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>{formData.id}</span>
+              </div>
+              <div className="hidden lg:block">
+                <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-3">Tracking</p>
+                <span className={`text-sm font-black font-mono transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>{formData.trackingNumber || "PENDIENTE"}</span>
+              </div>
+              <div>
+                <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-3">Unidades Decl.</p>
+                <span className={`text-2xl font-black tracking-tighter ${formData.cameras.length > 0 ? 'text-emerald-500' : 'text-amber-500'}`}>
+                  {formData.cameras.length} <span className="text-xs text-slate-500 font-bold ml-1">PIX_UNITS</span>
+                </span>
+              </div>
+              <div className="col-span-2">
+                <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-3">Ruta de Transferencia</p>
+                <div className={`flex items-center gap-3 text-xs font-black transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>
+                  <span className="uppercase">{formData.origin || "?"}</span>
+                  <div className="flex-1 h-px border-t border-dashed border-slate-500"></div>
+                  <Truck className="w-4 h-4 text-emerald-500" />
+                  <div className="flex-1 h-px border-t border-dashed border-slate-500"></div>
+                  <span className="uppercase">{formData.destination || "?"}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-col md:flex-row gap-5 pt-10">
+              <button
+                type="submit"
+                disabled={!formData.destination || !formData.recipient || !formData.date || !formData.shipper}
+                className="flex-grow bg-emerald-500 text-white font-black py-5 hover:bg-emerald-400 disabled:bg-slate-500 disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-2xl shadow-emerald-500/20 active:scale-[0.98] uppercase tracking-[0.2em] text-xs"
+              >
+                {isEditing ? "Consolidar Actualización de Tránsito" : "Autorizar y Lanzar Envío"}
+              </button>
+              <button
+                type="button"
+                onClick={handleCancel}
+                className={`px-12 py-5 font-black uppercase tracking-widest text-xs transition-all duration-300 border ${
+                  darkMode 
+                    ? 'bg-white/5 border-white/5 text-slate-400 hover:bg-white/10 hover:text-white' 
+                    : 'bg-slate-100 border-slate-200 text-slate-500 hover:bg-slate-200 hover:text-slate-900'
+                }`}
+              >
+                Abortar
+              </button>
+            </div>
+          </section>
         </form>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

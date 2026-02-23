@@ -186,7 +186,7 @@ const StatisticsSection = memo(({ tournaments = [], cameras = [], workers = [], 
         {/* --- SECCIÓN TORNEOS --- */}
         {activeTab === 'tournaments' && (
           <>
-            <div className="md:col-span-2 glass-card rounded-[2rem] p-8">
+            <div className="md:col-span-2 border border-white/5 shadow-2xl rounded-[2rem] p-6 md:p-8 relative overflow-hidden group">
               <div className="flex items-center justify-between mb-2">
                 {renderSectionHeader("Tipos de Torneo Detallados", BarChart3)}
                 <span className="text-[10px] uppercase font-bold text-gray-500 tracking-widest px-2 py-1 bg-white/5 rounded-lg border border-white/5 mb-6">Días + Hoyos</span>
@@ -207,7 +207,7 @@ const StatisticsSection = memo(({ tournaments = [], cameras = [], workers = [], 
               </div>
             </div>
 
-            <div className="md:col-span-2 glass-card rounded-[2rem] p-8">
+            <div className="md:col-span-2 border border-white/5 shadow-2xl rounded-[2rem] p-6 md:p-8 relative overflow-hidden group">
               {renderSectionHeader("Tendencia Mensual de Actividad", TrendingUp)}
               <div className="h-[350px] w-full">
                 <ResponsiveContainer width="100%" height="100%">
@@ -230,7 +230,7 @@ const StatisticsSection = memo(({ tournaments = [], cameras = [], workers = [], 
               </div>
             </div>
 
-            <div className="glass-card rounded-[2rem] p-8">
+            <div className="border border-white/5 shadow-2xl rounded-[2rem] p-6 md:p-8 relative overflow-hidden group">
               {renderSectionHeader("Mix de Duración", PieChartIcon)}
               <div className="h-[300px]">
                 <ResponsiveContainer width="100%" height="100%">
@@ -253,7 +253,7 @@ const StatisticsSection = memo(({ tournaments = [], cameras = [], workers = [], 
               </div>
             </div>
 
-            <div className="glass-card rounded-[2rem] p-8">
+            <div className="border border-white/5 shadow-2xl rounded-[2rem] p-6 md:p-8 relative overflow-hidden group">
               {renderSectionHeader("Distribución por Hoyos", BarChart3)}
               <div className="h-[300px]">
                 <ResponsiveContainer width="100%" height="100%">
@@ -267,7 +267,7 @@ const StatisticsSection = memo(({ tournaments = [], cameras = [], workers = [], 
                 </ResponsiveContainer>
               </div>
             </div>
-            <div className="md:col-span-2 glass-card rounded-[2rem] p-8">
+            <div className="md:col-span-2 border border-white/5 shadow-2xl rounded-[2rem] p-6 md:p-8 relative overflow-hidden group">
               {renderSectionHeader("Torneos por Estado (Top 10)", BarChart3)}
               <div className="h-[350px] w-full">
                 <ResponsiveContainer width="100%" height="100%">
@@ -300,7 +300,7 @@ const StatisticsSection = memo(({ tournaments = [], cameras = [], workers = [], 
         {/* --- SECCIÓN CÁMARAS --- */}
         {activeTab === 'cameras' && (
           <>
-            <div className="glass-card rounded-[2rem] p-8">
+            <div className="border border-white/5 shadow-2xl rounded-[2rem] p-6 md:p-8 relative overflow-hidden group">
               {renderSectionHeader("Estado del Inventario", PieChartIcon)}
               <div className="h-[300px]">
                 <ResponsiveContainer width="100%" height="100%">
@@ -323,7 +323,7 @@ const StatisticsSection = memo(({ tournaments = [], cameras = [], workers = [], 
               </div>
             </div>
 
-            <div className="glass-card rounded-[2rem] p-8">
+            <div className="border border-white/5 shadow-2xl rounded-[2rem] p-6 md:p-8 relative overflow-hidden group">
               {renderSectionHeader("Stock por Modelo", BarChart3)}
               <div className="h-[300px]">
                 <ResponsiveContainer width="100%" height="100%">
@@ -343,7 +343,7 @@ const StatisticsSection = memo(({ tournaments = [], cameras = [], workers = [], 
         {/* --- SECCIÓN PERSONAL --- */}
         {activeTab === 'workers' && (
           <>
-            <div className="md:col-span-2 glass-card rounded-[2rem] p-8">
+            <div className="md:col-span-2 border border-white/5 shadow-2xl rounded-[2rem] p-6 md:p-8 relative overflow-hidden group">
               {renderSectionHeader("Carga de Trabajo (Torneos)", Trophy)}
               <div className="h-[350px]">
                 <ResponsiveContainer width="100%" height="100%">
@@ -363,7 +363,7 @@ const StatisticsSection = memo(({ tournaments = [], cameras = [], workers = [], 
         {/* --- SECCIÓN LOGÍSTICA --- */}
         {activeTab === 'logistics' && (
           <>
-            <div className="glass-card rounded-[2rem] p-8">
+            <div className="border border-white/5 shadow-2xl rounded-[2rem] p-6 md:p-8 relative overflow-hidden group">
               {renderSectionHeader("Estado de Envíos", Calendar)}
               <div className="h-[300px]">
                 <ResponsiveContainer width="100%" height="100%">
@@ -386,7 +386,7 @@ const StatisticsSection = memo(({ tournaments = [], cameras = [], workers = [], 
               </div>
             </div>
 
-            <div className="glass-card rounded-[2rem] p-8">
+            <div className="border border-white/5 shadow-2xl rounded-[2rem] p-6 md:p-8 relative overflow-hidden group">
               {renderSectionHeader("Volumen por Carrier", Truck)}
               <div className="h-[300px]">
                 <ResponsiveContainer width="100%" height="100%">

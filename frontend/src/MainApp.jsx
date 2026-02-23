@@ -1,4 +1,4 @@
-import React, { Suspense, useState } from "react";
+import React, { Suspense, useState, useEffect } from "react";
 import { useAppState } from "./hooks/useAppState";
 import Layout from "./components/Layout/Layout";
 import CameraInspector from "./components/Cameras/Inspector/CameraInspector";
@@ -17,6 +17,19 @@ const AdminPanel = React.lazy(() => import("./components/Admin/AdminPanel"));
 
 const MainApp = ({ user, onLogout }) => {
   const [inspectorCameraId, setInspectorCameraId] = useState(null);
+  const [darkMode, setDarkMode] = useState(() => {
+    const saved = localStorage.getItem('darkMode');
+    return saved ? JSON.parse(saved) : true; // Default to dark mode
+  });
+
+  useEffect(() => {
+    localStorage.setItem('darkMode', JSON.stringify(darkMode));
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [darkMode]);
 
   const {
     activeTab,
@@ -72,6 +85,7 @@ const MainApp = ({ user, onLogout }) => {
         <CameraInspector 
           cameraId={inspectorCameraId} 
           onBack={() => setInspectorCameraId(null)}
+          darkMode={darkMode}
         />
       );
     }
@@ -87,6 +101,7 @@ const MainApp = ({ user, onLogout }) => {
             tasksData={tasksData}
             onCompleteTask={completeTask}
             onShipCameras={handleShipCameras}
+            darkMode={darkMode}
           />
         );
       case "tournaments":
@@ -99,6 +114,7 @@ const MainApp = ({ user, onLogout }) => {
             onUpdateTournament={updateTournament}
             onDeleteTournament={deleteTournament}
             onSetSelectedTournament={setSelectedTournament}
+            darkMode={darkMode}
           />
         );
       case "workers":
@@ -109,6 +125,7 @@ const MainApp = ({ user, onLogout }) => {
             onCreateWorker={createWorker}
             onUpdateWorker={updateWorker}
             onDeleteWorker={deleteWorker}
+            darkMode={darkMode}
           />
         );
       case "cameras":
@@ -120,10 +137,11 @@ const MainApp = ({ user, onLogout }) => {
             onUpdateCamera={updateCamera}
             onDeleteCamera={deleteCamera}
             onInspectCamera={setInspectorCameraId}
+            darkMode={darkMode}
           />
         );
       case "history":
-        return <CameraHistory />;
+        return <CameraHistory darkMode={darkMode} />;
       case "logistics":
         return (
           <Logistics
@@ -133,6 +151,7 @@ const MainApp = ({ user, onLogout }) => {
             onCreateShipment={createShipment}
             onUpdateShipment={updateShipment}
             onDeleteShipment={deleteShipment}
+            darkMode={darkMode}
           />
         );
       case "map":
@@ -142,6 +161,7 @@ const MainApp = ({ user, onLogout }) => {
             workersData={workersData}
             camerasData={camerasData}
             shipmentsData={shipmentsData}
+            darkMode={darkMode}
           />
         );
       case "statistics":
@@ -151,10 +171,11 @@ const MainApp = ({ user, onLogout }) => {
             camerasData={camerasData}
             workersData={workersData}
             shipmentsData={shipmentsData}
+            darkMode={darkMode}
           />
         );
       case "admin":
-        return user.role === 'admin' ? <AdminPanel /> : <Dashboard />;
+        return user.role === 'admin' ? <AdminPanel darkMode={darkMode} /> : <Dashboard darkMode={darkMode} />;
       default:
         return (
           <Dashboard
@@ -165,6 +186,7 @@ const MainApp = ({ user, onLogout }) => {
             tasksData={tasksData}
             onCompleteTask={completeTask}
             onShipCameras={handleShipCameras}
+            darkMode={darkMode}
           />
         );
     }
@@ -172,8 +194,10 @@ const MainApp = ({ user, onLogout }) => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center">
-        <div className="text-white text-xl">Cargando PixGolf...</div>
+      <div className={`min-h-screen flex items-center justify-center transition-colors duration-500 ${
+        darkMode ? 'bg-slate-900' : 'bg-slate-50'
+      }`}>
+        <div className={`text-xl font-bold tracking-widest animate-pulse ${darkMode ? 'text-white' : 'text-slate-900'}`}>Cargando PixGolf...</div>
       </div>
     );
   }
@@ -185,6 +209,8 @@ const MainApp = ({ user, onLogout }) => {
         setActiveTab={setActiveTab}
         user={user}
         onLogout={onLogout}
+        darkMode={darkMode}
+        setDarkMode={setDarkMode}
       >
         {!apiAvailable && (
           <div className="bg-yellow-500/20 border border-yellow-500/30 text-yellow-400 px-4 py-2 rounded-lg mb-4 mx-6 flex items-center space-x-2">
@@ -206,6 +232,7 @@ const MainApp = ({ user, onLogout }) => {
         <TournamentModal
           tournament={selectedTournament}
           onClose={() => setSelectedTournament(null)}
+          darkMode={darkMode}
         />
       )}
     </>

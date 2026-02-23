@@ -3,7 +3,7 @@ import { Eye, MoreVertical, Edit, Trash2, Calendar } from 'lucide-react';
 import StatusBadge from '../UI/StatusBadge';
 import TournamentMobileCard from './TournamentMobileCard';
 
-const TournamentRow = memo(({ tournament, onView, onEdit, onDelete, onUpdateStatus }) => {
+const TournamentRow = memo(({ tournament, onView, onEdit, onDelete, onUpdateStatus, darkMode }) => {
   const [showMenu, setShowMenu] = useState(false);
 
   const getStatusOptions = (currentStatus) => {
@@ -12,39 +12,39 @@ const TournamentRow = memo(({ tournament, onView, onEdit, onDelete, onUpdateStat
   };
 
   return (
-    <tr className="hover:bg-white/[0.03] transition-all duration-300 group">
+    <tr className={`transition-all duration-300 group ${darkMode ? 'hover:bg-white/[0.03]' : 'hover:bg-slate-50'}`}>
       <td className="px-6 py-5 whitespace-nowrap">
-        <div className="text-sm font-bold text-white group-hover:text-emerald-400 transition-colors">{tournament.name}</div>
-        <div className="text-[11px] text-gray-500 mt-0.5 font-medium">{tournament.field}</div>
+        <div className={`text-sm font-bold transition-colors ${darkMode ? 'text-white group-hover:text-emerald-400' : 'text-slate-900 group-hover:text-emerald-500'}`}>{tournament.name}</div>
+        <div className={`text-[11px] font-medium mt-0.5 ${darkMode ? 'text-gray-500' : 'text-slate-500'}`}>{tournament.field}</div>
       </td>
       <td className="px-6 py-5 whitespace-nowrap">
-        <div className="text-sm text-gray-300 font-medium">{tournament.location}</div>
-        <div className="text-[11px] text-gray-500">{tournament.state}</div>
+        <div className={`text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-slate-700'}`}>{tournament.location}</div>
+        <div className={`text-[11px] ${darkMode ? 'text-gray-500' : 'text-slate-500'}`}>{tournament.state}</div>
       </td>
       <td className="px-6 py-5 whitespace-nowrap">
-        <div className="flex items-center gap-2 text-sm text-gray-300 font-medium">
-          <Calendar className="w-3.5 h-3.5 text-emerald-500/50" />
+        <div className={`flex items-center gap-2 text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-slate-700'}`}>
+          <Calendar className={`w-3.5 h-3.5 ${darkMode ? 'text-emerald-500/50' : 'text-emerald-500'}`} />
           {tournament.date}
         </div>
         {tournament.endDate && tournament.endDate !== tournament.date && (
-          <div className="text-[11px] text-gray-500 ml-5">al {tournament.endDate}</div>
+          <div className={`text-[11px] ml-5 ${darkMode ? 'text-gray-500' : 'text-slate-500'}`}>al {tournament.endDate}</div>
         )}
       </td>
       <td className="px-6 py-5 whitespace-nowrap">
         <StatusBadge status={tournament.status} />
       </td>
       <td className="px-6 py-5 whitespace-nowrap">
-        <div className="text-sm text-gray-300 font-medium">{tournament.worker}</div>
+        <div className={`text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-slate-700'}`}>{tournament.worker}</div>
         {tournament.workerId && (
-          <div className="text-[10px] text-gray-500 font-bold uppercase tracking-tighter mt-0.5">ID: {tournament.workerId}</div>
+          <div className={`text-[10px] font-bold uppercase tracking-tighter mt-0.5 ${darkMode ? 'text-gray-500' : 'text-slate-500'}`}>ID: {tournament.workerId}</div>
         )}
       </td>
       <td className="px-6 py-5 whitespace-nowrap">
         <div className="flex flex-col gap-1">
-          <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-blue-500/10 text-blue-400 text-[10px] font-bold w-fit border border-blue-500/20">
+          <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold w-fit border ${darkMode ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 'bg-blue-50 text-blue-600 border-blue-200'}`}>
             {tournament.cameras?.length || 0} Cámaras
           </span>
-          <span className="text-[10px] text-gray-500 font-medium ml-1">
+          <span className={`text-[10px] font-medium ml-1 ${darkMode ? 'text-gray-500' : 'text-slate-500'}`}>
             {tournament.holes || 0} Hoyos
           </span>
         </div>
@@ -53,7 +53,7 @@ const TournamentRow = memo(({ tournament, onView, onEdit, onDelete, onUpdateStat
         <div className="flex items-center space-x-1 justify-end">
           <button 
             onClick={() => onView(tournament)}
-            className="p-2 text-gray-400 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-xl transition-all duration-300"
+            className={`p-2 rounded-xl transition-all duration-300 ${darkMode ? 'text-gray-400 hover:text-emerald-400 hover:bg-emerald-500/10' : 'text-slate-400 hover:text-emerald-600 hover:bg-emerald-50'}`}
             title="Ver detalles"
           >
             <Eye className="w-4 h-4" />
@@ -65,7 +65,7 @@ const TournamentRow = memo(({ tournament, onView, onEdit, onDelete, onUpdateStat
                 e.stopPropagation();
                 setShowMenu(!showMenu);
               }}
-              className={`p-2 rounded-xl transition-all duration-300 ${showMenu ? 'bg-white/10 text-white' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}
+              className={`p-2 rounded-xl transition-all duration-300 ${showMenu ? (darkMode ? 'bg-white/10 text-white' : 'bg-slate-200 text-slate-800') : (darkMode ? 'text-gray-400 hover:text-white hover:bg-white/5' : 'text-slate-400 hover:text-slate-800 hover:bg-slate-100')}`}
             >
               <MoreVertical className="w-4 h-4" />
             </button>
@@ -73,10 +73,10 @@ const TournamentRow = memo(({ tournament, onView, onEdit, onDelete, onUpdateStat
             {showMenu && (
               <>
                 <div className="fixed inset-0 z-40" onClick={() => setShowMenu(false)} />
-                <div className="absolute right-0 mt-2 w-52 glass-card border-white/10 rounded-2xl shadow-2xl z-50 overflow-hidden animate-fade-in py-1.5">
+                <div className={`absolute right-0 mt-2 w-52 rounded-2xl shadow-2xl z-50 overflow-hidden animate-fade-in py-1.5 border ${darkMode ? 'glass-card border-white/10' : 'bg-white border-black/5'}`}>
                     <button
                       onClick={() => { onView(tournament); setShowMenu(false); }}
-                      className="w-full flex items-center space-x-3 px-4 py-2 text-xs font-semibold text-gray-300 hover:bg-white/5 hover:text-white transition-all"
+                      className={`w-full flex items-center space-x-3 px-4 py-2 text-xs font-semibold transition-all ${darkMode ? 'text-gray-300 hover:bg-white/5 hover:text-white' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}
                     >
                       <Eye className="w-4 h-4 text-emerald-400/70" />
                       <span>Inspeccionar</span>
@@ -84,14 +84,14 @@ const TournamentRow = memo(({ tournament, onView, onEdit, onDelete, onUpdateStat
                     
                     <button
                       onClick={() => { onEdit(tournament); setShowMenu(false); }}
-                      className="w-full flex items-center space-x-3 px-4 py-2 text-xs font-semibold text-gray-300 hover:bg-white/5 hover:text-white transition-all"
+                      className={`w-full flex items-center space-x-3 px-4 py-2 text-xs font-semibold transition-all ${darkMode ? 'text-gray-300 hover:bg-white/5 hover:text-white' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}
                     >
                       <Edit className="w-4 h-4 text-blue-400/70" />
                       <span>Editar Registro</span>
                     </button>
                     
-                    <div className="h-px bg-white/5 my-1.5 mx-2"></div>
-                    <div className="px-4 py-1.5 text-[9px] text-gray-500 font-black uppercase tracking-[0.2em]">Actualizar Fase</div>
+                    <div className={`h-px my-1.5 mx-2 ${darkMode ? 'bg-white/5' : 'bg-slate-100'}`}></div>
+                    <div className={`px-4 py-1.5 text-[9px] font-black uppercase tracking-[0.2em] ${darkMode ? 'text-gray-500' : 'text-slate-400'}`}>Actualizar Fase</div>
                     {getStatusOptions(tournament.status).map(status => (
                       <button
                         key={status}
@@ -99,18 +99,18 @@ const TournamentRow = memo(({ tournament, onView, onEdit, onDelete, onUpdateStat
                           onUpdateStatus(tournament.id, status);
                           setShowMenu(false);
                         }}
-                        className="w-full flex items-center space-x-3 px-4 py-1.5 text-xs font-semibold text-gray-400 hover:bg-white/5 hover:text-white transition-all capitalize"
+                        className={`w-full flex items-center space-x-3 px-4 py-1.5 text-xs font-semibold transition-all capitalize ${darkMode ? 'text-gray-400 hover:bg-white/5 hover:text-white' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'}`}
                       >
                         <div className={`w-1.5 h-1.5 rounded-full ${
                           status === 'activo' ? 'bg-emerald-500' : 
-                          status === 'pendiente' ? 'bg-yellow-500' : 
+                          status === 'pendiente' ? 'bg-amber-500' : 
                           status === 'terminado' ? 'bg-blue-500' : 'bg-red-500'
                         }`}></div>
                         <span>{status}</span>
                       </button>
                     ))}
                     
-                    <div className="h-px bg-white/5 my-1.5 mx-2"></div>
+                    <div className={`h-px my-1.5 mx-2 ${darkMode ? 'bg-white/5' : 'bg-slate-100'}`}></div>
                     <button
                       onClick={() => {
                         if (confirm('¿Estás seguro de que quieres eliminar este torneo?')) {
@@ -118,7 +118,7 @@ const TournamentRow = memo(({ tournament, onView, onEdit, onDelete, onUpdateStat
                         }
                         setShowMenu(false);
                       }}
-                      className="w-full flex items-center space-x-3 px-4 py-2 text-xs font-semibold text-red-400/70 hover:bg-red-500/10 hover:text-red-400 transition-all"
+                      className={`w-full flex items-center space-x-3 px-4 py-2 text-xs font-semibold transition-all ${darkMode ? 'text-red-400/70 hover:bg-red-500/10 hover:text-red-400' : 'text-red-500 hover:bg-red-50 hover:text-red-600'}`}
                     >
                       <Trash2 className="w-4 h-4" />
                       <span>Eliminar</span>
@@ -139,7 +139,8 @@ const TournamentTable = ({
   onViewDetails, 
   onEditTournament, 
   onDeleteTournament, 
-  onUpdateStatus 
+  onUpdateStatus,
+  darkMode
 }) => {
   const handleEdit = (tournament) => onEditTournament(tournament);
   const handleView = (tournament) => onViewDetails(tournament);
@@ -167,11 +168,11 @@ const TournamentTable = ({
         )}
       </div>
 
-      <div className="hidden md:block glass-card rounded-3xl overflow-hidden shadow-2xl border-white/5">
+      <div className={`hidden md:block rounded-3xl overflow-hidden shadow-2xl border ${darkMode ? 'glass-card border-white/5' : 'bg-white border-black/5'}`}>
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="bg-white/5 border-b border-white/5">
+              <tr className={`border-b ${darkMode ? 'bg-white/5 border-white/5' : 'bg-slate-50 border-slate-100'}`}>
                 <th className="px-6 py-5 text-left text-[10px] font-bold text-gray-500 uppercase tracking-widest">Información del Torneo</th>
                 <th className="px-6 py-5 text-left text-[10px] font-bold text-gray-500 uppercase tracking-widest">Ubicación</th>
                 <th className="px-6 py-5 text-left text-[10px] font-bold text-gray-500 uppercase tracking-widest">Cronograma</th>
@@ -181,7 +182,7 @@ const TournamentTable = ({
                 <th className="px-6 py-5 text-right text-[10px] font-bold text-gray-500 uppercase tracking-widest w-24">Acciones</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody className={`divide-y ${darkMode ? 'divide-white/5' : 'divide-slate-100'}`}>
               {tournaments.map((tournament, idx) => (
                 <TournamentRow 
                   key={tournament.id}
@@ -190,6 +191,7 @@ const TournamentTable = ({
                   onEdit={handleEdit}
                   onDelete={handleDelete}
                   onUpdateStatus={handleStatusChange}
+                  darkMode={darkMode}
                 />
               ))}
             </tbody>

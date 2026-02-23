@@ -1,4 +1,5 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
 import { X, Camera, Hash, MessageCircle, MapPin, User, Wifi, AlertCircle } from 'lucide-react';
 import StatusBadge from '../UI/StatusBadge';
 
@@ -35,19 +36,20 @@ const CameraCard = ({ camera, onClose, onEdit }) => {
     return new Date(dateString).toLocaleDateString('es-MX');
   };
 
-  return (
-    <div 
-      className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50"
-      onClick={onClose}
-    >
+  return createPortal(
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 animate-fade-in">
       <div 
-        className="bg-slate-800 border border-white/20 rounded-2xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+        className="absolute inset-0 bg-black/60 backdrop-blur-md"
+        onClick={onClose}
+      />
+      <div 
+        className="relative bg-slate-800 border border-white/20 rounded-2xl p-6 max-w-2xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-y-auto shadow-2xl"
         onClick={handleModalClick}
       >
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-3">
-            <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center">
+            <div className="w-12 h-12 rounded-full flex items-center justify-center">
               <Camera className="w-6 h-6 text-white" />
             </div>
             <div>
@@ -225,7 +227,8 @@ const CameraCard = ({ camera, onClose, onEdit }) => {
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

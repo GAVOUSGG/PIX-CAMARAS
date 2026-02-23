@@ -8,7 +8,7 @@ import {
   Shield,
 } from "lucide-react";
 
-const HistoryPanel = ({ camera, history, onBack }) => {
+const HistoryPanel = ({ camera, history, onBack, darkMode = true }) => {
   const stats = useMemo(() => {
     return {
       totalEvents: history.length,
@@ -41,130 +41,145 @@ const HistoryPanel = ({ camera, history, onBack }) => {
   const getStatusColor = (status) => {
     switch (status) {
       case "disponible":
-        return "bg-green-500";
+        return "bg-emerald-500 shadow-emerald-500/20";
       case "en envio":
-        return "bg-blue-500";
+        return "bg-blue-500 shadow-blue-500/20";
       case "en uso":
-        return "bg-purple-500";
+        return "bg-purple-500 shadow-purple-500/20";
       case "mantenimiento":
-        return "bg-yellow-500";
+        return "bg-amber-500 shadow-amber-500/20";
       default:
-        return "bg-gray-500";
+        return "bg-slate-500 shadow-slate-500/20";
     }
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6 animate-fade-in-right">
       {/* Camera Status Card */}
-      <div className="bg-black/20 backdrop-blur-sm rounded-xl border border-white/10 p-4">
-        <div className="flex items-center gap-2 mb-3">
-          <Shield className="w-4 h-4 text-emerald-400" />
-          <h3 className="text-sm font-semibold text-gray-400">Estado Actual</h3>
+      <div className={`rounded-3xl border p-6 transition-all duration-500 ${
+        darkMode ? 'bg-slate-900 border-white/5 shadow-2xl' : 'bg-white border-black/5 shadow-xl shadow-slate-200'
+      }`}>
+        <div className="flex items-center gap-3 mb-6">
+          <div className={`p-2 rounded-xl transition-colors duration-500 ${darkMode ? 'bg-emerald-500/10 text-emerald-400' : 'bg-emerald-50 text-emerald-600'}`}>
+            <Shield className="w-4 h-4" />
+          </div>
+          <h3 className={`text-[10px] font-black uppercase tracking-widest ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>Estado Maestro</h3>
         </div>
 
-        {/* Status */}
-        <div className="flex items-center gap-3 mb-4 p-3 bg-white/5 rounded-lg">
-          <div
-            className={`w-3 h-3 rounded-full ${getStatusColor(camera.status)}`}
-          />
-          <div>
-            <div className="text-white font-medium capitalize">
-              {camera.status}
+        <div className="space-y-4">
+          {/* Status */}
+          <div className={`flex items-center gap-4 p-4 rounded-2xl border transition-all duration-500 ${
+            darkMode ? 'bg-white/5 border-white/5' : 'bg-slate-50 border-slate-100'
+          }`}>
+            <div className={`w-3.5 h-3.5 rounded-full shadow-lg ${getStatusColor(camera.status)}`} />
+            <div>
+              <div className={`text-sm font-black uppercase tracking-tight transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>
+                {camera.status}
+              </div>
+              <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Nivel de Disponibilidad</div>
             </div>
-            <div className="text-xs text-gray-400">Estado actual</div>
           </div>
+
+          {/* Location */}
+          {camera.location && (
+            <div className={`flex items-center gap-4 p-4 rounded-2xl border transition-all duration-500 ${
+              darkMode ? 'bg-white/5 border-white/5' : 'bg-slate-50 border-slate-100'
+            }`}>
+              <MapPin className={`w-4 h-4 flex-shrink-0 transition-colors duration-500 ${darkMode ? 'text-blue-400' : 'text-blue-600'}`} />
+              <div className="min-w-0">
+                <div className={`text-sm font-bold truncate transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>{camera.location}</div>
+                <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Ubicación Registrada</div>
+              </div>
+            </div>
+          )}
+
+          {/* Assigned To */}
+          {camera.assignedTo && (
+            <div className={`flex items-center gap-4 p-4 rounded-2xl border transition-all duration-500 ${
+              darkMode ? 'bg-white/5 border-white/5' : 'bg-slate-50 border-slate-100'
+            }`}>
+              <User className={`w-4 h-4 flex-shrink-0 transition-colors duration-500 ${darkMode ? 'text-purple-400' : 'text-purple-600'}`} />
+              <div className="min-w-0">
+                <div className={`text-sm font-bold truncate transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>{camera.assignedTo}</div>
+                <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Responsable Actual</div>
+              </div>
+            </div>
+          )}
         </div>
-
-        {/* Location */}
-        {camera.location && (
-          <div className="flex items-center gap-3 p-3 bg-white/5 rounded-lg mb-2">
-            <MapPin className="w-4 h-4 text-blue-400 flex-shrink-0" />
-            <div className="min-w-0">
-              <div className="text-white text-sm truncate">
-                {camera.location}
-              </div>
-              <div className="text-xs text-gray-400">Ubicación</div>
-            </div>
-          </div>
-        )}
-
-        {/* Assigned To */}
-        {camera.assignedTo && (
-          <div className="flex items-center gap-3 p-3 bg-white/5 rounded-lg">
-            <User className="w-4 h-4 text-purple-400 flex-shrink-0" />
-            <div className="min-w-0">
-              <div className="text-white text-sm truncate">
-                {camera.assignedTo}
-              </div>
-              <div className="text-xs text-gray-400">Asignada a</div>
-            </div>
-          </div>
-        )}
       </div>
 
       {/* Statistics */}
-      <div className="bg-black/20 backdrop-blur-sm rounded-xl border border-white/10 p-4">
-        <div className="flex items-center gap-2 mb-3">
-          <TrendingUp className="w-4 h-4 text-blue-400" />
-          <h3 className="text-sm font-semibold text-gray-400">Estadísticas</h3>
+      <div className={`rounded-3xl border p-6 transition-all duration-500 ${
+        darkMode ? 'bg-slate-900 border-white/5 shadow-2xl' : 'bg-white border-black/5 shadow-xl shadow-slate-200'
+      }`}>
+        <div className="flex items-center gap-3 mb-6">
+          <div className={`p-2 rounded-xl transition-colors duration-500 ${darkMode ? 'bg-blue-500/10 text-blue-400' : 'bg-blue-50 text-blue-600'}`}>
+            <TrendingUp className="w-4 h-4" />
+          </div>
+          <h3 className={`text-[10px] font-black uppercase tracking-widest ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>Métricas Clave</h3>
         </div>
 
-        <div className="space-y-3">
-          <div className="flex justify-between items-center p-2 hover:bg-white/5 rounded transition-colors">
-            <span className="text-gray-400 text-sm">Total eventos</span>
-            <span className="text-white font-bold">{stats.totalEvents}</span>
-          </div>
-          <div className="flex justify-between items-center p-2 hover:bg-white/5 rounded transition-colors">
-            <span className="text-gray-400 text-sm">Envíos</span>
-            <span className="text-blue-400 font-bold">{stats.shipments}</span>
-          </div>
-          <div className="flex justify-between items-center p-2 hover:bg-white/5 rounded transition-colors">
-            <span className="text-gray-400 text-sm">Torneos</span>
-            <span className="text-purple-400 font-bold">
-              {stats.tournaments}
-            </span>
-          </div>
-          <div className="flex justify-between items-center p-2 hover:bg-white/5 rounded transition-colors">
-            <span className="text-gray-400 text-sm">Entregas</span>
-            <span className="text-orange-400 font-bold">{stats.returns}</span>
-          </div>
-          <div className="flex justify-between items-center p-2 hover:bg-white/5 rounded transition-colors">
-            <span className="text-gray-400 text-sm">Mantenimiento</span>
-            <span className="text-gray-400 font-bold">{stats.maintenance}</span>
-          </div>
+        <div className="space-y-2">
+          {[
+            { label: 'Eventos Totales', value: stats.totalEvents, color: 'emerald' },
+            { label: 'Envíos Logísticos', value: stats.shipments, color: 'blue' },
+            { label: 'Torneos Activos', value: stats.tournaments, color: 'purple' },
+            { label: 'Entregas Hechas', value: stats.returns, color: 'orange' },
+            { label: 'Intervenciones', value: stats.maintenance, color: 'slate' }
+          ].map((stat, i) => (
+            <div 
+              key={i}
+              className={`flex justify-between items-center p-3 rounded-xl transition-all duration-300 ${
+                darkMode ? 'hover:bg-white/5' : 'hover:bg-slate-50'
+              }`}
+            >
+              <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wide">{stat.label}</span>
+              <span className={`text-sm font-black transition-colors duration-500 text-${stat.color}-500`}>{stat.value}</span>
+            </div>
+          ))}
         </div>
       </div>
 
       {/* Last Event */}
       {stats.lastEvent && (
-        <div className="bg-black/20 backdrop-blur-sm rounded-xl border border-white/10 p-4">
-          <div className="flex items-center gap-2 mb-3">
-            <Calendar className="w-4 h-4 text-orange-400" />
-            <h3 className="text-sm font-semibold text-gray-400">
-              Último Evento
-            </h3>
+        <div className={`rounded-3xl border p-6 transition-all duration-500 ${
+          darkMode ? 'bg-slate-900 border-white/5 shadow-2xl' : 'bg-white border-black/5 shadow-xl shadow-slate-200'
+        }`}>
+          <div className="flex items-center gap-3 mb-4">
+            <div className={`p-2 rounded-xl transition-colors duration-500 ${darkMode ? 'bg-orange-500/10 text-orange-400' : 'bg-orange-50 text-orange-600'}`}>
+              <Calendar className="w-4 h-4" />
+            </div>
+            <h3 className={`text-[10px] font-black uppercase tracking-widest ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>Última Actividad</h3>
           </div>
-          <div className="space-y-2">
-            <p className="text-white text-sm font-medium line-clamp-2">
+          <div className="space-y-3">
+            <p className={`text-sm font-black transition-colors duration-500 line-clamp-2 leading-tight ${darkMode ? 'text-white' : 'text-slate-900'}`}>
               {stats.lastEvent.title}
             </p>
-            <p className="text-gray-400 text-xs">
-              {formatDate(stats.lastEvent.date)}
-            </p>
-            <span className="inline-block px-2 py-1 bg-white/10 rounded text-xs text-gray-400 capitalize">
-              {stats.lastEvent.type}
-            </span>
+            <div className="flex items-center justify-between">
+              <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">
+                {formatDate(stats.lastEvent.date)}
+              </p>
+              <span className={`px-2 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest border transition-colors duration-500 ${
+                darkMode ? 'bg-white/10 border-white/10 text-slate-400' : 'bg-slate-100 border-slate-200 text-slate-500'
+              }`}>
+                {stats.lastEvent.type}
+              </span>
+            </div>
           </div>
         </div>
       )}
 
-      {/* Back Button */}
+      {/* Navigation */}
       <button
         onClick={onBack}
-        className="w-full bg-white/5 border border-white/10 text-gray-300 hover:bg-white/10 hover:text-white px-4 py-3 rounded-xl transition-colors text-sm font-medium flex items-center justify-center gap-2"
+        className={`w-full group px-6 py-4 rounded-2xl border font-black uppercase tracking-widest text-xs transition-all duration-300 flex items-center justify-center gap-3 ${
+          darkMode 
+            ? 'bg-white/5 border-white/10 text-slate-400 hover:bg-white/10 hover:text-white' 
+            : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-slate-900 hover:shadow-lg hover:shadow-slate-200'
+        }`}
       >
-        <ArrowLeft className="w-4 h-4" />
-        Volver a Cámaras
+        <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
+        Regresar al Listado
       </button>
     </div>
   );

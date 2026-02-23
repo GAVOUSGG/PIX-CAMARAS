@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { ArrowLeft, MapPin, ZoomIn, ZoomOut } from "lucide-react";
 import { apiService } from "../../../services/api";
 import Timeline from "./Timeline";
 import EventModal from "./EventModal";
 import HistoryPanel from "./HistoryPanel";
 
-const CameraInspector = ({ cameraId, onBack }) => {
+const CameraInspector = ({ cameraId, onBack, darkMode = true }) => {
   const [camera, setCamera] = useState(null);
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -37,10 +37,10 @@ const CameraInspector = ({ cameraId, onBack }) => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-        <div className="text-white text-xl flex items-center space-x-3">
-          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-emerald-500"></div>
-          <span>Cargando Inspector de Cámara...</span>
+      <div className={`flex items-center justify-center h-screen transition-colors duration-500 ${darkMode ? 'bg-slate-950' : 'bg-slate-50'}`}>
+        <div className={`text-xl flex items-center space-x-3 transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
+          <span className="font-bold tracking-widest uppercase text-sm">Cargando Inspector...</span>
         </div>
       </div>
     );
@@ -48,13 +48,17 @@ const CameraInspector = ({ cameraId, onBack }) => {
 
   if (!camera) {
     return (
-      <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 gap-4">
-        <div className="text-white text-xl">Cámara no encontrada</div>
+      <div className={`flex flex-col items-center justify-center h-screen gap-4 transition-colors duration-500 ${darkMode ? 'bg-slate-950' : 'bg-slate-50'}`}>
+        <div className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-slate-900'}`}>Cámara no encontrada</div>
         <button
           onClick={onBack}
-          className="bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/30 px-4 py-2 rounded-lg transition-colors flex items-center space-x-2"
+          className={`flex items-center space-x-2 px-6 py-3 rounded-xl font-bold transition-all border ${
+            darkMode 
+              ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400 hover:bg-emerald-500/20' 
+              : 'bg-emerald-500 border-emerald-600 text-white shadow-lg shadow-emerald-500/20'
+          }`}
         >
-          <ArrowLeft className="w-4 h-4" />
+          <ArrowLeft className="w-5 h-5" />
           <span>Volver a Cámaras</span>
         </button>
       </div>
@@ -78,33 +82,42 @@ const CameraInspector = ({ cameraId, onBack }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-6">
+    <div className={`min-h-[calc(100vh-80px)] space-y-8 animate-fade-in`}>
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div className="flex items-center gap-4">
           <button
             onClick={onBack}
-            className="text-gray-400 hover:text-white transition-colors p-2 rounded-lg hover:bg-white/10 border border-white/10"
-            title="Volver"
+            className={`p-3 rounded-2xl border transition-all duration-300 ${
+              darkMode 
+                ? 'text-slate-400 hover:text-white hover:bg-white/10 border-white/10' 
+                : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100 border-slate-200 shadow-sm'
+            }`}
           >
-            <ArrowLeft className="w-5 h-5" />
+            <ArrowLeft className="w-6 h-6" />
           </button>
           <div>
-            <h1 className="text-2xl font-bold text-white flex items-center gap-2">
-              <span className="bg-emerald-500/20 text-emerald-400 px-3 py-1 rounded-lg text-sm font-mono">
+            <div className="flex items-center gap-3">
+              <span className={`px-4 py-1.5 rounded-xl text-xs font-black font-mono tracking-widest border transition-colors duration-500 ${
+                darkMode ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-emerald-500 text-white border-emerald-600'
+              }`}>
                 {camera.id}
               </span>
-              <span>{camera.model}</span>
-            </h1>
-            <p className="text-gray-400 text-sm mt-1">
-              Inspector de Cámara - Historial Completo
+              <h1 className={`text-2xl md:text-3xl font-black tracking-tight transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>
+                {camera.model}
+              </h1>
+            </div>
+            <p className="text-slate-500 text-sm mt-1 font-medium italic">
+              Inspector de Cámara • <span className="text-emerald-500">Historial Completo</span>
             </p>
           </div>
         </div>
 
         {/* Zoom Controls */}
-        <div className="flex items-center gap-3 bg-black/20 border border-white/10 rounded-xl px-4 py-2">
-          <ZoomOut className="w-4 h-4 text-gray-400" />
+        <div className={`flex items-center gap-4 border rounded-[2rem] px-6 py-3 transition-colors duration-500 ${
+          darkMode ? 'bg-slate-900 border-white/5 shadow-2xl' : 'bg-white border-black/5 shadow-lg shadow-slate-200/50'
+        }`}>
+          <ZoomOut className="w-4 h-4 text-slate-500" />
           <input
             type="range"
             min="0.5"
@@ -112,40 +125,49 @@ const CameraInspector = ({ cameraId, onBack }) => {
             step="0.1"
             value={zoomLevel}
             onChange={(e) => setZoomLevel(parseFloat(e.target.value))}
-            className="w-24 accent-emerald-500"
+            className="w-24 md:w-32 lg:w-48 h-1.5 bg-emerald-500/20 rounded-lg appearance-none cursor-pointer accent-emerald-500"
           />
-          <ZoomIn className="w-4 h-4 text-gray-400" />
-          <span className="text-gray-400 text-sm w-12 text-center bg-white/5 px-2 py-1 rounded">
+          <ZoomIn className="w-4 h-4 text-slate-500" />
+          <div className={`text-[10px] font-black w-12 text-center px-2 py-1.5 rounded-lg border transition-colors duration-500 ${
+            darkMode ? 'bg-white/5 border-white/10 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-600'
+          }`}>
             {(zoomLevel * 100).toFixed(0)}%
-          </span>
+          </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        {/* Timeline Section */}
-        <div className="lg:col-span-3">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <div className="lg:col-span-3 order-2 lg:order-1">
           <Timeline
             events={history}
             onEventClick={setSelectedEvent}
             onEventDelete={handleDeleteHistoryEntry}
             zoomLevel={zoomLevel}
+            darkMode={darkMode}
           />
         </div>
 
-        {/* Right Panel */}
-        <div className="lg:col-span-1">
-          <HistoryPanel camera={camera} history={history} onBack={onBack} />
+        <div className="lg:col-span-1 order-1 lg:order-2">
+          <HistoryPanel 
+            camera={camera} 
+            history={history} 
+            onBack={onBack} 
+            darkMode={darkMode}
+          />
         </div>
       </div>
 
-      {/* Event Modal */}
-      {selectedEvent && (
-        <EventModal
-          event={selectedEvent}
-          onClose={() => setSelectedEvent(null)}
-        />
-      )}
+      {/* Modals and Forms */}
+      <Suspense fallback={null}>
+        {selectedEvent && (
+          <EventModal
+            event={selectedEvent}
+            onClose={() => setSelectedEvent(null)}
+            darkMode={darkMode}
+          />
+        )}
+      </Suspense>
     </div>
   );
 };

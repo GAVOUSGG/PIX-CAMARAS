@@ -9,9 +9,10 @@ import {
   Trash2,
   Calendar,
   Clock,
+  User,
 } from "lucide-react";
 
-const EventCard = ({ event, onClick, onDelete }) => {
+const EventCard = ({ event, onClick, onDelete, darkMode = true }) => {
   const getTypeIcon = (type) => {
     switch (type) {
       case "shipment":
@@ -28,56 +29,62 @@ const EventCard = ({ event, onClick, onDelete }) => {
   };
 
   const getTypeConfig = (type) => {
+    const isDark = darkMode;
     switch (type) {
       case "shipment":
         return {
-          bg: "from-blue-500/20 to-blue-500/5",
-          border: "border-blue-500/30",
-          hoverBorder: "hover:border-blue-400/60",
-          text: "text-blue-400",
-          iconBg: "bg-blue-500/20",
-          shadow: "shadow-blue-500/20",
-          label: "Envío",
+          bg: isDark ? ".02]" : "",
+          border: isDark ? "border-blue-500/20" : "border-blue-100",
+          hoverBorder: isDark ? "hover:border-blue-400" : "hover:border-blue-300",
+          text: isDark ? "text-blue-400" : "text-blue-600",
+          iconBg: isDark ? "bg-blue-500/20" : "bg-blue-500",
+          iconText: isDark ? "text-blue-400" : "text-white",
+          shadow: "shadow-blue-500/10",
+          label: "Envío Logístico",
         };
       case "tournament":
         return {
-          bg: "from-purple-500/20 to-purple-500/5",
-          border: "border-purple-500/30",
-          hoverBorder: "hover:border-purple-400/60",
-          text: "text-purple-400",
-          iconBg: "bg-purple-500/20",
-          shadow: "shadow-purple-500/20",
-          label: "Torneo",
+          bg: isDark ? ".02]" : "",
+          border: isDark ? "border-purple-500/20" : "border-purple-100",
+          hoverBorder: isDark ? "hover:border-purple-400" : "hover:border-purple-300",
+          text: isDark ? "text-purple-400" : "text-purple-600",
+          iconBg: isDark ? "bg-purple-500/20" : "bg-purple-500",
+          iconText: isDark ? "text-purple-400" : "text-white",
+          shadow: "shadow-purple-500/10",
+          label: "Torneo Activo",
         };
       case "return":
         return {
-          bg: "from-orange-500/20 to-orange-500/5",
-          border: "border-orange-500/30",
-          hoverBorder: "hover:border-orange-400/60",
-          text: "text-orange-400",
-          iconBg: "bg-orange-500/20",
-          shadow: "shadow-orange-500/20",
-          label: "Entrega",
+          bg: isDark ? ".02]" : "",
+          border: isDark ? "border-orange-500/20" : "border-orange-100",
+          hoverBorder: isDark ? "hover:border-orange-400" : "hover:border-orange-300",
+          text: isDark ? "text-orange-400" : "text-orange-600",
+          iconBg: isDark ? "bg-orange-500/20" : "bg-orange-500",
+          iconText: isDark ? "text-orange-400" : "text-white",
+          shadow: "shadow-orange-500/10",
+          label: "Entrega Realizada",
         };
       case "maintenance":
         return {
-          bg: "from-gray-500/20 to-gray-500/5",
-          border: "border-gray-500/30",
-          hoverBorder: "hover:border-gray-400/60",
-          text: "text-gray-400",
-          iconBg: "bg-gray-500/20",
-          shadow: "shadow-gray-500/20",
+          bg: isDark ? ".02]" : "",
+          border: isDark ? "border-slate-500/20" : "border-slate-200",
+          hoverBorder: isDark ? "hover:border-slate-400" : "hover:border-slate-400",
+          text: isDark ? "text-slate-400" : "text-slate-600",
+          iconBg: isDark ? "bg-slate-500/20" : "bg-slate-500",
+          iconText: isDark ? "text-slate-400" : "text-white",
+          shadow: "shadow-slate-500/10",
           label: "Mantenimiento",
         };
       default:
         return {
-          bg: "from-white/10 to-white/5",
-          border: "border-white/10",
-          hoverBorder: "hover:border-white/20",
-          text: "text-gray-400",
-          iconBg: "bg-white/10",
-          shadow: "shadow-white/10",
-          label: "Evento",
+          bg: isDark ? ".02]" : "",
+          border: isDark ? "border-emerald-500/20" : "border-emerald-100",
+          hoverBorder: isDark ? "hover:border-emerald-400" : "hover:border-emerald-300",
+          text: isDark ? "text-emerald-400" : "text-emerald-600",
+          iconBg: isDark ? "bg-emerald-500/20" : "bg-emerald-500",
+          iconText: isDark ? "text-emerald-400" : "text-white",
+          shadow: "shadow-emerald-500/10",
+          label: "Evento General",
         };
     }
   };
@@ -107,100 +114,108 @@ const EventCard = ({ event, onClick, onDelete }) => {
   return (
     <div className="relative group/card">
       {/* Delete Button */}
-      <button
-        onClick={(e) => {
-          e.stopPropagation();
-          if (window.confirm("¿Eliminar este evento del historial?")) {
-            onDelete();
-          }
-        }}
-        className="absolute -top-3 -right-3 z-20 w-10 h-10 bg-red-500/20 border border-red-500/30 rounded-full flex items-center justify-center text-red-400 hover:bg-red-500 hover:text-white hover:scale-110 transition-all opacity-0 group-hover/card:opacity-100 shadow-lg"
-        title="Eliminar evento"
-      >
-        <Trash2 className="w-4 h-4" />
-      </button>
+      {onDelete && (
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onDelete(event.id);
+          }}
+          className={`absolute -top-3 -right-3 z-20 w-10 h-10 rounded-full flex items-center justify-center transition-all opacity-0 group-hover/card:opacity-100 shadow-xl border ${
+            darkMode 
+              ? 'bg-red-500/20 border-red-500/30 text-red-400 hover:bg-red-500 hover:text-white' 
+              : 'bg-white border-red-100 text-red-500 hover:bg-red-500 hover:text-white'
+          }`}
+          title="Eliminar evento"
+        >
+          <Trash2 className="w-5 h-5" />
+        </button>
+      )}
 
       {/* Main Card */}
       <button
         onClick={onClick}
         className={`
-          w-full p-6 rounded-2xl border text-left
-          transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl
-          backdrop-blur-sm group/button relative overflow-hidden
-          bg-gradient-to-br ${config.bg} ${config.border} ${config.hoverBorder}
+          w-full p-6 rounded-3xl border text-left
+          transition-all duration-500 hover:scale-[1.01] hover:shadow-2xl
+          relative overflow-hidden group/button
+          ${config.bg} ${config.border} ${config.hoverBorder}
         `}
       >
-        {/* Decorative Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover/button:opacity-100 transition-opacity"></div>
-
-        {/* Content */}
-        <div className="relative z-10">
-          {/* Header */}
-          <div className="flex items-start justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <div
-                className={`p-3 rounded-xl ${config.iconBg} border ${config.border} ${config.text} shadow-lg ${config.shadow}`}
-              >
-                {getTypeIcon(event.type)}
-              </div>
-              <div>
-                <span
-                  className={`text-xs font-bold uppercase tracking-wider ${config.text} block mb-1`}
-                >
-                  {config.label}
-                </span>
-                <div className="flex items-center gap-2 text-xs text-gray-400">
-                  <Calendar className="w-3 h-3" />
+        <div className="relative z-10 flex flex-col md:flex-row md:items-start gap-6">
+          {/* Icon and Type Area */}
+          <div className="flex items-start gap-4 flex-1">
+            <div className={`p-4 rounded-2xl shadow-xl transition-all duration-500 ${config.iconBg} ${config.iconText} ${config.shadow} group-hover/button:scale-110`}>
+              {getTypeIcon(event.type)}
+            </div>
+            <div className="flex-1 min-w-0">
+              <span className={`text-[10px] font-black uppercase tracking-widest block mb-1 ${config.text}`}>
+                {config.label}
+              </span>
+              <h3 className={`text-lg font-black tracking-tight mb-2 leading-tight transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'} group-hover/button:text-emerald-500`}>
+                {event.title}
+              </h3>
+              
+              {/* Date & Time */}
+              <div className="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-slate-500">
+                <div className="flex items-center gap-1.5">
+                  <Calendar className="w-3.5 h-3.5" />
                   <span>{date}</span>
-                  {time && (
-                    <>
-                      <Clock className="w-3 h-3 ml-1" />
-                      <span>{time}</span>
-                    </>
-                  )}
                 </div>
+                {time && (
+                  <div className="flex items-center gap-1.5 border-l pl-3 border-slate-500/30">
+                    <Clock className="w-3.5 h-3.5" />
+                    <span>{time}</span>
+                  </div>
+                )}
               </div>
             </div>
-            <ArrowRight className="w-5 h-5 text-gray-500 group-hover/button:text-white group-hover/button:translate-x-1 transition-all" />
           </div>
 
-          {/* Title */}
-          <h3 className="font-bold text-lg text-white mb-3 line-clamp-2 group-hover/button:text-emerald-50 transition-colors leading-tight">
-            {event.title}
-          </h3>
+          <ArrowRight className={`w-6 h-6 self-center transition-all duration-500 hidden md:block ${darkMode ? 'text-slate-700 group-hover:text-emerald-400 translate-x-0' : 'text-slate-300 group-hover:text-emerald-600'} group-hover/button:translate-x-2`} />
+        </div>
 
-          {/* Details */}
-          {event.details && Object.keys(event.details).length > 0 && (
-            <div className="space-y-1.5 mb-4">
-              {event.details.destination && (
-                <div className="flex items-center gap-2 text-sm text-gray-400">
-                  <MapPin className="w-3.5 h-3.5" />
-                  <span>Destino: {event.details.destination}</span>
+        {/* Details Section */}
+        {event.details && Object.keys(event.details).length > 0 && (
+          <div className={`mt-6 pt-6 border-t grid grid-cols-1 md:grid-cols-2 gap-4 transition-colors duration-500 ${darkMode ? 'border-white/5' : 'border-slate-100'}`}>
+            {event.details.destination && (
+              <div className="flex items-center gap-2.5">
+                <MapPin className="w-4 h-4 text-emerald-500" />
+                <div>
+                  <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">Destino Final</p>
+                  <p className={`text-xs font-bold ${darkMode ? 'text-slate-300' : 'text-slate-700'}`}>{event.details.destination}</p>
                 </div>
-              )}
-              {event.details.recipient && (
-                <div className="flex items-center gap-2 text-sm text-gray-400">
-                  <Package className="w-3.5 h-3.5" />
-                  <span>Receptor: {event.details.recipient}</span>
+              </div>
+            )}
+            {event.details.recipient && (
+              <div className="flex items-center gap-2.5">
+                <User className="w-4 h-4 text-blue-500" />
+                <div>
+                  <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">Receptor</p>
+                  <p className={`text-xs font-bold ${darkMode ? 'text-slate-300' : 'text-slate-700'}`}>{event.details.recipient}</p>
                 </div>
-              )}
-              {event.details.trackingNumber && (
-                <div className="flex items-center gap-2 text-sm text-gray-400">
-                  <Truck className="w-3.5 h-3.5" />
-                  <span className="font-mono">{event.details.trackingNumber}</span>
+              </div>
+            )}
+            {event.details.trackingNumber && (
+              <div className="flex items-center gap-2.5">
+                <Truck className="w-4 h-4 text-purple-500" />
+                <div>
+                  <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">Guía de Seguimiento</p>
+                  <p className={`text-xs font-mono font-bold ${darkMode ? 'text-emerald-400' : 'text-emerald-600'}`}>{event.details.trackingNumber}</p>
                 </div>
-              )}
-            </div>
-          )}
+              </div>
+            )}
+          </div>
+        )}
 
-          {/* Footer */}
-          <div className="flex items-center justify-between pt-3 border-t border-white/10">
-            <div className={`text-xs font-semibold ${config.text}`}>
-              ID: {String(event.id).split("-")[0]}
-            </div>
-            <div className="text-xs bg-white/10 text-gray-300 px-3 py-1.5 rounded-lg group-hover/button:bg-white/20 transition-all font-medium">
-              Ver detalles →
-            </div>
+        {/* Action Indicator */}
+        <div className={`mt-6 flex items-center justify-between transition-colors duration-500`}>
+          <div className={`text-[10px] font-black uppercase tracking-tighter transition-colors duration-500 ${darkMode ? 'text-slate-600' : 'text-slate-400'}`}>
+            ID REF: {String(event.id).split("-")[0]}
+          </div>
+          <div className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-500 ${
+            darkMode ? 'bg-white/5 text-slate-400 group-hover:bg-emerald-500/10 group-hover:text-emerald-400' : 'bg-slate-50 text-slate-500 group-hover:bg-emerald-50 group-hover:text-emerald-600'
+          }`}>
+            Detalles Maestros →
           </div>
         </div>
       </button>

@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
-import { Calendar, Camera, Package, Users, MapPin, History, Shield, BarChart3, Menu, X } from 'lucide-react';
+import React from 'react';
+import { Calendar, Camera, Package, Users, MapPin, History, Shield, BarChart3, X, LayoutDashboard } from 'lucide-react';
 
-const Navigation = ({ activeTab, setActiveTab, user }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
+const Navigation = ({ activeTab, setActiveTab, user, isOpen, setIsOpen, darkMode }) => {
   const menuItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: Calendar },
+    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'tournaments', label: 'Torneos', icon: Calendar },
     { id: 'workers', label: 'Trabajadores', icon: Users },
     { id: 'cameras', label: 'Cámaras', icon: Camera },
@@ -21,103 +19,123 @@ const Navigation = ({ activeTab, setActiveTab, user }) => {
 
   const handleSelect = (id) => {
     setActiveTab(id);
-    setIsOpen(false);
+    if (setIsOpen) setIsOpen(false);
   };
+
+  const SidebarContent = () => (
+    <div className={`flex flex-col h-full transition-colors duration-500 ${darkMode ? 'bg-[#0B1120]' : 'bg-slate-50'}`}>
+      {/* Brand area */}
+      <div className="p-6 md:p-8 flex items-center justify-between">
+        <div className="flex items-center space-x-3 group cursor-pointer">
+          <div className={``}>
+            
+          </div>
+          <span className={`text-2xl font-black tracking-tight transition-all duration-500 ${
+            darkMode ? '' : ''
+          }`}>
+            PixGolf
+          </span>
+        </div>
+        
+        {/* Mobile Close Button */}
+        {setIsOpen && (
+          <button 
+            onClick={() => setIsOpen(false)}
+            className={`md:hidden p-2 rounded-lg transition-colors border border-transparent ${
+              darkMode ? 'text-slate-400 hover:text-white hover:bg-white/5 hover:border-white/10' : 'text-slate-500 hover:text-slate-900 hover:bg-black/5 hover:border-black/10'
+            }`}
+          >
+            <X className="w-5 h-5" />
+          </button>
+        )}
+      </div>
+
+      {/* Navigation Links */}
+      <nav className="flex-1 overflow-y-auto px-4 space-y-2 pb-6 custom-scrollbar">
+        <div className="mb-4 px-3">
+          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest hidden md:block">
+            Menú Principal
+          </p>
+        </div>
+        {menuItems.map(({ id, label, icon: Icon }) => {
+          const isActive = activeTab === id;
+          return (
+            <button
+              key={id}
+              onClick={() => handleSelect(id)}
+              className={`
+                w-full flex items-center justify-between px-4 py-3.5 rounded-2xl transition-all duration-300 group
+                ${
+                  isActive
+                    ? darkMode 
+                      ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shadow-lg shadow-emerald-500/5'
+                      : 'bg-emerald-500 text-white border border-emerald-600 shadow-lg shadow-emerald-500/20 font-bold'
+                    : darkMode
+                      ? 'text-slate-400 hover:bg-white/5 hover:text-slate-100 hover:border-white/5 border border-transparent'
+                      : 'text-slate-500 hover:bg-black/5 hover:text-slate-900 hover:border-black/5 border border-transparent'
+                }
+              `}
+            >
+              <div className="flex items-center space-x-3.5">
+                <Icon className={`w-5 h-5 transition-colors duration-300 ${isActive ? (darkMode ? 'text-emerald-400' : 'text-white') : (darkMode ? 'text-slate-400 group-hover:text-slate-100' : 'text-slate-500 group-hover:text-slate-900')}`} />
+                <span className="text-sm font-semibold tracking-wide">{label}</span>
+              </div>
+              
+              {isActive && (
+                <div className={`w-1.5 h-1.5 rounded-full shadow-[0_0_8px_rgba(52,211,153,0.8)] ${darkMode ? 'bg-emerald-400' : 'bg-white'}`} />
+              )}
+            </button>
+          );
+        })}
+      </nav>
+
+      {/* User Profile Area for aesthetics */}
+      {user && (
+        <div className={`p-4 mx-4 mb-6 rounded-2xl border backdrop-blur-xl shrink-0 transition-colors duration-500 ${
+          darkMode 
+            ? 'border-white/5' 
+            : 'bg-white border-black/5 shadow-sm'
+        }`}>
+          <div className="flex items-center space-x-3">
+            <div className={`w-10 h-10 rounded-full border flex items-center justify-center shrink-0 ${
+              darkMode ? 'bg-emerald-500/20 border-emerald-500/20' : 'bg-emerald-50 border-emerald-100'
+            }`}>
+              <span className="text-sm font-bold text-emerald-500">
+                {user.username?.charAt(0).toUpperCase() || 'U'}
+              </span>
+            </div>
+            <div className="overflow-hidden">
+              <p className="text-[10px] text-slate-500 uppercase font-black tracking-widest truncate">
+                {user.role === 'admin' ? 'Administrador' : 'Operador'}
+              </p>
+              <p className={`text-sm font-bold truncate transition-colors duration-500 ${darkMode ? 'text-slate-200' : 'text-slate-800'}`}>{user.username}</p>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 
   return (
     <>
-      {/* Mobile Hamburger Button - Floating for high visibility */}
-      <div className="md:hidden fixed top-4 left-4 z-[60]">
-        <button
-          onClick={() => setIsOpen(true)}
-          className="p-2.5 bg-emerald-500 text-white rounded-xl shadow-lg shadow-emerald-500/30 active:scale-95 transition-all"
-        >
-          <Menu className="w-6 h-6" />
-        </button>
-      </div>
-
-      {/* Desktop Navigation (Stays as is, or slightly refined) */}
-      <div className="hidden md:block bg-slate-900/50 backdrop-blur-xl border-b border-white/5 sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto md:px-6">
-          <nav className="flex space-x-4 overflow-x-auto scrollbar-hide">
-            {menuItems.map(({ id, label, icon: Icon }) => (
-              <button
-                key={id}
-                onClick={() => setActiveTab(id)}
-                className={`
-                  flex items-center space-x-2 px-4 py-5 border-b-2 transition-all duration-300 whitespace-nowrap group relative
-                  ${
-                    activeTab === id
-                      ? 'border-emerald-400 text-emerald-400 bg-emerald-400/5'
-                      : 'border-transparent text-gray-500 hover:text-white hover:bg-white/5'
-                  }
-                `}
-              >
-                <Icon className={`w-5 h-5 transition-transform duration-300 ${activeTab === id ? 'scale-110' : 'group-hover:scale-110'}`} />
-                <span className="text-sm font-bold uppercase tracking-wider">{label}</span>
-                {activeTab === id && (
-                  <div className="absolute inset-x-0 bottom-0 h-0.5 bg-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.5)]"></div>
-                )}
-              </button>
-            ))}
-          </nav>
-        </div>
-      </div>
+      {/* Desktop Sidebar */}
+      <aside className={`hidden md:block w-72 h-screen border-r relative z-20 shrink-0 transition-colors duration-500 ${
+        darkMode ? 'border-white/5 bg-[#0B1120]' : 'border-black/5 bg-slate-50'
+      }`}>
+        <SidebarContent />
+      </aside>
 
       {/* Mobile Drawer Navigation */}
       {isOpen && (
         <>
-          {/* Backdrop */}
           <div 
-            className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[70] md:hidden animate-in fade-in duration-300"
+            className={`fixed inset-0 z-[70] md:hidden animate-in fade-in duration-300 ${darkMode ? 'bg-[#0B1120]/80 backdrop-blur-sm' : 'bg-slate-900/40 backdrop-blur-sm'}`}
             onClick={() => setIsOpen(false)}
           />
-          
-          {/* Drawer Sidebar */}
-          <div className="fixed inset-y-0 left-0 w-[280px] bg-slate-900 border-r border-white/10 z-[80] md:hidden shadow-2xl animate-in slide-in-from-left duration-300 flex flex-col">
-            <div className="p-6 border-b border-white/5 flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <div className="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center">
-                  <Camera className="w-5 h-5 text-white" />
-                </div>
-                <span className="text-xl font-bold text-white tracking-tight">PixGolf</span>
-              </div>
-              <button 
-                onClick={() => setIsOpen(false)}
-                className="p-2 text-gray-400 hover:text-white transition-colors"
-              >
-                <X className="w-6 h-6" />
-              </button>
-            </div>
-
-            <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
-              {menuItems.map(({ id, label, icon: Icon }) => (
-                <button
-                  key={id}
-                  onClick={() => handleSelect(id)}
-                  className={`
-                    w-full flex items-center space-x-4 px-4 py-3.5 rounded-xl transition-all duration-200
-                    ${
-                      activeTab === id
-                        ? 'bg-emerald-500/10 text-emerald-400 font-bold'
-                        : 'text-gray-400 hover:bg-white/5 hover:text-white'
-                    }
-                  `}
-                >
-                  <Icon className={`w-5 h-5 ${activeTab === id ? 'text-emerald-400' : 'text-gray-500'}`} />
-                  <span className="text-sm uppercase tracking-wide">{label}</span>
-                </button>
-              ))}
-            </nav>
-
-            {user && (
-              <div className="p-6 border-t border-white/5 bg-slate-950/20">
-                <div className="mb-4">
-                  <p className="text-[10px] text-gray-500 uppercase font-black tracking-widest">Usuario</p>
-                  <p className="text-sm font-bold text-white">{user.username}</p>
-                </div>
-              </div>
-            )}
+          <div className={`fixed inset-y-0 left-0 w-[300px] max-w-[85vw] border-r z-[80] md:hidden shadow-2xl animate-in slide-in-duration-300 flex flex-col ${
+            darkMode ? 'bg-[#0B1120] border-white/10 shadow-black' : 'bg-white border-black/10 shadow-slate-200'
+          }`}>
+            <SidebarContent />
           </div>
         </>
       )}

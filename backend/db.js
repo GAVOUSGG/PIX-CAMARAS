@@ -121,9 +121,8 @@ const Shipment = sequelize.define('Shipment', {
 
 const CameraHistory = sequelize.define('CameraHistory', {
   id: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     primaryKey: true,
-    autoIncrement: true
   },
   cameraId: {
     type: DataTypes.STRING,
