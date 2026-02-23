@@ -21,7 +21,7 @@ const getTypeConfig = (type, darkMode) => {
         text: darkMode ? "text-blue-400" : "text-blue-600",
         iconBg: darkMode ? "bg-blue-500/20" : "bg-blue-500",
         iconText: darkMode ? "text-blue-400" : "text-white",
-        label: "Envío Logístico",
+        label: "Envío",
       };
     case "tournament":
       return {
@@ -138,10 +138,20 @@ const GraphEventNode = ({ data }) => {
           {/* Relevant Mini Details Map */}
           {event.details && Object.keys(event.details).length > 0 && (
             <div className={`mt-4 pt-4 border-t flex flex-wrap gap-x-4 gap-y-2 ${darkMode ? 'border-white/10' : 'border-slate-200'}`}>
+               {event.details.origin && (
+                  <div className="flex items-center gap-1.5 w-full">
+                    <MapPin className="w-3.5 h-3.5 text-blue-500" />
+                    <span className={`text-[10px] uppercase font-bold truncate ${darkMode ? 'text-slate-300' : 'text-slate-600'}`}>
+                      <span className="opacity-50 mr-1">ORIGEN:</span>
+                      {event.details.origin}
+                    </span>
+                  </div>
+                )}
                {event.details.destination && (
                   <div className="flex items-center gap-1.5 w-full">
                     <MapPin className="w-3.5 h-3.5 text-emerald-500" />
                     <span className={`text-[10px] uppercase font-bold truncate ${darkMode ? 'text-slate-300' : 'text-slate-600'}`}>
+                      <span className="opacity-50 mr-1">DESTINO:</span>
                       {event.details.destination}
                     </span>
                   </div>

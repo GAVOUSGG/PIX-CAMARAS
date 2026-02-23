@@ -192,10 +192,10 @@ const ShipmentForm = ({
         <div className={`p-8 border-b flex items-center justify-between transition-colors duration-500 ${darkMode ? 'border-white/5 bg-white/[0.02]' : 'border-slate-50 bg-slate-50/50'}`}>
           <div>
             <h3 className={`text-2xl font-black transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'} tracking-tight`}>
-              {isEditing ? "Gestión de" : "Nuevo"} <span className="text-emerald-500">Expediente de Envío</span>
+              {isEditing ? "Gestión de" : "Nuevo"} <span className="text-emerald-500">Envío</span>
             </h3>
             <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">
-              Logística y control de activos en tránsito
+              Logística y control de envíos
             </p>
           </div>
           <button
@@ -212,9 +212,9 @@ const ShipmentForm = ({
           {/* Fila 1: ID, Tracking, Fecha */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="space-y-2">
-              <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>
+              <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-white' : 'text-slate-400'}`}>
                 <Hash className="w-3.5 h-3.5 inline mr-1" />
-                ID de Envío Maestro
+                ID de Envío
               </label>
               <input
                 type="text"
@@ -230,7 +230,7 @@ const ShipmentForm = ({
             </div>
 
             <div className="space-y-2">
-              <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>
+              <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-white' : 'text-slate-400'}`}>
                 <Hash className="w-3.5 h-3.5 inline mr-1" />
                 Guía de Seguimiento
               </label>
@@ -240,7 +240,7 @@ const ShipmentForm = ({
                 onChange={(e) => handleInputChange("trackingNumber", e.target.value)}
                 className={`w-full border px-5 py-4 transition-all duration-300 outline-none focus:ring-2 focus:ring-emerald-500/50 ${
                   darkMode 
-                    ? 'bg-slate-950/50 border-white/5 text-white placeholder-slate-700' 
+                    ? 'bg-slate-950/50 border-white/5 text-slate-400 placeholder-slate-700' 
                     : 'bg-slate-50 border-slate-200 text-slate-900 placeholder-slate-400'
                 }`}
                 placeholder="TRK_CODE_PIX"
@@ -248,9 +248,9 @@ const ShipmentForm = ({
             </div>
 
             <div className="space-y-2">
-              <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>
+              <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-white' : 'text-slate-400'}`}>
                 <Calendar className="w-3.5 h-3.5 inline mr-1" />
-                Fecha de Emisión
+                Fecha de envío
               </label>
               <input
                 type="date"
@@ -259,7 +259,7 @@ const ShipmentForm = ({
                 onChange={(e) => handleInputChange("date", e.target.value)}
                 className={`w-full border px-5 py-4 transition-all duration-300 outline-none ${
                    darkMode 
-                  ? 'bg-slate-950/50 border-white/5 text-white scheme-dark' 
+                  ? 'bg-slate-950/50 border-white/5 text-slate-400 scheme-dark' 
                   : 'bg-slate-50 border-slate-200 text-slate-900'
                 }`}
               />
@@ -271,19 +271,19 @@ const ShipmentForm = ({
             <div className="space-y-6">
               <div className="flex items-center gap-3 mb-2">
                 <div className={`w-1.5 h-6 ${darkMode ? 'bg-blue-500/50' : 'bg-blue-500'}`}></div>
-                <h4 className={`text-xs font-black uppercase tracking-[0.2em] ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>Ruta Logística</h4>
+                <h4 className={`text-xs font-black uppercase tracking-[0.2em] ${darkMode ? 'text-white' : 'text-slate-500'}`}>Información Logística</h4>
               </div>
               
               <div className="space-y-6">
                 <div className="space-y-2">
-                  <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>Punto de Origen *</label>
+                  <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-white' : 'text-slate-400'}`}>Punto de Origen *</label>
                   <select
                     required
                     value={formData.origin}
                     onChange={(e) => handleInputChange("origin", e.target.value)}
                     className={`w-full border px-5 py-4 transition-all duration-300 outline-none ${
                       darkMode 
-                        ? 'bg-slate-950/50 border-white/5 text-white' 
+                        ? 'bg-slate-950/50 border-white/5 text-slate-400' 
                         : 'bg-slate-50 border-slate-200 text-slate-900'
                     }`}
                   >
@@ -293,18 +293,18 @@ const ShipmentForm = ({
                 </div>
 
                 <div className="space-y-2">
-                  <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>Punto de Destino *</label>
+                  <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-white' : 'text-slate-400'}`}>Punto de Destino *</label>
                   <select
                     required
                     value={formData.destination}
                     onChange={(e) => handleInputChange("destination", e.target.value)}
                     className={`w-full border px-5 py-4 transition-all duration-300 outline-none ${
                         darkMode 
-                      ? 'bg-slate-950/50 border-white/5 text-white' 
+                      ? 'bg-slate-950/50 border-white/5 text-slate-400' 
                       : 'bg-slate-50 border-slate-200 text-slate-900'
                     }`}
                   >
-                    <option value="">Seleccionar arribo</option>
+                    <option value="">Seleccionar punto de destino</option>
                     {estadosMexico.map(estado => <option key={estado} value={estado}>{estado}</option>)}
                   </select>
                 </div>
@@ -315,19 +315,19 @@ const ShipmentForm = ({
             <div className="space-y-6">
               <div className="flex items-center gap-3 mb-2">
                 <div className={`w-1.5 h-6 ${darkMode ? 'bg-purple-500/50' : 'bg-purple-500'}`}></div>
-                <h4 className={`text-xs font-black uppercase tracking-[0.2em] ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>Agentes Involucrados</h4>
+                <h4 className={`text-xs font-black uppercase tracking-[0.2em] ${darkMode ? 'text-white' : 'text-slate-500'}`}>Personas Involucradas</h4>
               </div>
 
               <div className="space-y-6">
                 <div className="space-y-2">
-                  <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>Agente Remitente (PIX) *</label>
+                  <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-white' : 'text-slate-400'}`}>Persona *</label>
                   <select
                     required
                     value={formData.shipper}
                     onChange={(e) => handleInputChange("shipper", e.target.value)}
                     className={`w-full border px-5 py-4 transition-all duration-300 outline-none ${
                         darkMode 
-                      ? 'bg-slate-950/50 border-white/5 text-white' 
+                      ? 'bg-slate-950/50 border-white/5 text-slate-400' 
                       : 'bg-slate-50 border-slate-200 text-slate-900'
                     }`}
                   >
@@ -339,14 +339,14 @@ const ShipmentForm = ({
                 </div>
 
                 <div className="space-y-2">
-                  <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>Agente Destinatario *</label>
+                  <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-white' : 'text-slate-400'}`}>Persona Destinataria *</label>
                   <select
                     required
                     value={formData.recipient}
                     onChange={(e) => handleInputChange("recipient", e.target.value)}
                     className={`w-full border px-5 py-4 transition-all duration-300 outline-none ${
                       darkMode 
-                        ? 'bg-slate-950/50 border-white/5 text-white' 
+                        ? 'bg-slate-950/50 border-white/5 text-slate-400' 
                         : 'bg-slate-50 border-slate-200 text-slate-900'
                     }`}
                   >
@@ -363,13 +363,13 @@ const ShipmentForm = ({
           {/* Estado y Empresa */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
             <div className="space-y-2">
-              <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>Estado Logístico Actual</label>
+              <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-white' : 'text-slate-400'}`}>Estado Logístico Actual</label>
               <select
                 value={formData.status}
                 onChange={(e) => handleInputChange("status", e.target.value)}
                 className={`w-full border px-5 py-4 transition-all duration-300 outline-none ${
                     darkMode 
-                  ? 'bg-slate-950/50 border-white/5 text-white' 
+                  ? 'bg-slate-950/50 border-white/5 text-slate-400' 
                   : 'bg-slate-50 border-slate-200 text-slate-900'
                 }`}
               >
@@ -382,17 +382,17 @@ const ShipmentForm = ({
               <div className={`mt-3 p-4 border flex items-center gap-3 transition-colors duration-500 ${darkMode ? 'bg-white/[0.01] border-white/5' : 'bg-slate-50/50 border-slate-100'}`}>
                 <MessageCircle className="w-3.5 h-3.5 text-blue-500" />
                 <p className="text-[9px] font-bold uppercase tracking-tight text-slate-500">
-                  {formData.status === "enviado" && 'Cambio automático: Unidades en estado "EN TRANSITO"'}
-                  {formData.status === "entregado" && "Cambio automático: Unidades vinculadas al destinatario"}
-                  {formData.status === "preparando" && "Esperando consolidación de unidades"}
-                  {formData.status === "pendiente" && "Ruta verificada, listo para despacho"}
-                  {formData.status === "cancelado" && 'Unidades volverán a estado "DISPONIBLE"'}
+                  {formData.status === "enviado" && 'En camino a su destino'}
+                  {formData.status === "entregado" && "Visor recogio las camaras"}
+                  {formData.status === "preparando" && "preparando envio"}
+                  {formData.status === "pendiente" && "Por definir"}
+                  {formData.status === "cancelado" && 'reasignar camaras'}
                 </p>
               </div>
             </div>
 
             <div className="space-y-2">
-              <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>Proveedor Logístico (Paquetería)</label>
+              <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-white' : 'text-slate-400'}`}>Empresa logística</label>
               <div className="relative group">
                 <Truck className={`absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 transition-colors ${darkMode ? 'text-slate-600 group-focus-within:text-emerald-500' : 'text-slate-400 group-focus-within:text-emerald-600'}`} />
                 <input
@@ -404,7 +404,7 @@ const ShipmentForm = ({
                     ? 'bg-slate-950/50 border-white/5 text-white' 
                     : 'bg-slate-50 border-slate-200 text-slate-900'
                   }`}
-                  placeholder="Ej: DHL, Estafeta, FedEx..."
+                  placeholder="Potosinos, tres guerras, etc..."
                 />
               </div>
             </div>
@@ -412,7 +412,7 @@ const ShipmentForm = ({
 
           {/* Items Extra */}
           <div className="space-y-3">
-            <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>Declaración de Items Adicionales</label>
+            <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>Items Adicionales</label>
             <div className="relative group">
               <Package className={`absolute left-5 top-6 w-4 h-4 transition-colors ${darkMode ? 'text-slate-600 group-focus-within:text-emerald-500' : 'text-slate-400 group-focus-within:text-emerald-600'}`} />
               <textarea
@@ -424,7 +424,7 @@ const ShipmentForm = ({
                   ? 'bg-slate-950/50 border-white/5 text-white placeholder-slate-700' 
                   : 'bg-slate-50 border-slate-200 text-slate-900 placeholder-slate-400'
                 }`}
-                placeholder="Declare aquí accesorios, cargadores, cables u otros complementos vinculados al envío principal..."
+                placeholder="Escribe aqui cualquier item adicional"
               />
             </div>
           </div>
@@ -433,7 +433,7 @@ const ShipmentForm = ({
           <div className="space-y-6">
             <div className="flex items-center gap-3 mb-2">
               <div className={`w-1.5 h-6 ${darkMode ? 'bg-emerald-500/50' : 'bg-emerald-500'}`}></div>
-              <h4 className={`text-xs font-black uppercase tracking-[0.2em] ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>Asignación de Unidades PIX</h4>
+              <h4 className={`text-xs font-black uppercase tracking-[0.2em] ${darkMode ? 'text-white' : 'text-slate-500'}`}>Camaras a enviar</h4>
             </div>
 
             <div className={`border transition-all duration-500 ${darkMode ? 'bg-white/[0.01] border-white/5' : 'bg-slate-50/50 border-slate-200'}`}>
