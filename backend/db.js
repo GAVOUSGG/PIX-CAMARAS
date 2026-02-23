@@ -195,6 +195,15 @@ const LoginAttempt = sequelize.define('LoginAttempt', {
 // Sync database
 const initDb = async () => {
   try {
+    if (databaseUrl) {
+      try {
+        // En PostgreSQL de Railway, cambiar la columna id de int a varchar
+        await sequelize.query('ALTER TABLE "CameraHistories" ALTER COLUMN "id" DROP DEFAULT;');
+        await sequelize.query('ALTER TABLE "CameraHistories" ALTER COLUMN "id" TYPE VARCHAR(255) USING "id"::VARCHAR;');
+      } catch (e) {
+        console.log('Migration info: CameraHistories ID already VARCHAR or table missing.');
+      }
+    }
     await sequelize.sync({ alter: true });
   } catch (error) {
     console.error('Error syncing database:', error);
