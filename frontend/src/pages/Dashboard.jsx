@@ -75,6 +75,7 @@ const Dashboard = memo(({ tournamentsData, camerasData, workersData, shipmentsDa
                     cameras: false,
                     shipments: false,
                   }}
+                  darkMode={darkMode}
                 />
               </div>
             </React.Suspense>

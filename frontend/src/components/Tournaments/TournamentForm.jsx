@@ -144,7 +144,7 @@ const TournamentForm = ({
         </div>
         <button
           onClick={onCancel}
-          className={`p-3 rounded-2xl transition-all duration-300 border ${
+          className={`p-3 transition-all duration-300 border ${
             darkMode 
               ? 'bg-white/5 border-white/5 text-slate-400 hover:bg-white/10 hover:text-white' 
               : 'bg-slate-100 border-slate-200 text-slate-500 hover:bg-slate-200 hover:text-slate-900'
@@ -158,7 +158,7 @@ const TournamentForm = ({
         {/* Información Básica */}
         <section className="space-y-6">
           <div className="flex items-center gap-3 mb-2">
-            <div className={`w-1.5 h-6 rounded-full ${darkMode ? 'bg-emerald-500/50' : 'bg-emerald-500'}`}></div>
+            <div className={`w-1.5 h-6 ${darkMode ? 'bg-emerald-500/50' : 'bg-emerald-500'}`}></div>
             <h4 className={`text-xs font-black uppercase tracking-[0.2em] ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>Información Primaria</h4>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -169,7 +169,7 @@ const TournamentForm = ({
                 required
                 value={formData.name}
                 onChange={(e) => handleInputChange("name", e.target.value)}
-                className={`w-full border rounded-2xl px-5 py-4 transition-all duration-300 outline-none focus:ring-2 focus:ring-emerald-500/50 ${
+                className={`w-full border px-5 py-4 transition-all duration-300 outline-none focus:ring-2 focus:ring-emerald-500/50 ${
                   darkMode 
                     ? 'bg-slate-950/50 border-white/5 text-white placeholder-slate-600 focus:bg-slate-950' 
                     : 'bg-slate-50 border-slate-200 text-slate-900 placeholder-slate-400 focus:bg-white'
@@ -183,7 +183,7 @@ const TournamentForm = ({
                 required
                 value={formData.state}
                 onChange={(e) => handleInputChange("state", e.target.value)}
-                className={`w-full border rounded-2xl px-5 py-4 transition-all duration-300 outline-none ${
+                className={`w-full border px-5 py-4 transition-all duration-300 outline-none ${
                   darkMode 
                     ? 'bg-slate-950/50 border-white/5 text-white' 
                     : 'bg-slate-50 border-slate-200 text-slate-900'
@@ -205,7 +205,7 @@ const TournamentForm = ({
                   required
                   value={formData.field}
                   onChange={(e) => handleInputChange("field", e.target.value)}
-                  className={`w-full border rounded-2xl pl-12 pr-5 py-4 transition-all duration-300 outline-none focus:ring-2 focus:ring-emerald-500/50 ${
+                  className={`w-full border pl-12 pr-5 py-4 transition-all duration-300 outline-none focus:ring-2 focus:ring-emerald-500/50 ${
                     darkMode 
                       ? 'bg-slate-950/50 border-white/5 text-white placeholder-slate-600' 
                       : 'bg-slate-50 border-slate-200 text-slate-900 placeholder-slate-400'
@@ -221,7 +221,7 @@ const TournamentForm = ({
                 required
                 value={formData.location}
                 onChange={(e) => handleInputChange("location", e.target.value)}
-                className={`w-full border rounded-2xl px-5 py-4 transition-all duration-300 outline-none focus:ring-2 focus:ring-emerald-500/50 ${
+                className={`w-full border px-5 py-4 transition-all duration-300 outline-none focus:ring-2 focus:ring-emerald-500/50 ${
                   darkMode 
                     ? 'bg-slate-950/50 border-white/5 text-white placeholder-slate-600' 
                     : 'bg-slate-50 border-slate-200 text-slate-900 placeholder-slate-400'
@@ -235,7 +235,7 @@ const TournamentForm = ({
         {/* Logística y Fechas */}
         <section className="space-y-6">
           <div className="flex items-center gap-3 mb-2">
-            <div className={`w-1.5 h-6 rounded-full ${darkMode ? 'bg-blue-500/50' : 'bg-blue-500'}`}></div>
+            <div className={`w-1.5 h-6 ${darkMode ? 'bg-blue-500/50' : 'bg-blue-500'}`}></div>
             <h4 className={`text-xs font-black uppercase tracking-[0.2em] ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>Tiempos y Operación</h4>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -248,7 +248,7 @@ const TournamentForm = ({
                 required
                 value={formData.startDate}
                 onChange={(e) => handleInputChange("startDate", e.target.value)}
-                className={`w-full border rounded-2xl px-5 py-4 transition-all duration-300 outline-none ${
+                className={`w-full border px-5 py-4 transition-all duration-300 outline-none ${
                   darkMode 
                     ? 'bg-slate-950/50 border-white/5 text-white scheme-dark' 
                     : 'bg-slate-50 border-slate-200 text-slate-900'
@@ -263,7 +263,7 @@ const TournamentForm = ({
                 required
                 value={formData.days}
                 onChange={(e) => handleInputChange("days", e.target.value)}
-                className={`w-full border rounded-2xl px-5 py-4 transition-all duration-300 outline-none ${
+                className={`w-full border px-5 py-4 transition-all duration-300 outline-none ${
                    darkMode 
                   ? 'bg-slate-950/50 border-white/5 text-white' 
                   : 'bg-slate-50 border-slate-200 text-slate-900'
@@ -276,7 +276,7 @@ const TournamentForm = ({
                 type="date"
                 readOnly
                 value={endDate}
-                className={`w-full border rounded-2xl px-5 py-4 transition-all duration-300 outline-none cursor-not-allowed ${
+                className={`w-full border px-5 py-4 transition-all duration-300 outline-none cursor-not-allowed ${
                   darkMode 
                   ? 'bg-white/5 border-white/5 text-slate-500' 
                   : 'bg-slate-100 border-slate-100 text-slate-400'
@@ -293,7 +293,7 @@ const TournamentForm = ({
                   key={num}
                   type="button"
                   onClick={() => handleInputChange("holes", num)}
-                  className={`py-4 rounded-2xl font-black text-xs transition-all duration-300 border ${
+                  className={`py-4 font-black text-xs transition-all duration-300 border ${
                     formData.holes === num
                       ? darkMode
                         ? 'bg-emerald-500/10 border-emerald-500/50 text-emerald-400 shadow-xl shadow-emerald-500/10'
@@ -307,7 +307,7 @@ const TournamentForm = ({
                 </button>
               ))}
             </div>
-            <div className={`mt-4 p-4 rounded-2xl border flex items-center gap-4 transition-colors duration-500 ${darkMode ? 'bg-white/[0.02] border-white/5' : 'bg-slate-50/50 border-slate-100'}`}>
+            <div className={`mt-4 p-4 border flex items-center gap-4 transition-colors duration-500 ${darkMode ? 'bg-white/[0.02] border-white/5' : 'bg-slate-50/50 border-slate-100'}`}>
               <Camera className={`w-4 h-4 ${darkMode ? 'text-emerald-400' : 'text-emerald-600'}`} />
               <p className="text-[10px] font-black uppercase tracking-[0.1em]">
                 Unidades requeridas para despliegue: <span className={`${darkMode ? 'text-white' : 'text-slate-900'} text-xs ml-1`}>{requiredCameras} DISPOSITIVOS</span>
@@ -319,7 +319,7 @@ const TournamentForm = ({
         {/* Asignación de Recursos */}
         <section className="space-y-6">
           <div className="flex items-center gap-3 mb-2">
-            <div className={`w-1.5 h-6 rounded-full ${darkMode ? 'bg-purple-500/50' : 'bg-purple-500'}`}></div>
+            <div className={`w-1.5 h-6 ${darkMode ? 'bg-purple-500/50' : 'bg-purple-500'}`}></div>
             <h4 className={`text-xs font-black uppercase tracking-[0.2em] ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>Recursos Maestros</h4>
           </div>
           
@@ -331,7 +331,7 @@ const TournamentForm = ({
               <select
                 value={formData.workerId}
                 onChange={(e) => handleInputChange("workerId", e.target.value)}
-                className={`w-full border rounded-2xl px-5 py-4 transition-all duration-300 outline-none ${
+                className={`w-full border px-5 py-4 transition-all duration-300 outline-none ${
                     darkMode 
                   ? 'bg-slate-950/50 border-white/5 text-white' 
                   : 'bg-slate-50 border-slate-200 text-slate-900'
@@ -348,12 +348,12 @@ const TournamentForm = ({
             </div>
 
             {formData.workerId && (
-              <div className={`rounded-3xl p-8 border transition-all duration-500 space-y-6 ${darkMode ? 'bg-white/[0.02] border-white/5 shadow-2xl' : 'bg-slate-50/50 border-slate-200 shadow-sm'}`}>
+              <div className={`p-8 border transition-all duration-500 space-y-6 ${darkMode ? 'bg-white/[0.02] border-white/5 shadow-2xl' : 'bg-slate-50/50 border-slate-200 shadow-sm'}`}>
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <h5 className={`text-[10px] font-black uppercase tracking-[0.2em] flex items-center gap-3 ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>
                     <Camera className="w-4 h-4" /> Selección Táctica de Hardware
                   </h5>
-                  <div className={`px-4 py-2 rounded-xl text-[10px] font-black tracking-widest border transition-all duration-500 ${
+                  <div className={`px-4 py-2 text-[10px] font-black tracking-widest border transition-all duration-500 ${
                     formData.assignedCameras.length >= requiredCameras 
                       ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500' 
                       : 'bg-amber-500/10 border-amber-500/20 text-amber-500'
@@ -368,7 +368,7 @@ const TournamentForm = ({
                       key={cam.id}
                       type="button"
                       onClick={() => handleCameraSelection(cam.id)}
-                      className={`p-4 rounded-2xl border text-left transition-all duration-300 group relative ${
+                      className={`p-4 border text-left transition-all duration-300 group relative ${
                         formData.assignedCameras.includes(cam.id)
                           ? darkMode 
                             ? 'bg-emerald-500/10 border-emerald-500/50 text-emerald-400 ring-2 ring-emerald-500/20' 
@@ -386,7 +386,7 @@ const TournamentForm = ({
                     </button>
                   ))}
                   {workerCameras.length === 0 && (
-                    <div className={`col-span-full py-12 text-center rounded-3xl border border-dashed transition-all duration-500 ${darkMode ? 'bg-white/[0.01] border-white/10' : 'bg-slate-100/50 border-slate-200'}`}>
+                    <div className={`col-span-full py-12 text-center border border-dashed transition-all duration-500 ${darkMode ? 'bg-white/[0.01] border-white/10' : 'bg-slate-100/50 border-slate-200'}`}>
                       <Package className={`w-12 h-12 mx-auto mb-4 opacity-20 ${darkMode ? 'text-white' : 'text-slate-900'}`} />
                       <p className="text-[10px] text-slate-500 font-black uppercase tracking-widest">El responsable no tiene unidades asignadas en inventario</p>
                     </div>
@@ -398,14 +398,14 @@ const TournamentForm = ({
         </section>
 
         {/* Resumen Final y Acciones */}
-        <section className={`rounded-[2.5rem] p-10 border transition-all duration-500 space-y-8 ${
+        <section className={`p-10 border transition-all duration-500 space-y-8 ${
           darkMode ? 'bg-emerald-500/[0.02] border-emerald-500/10' : 'bg-slate-50 border-slate-100 shadow-xl shadow-slate-200/50'
         }`}>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
             <div>
               <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Estado Previsto</p>
               <div className="flex items-center gap-3">
-                <div className={`w-2.5 h-2.5 rounded-full ${currentStatus === 'activo' ? 'bg-emerald-500 shadow-lg shadow-emerald-500/40' : 'bg-amber-500 shadow-lg shadow-amber-500/40'} animate-pulse`}></div>
+                <div className={`w-2.5 h-2.5 ${currentStatus === 'activo' ? 'bg-emerald-500 shadow-lg shadow-emerald-500/40' : 'bg-amber-500 shadow-lg shadow-amber-500/40'} animate-pulse`}></div>
                 <span className={`text-sm font-black uppercase tracking-tight transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>{currentStatus}</span>
               </div>
             </div>
@@ -432,14 +432,14 @@ const TournamentForm = ({
           <div className="flex flex-col md:flex-row gap-5 pt-6">
             <button
               type="submit"
-              className="flex-grow bg-emerald-500 text-white font-black py-5 rounded-2xl hover:bg-emerald-400 transition-all shadow-2xl shadow-emerald-500/20 active:scale-[0.98] uppercase tracking-[0.2em] text-xs"
+              className="flex-grow bg-emerald-500 text-white font-black py-5 hover:bg-emerald-400 transition-all shadow-2xl shadow-emerald-500/20 active:scale-[0.98] uppercase tracking-[0.2em] text-xs"
             >
               {isEditing ? "Consolidar Cambios Maestros" : "Autorizar y Generar Expediente"}
             </button>
             <button
               type="button"
               onClick={onCancel}
-              className={`px-12 py-5 rounded-2xl font-black uppercase tracking-widest text-xs transition-all duration-300 border ${
+              className={`px-12 py-5 font-black uppercase tracking-widest text-xs transition-all duration-300 border ${
                 darkMode 
                   ? 'bg-white/5 border-white/5 text-slate-400 hover:bg-white/10 hover:text-white' 
                   : 'bg-slate-100 border-slate-200 text-slate-500 hover:bg-slate-200 hover:text-slate-900'

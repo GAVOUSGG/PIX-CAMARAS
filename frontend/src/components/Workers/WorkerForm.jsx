@@ -111,7 +111,7 @@ const WorkerForm = ({
     return (
       <button
         onClick={() => setShowForm(true)}
-        className={`group px-6 py-4 rounded-2xl border font-black uppercase tracking-[0.2em] text-xs transition-all duration-300 flex items-center gap-3 shadow-xl ${
+        className={`group px-6 py-4 border font-black uppercase tracking-[0.2em] text-xs transition-all duration-300 flex items-center gap-3 shadow-xl ${
           darkMode 
             ? 'bg-emerald-600 border-emerald-400 text-white hover:bg-emerald-400 ' 
             : 'bg-emerald-500 border-emerald-600 text-white hover:bg-emerald-600 shadow-emerald-500/10'
@@ -132,23 +132,23 @@ const WorkerForm = ({
         onClick={handleCancel} 
       />
 
-      <div className={`relative w-full max-w-4xl rounded-[2rem] border shadow-2xl flex flex-col max-h-[95vh] sm:max-h-[90vh] overflow-hidden transition-all duration-500 ${
+      <div className={`relative w-full max-w-4xl border shadow-2xl flex flex-col max-h-[95vh] sm:max-h-[90vh] overflow-hidden transition-all duration-500 ${
         darkMode ? 'bg-slate-900 border-white/10 shadow-black' : 'bg-white border-black/5 shadow-slate-300'
       }`}>
         {/* Header */}
         <div className={`flex items-center justify-between p-6 md:p-8 border-b transition-colors duration-500 flex-shrink-0 ${darkMode ? 'border-white/5 bg-white/[0.02]' : 'border-slate-100 bg-slate-50/50'}`}>
           <div className="flex items-center gap-4">
-            <div className={`p-3 rounded-2xl ${darkMode ? 'bg-emerald-500/10 text-emerald-400' : 'bg-emerald-500 text-white'}`}>
+            <div className={`p-3 ${darkMode ? 'bg-emerald-500/10 text-emerald-400' : 'bg-emerald-500 text-white'}`}>
               <User className="w-6 h-6" />
             </div>
             <div>
               <h3 className={`text-xl font-black uppercase tracking-widest transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>
                 {isEditing ? "Modificar Operador" : "Registro de Operador"}
               </h3>
-              <p className="text-xs font-bold text-slate-500 tracking-tight mt-0.5">Complete el expediente profesional del colaborador</p>
+              <p className="text-xs font-bold text-slate-500 tracking-tight mt-0.5">Rellene los campos con la información del trabajador</p>
             </div>
           </div>
-          <button onClick={handleCancel} className={`p-3 rounded-2xl transition-all duration-300 ${darkMode ? 'text-slate-500 hover:text-white hover:bg-white/5' : 'text-slate-400 hover:text-slate-900 hover:bg-slate-100'}`}>
+          <button onClick={handleCancel} className={`p-3 transition-all duration-300 ${darkMode ? 'text-slate-500 hover:text-white hover:bg-white/5' : 'text-slate-400 hover:text-slate-900 hover:bg-slate-100'}`}>
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -157,19 +157,19 @@ const WorkerForm = ({
           {/* Información General */}
           <section className="space-y-6">
             <div className="flex items-center gap-3">
-              <div className={`w-1 h-4 rounded-full ${darkMode ? 'bg-blue-500/50' : 'bg-blue-500'}`}></div>
-              <h4 className={`text-[10px] font-black uppercase tracking-[0.2em] ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>Información General</h4>
+              <div className={`w-1 h-4 ${darkMode ? 'bg-blue-500/50' : 'bg-blue-500'}`}></div>
+              <h4 className={`text-[10px] font-black uppercase tracking-[0.2em] ${darkMode ? 'text-slate-500' : 'text-black-400'}`}>Información General</h4>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>Nombre Completo</label>
+                <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-slate-500' : 'text-black-400'}`}>Nombre Completo</label>
                 <div className="relative group">
                   <User className={`absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 transition-colors ${darkMode ? 'text-slate-500' : 'text-slate-400'}`} />
                   <input
                     type="text" required value={formData.name}
                     onChange={(e) => handleInputChange("name", e.target.value)}
-                    className={`w-full pl-12 pr-4 py-4 rounded-2xl border font-bold text-sm transition-all focus:ring-2 outline-none ${
+                    className={`w-full pl-12 pr-4 py-4 border font-bold text-sm transition-all focus:ring-2 outline-none ${
                       darkMode ? 'bg-white/5 border-white/5 text-white focus:ring-emerald-500/50' : 'bg-slate-50 border-slate-100 text-slate-900 focus:ring-emerald-500/30'
                     }`}
                     placeholder="Ej: Alejandro Gonzalez"
@@ -178,13 +178,13 @@ const WorkerForm = ({
               </div>
 
               <div className="space-y-2">
-                <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>Entidad Federativa</label>
+                <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-slate-500' : 'text-black-400'}`}>Entidad Federativa</label>
                 <div className="relative group">
                   <MapPin className={`absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 transition-colors ${darkMode ? 'text-slate-500' : 'text-slate-400'}`} />
                   <select
                     required value={formData.state}
                     onChange={(e) => handleInputChange("state", e.target.value)}
-                    className={`w-full pl-12 pr-4 py-4 rounded-2xl border font-bold text-sm appearance-none transition-all focus:ring-2 outline-none cursor-pointer ${
+                    className={`w-full pl-12 pr-4 py-4 border font-bold text-sm appearance-none transition-all focus:ring-2 outline-none cursor-pointer ${
                       darkMode ? 'bg-white/5 border-white/5 text-white focus:ring-emerald-500/50' : 'bg-slate-50 border-slate-100 text-slate-900 focus:ring-emerald-500/30'
                     }`}
                   >
@@ -201,19 +201,19 @@ const WorkerForm = ({
           {/* Contacto & Perfil */}
           <section className="space-y-6">
             <div className="flex items-center gap-3">
-              <div className={`w-1 h-4 rounded-full ${darkMode ? 'bg-purple-500/50' : 'bg-purple-500'}`}></div>
-              <h4 className={`text-[10px] font-black uppercase tracking-[0.2em] ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>Medios de Contacto</h4>
+              <div className={`w-1 h-4 ${darkMode ? 'bg-purple-500/50' : 'bg-purple-500'}`}></div>
+              <h4 className={`text-[10px] font-black uppercase tracking-[0.2em] ${darkMode ? 'text-slate-500' : 'text-black-400'}`}>Medios de Contacto</h4>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>Contacto Telefónico</label>
+                <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-slate-500' : 'text-black-400'}`}>Telefono</label>
                 <div className="relative group">
                   <Phone className={`absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 transition-colors ${darkMode ? 'text-slate-500' : 'text-slate-400'}`} />
                   <input
                     type="tel" required value={formData.phone}
                     onChange={(e) => handleInputChange("phone", e.target.value)}
-                    className={`w-full pl-12 pr-4 py-4 rounded-2xl border font-mono font-bold text-sm transition-all focus:ring-2 outline-none ${
+                    className={`w-full pl-12 pr-4 py-4 border font-mono font-bold text-sm transition-all focus:ring-2 outline-none ${
                       darkMode ? 'bg-white/5 border-white/5 text-white focus:ring-emerald-500/50' : 'bg-slate-50 border-slate-100 text-slate-900 focus:ring-emerald-500/30'
                     }`}
                     placeholder="+52 000-000-000"
@@ -222,16 +222,16 @@ const WorkerForm = ({
               </div>
 
               <div className="space-y-2">
-                <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>Email Corporativo</label>
+                <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-slate-500' : 'text-black-400'}`}>Email</label>
                 <div className="relative group">
-                  <Mail className={`absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 transition-colors ${darkMode ? 'text-slate-500' : 'text-slate-400'}`} />
+                  <Mail className={`absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 transition-colors ${darkMode ? 'text-slate-500' : 'text-black-400'}`} />
                   <input
                     type="email" required value={formData.email}
                     onChange={(e) => handleInputChange("email", e.target.value)}
-                    className={`w-full pl-12 pr-4 py-4 rounded-2xl border font-bold text-sm transition-all focus:ring-2 outline-none ${
-                      darkMode ? 'bg-white/5 border-white/5 text-white focus:ring-emerald-500/50' : 'bg-slate-50 border-slate-100 text-slate-900 focus:ring-emerald-500/30'
+                    className={`w-full pl-12 pr-4 py-4 border font-bold text-sm transition-all focus:ring-2 outline-none ${
+                      darkMode ? 'bg-white/5 border-white/5 text-white focus:ring-emerald-500/50' : 'bg-slate-50 border-slate-100 text-slate-600 focus:ring-emerald-500/30'
                     }`}
-                    placeholder="operador@pxgolf.com"
+                    placeholder="trabajador@gmail.com"
                   />
                 </div>
               </div>
@@ -241,41 +241,36 @@ const WorkerForm = ({
           {/* Estatus Laboral & Especialidad */}
           <section className="space-y-6">
             <div className="flex items-center gap-3">
-              <div className={`w-1 h-4 rounded-full ${darkMode ? 'bg-amber-500/50' : 'bg-amber-500'}`}></div>
-              <h4 className={`text-[10px] font-black uppercase tracking-[0.2em] ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>Estatus & Roles</h4>
+              <div className={`w-1 h-4 ${darkMode ? 'bg-amber-500/50' : 'bg-amber-500'}`}></div>
+              <h4 className={`text-[10px] font-black uppercase tracking-[0.2em] ${darkMode ? 'text-slate-500' : 'text-black-400'}`}>Estatus & Roles</h4>
             </div>
 
-            <div className={`grid grid-cols-1 md:grid-cols-2 gap-6 p-6 rounded-2xl border transition-all duration-500 ${darkMode ? 'bg-white/5 border-white/5' : 'bg-slate-50 border-slate-100'}`}>
+            <div className={`grid grid-cols-1 md:grid-cols-2 gap-6 p-6 border transition-all duration-500 ${darkMode ? 'bg-white/5 border-white/5' : 'bg-slate-50 border-slate-100'}`}>
               <div className="space-y-2">
-                <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>Situación Laboral</label>
+                <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-slate-500' : 'text-black-400'}`}>Situación Laboral</label>
                 <select
                   value={formData.status}
                   onChange={(e) => handleInputChange("status", e.target.value)}
-                  className={`w-full px-4 py-4 rounded-2xl border font-bold text-sm transition-all appearance-none outline-none cursor-pointer ${
+                  className={`w-full px-4 py-4 border font-bold text-sm transition-all appearance-none outline-none cursor-pointer ${
                     darkMode ? 'bg-slate-900 border-white/5 text-white focus:ring-emerald-500/50' : 'bg-white border-slate-100 text-slate-900 focus:ring-emerald-500/30'
                   }`}
                 >
-                  <option value="disponible">Deseable / Disponible</option>
-                  <option value="activo">Activo en Misión</option>
-                  <option value="ocupado">Ocupado / Otros</option>
-                  <option value="vacaciones">Inhabilitado / Vacaciones</option>
+                  <option value="disponible">Disponible</option>
+                  <option value="activo">Activo</option>
+                  <option value="inactivo">Inactivo</option>
                 </select>
               </div>
 
               <div className="space-y-2">
-                <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>Especialización</label>
+                <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-slate-500' : 'text-black-400'}`}>Especialización</label>
                 <select
                   value={formData.specialty}
                   onChange={(e) => handleInputChange("specialty", e.target.value)}
-                  className={`w-full px-4 py-4 rounded-2xl border font-bold text-sm transition-all appearance-none outline-none cursor-pointer ${
+                  className={`w-full px-4 py-4 border font-bold text-sm transition-all appearance-none outline-none cursor-pointer ${
                     darkMode ? 'bg-slate-900 border-white/5 text-white focus:ring-emerald-500/50' : 'bg-white border-slate-100 text-slate-900 focus:ring-emerald-500/30'
                   }`}
                 >
-                  <option value="Instalación cámaras solares">Instalación PIX GOLD (Solar)</option>
-                  <option value="Coordinación torneos">Coordinación de Torneos</option>
-                  <option value="Mantenimiento equipos">Mantenimiento de Unidades</option>
-                  <option value="Logística envíos">Logística & Embarques</option>
-                  <option value="Soporte técnico">IT & Soporte Técnico</option>
+                  <option value="Instalación cámaras solares">Instalación PIX GOLF</option>
                 </select>
               </div>
             </div>
@@ -285,8 +280,8 @@ const WorkerForm = ({
           <section className="space-y-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className={`w-1 h-4 rounded-full ${darkMode ? 'bg-emerald-500/50' : 'bg-emerald-500'}`}></div>
-                <h4 className={`text-[10px] font-black uppercase tracking-[0.2em] ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>Inventario Asignado</h4>
+                <div className={`w-1 h-4 ${darkMode ? 'bg-emerald-500/50' : 'bg-emerald-500'}`}></div>
+                <h4 className={`text-[10px] font-black uppercase tracking-[0.2em] ${darkMode ? 'text-slate-500' : 'text-black-400'}`}>Inventario Asignado</h4>
               </div>
               {availableCameras.length > 0 && (
                 <button type="button" onClick={handleSelectAllCameras} className={`text-[10px] font-black uppercase tracking-widest flex items-center gap-2 transition-colors ${darkMode ? 'text-emerald-500 hover:text-emerald-400' : 'text-emerald-600 hover:text-emerald-700'}`}>
@@ -298,19 +293,19 @@ const WorkerForm = ({
 
             {availableCameras.length > 0 ? (
               <div className="space-y-4">
-                <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1 opacity-70">Seleccione las Unidades PIX disponibles en almacén</p>
-                <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-72 overflow-y-auto p-4 rounded-3xl border transition-all ${darkMode ? 'bg-white/[0.01] border-white/5' : 'bg-slate-50 border-slate-100'}`}>
+                <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest ml-1 opacity-70">Camaras disponibles para asignar </p>
+                <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-72 overflow-y-auto p-4 border transition-all ${darkMode ? 'bg-white/[0.01] border-white/5' : 'bg-slate-50 border-slate-100'}`}>
                   {availableCameras.map((camera) => (
                     <button
                       key={camera.id} type="button"
                       onClick={() => handleCameraSelection(camera.id)}
-                      className={`flex items-start text-left gap-4 p-4 rounded-2xl border transition-all duration-300 transform active:scale-95 ${
+                      className={`flex items-start text-left gap-4 p-4 border transition-all duration-300 transform active:scale-95 ${
                         formData.camerasAssigned.includes(camera.id)
                           ? darkMode ? 'bg-emerald-500 border-emerald-400 text-white shadow-lg shadow-emerald-500/20' : 'bg-emerald-500 border-emerald-600 text-white shadow-lg'
                           : darkMode ? 'bg-slate-900 border-white/5 text-slate-400 hover:border-emerald-500/50' : 'bg-white border-slate-200 text-slate-600 hover:border-emerald-500'
                       }`}
                     >
-                      <div className={`p-2 rounded-xl transition-colors ${formData.camerasAssigned.includes(camera.id) ? 'bg-white/20' : darkMode ? 'bg-white/5' : 'bg-slate-50'}`}>
+                      <div className={`p-2 transition-colors ${formData.camerasAssigned.includes(camera.id) ? 'bg-white/20' : darkMode ? 'bg-white/5' : 'bg-slate-50'}`}>
                         <Camera className="w-4 h-4" />
                       </div>
                       <div className="flex-1 min-w-0">
@@ -322,14 +317,14 @@ const WorkerForm = ({
                 </div>
               </div>
             ) : (
-              <div className={`text-center py-10 rounded-3xl border border-dashed flex flex-col items-center gap-3 ${darkMode ? 'bg-white/[0.02] border-white/10' : 'bg-slate-50 border-slate-200'}`}>
+              <div className={`text-center py-10 border border-dashed flex flex-col items-center gap-3 ${darkMode ? 'bg-white/[0.02] border-white/10' : 'bg-slate-50 border-slate-200'}`}>
                 <Camera className="w-10 h-10 text-slate-600 opacity-30" />
                 <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">Sin unidades PIX disponibles en Almacén</p>
               </div>
             )}
           </section>
 
-          <section className={`p-6 rounded-2xl border transition-all duration-500 ${darkMode ? 'bg-white/5 border-white/10' : 'bg-slate-50 border-slate-200'}`}>
+          <section className={`p-6 border transition-all duration-500 ${darkMode ? 'bg-white/5 border-white/10' : 'bg-slate-50 border-slate-200'}`}>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               <div className="space-y-1">
                 <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest block">Colaborador</span>
@@ -345,7 +340,7 @@ const WorkerForm = ({
               </div>
               <div className="space-y-1">
                 <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest block">Equipos Vinculados</span>
-                <p className={`text-xs font-black transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>{formData.camerasAssigned.length} PIX</p>
+                <p className={`text-xs font-black transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>{formData.camerasAssigned.length} Camaras</p>
               </div>
             </div>
           </section>
@@ -355,7 +350,7 @@ const WorkerForm = ({
         <div className={`flex items-center justify-end px-6 md:px-8 py-5 border-t transition-colors duration-500 flex-shrink-0 gap-4 ${darkMode ? 'border-white/5 bg-slate-900/50' : 'border-slate-100 bg-white'}`}>
           <button
             type="button" onClick={handleCancel}
-            className={`px-6 py-2.5 rounded-xl font-bold text-sm transition-all duration-300 ${
+            className={`px-6 py-2.5 font-bold text-sm transition-all duration-300 ${
               darkMode 
                 ? 'bg-white/5 text-slate-300 hover:bg-white/10 hover:text-white' 
                 : 'bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-900'
@@ -366,7 +361,7 @@ const WorkerForm = ({
           <button
             type="submit" onClick={handleSubmit}
             disabled={!formData.name || !formData.state || !formData.phone || !formData.email}
-            className={`group px-6 py-2.5 rounded-xl font-bold text-sm text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 flex items-center justify-center space-x-2 ${
+            className={`group px-6 py-2.5 font-bold text-sm text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 flex items-center justify-center space-x-2 ${
               darkMode 
                 ? 'bg-emerald-500 hover:bg-emerald-400' 
                 : 'bg-emerald-500 hover:bg-emerald-600'

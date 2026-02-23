@@ -11,7 +11,7 @@ const Header = ({ user, onLogout, onMenuClick, darkMode, setDarkMode }) => {
           <div className="flex items-center space-x-4 flex-1">
             <button
               onClick={onMenuClick}
-              className={`md:hidden p-2 -ml-2 rounded-lg transition-colors ${darkMode ? 'text-slate-400 hover:text-white hover:bg-white/5' : 'text-slate-500 hover:text-slate-900 hover:bg-black/5'}`}
+              className={`md:hidden p-2 -ml-2 rounded-lg¿ transition-colors ${darkMode ? 'text-slate-400 hover:text-white hover:bg-white/5' : 'text-slate-500 hover:text-slate-900 hover:bg-black/5'}`}
             >
               <Menu className="w-6 h-6" />
             </button>

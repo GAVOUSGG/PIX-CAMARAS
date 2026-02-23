@@ -137,7 +137,7 @@ const CameraForm = ({
         onClick={handleCancel}
       />
       
-      <div className={`relative w-full max-w-3xl rounded-[2rem] border shadow-2xl flex flex-col max-h-[95vh] sm:max-h-[90vh] overflow-hidden transition-all duration-500 ${
+      <div className={`relative w-full max-w-3xl border shadow-2xl flex flex-col max-h-[95vh] sm:max-h-[90vh] overflow-hidden transition-all duration-500 ${
         darkMode ? 'bg-slate-900 border-white/10 shadow-black' : 'bg-white border-black/5 shadow-slate-300'
       }`}>
         <div className={`flex items-center justify-between p-6 md:p-8 border-b transition-colors duration-500 flex-shrink-0 ${
@@ -153,7 +153,7 @@ const CameraForm = ({
           </div>
           <button
             onClick={handleCancel}
-            className={`p-3 rounded-2xl transition-all duration-300 ${
+            className={`p-3 transition-all duration-300 ${
               darkMode ? 'hover:bg-white/5 text-slate-500 hover:text-white' : 'hover:bg-slate-100 text-slate-400 hover:text-slate-900'
             }`}
           >
@@ -174,7 +174,7 @@ const CameraForm = ({
                   required
                   value={formData.id}
                   onChange={(e) => handleInputChange("id", e.target.value)}
-                  className={`w-full rounded-xl px-4 py-3 text-sm font-bold font-mono transition-all duration-300 outline-none border focus:ring-2 focus:ring-emerald-500/50 ${
+                  className={`w-full px-4 py-3 text-sm font-bold font-mono transition-all duration-300 outline-none border focus:ring-2 focus:ring-emerald-500/50 ${
                     darkMode 
                       ? 'bg-white/5 border-white/10 text-white placeholder-slate-600 focus:border-emerald-500/50 hover:bg-white/10' 
                       : 'bg-slate-50 border-slate-200 text-slate-900 placeholder-slate-400 focus:border-emerald-500/50 hover:bg-slate-100'
@@ -193,7 +193,7 @@ const CameraForm = ({
                   required
                   value={formData.serialNumber}
                   onChange={(e) => handleInputChange("serialNumber", e.target.value)}
-                  className={`w-full rounded-xl px-4 py-3 text-sm font-bold font-mono transition-all duration-300 outline-none border focus:ring-2 focus:ring-emerald-500/50 ${
+                  className={`w-full px-4 py-3 text-sm font-bold font-mono transition-all duration-300 outline-none border focus:ring-2 focus:ring-emerald-500/50 ${
                     darkMode 
                       ? 'bg-white/5 border-white/10 text-white placeholder-slate-600 focus:border-emerald-500/50 hover:bg-white/10' 
                       : 'bg-slate-50 border-slate-200 text-slate-900 placeholder-slate-400 focus:border-emerald-500/50 hover:bg-slate-100'
@@ -215,7 +215,7 @@ const CameraForm = ({
                     required
                     value={formData.model}
                     onChange={(e) => handleInputChange("model", e.target.value)}
-                    className={`w-full rounded-xl px-4 py-3 text-sm font-bold transition-all duration-300 outline-none border appearance-none focus:ring-2 focus:ring-emerald-500/50 ${
+                    className={`w-full px-4 py-3 text-sm font-bold transition-all duration-300 outline-none border appearance-none focus:ring-2 focus:ring-emerald-500/50 ${
                       darkMode 
                         ? 'bg-white/5 border-white/10 text-emerald-400 focus:border-emerald-500/50 hover:bg-white/10' 
                         : 'bg-slate-50 border-slate-200 text-emerald-600 focus:border-emerald-500/50 hover:bg-slate-100'
@@ -238,7 +238,7 @@ const CameraForm = ({
                   <select
                     value={formData.type}
                     onChange={(e) => handleInputChange("type", e.target.value)}
-                    className={`w-full rounded-xl px-4 py-3 text-sm font-bold transition-all duration-300 outline-none border appearance-none focus:ring-2 focus:ring-emerald-500/50 ${
+                    className={`w-full px-4 py-3 text-sm font-bold transition-all duration-300 outline-none border appearance-none focus:ring-2 focus:ring-emerald-500/50 ${
                       darkMode 
                         ? 'bg-white/5 border-white/10 text-white focus:border-emerald-500/50 hover:bg-white/10' 
                         : 'bg-slate-50 border-slate-200 text-slate-900 focus:border-emerald-500/50 hover:bg-slate-100'
@@ -262,7 +262,7 @@ const CameraForm = ({
                   <select
                     value={formData.status}
                     onChange={(e) => handleInputChange("status", e.target.value)}
-                    className={`w-full rounded-xl px-4 py-3 text-sm font-bold transition-all duration-300 outline-none border appearance-none focus:ring-2 focus:ring-emerald-500/50 ${
+                    className={`w-full px-4 py-3 text-sm font-bold transition-all duration-300 outline-none border appearance-none focus:ring-2 focus:ring-emerald-500/50 ${
                       darkMode 
                         ? 'bg-white/5 border-white/10 text-white focus:border-emerald-500/50 hover:bg-white/10' 
                         : 'bg-slate-50 border-slate-200 text-slate-900 focus:border-emerald-500/50 hover:bg-slate-100'
@@ -288,7 +288,7 @@ const CameraForm = ({
                     required
                     value={formData.location}
                     onChange={(e) => handleInputChange("location", e.target.value)}
-                    className={`w-full rounded-xl px-4 py-3 text-sm font-bold transition-all duration-300 outline-none border appearance-none focus:ring-2 focus:ring-emerald-500/50 ${
+                    className={`w-full px-4 py-3 text-sm font-bold transition-all duration-300 outline-none border appearance-none focus:ring-2 focus:ring-emerald-500/50 ${
                       darkMode 
                         ? 'bg-white/5 border-white/10 text-white focus:border-emerald-500/50 hover:bg-white/10' 
                         : 'bg-slate-50 border-slate-200 text-slate-900 focus:border-emerald-500/50 hover:bg-slate-100'
@@ -316,7 +316,7 @@ const CameraForm = ({
                   type="text"
                   value={formData.simNumber}
                   onChange={(e) => handleInputChange("simNumber", e.target.value)}
-                  className={`w-full rounded-xl px-4 py-3 text-sm font-bold font-mono transition-all duration-300 outline-none border focus:ring-2 focus:ring-emerald-500/50 ${
+                  className={`w-full px-4 py-3 text-sm font-bold font-mono transition-all duration-300 outline-none border focus:ring-2 focus:ring-emerald-500/50 ${
                     darkMode 
                       ? 'bg-white/5 border-white/10 text-white placeholder-slate-600 focus:border-emerald-500/50 hover:bg-white/10' 
                       : 'bg-slate-50 border-slate-200 text-slate-900 placeholder-slate-400 focus:border-emerald-500/50 hover:bg-slate-100'
@@ -334,7 +334,7 @@ const CameraForm = ({
                   <select
                     value={formData.assignedTo}
                     onChange={(e) => handleInputChange("assignedTo", e.target.value)}
-                    className={`w-full rounded-xl px-4 py-3 text-sm font-bold transition-all duration-300 outline-none border appearance-none focus:ring-2 focus:ring-emerald-500/50 ${
+                    className={`w-full px-4 py-3 text-sm font-bold transition-all duration-300 outline-none border appearance-none focus:ring-2 focus:ring-emerald-500/50 ${
                       darkMode 
                         ? 'bg-white/5 border-white/10 text-white focus:border-emerald-500/50 hover:bg-white/10' 
                         : 'bg-slate-50 border-slate-200 text-slate-900 focus:border-emerald-500/50 hover:bg-slate-100'
@@ -352,7 +352,7 @@ const CameraForm = ({
             </div>
 
             {/* Notas/Observaciones */}
-            <div className={`p-6 rounded-2xl border transition-colors duration-500 ${darkMode ? 'bg-white/[0.02] border-white/5' : 'bg-slate-50/50 border-slate-100'}`}>
+            <div className={`p-6 border transition-colors duration-500 ${darkMode ? 'bg-white/[0.02] border-white/5' : 'bg-slate-50/50 border-slate-100'}`}>
               <label className="block text-[10px] font-black uppercase tracking-widest text-slate-500 mb-3">
                 Bitácora de Observaciones
               </label>
@@ -360,7 +360,7 @@ const CameraForm = ({
                 value={formData.notes}
                 onChange={(e) => handleInputChange("notes", e.target.value)}
                 rows="3"
-                className={`w-full rounded-xl px-4 py-3 text-sm font-medium transition-all duration-300 outline-none border focus:ring-2 focus:ring-emerald-500/50 resize-none ${
+                className={`w-full px-4 py-3 text-sm font-medium transition-all duration-300 outline-none border focus:ring-2 focus:ring-emerald-500/50 resize-none ${
                   darkMode 
                     ? 'bg-white/5 border-white/10 text-white placeholder-slate-600 focus:border-emerald-500/50 hover:bg-white/10' 
                     : 'bg-white border-slate-200 text-slate-900 placeholder-slate-400 focus:border-emerald-500/50 hover:bg-slate-50'
@@ -379,7 +379,7 @@ const CameraForm = ({
           <button
             type="button"
             onClick={handleCancel}
-            className={`px-6 py-2.5 rounded-xl font-bold text-sm transition-all duration-300 ${
+            className={`px-6 py-2.5 font-bold text-sm transition-all duration-300 ${
               darkMode 
                 ? 'bg-white/5 text-slate-300 hover:bg-white/10 hover:text-white' 
                 : 'bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-900'
@@ -391,7 +391,7 @@ const CameraForm = ({
             type="submit"
             form="camera-form"
             disabled={!formData.id || !formData.location || !formData.serialNumber}
-            className="group px-6 py-2.5 rounded-xl font-bold text-sm bg-emerald-500 hover:bg-emerald-600 text-white disabled:bg-slate-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-xl shadow-emerald-500/20 active:scale-95 flex items-center justify-center space-x-2"
+            className="group px-6 py-2.5 font-bold text-sm bg-emerald-500 hover:bg-emerald-600 text-white disabled:bg-slate-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-xl shadow-emerald-500/20 active:scale-95 flex items-center justify-center space-x-2"
           >
             <Save className="w-4 h-4 transition-transform group-hover:scale-110" />
             <span>{isEditing ? "Guardar Cambios" : "Confirmar Registro"}</span>

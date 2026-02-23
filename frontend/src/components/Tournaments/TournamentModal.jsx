@@ -31,7 +31,7 @@ const TournamentModal = ({
       
       {/* Modal */}
       <div 
-        className={`w-full max-w-4xl relative z-10 shadow-2xl rounded-[2.5rem] border transition-all duration-500 p-8 max-h-[90vh] overflow-y-auto custom-scrollbar ${
+        className={`w-full max-w-4xl relative z-10 shadow-2xl border transition-all duration-500 p-8 max-h-[90vh] overflow-y-auto custom-scrollbar ${
           darkMode 
             ? 'bg-slate-900 border-white/5' 
             : 'bg-white border-black/5 shadow-slate-300'

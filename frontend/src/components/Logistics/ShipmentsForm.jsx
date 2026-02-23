@@ -184,7 +184,7 @@ const ShipmentForm = ({
         onClick={handleCancel} 
       />
       <div 
-        className={`relative w-full max-w-5xl rounded-[2rem] border shadow-2xl flex flex-col max-h-[95vh] sm:max-h-[90vh] overflow-hidden transition-all duration-500 ${
+        className={`relative w-full max-w-5xl border shadow-2xl flex flex-col max-h-[95vh] sm:max-h-[90vh] overflow-hidden transition-all duration-500 ${
           darkMode ? 'bg-slate-900 border-white/10 shadow-black' : 'bg-white border-black/5 shadow-slate-300'
         }`}
       >
@@ -200,7 +200,7 @@ const ShipmentForm = ({
           </div>
           <button
             onClick={handleCancel}
-            className={`p-3 rounded-2xl transition-all duration-300 ${
+            className={`p-3 transition-all duration-300 ${
               darkMode ? 'bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white' : 'bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-slate-900'
             }`}
           >
@@ -220,7 +220,7 @@ const ShipmentForm = ({
                 type="text"
                 value={formData.id}
                 onChange={(e) => handleInputChange("id", e.target.value)}
-                className={`w-full border rounded-2xl px-5 py-4 transition-all duration-300 outline-none font-mono ${
+                className={`w-full border px-5 py-4 transition-all duration-300 outline-none font-mono ${
                   darkMode 
                     ? 'bg-slate-950/50 border-white/5 text-slate-400' 
                     : 'bg-slate-50 border-slate-200 text-slate-500'
@@ -238,7 +238,7 @@ const ShipmentForm = ({
                 type="text"
                 value={formData.trackingNumber}
                 onChange={(e) => handleInputChange("trackingNumber", e.target.value)}
-                className={`w-full border rounded-2xl px-5 py-4 transition-all duration-300 outline-none focus:ring-2 focus:ring-emerald-500/50 ${
+                className={`w-full border px-5 py-4 transition-all duration-300 outline-none focus:ring-2 focus:ring-emerald-500/50 ${
                   darkMode 
                     ? 'bg-slate-950/50 border-white/5 text-white placeholder-slate-700' 
                     : 'bg-slate-50 border-slate-200 text-slate-900 placeholder-slate-400'
@@ -257,7 +257,7 @@ const ShipmentForm = ({
                 required
                 value={formData.date}
                 onChange={(e) => handleInputChange("date", e.target.value)}
-                className={`w-full border rounded-2xl px-5 py-4 transition-all duration-300 outline-none ${
+                className={`w-full border px-5 py-4 transition-all duration-300 outline-none ${
                    darkMode 
                   ? 'bg-slate-950/50 border-white/5 text-white scheme-dark' 
                   : 'bg-slate-50 border-slate-200 text-slate-900'
@@ -270,7 +270,7 @@ const ShipmentForm = ({
             {/* Sección Ruta */}
             <div className="space-y-6">
               <div className="flex items-center gap-3 mb-2">
-                <div className={`w-1.5 h-6 rounded-full ${darkMode ? 'bg-blue-500/50' : 'bg-blue-500'}`}></div>
+                <div className={`w-1.5 h-6 ${darkMode ? 'bg-blue-500/50' : 'bg-blue-500'}`}></div>
                 <h4 className={`text-xs font-black uppercase tracking-[0.2em] ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>Ruta Logística</h4>
               </div>
               
@@ -281,7 +281,7 @@ const ShipmentForm = ({
                     required
                     value={formData.origin}
                     onChange={(e) => handleInputChange("origin", e.target.value)}
-                    className={`w-full border rounded-2xl px-5 py-4 transition-all duration-300 outline-none ${
+                    className={`w-full border px-5 py-4 transition-all duration-300 outline-none ${
                       darkMode 
                         ? 'bg-slate-950/50 border-white/5 text-white' 
                         : 'bg-slate-50 border-slate-200 text-slate-900'
@@ -298,7 +298,7 @@ const ShipmentForm = ({
                     required
                     value={formData.destination}
                     onChange={(e) => handleInputChange("destination", e.target.value)}
-                    className={`w-full border rounded-2xl px-5 py-4 transition-all duration-300 outline-none ${
+                    className={`w-full border px-5 py-4 transition-all duration-300 outline-none ${
                         darkMode 
                       ? 'bg-slate-950/50 border-white/5 text-white' 
                       : 'bg-slate-50 border-slate-200 text-slate-900'
@@ -314,7 +314,7 @@ const ShipmentForm = ({
             {/* Sección Agentes */}
             <div className="space-y-6">
               <div className="flex items-center gap-3 mb-2">
-                <div className={`w-1.5 h-6 rounded-full ${darkMode ? 'bg-purple-500/50' : 'bg-purple-500'}`}></div>
+                <div className={`w-1.5 h-6 ${darkMode ? 'bg-purple-500/50' : 'bg-purple-500'}`}></div>
                 <h4 className={`text-xs font-black uppercase tracking-[0.2em] ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>Agentes Involucrados</h4>
               </div>
 
@@ -325,7 +325,7 @@ const ShipmentForm = ({
                     required
                     value={formData.shipper}
                     onChange={(e) => handleInputChange("shipper", e.target.value)}
-                    className={`w-full border rounded-2xl px-5 py-4 transition-all duration-300 outline-none ${
+                    className={`w-full border px-5 py-4 transition-all duration-300 outline-none ${
                         darkMode 
                       ? 'bg-slate-950/50 border-white/5 text-white' 
                       : 'bg-slate-50 border-slate-200 text-slate-900'
@@ -344,7 +344,7 @@ const ShipmentForm = ({
                     required
                     value={formData.recipient}
                     onChange={(e) => handleInputChange("recipient", e.target.value)}
-                    className={`w-full border rounded-2xl px-5 py-4 transition-all duration-300 outline-none ${
+                    className={`w-full border px-5 py-4 transition-all duration-300 outline-none ${
                       darkMode 
                         ? 'bg-slate-950/50 border-white/5 text-white' 
                         : 'bg-slate-50 border-slate-200 text-slate-900'
@@ -367,7 +367,7 @@ const ShipmentForm = ({
               <select
                 value={formData.status}
                 onChange={(e) => handleInputChange("status", e.target.value)}
-                className={`w-full border rounded-2xl px-5 py-4 transition-all duration-300 outline-none ${
+                className={`w-full border px-5 py-4 transition-all duration-300 outline-none ${
                     darkMode 
                   ? 'bg-slate-950/50 border-white/5 text-white' 
                   : 'bg-slate-50 border-slate-200 text-slate-900'
@@ -379,7 +379,7 @@ const ShipmentForm = ({
                 <option value="entregado">Entregado (Almacenado)</option>
                 <option value="cancelado">Cancelado (Anulado)</option>
               </select>
-              <div className={`mt-3 p-4 rounded-xl border flex items-center gap-3 transition-colors duration-500 ${darkMode ? 'bg-white/[0.01] border-white/5' : 'bg-slate-50/50 border-slate-100'}`}>
+              <div className={`mt-3 p-4 border flex items-center gap-3 transition-colors duration-500 ${darkMode ? 'bg-white/[0.01] border-white/5' : 'bg-slate-50/50 border-slate-100'}`}>
                 <MessageCircle className="w-3.5 h-3.5 text-blue-500" />
                 <p className="text-[9px] font-bold uppercase tracking-tight text-slate-500">
                   {formData.status === "enviado" && 'Cambio automático: Unidades en estado "EN TRANSITO"'}
@@ -399,7 +399,7 @@ const ShipmentForm = ({
                   type="text"
                   value={formData.sender}
                   onChange={(e) => handleInputChange("sender", e.target.value)}
-                  className={`w-full border rounded-2xl pl-12 pr-5 py-4 transition-all duration-300 outline-none focus:ring-2 focus:ring-emerald-500/50 ${
+                  className={`w-full border pl-12 pr-5 py-4 transition-all duration-300 outline-none focus:ring-2 focus:ring-emerald-500/50 ${
                      darkMode 
                     ? 'bg-slate-950/50 border-white/5 text-white' 
                     : 'bg-slate-50 border-slate-200 text-slate-900'
@@ -419,7 +419,7 @@ const ShipmentForm = ({
                 value={formData.extraItems}
                 onChange={(e) => handleInputChange("extraItems", e.target.value)}
                 rows="3"
-                className={`w-full border rounded-3xl pl-12 pr-6 py-5 transition-all duration-300 outline-none focus:ring-2 focus:ring-emerald-500/50 resize-none ${
+                className={`w-full border pl-12 pr-6 py-5 transition-all duration-300 outline-none focus:ring-2 focus:ring-emerald-500/50 resize-none ${
                     darkMode 
                   ? 'bg-slate-950/50 border-white/5 text-white placeholder-slate-700' 
                   : 'bg-slate-50 border-slate-200 text-slate-900 placeholder-slate-400'
@@ -432,11 +432,11 @@ const ShipmentForm = ({
           {/* Selección de Cámaras */}
           <div className="space-y-6">
             <div className="flex items-center gap-3 mb-2">
-              <div className={`w-1.5 h-6 rounded-full ${darkMode ? 'bg-emerald-500/50' : 'bg-emerald-500'}`}></div>
+              <div className={`w-1.5 h-6 ${darkMode ? 'bg-emerald-500/50' : 'bg-emerald-500'}`}></div>
               <h4 className={`text-xs font-black uppercase tracking-[0.2em] ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>Asignación de Unidades PIX</h4>
             </div>
 
-            <div className={`rounded-3xl border transition-all duration-500 ${darkMode ? 'bg-white/[0.01] border-white/5' : 'bg-slate-50/50 border-slate-200'}`}>
+            <div className={`border transition-all duration-500 ${darkMode ? 'bg-white/[0.01] border-white/5' : 'bg-slate-50/50 border-slate-200'}`}>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-8 max-h-[350px] overflow-y-auto custom-scrollbar">
                 {availableCameras.length > 0 ? (
                   availableCameras.map((camera) => (
@@ -444,7 +444,7 @@ const ShipmentForm = ({
                       key={camera.id}
                       type="button"
                       onClick={() => handleCameraSelection(camera.id)}
-                      className={`p-5 rounded-[2rem] border text-left transition-all duration-300 group relative flex items-start gap-4 ${
+                      className={`p-5 border text-left transition-all duration-300 group relative flex items-start gap-4 ${
                         formData.cameras.includes(camera.id)
                           ? darkMode 
                             ? 'bg-emerald-500/10 border-emerald-500/50 text-emerald-400 ring-2 ring-emerald-500/20' 
@@ -454,7 +454,7 @@ const ShipmentForm = ({
                             : 'bg-white border-slate-200 text-slate-900 hover:border-slate-400 shadow-sm'
                       }`}
                     >
-                      <div className={`p-2 rounded-xl transition-colors duration-300 ${
+                      <div className={`p-2 transition-colors duration-300 ${
                          formData.cameras.includes(camera.id)
                          ? darkMode ? 'bg-emerald-500/20' : 'bg-white/20'
                          : darkMode ? 'bg-white/5' : 'bg-slate-100'
@@ -465,7 +465,7 @@ const ShipmentForm = ({
                         <div className="text-xs font-black transition-colors duration-300 mb-0.5">{camera.id}</div>
                         <div className="text-[10px] font-bold opacity-60 truncate uppercase tracking-tighter mb-1">{camera.model}</div>
                         <div className="flex items-center gap-2">
-                          <span className={`text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded ${
+                          <span className={`text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 ${
                             camera.status === 'disponible' 
                               ? formData.cameras.includes(camera.id) && !darkMode ? 'bg-white/20 text-white' : 'bg-emerald-500/20 text-emerald-500'
                               : formData.cameras.includes(camera.id) && !darkMode ? 'bg-white/20 text-white' : 'bg-blue-500/20 text-blue-500'
@@ -491,7 +491,7 @@ const ShipmentForm = ({
           </div>
 
           {/* Panel de Consolidación */}
-          <section className={`rounded-[2.5rem] p-10 border transition-all duration-500 ${
+          <section className={`p-10 border transition-all duration-500 ${
             darkMode ? 'bg-emerald-500/[0.02] border-emerald-500/10' : 'bg-slate-50 border-slate-100 shadow-xl shadow-slate-200/50'
           }`}>
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-10">
@@ -525,14 +525,14 @@ const ShipmentForm = ({
               <button
                 type="submit"
                 disabled={!formData.destination || !formData.recipient || !formData.date || !formData.shipper}
-                className="flex-grow bg-emerald-500 text-white font-black py-5 rounded-2xl hover:bg-emerald-400 disabled:bg-slate-500 disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-2xl shadow-emerald-500/20 active:scale-[0.98] uppercase tracking-[0.2em] text-xs"
+                className="flex-grow bg-emerald-500 text-white font-black py-5 hover:bg-emerald-400 disabled:bg-slate-500 disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-2xl shadow-emerald-500/20 active:scale-[0.98] uppercase tracking-[0.2em] text-xs"
               >
                 {isEditing ? "Consolidar Actualización de Tránsito" : "Autorizar y Lanzar Envío"}
               </button>
               <button
                 type="button"
                 onClick={handleCancel}
-                className={`px-12 py-5 rounded-2xl font-black uppercase tracking-widest text-xs transition-all duration-300 border ${
+                className={`px-12 py-5 font-black uppercase tracking-widest text-xs transition-all duration-300 border ${
                   darkMode 
                     ? 'bg-white/5 border-white/5 text-slate-400 hover:bg-white/10 hover:text-white' 
                     : 'bg-slate-100 border-slate-200 text-slate-500 hover:bg-slate-200 hover:text-slate-900'
