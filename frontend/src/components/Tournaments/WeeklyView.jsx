@@ -62,12 +62,13 @@ const StatusBadge = ({ status, small = false }) => {
   );
 };
 
-const WeeklyView = ({
+const WeeklyView = ({ 
   tournaments = [],
   onViewDetails = () => {},
   onEditTournament = () => {},
   onDeleteTournament = () => {},
   onUpdateStatus = () => {},
+  darkMode = true 
 }) => {
   const [currentWeek, setCurrentWeek] = useState(new Date());
   const [selectedDay, setSelectedDay] = useState(null);
@@ -220,32 +221,32 @@ const WeeklyView = ({
   return (
     <div className="space-y-8">
       {/* Header con navegación y stats premium */}
-      <div className="glass-card rounded-3xl p-8 relative overflow-hidden border-white/5 shadow-2xl">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 blur-[100px] rounded-full -mr-32 -mt-32"></div>
+      <div className={`rounded-3xl p-8 relative overflow-hidden transition-all duration-300 ${darkMode ? 'glass-card border-white/5 shadow-2xl' : 'bg-white border border-slate-200 shadow-xl'}`}>
+        {darkMode && <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 blur-[100px] rounded-full -mr-32 -mt-32"></div>}
         
         <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8">
           <div className="flex items-center gap-6">
-            <div className="flex bg-white/5 rounded-2xl p-1.5 border border-white/10 backdrop-blur-xl">
+            <div className={`flex rounded-2xl p-1.5 border backdrop-blur-xl ${darkMode ? 'bg-white/5 border-white/10' : 'bg-slate-100 border-black/5'}`}>
               <button
                 onClick={goToPreviousWeek}
-                className="p-3 hover:bg-white/10 rounded-xl transition-all duration-300 text-gray-400 hover:text-white"
+                className={`p-3 rounded-xl transition-all duration-300 ${darkMode ? 'hover:bg-white/10 text-gray-400 hover:text-white' : 'hover:bg-white text-slate-500 hover:text-slate-900'}`}
               >
                 <ChevronLeft className="w-5 h-5" />
               </button>
               <button
                 onClick={goToNextWeek}
-                className="p-3 hover:bg-white/10 rounded-xl transition-all duration-300 text-gray-400 hover:text-white"
+                className={`p-3 rounded-xl transition-all duration-300 ${darkMode ? 'hover:bg-white/10 text-gray-400 hover:text-white' : 'hover:bg-white text-slate-500 hover:text-slate-900'}`}
               >
                 <ChevronRight className="w-5 h-5" />
               </button>
             </div>
 
             <div className="space-y-1">
-              <h3 className="text-3xl font-bold text-white capitalize tracking-tight">
+              <h3 className={`text-3xl font-bold capitalize tracking-tight ${darkMode ? 'text-white' : 'text-slate-900'}`}>
                 {weekDays[0].toLocaleDateString("es-MX", { month: "long", year: "numeric" })}
               </h3>
-              <p className="text-gray-500 font-medium text-sm flex items-center gap-2">
-                <Calendar className="w-3.5 h-3.5 text-emerald-500/50" />
+              <p className={`font-medium text-sm flex items-center gap-2 ${darkMode ? 'text-gray-500' : 'text-slate-500'}`}>
+                <Calendar className={`w-3.5 h-3.5 ${darkMode ? 'text-emerald-500/50' : 'text-emerald-500'}`} />
                 Semana: {weekDays[0].getDate()} - {weekDays[6].getDate()} de {weekDays[6].toLocaleDateString("es-MX", { month: "short" })}
               </p>
             </div>
@@ -258,14 +259,14 @@ const WeeklyView = ({
               { label: 'Multidía', count: multiDayTournaments, color: 'purple' },
             ].map((stat, i) => (
               <div key={i} className="flex flex-col items-center">
-                <span className="text-2xl font-bold text-white leading-none">{stat.count}</span>
-                <span className={`text-[10px] font-bold uppercase tracking-[0.2em] text-${stat.color}-400/70 mt-2`}>{stat.label}</span>
+                <span className={`text-2xl font-bold leading-none ${darkMode ? 'text-white' : 'text-slate-900'}`}>{stat.count}</span>
+                <span className={`text-[10px] font-bold uppercase tracking-[0.2em] mt-2 ${darkMode ? `text-${stat.color}-400/70` : `text-${stat.color}-500/80`}`}>{stat.label}</span>
               </div>
             ))}
-            <div className="h-10 w-px bg-white/10 hidden md:block"></div>
+            <div className={`h-10 w-px hidden md:block ${darkMode ? 'bg-white/10' : 'bg-slate-200'}`}></div>
             <button
                onClick={goToToday}
-               className="group flex items-center gap-2 bg-white/5 hover:bg-emerald-500 text-gray-300 hover:text-white px-5 py-2.5 rounded-2xl border border-white/10 hover:border-emerald-400/50 transition-all duration-300 font-bold text-sm shadow-xl"
+               className={`group flex items-center gap-2 px-5 py-2.5 rounded-2xl border transition-all duration-300 font-bold text-sm shadow-xl ${darkMode ? 'bg-white/5 hover:bg-emerald-500 text-gray-300 hover:text-white border-white/10 hover:border-emerald-400/50' : 'bg-white hover:bg-emerald-50 text-slate-600 hover:text-emerald-700 border-black/5 hover:border-emerald-200 shadow-slate-200'}`}
             >
               <Clock className="w-4 h-4 group-hover:rotate-12 transition-transform" />
               Semana Actual
@@ -293,10 +294,10 @@ const WeeklyView = ({
               <div
                 className={`flex-grow rounded-3xl border transition-all duration-500 overflow-hidden relative ${
                   today
-                    ? "border-emerald-500/40 bg-emerald-500/5 shadow-[0_0_20px_rgba(16,185,129,0.1)]"
+                    ? (darkMode ? "border-emerald-500/40 bg-emerald-500/5 shadow-[0_0_20px_rgba(16,185,129,0.1)]" : "border-emerald-500 bg-emerald-50 shadow-[0_0_20px_rgba(16,185,129,0.1)]")
                     : isSelected
-                    ? "border-blue-500 bg-blue-500/10 shadow-[0_0_20px_rgba(59,130,246,0.15)]"
-                    : "border-white/5 bg-white/[0.03] hover:bg-white/[0.06] hover:border-white/10"
+                    ? (darkMode ? "border-blue-500 bg-blue-500/10 shadow-[0_0_20px_rgba(59,130,246,0.15)]" : "border-blue-500 bg-blue-50 shadow-[0_0_20px_rgba(59,130,246,0.15)]")
+                    : (darkMode ? "border-white/5 bg-white/[0.03] hover:bg-white/[0.06] hover:border-white/10" : "border-black/5 bg-white hover:bg-slate-50 hover:border-black/10 shadow-sm")
                 }`}
               >
                 {/* Indicador de Hoyt */}
@@ -307,11 +308,11 @@ const WeeklyView = ({
                 )}
 
                 {/* Header del día compacto */}
-                <div className={`p-4 ${today ? "bg-emerald-500/10" : isSelected ? "bg-blue-500/10" : "bg-white/5"}`}>
-                  <p className={`text-[10px] font-black uppercase tracking-widest ${today ? "text-emerald-400" : isSelected ? "text-blue-400" : "text-gray-500"}`}>
+                <div className={`p-4 ${today ? (darkMode ? "bg-emerald-500/10" : "bg-emerald-100/50") : isSelected ? (darkMode ? "bg-blue-500/10" : "bg-blue-100/50") : (darkMode ? "bg-white/5" : "bg-slate-50")}`}>
+                  <p className={`text-[10px] font-black uppercase tracking-widest ${today ? (darkMode ? "text-emerald-400" : "text-emerald-600") : isSelected ? (darkMode ? "text-blue-400" : "text-blue-600") : (darkMode ? "text-gray-500" : "text-slate-400")}`}>
                     {day.toLocaleDateString("es-MX", { weekday: "short" })}
                   </p>
-                  <p className={`text-2xl font-black mt-1 ${today ? "text-white" : isSelected ? "text-white" : "text-gray-300"}`}>
+                  <p className={`text-2xl font-black mt-1 ${today ? (darkMode ? "text-white" : "text-emerald-700") : isSelected ? (darkMode ? "text-white" : "text-blue-700") : (darkMode ? "text-gray-300" : "text-slate-800")}`}>
                     {day.getDate()}
                   </p>
                 </div>
@@ -326,7 +327,7 @@ const WeeklyView = ({
                             t.status === 'pendiente' ? 'bg-yellow-500 shadow-[0_0_8px_rgba(234,179,8,0.6)]' :
                             'bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.6)]'
                          }`}></div>
-                         <p className="text-[10px] font-semibold text-gray-400 truncate group-hover/item:text-white transition-colors">{t.name}</p>
+                         <p className={`text-[10px] font-semibold truncate transition-colors ${darkMode ? 'text-gray-400 group-hover/item:text-white' : 'text-slate-600 group-hover/item:text-slate-900'}`}>{t.name}</p>
                       </div>
                     ))
                   ) : (
@@ -354,17 +355,17 @@ const WeeklyView = ({
       {selectedDay &&
         tournamentsByDay[selectedDay] &&
         tournamentsByDay[selectedDay].length > 0 && (
-          <div className="rounded-2xl border border-blue-500/30 p-6 animate-in fade-in slide-in-duration-300">
+          <div className={`rounded-2xl border p-6 animate-in fade-in slide-in-duration-300 ${darkMode ? 'border-blue-500/30' : 'bg-blue-50/50 border-blue-200'}`}>
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-bold text-white flex items-center">
-                <Calendar className="w-5 h-5 mr-2 text-blue-400" />
+              <h3 className={`text-xl font-bold flex items-center ${darkMode ? 'text-white' : 'text-slate-900'}`}>
+                <Calendar className={`w-5 h-5 mr-2 ${darkMode ? 'text-blue-400' : 'text-blue-500'}`} />
                 {formatDate(new Date(selectedDay + "T12:00:00"))}
               </h3>
               <button
                 onClick={() => setSelectedDay(null)}
-                className="text-gray-400 hover:text-white transition-colors"
+                className={`transition-colors ${darkMode ? 'text-gray-400 hover:text-white' : 'text-slate-500 hover:text-slate-900'}`}
               >
-                <span className="text-sm">Cerrar</span>
+                <span className="text-sm font-bold">Cerrar</span>
               </button>
             </div>
 
@@ -376,14 +377,13 @@ const WeeklyView = ({
                 return (
                   <div
                     key={tournament.id}
-                    className="bg-white/5 rounded-xl border border-white/10 hover:border-blue-500/30 transition-all duration-200 overflow-hidden group"
+                    className={`rounded-xl border transition-all duration-200 overflow-hidden group ${darkMode ? 'bg-white/5 border-white/10 hover:border-blue-500/30' : 'bg-white border-black/5 shadow-sm hover:border-blue-300'}`}
                   >
                     <div className="p-5">
-                      {/* Header */}
                       <div className="flex items-start justify-between mb-4">
                         <div className="flex-1">
                           <div className="flex items-center space-x-2 mb-2">
-                            <h4 className="font-bold text-white text-lg group-hover:text-blue-400 transition-colors">
+                            <h4 className={`font-bold text-lg transition-colors ${darkMode ? 'text-white group-hover:text-blue-400' : 'text-slate-900 group-hover:text-blue-600'}`}>
                               {tournament.name}
                             </h4>
                             {isMultiDay && (
@@ -400,45 +400,45 @@ const WeeklyView = ({
                       {/* Info Grid */}
                       <div className="grid grid-cols-2 gap-4 mb-4">
                         <div className="flex items-start space-x-3">
-                          <div className="p-2 bg-white/5 rounded-lg">
-                            <MapPin className="w-4 h-4 text-emerald-400" />
+                          <div className={`p-2 rounded-lg ${darkMode ? 'bg-white/5' : 'bg-slate-100'}`}>
+                            <MapPin className={`w-4 h-4 ${darkMode ? 'text-emerald-400' : 'text-emerald-500'}`} />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <div className="text-xs text-gray-400 mb-0.5">
+                            <div className={`text-xs mb-0.5 ${darkMode ? 'text-gray-400' : 'text-slate-500'}`}>
                               Ubicación
                             </div>
-                            <div className="text-sm text-white font-medium truncate">
+                            <div className={`text-sm font-medium truncate ${darkMode ? 'text-white' : 'text-slate-900'}`}>
                               {tournament.field}
                             </div>
-                            <div className="text-xs text-gray-400">
+                            <div className={`text-xs ${darkMode ? 'text-gray-400' : 'text-slate-500'}`}>
                               {tournament.state}
                             </div>
                           </div>
                         </div>
 
                         <div className="flex items-start space-x-3">
-                          <div className="p-2 bg-white/5 rounded-lg">
-                            <Users className="w-4 h-4 text-blue-400" />
+                          <div className={`p-2 rounded-lg ${darkMode ? 'bg-white/5' : 'bg-slate-100'}`}>
+                            <Users className={`w-4 h-4 ${darkMode ? 'text-blue-400' : 'text-blue-500'}`} />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <div className="text-xs text-gray-400 mb-0.5">
+                            <div className={`text-xs mb-0.5 ${darkMode ? 'text-gray-400' : 'text-slate-500'}`}>
                               Trabajador
                             </div>
-                            <div className="text-sm text-white font-medium truncate">
+                            <div className={`text-sm font-medium truncate ${darkMode ? 'text-white' : 'text-slate-900'}`}>
                               {tournament.worker || "Por asignar"}
                             </div>
                           </div>
                         </div>
 
                         <div className="flex items-start space-x-3">
-                          <div className="p-2 bg-white/5 rounded-lg">
-                            <Camera className="w-4 h-4 text-purple-400" />
+                          <div className={`p-2 rounded-lg ${darkMode ? 'bg-white/5' : 'bg-slate-100'}`}>
+                            <Camera className={`w-4 h-4 ${darkMode ? 'text-purple-400' : 'text-purple-500'}`} />
                           </div>
                           <div className="flex-1">
-                            <div className="text-xs text-gray-400 mb-0.5">
+                            <div className={`text-xs mb-0.5 ${darkMode ? 'text-gray-400' : 'text-slate-500'}`}>
                               Cámaras
                             </div>
-                            <div className="text-sm text-white font-medium">
+                            <div className={`text-sm font-medium ${darkMode ? 'text-white' : 'text-slate-900'}`}>
                               {tournament.cameras &&
                               tournament.cameras.length > 0
                                 ? `${tournament.cameras.length} asignadas`
@@ -448,14 +448,14 @@ const WeeklyView = ({
                         </div>
 
                         <div className="flex items-start space-x-3">
-                          <div className="p-2 bg-white/5 rounded-lg">
-                            <TrendingUp className="w-4 h-4 text-yellow-400" />
+                          <div className={`p-2 rounded-lg ${darkMode ? 'bg-white/5' : 'bg-slate-100'}`}>
+                            <TrendingUp className={`w-4 h-4 ${darkMode ? 'text-amber-400' : 'text-amber-500'}`} />
                           </div>
                           <div className="flex-1">
-                            <div className="text-xs text-gray-400 mb-0.5">
+                            <div className={`text-xs mb-0.5 ${darkMode ? 'text-gray-400' : 'text-slate-500'}`}>
                               Hoyos
                             </div>
-                            <div className="text-sm text-white font-medium">
+                            <div className={`text-sm font-medium ${darkMode ? 'text-white' : 'text-slate-900'}`}>
                               {tournament.holes > 0
                                 ? `${tournament.holes} hoyos`
                                 : "Por definir"}
@@ -466,7 +466,7 @@ const WeeklyView = ({
 
                       {/* Fechas para torneos multi-día */}
                       {isMultiDay && (
-                        <div className="mb-4 inline-flex items-center space-x-2 bg-blue-500/20 text-blue-400 px-3 py-1.5 rounded-lg text-sm">
+                        <div className={`mb-4 inline-flex items-center space-x-2 px-3 py-1.5 rounded-lg text-sm ${darkMode ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-50 text-blue-600 border border-blue-200'}`}>
                           <Calendar className="w-4 h-4" />
                           <span className="font-medium">
                             {parseLocalDate(tournament.date).toLocaleDateString(
@@ -481,24 +481,24 @@ const WeeklyView = ({
                       )}
 
                       {/* Acciones */}
-                      <div className="flex items-center space-x-2 pt-4 border-t border-white/10">
+                      <div className={`flex items-center space-x-2 pt-4 border-t ${darkMode ? 'border-white/10' : 'border-slate-100'}`}>
                         <button
                           onClick={() => onViewDetails(tournament)}
-                          className="flex-1 bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 py-2.5 rounded-lg transition-all font-medium flex items-center justify-center space-x-2"
+                          className={`flex-1 py-2.5 rounded-lg transition-all font-medium flex items-center justify-center space-x-2 ${darkMode ? 'bg-blue-500/20 hover:bg-blue-500/30 text-blue-400' : 'bg-slate-50 border border-slate-200 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200 text-slate-600'}`}
                         >
                           <Eye className="w-4 h-4" />
                           <span>Ver Detalles</span>
                         </button>
                         <button
                           onClick={() => onEditTournament(tournament)}
-                          className="flex-1 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 py-2.5 rounded-lg transition-all font-medium flex items-center justify-center space-x-2"
+                          className={`flex-1 py-2.5 rounded-lg transition-all font-medium flex items-center justify-center space-x-2 ${darkMode ? 'bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400' : 'bg-slate-50 border border-slate-200 hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-200 text-slate-600'}`}
                         >
                           <Edit className="w-4 h-4" />
                           <span>Editar</span>
                         </button>
                         <button
                           onClick={() => onDeleteTournament(tournament.id)}
-                          className="p-2.5 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-lg transition-all"
+                          className={`p-2.5 rounded-lg transition-all ${darkMode ? 'bg-red-500/20 hover:bg-red-500/30 text-red-400' : 'bg-white border border-slate-200 text-red-500 hover:bg-red-50 hover:border-red-200'}`}
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>

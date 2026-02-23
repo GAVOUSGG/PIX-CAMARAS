@@ -274,7 +274,7 @@ const Tournaments = ({
         <div>
           <h2 className={`text-3xl font-bold tracking-tight transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>Gestión de <span className="text-emerald-500">Torneos</span></h2>
           <p className="text-slate-500 mt-1">
-            Visualización y control de eventos: {filteredTournaments.length} resultados encontrados.
+            Visualización y control de torneos: {filteredTournaments.length} resultados encontrados.
           </p>
         </div>
 
@@ -593,6 +593,7 @@ const Tournaments = ({
           workers={workersData}
           cameras={camerasData}
           tournament={editingTournament}
+          darkMode={darkMode}
         />
       </Suspense>
 
@@ -601,6 +602,7 @@ const Tournaments = ({
           <TournamentDetailsModal 
             tournament={selectedTournament} 
             onClose={() => setSelectedTournament(null)} 
+            darkMode={darkMode}
           />
         </Suspense>
       )}
