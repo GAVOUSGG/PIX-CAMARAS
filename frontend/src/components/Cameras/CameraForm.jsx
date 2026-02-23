@@ -232,7 +232,7 @@ const CameraForm = ({
 
               <div>
                 <label className="block text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2">
-                  Tipo Energético
+                  Tipo
                 </label>
                 <div className="relative">
                   <select
@@ -244,9 +244,7 @@ const CameraForm = ({
                         : 'bg-slate-50 border-slate-200 text-slate-900 focus:border-emerald-500/50 hover:bg-slate-100'
                     }`}
                   >
-                    <option value="Solar" className={darkMode ? "bg-slate-800 text-white" : "bg-white text-slate-900"}>Autónoma Solar</option>
-                    <option value="Eléctrica" className={darkMode ? "bg-slate-800 text-white" : "bg-white text-slate-900"}>Cableada Eléctrica</option>
-                    <option value="Híbrida" className={darkMode ? "bg-slate-800 text-white" : "bg-white text-slate-900"}>Mixta Híbrida</option>
+                    <option value="Solar" className={darkMode ? "bg-slate-800 text-white" : "bg-white text-slate-900"}> Solar</option>
                   </select>
                 </div>
               </div>
@@ -256,7 +254,7 @@ const CameraForm = ({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2">
-                  Estatus Operativo
+                  Estatus Cámara
                 </label>
                 <div className="relative">
                   <select
@@ -281,7 +279,7 @@ const CameraForm = ({
               <div>
                 <label className="block text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2 flex items-center">
                   <MapPin className="w-3.5 h-3.5 mr-1.5" />
-                  Base de Ubicación *
+                  Ubicación *
                 </label>
                 <div className="relative">
                   <select
@@ -310,7 +308,7 @@ const CameraForm = ({
               <div>
                 <label className="block text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2 flex items-center">
                   <MessageCircle className="w-3.5 h-3.5 mr-1.5" />
-                  Conectividad SIM (Si aplica)
+                  Numero de telefono
                 </label>
                 <input
                   type="text"
@@ -341,7 +339,7 @@ const CameraForm = ({
                     }`}
                   >
                     <option value="" className={darkMode ? "bg-slate-800 text-white" : "bg-white text-slate-900"}>Ninguno (En Almacén)</option>
-                    {workers.map((worker) => (
+                    {[...workers].sort((a, b) => a.name.localeCompare(b.name)).map((worker) => (
                       <option key={worker.id} value={worker.name} className={darkMode ? "bg-slate-800 text-white" : "bg-white text-slate-900"}>
                         {worker.name} ({worker.state})
                       </option>

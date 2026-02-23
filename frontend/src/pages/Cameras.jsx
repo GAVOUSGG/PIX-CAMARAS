@@ -187,7 +187,7 @@ const Cameras = ({ camerasData, workersData, onCreateCamera, onUpdateCamera, onD
             className="group bg-emerald-500 hover:bg-emerald-600 text-white px-5 py-2.5 rounded-xl transition-all flex items-center justify-center space-x-2 font-bold text-sm shadow-lg shadow-emerald-500/20 active:scale-95"
           >
             <Plus className="w-5 h-5 transition-transform group-hover:rotate-90" />
-            <span>Agregar</span>
+            <span>Agregar Cámara</span>
           </button>
         </div>
       </div>

@@ -16,32 +16,17 @@ import CameraMobileCard from "./CameraMobileCard";
 const CameraRow = memo(({ camera, onEdit, onDelete, onView, onInspect, darkMode = true }) => {
   const [showMenu, setShowMenu] = useState(false);
 
-  const getTypeBadgeColor = (type) => {
-    switch (type) {
-      case "Solar": return darkMode ? "bg-amber-500/10 text-amber-400 border-amber-500/20" : "bg-amber-50 text-amber-600 border-amber-100";
-      case "Eléctrica": return darkMode ? "bg-blue-500/10 text-blue-400 border-blue-500/20" : "bg-blue-50 text-blue-600 border-blue-100";
-      case "Híbrida": return darkMode ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" : "bg-emerald-50 text-emerald-600 border-emerald-100";
-      default: return darkMode ? "bg-slate-500/10 text-slate-400 border-slate-500/20" : "bg-slate-50 text-slate-500 border-slate-200";
-    }
-  };
-
   const getAssignmentBadge = (camera) => {
     if (camera.assignedTo) {
       return (
-        <div className="flex items-center space-x-3">
-          <div className={`p-1.5 rounded-lg ${darkMode ? 'bg-emerald-500/10' : 'bg-emerald-50'}`}>
-            <UserCheck className={`w-4 h-4 ${darkMode ? 'text-emerald-400' : 'text-emerald-600'}`} />
-          </div>
-          <div>
-            <div className={`text-xs font-black uppercase tracking-wider transition-colors duration-500 ${darkMode ? 'text-emerald-400' : 'text-emerald-700'}`}>{camera.assignedTo}</div>
-            {camera.assignedWorkerId && <div className="text-[10px] font-bold text-slate-500">ID: {camera.assignedWorkerId}</div>}
-          </div>
+        <div>
+          <div className={`text-xs font-black uppercase tracking-wider transition-colors duration-500 ${darkMode ? 'text-emerald-400' : 'text-emerald-700'}`}>{camera.assignedTo}</div>
+          {camera.assignedWorkerId && <div className="text-[10px] font-bold text-slate-500">ID: {camera.assignedWorkerId}</div>}
         </div>
       );
     }
     return (
-      <div className="flex items-center space-x-3 opacity-60">
-        <UserX className={`w-4 h-4 ${darkMode ? 'text-slate-600' : 'text-slate-400'}`} />
+      <div className="opacity-60">
         <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 italic">No asignada</span>
       </div>
     );
@@ -50,24 +35,13 @@ const CameraRow = memo(({ camera, onEdit, onDelete, onView, onInspect, darkMode 
   return (
     <tr className={`transition-all duration-300 ${darkMode ? 'hover:bg-white/[0.02]' : 'hover:bg-slate-50'}`}>
       <td className="px-6 py-5 whitespace-nowrap">
-        <div className="flex items-center space-x-3">
-          <div className={`p-2 rounded-lg ${darkMode ? 'bg-white/5 text-slate-400' : 'bg-slate-50 text-slate-500'}`}>
-            <Camera className="w-4 h-4" />
-          </div>
-          <div>
-            <div className={`text-sm font-black font-mono transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>{camera.id}</div>
-            {camera.assignedTo && <div className="text-[9px] font-black uppercase tracking-widest text-emerald-500">Activa</div>}
-          </div>
+        <div>
+          <div className={`text-sm font-black font-mono transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>{camera.id}</div>
+          {camera.assignedTo && <div className="text-[9px] font-black uppercase tracking-widest text-emerald-500">Activa</div>}
         </div>
       </td>
-      <td className="px-6 py-5 whitespace-nowrap">
-        <div className={`text-xs font-bold transition-colors duration-500 ${darkMode ? 'text-slate-300' : 'text-slate-700'}`}>{camera.model}</div>
-      </td>
-      <td className="px-6 py-5 whitespace-nowrap">
-        <div className={`px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border flex items-center space-x-1.5 w-fit ${getTypeBadgeColor(camera.type)}`}>
-          <span>{camera.type}</span>
-        </div>
-      </td>
+
+
       <td className="px-6 py-5 whitespace-nowrap">
         <div className="flex items-center space-x-2">
           <Hash className={`w-3.5 h-3.5 ${darkMode ? 'text-slate-500' : 'text-slate-400'}`} />
@@ -75,10 +49,7 @@ const CameraRow = memo(({ camera, onEdit, onDelete, onView, onInspect, darkMode 
         </div>
       </td>
       <td className="px-6 py-5 whitespace-nowrap">
-        <div className="flex items-center space-x-2">
-          <MessageCircle className={`w-3.5 h-3.5 ${darkMode ? 'text-slate-500' : 'text-slate-400'}`} />
-          <div className={`text-xs font-mono font-black tracking-tighter transition-colors duration-500 ${darkMode ? 'text-slate-300' : 'text-slate-600'}`}>{camera.simNumber || <span className="opacity-40 italic">N/A</span>}</div>
-        </div>
+        <div className={`text-xs font-mono font-black tracking-tighter transition-colors duration-500 ${darkMode ? 'text-slate-300' : 'text-slate-600'}`}>{camera.simNumber || <span className="opacity-40 italic">N/A</span>}</div>
       </td>
       <td className="px-6 py-5 whitespace-nowrap">
         <StatusBadge status={camera.status} darkMode={darkMode} />
@@ -215,10 +186,10 @@ const CamerasTable = ({
           <thead className={darkMode ? 'bg-white/[0.02]' : 'bg-slate-50/50'}>
             <tr>
               {[
-                "ID Unidad", "Modelo", "Tipo", "N° Serie", "SIM", 
+                "ID Unidad", "N° Serie", "SIM", 
                 "Estatus", "Ubicación", "Asignada a", "Acciones"
               ].map((h, i) => (
-                <th key={h} className={`px-6 py-4 text-left text-[10px] font-black uppercase tracking-[0.2em] ${darkMode ? 'text-slate-500' : 'text-slate-400'} ${i === 8 ? 'text-right' : ''}`}>
+                <th key={h} className={`px-6 py-4 text-left text-[10px] font-black uppercase tracking-[0.2em] ${darkMode ? 'text-slate-500' : 'text-slate-400'} ${i === 6 ? 'text-right' : ''}`}>
                   {h}
                 </th>
               ))}
@@ -239,7 +210,7 @@ const CamerasTable = ({
               ))
             ) : (
               <tr>
-                <td colSpan="9" className="px-6 py-20 text-center">
+                <td colSpan="7" className="px-6 py-20 text-center">
                   <div className="flex flex-col items-center gap-4 opacity-20">
                     <Camera className={`w-12 h-12 ${darkMode ? 'text-white' : 'text-slate-900'}`} />
                     <p className="text-[10px] font-black uppercase tracking-widest md:tracking-[0.4em] text-slate-500">Base de datos de unidades vacía</p>
