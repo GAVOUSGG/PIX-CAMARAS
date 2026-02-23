@@ -14,10 +14,10 @@ const ActiveTournaments = memo(({ tournaments, darkMode }) => {
     <>
       <div className={`rounded-3xl p-5 lg:p-6 h-full border shadow-lg relative overflow-hidden transition-all duration-500 transform-gpu ${
         darkMode 
-          ? 'bg-gradient-to-br from-slate-900/90 to-[#0B1120] border-white/5' 
+          ? 'border-white/5' 
           : 'bg-white border-black/5 shadow-slate-200 shadow-sm'
       }`}>
-        <div className={`absolute -right-24 -top-24 w-64 h-64 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-emerald-500/20 via-emerald-500/5 to-transparent rounded-full transition-opacity duration-500 pointer-events-none ${darkMode ? 'opacity-40' : 'opacity-10'}`}></div>
+        <div className={`absolute -right-24 -top-24 w-64 h-64 rounded-full transition-opacity duration-500 pointer-events-none ${darkMode ? 'opacity-40' : 'opacity-10'}`}></div>
 
         <div className="flex items-center justify-between mb-6 relative z-10">
           <div className="flex items-center gap-2.5">

@@ -312,7 +312,7 @@ const Tournaments = ({
 
           <button
             onClick={() => setShowForm(true)}
-            className="group bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white px-5 py-2.5 rounded-2xl transition-all duration-300 flex items-center space-x-2 shadow-lg shadow-emerald-500/10 hover:shadow-emerald-500/20 active:scale-95"
+            className="group hover:hover:text-white px-5 py-2.5 rounded-2xl transition-all duration-300 flex items-center space-x-2 shadow-lg shadow-emerald-500/10 hover:shadow-emerald-500/20 active:scale-95"
           >
             <Plus className="w-5 h-5" />
             <span className="font-semibold">Nuevo Torneo</span>

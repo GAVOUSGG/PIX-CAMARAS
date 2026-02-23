@@ -47,7 +47,7 @@ const WorkerCard = ({ worker, onClose, onEdit, darkMode = true }) => {
         {/* Header Visual */}
         <div className={`h-32 relative overflow-hidden ${darkMode ? 'bg-slate-950/50' : 'bg-slate-50'}`}>
           <div className="absolute inset-0 opacity-20">
-            <div className={`absolute top-0 left-0 w-full h-full ${darkMode ? 'bg-[radial-gradient(circle_at_50%_50%,rgba(16,185,129,0.1),transparent)]' : 'bg-[radial-gradient(circle_at_50%_50%,rgba(16,185,129,0.05),transparent)]'}`}></div>
+            <div className={`absolute top-0 left-0 w-full h-full ${darkMode ? '' : ''}`}></div>
           </div>
         </div>
 

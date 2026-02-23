@@ -32,10 +32,10 @@ const UpcomingTournaments = memo(({ tournaments, darkMode }) => {
     <>
       <div className={`rounded-3xl p-5 lg:p-6 h-full border shadow-lg relative overflow-hidden transition-all duration-500 transform-gpu ${
         darkMode 
-          ? 'bg-gradient-to-br from-slate-900/90 to-[#0B1120] border-white/5' 
+          ? 'border-white/5' 
           : 'bg-white border-black/5 shadow-slate-200 shadow-sm'
       }`}>
-        <div className={`absolute -left-24 -top-24 w-64 h-64 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-500/20 via-blue-500/5 to-transparent rounded-full transition-opacity duration-500 pointer-events-none ${darkMode ? 'opacity-40' : 'opacity-10'}`}></div>
+        <div className={`absolute -left-24 -top-24 w-64 h-64 rounded-full transition-opacity duration-500 pointer-events-none ${darkMode ? 'opacity-40' : 'opacity-10'}`}></div>
 
         <div className="flex items-center justify-between mb-6 relative z-10">
           <div className="flex items-center gap-2.5">
@@ -81,7 +81,7 @@ const UpcomingTournaments = memo(({ tournaments, darkMode }) => {
                       {/* Premium Date Calendar Icon */}
                       <div className={`flex flex-col items-center justify-center w-12 py-1.5 rounded-lg border text-center transition-all duration-500 ${
                         darkMode 
-                          ? 'bg-gradient-to-b from-blue-500/20 to-blue-500/5 border-blue-500/20' 
+                          ? 'border-blue-500/20' 
                           : 'bg-white border-blue-100'
                       }`}>
                         <span className={`text-[8px] uppercase font-black tracking-widest leading-none mb-0.5 transition-colors duration-500 ${darkMode ? 'text-blue-400' : 'text-blue-600'}`}>

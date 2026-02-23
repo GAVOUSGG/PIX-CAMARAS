@@ -127,7 +127,7 @@ const Timeline = ({ events, onEventClick, onEventDelete, zoomLevel, darkMode = t
           </div>
         ) : (
           <div className="relative">
-            <div className={`absolute left-8 top-0 bottom-0 w-0.5 opacity-20 bg-gradient-to-b from-emerald-500 via-blue-500 to-transparent`}></div>
+            <div className={`absolute left-8 top-0 bottom-0 w-0.5 opacity-20 `}></div>
 
             <div className="space-y-12 transition-all duration-500" style={{ transform: `scale(${zoomLevel})`, transformOrigin: 'top left' }}>
               {filteredEvents.map((event, index) => (

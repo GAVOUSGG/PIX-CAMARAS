@@ -54,14 +54,14 @@ const ShipmentCard = ({ shipment, onClose, onEdit, darkMode = true }) => {
           <div className="absolute inset-0 opacity-10">
             <div className="absolute top-0 left-0 w-full h-full" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, gray 1px, transparent 0)', backgroundSize: '24px 24px' }}></div>
           </div>
-          <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-inherit to-transparent"></div>
+          <div className="absolute bottom-0 left-0 w-full h-1/2 "></div>
         </div>
 
         {/* Content Container */}
         <div className="px-8 pb-8 -mt-16 relative z-10">
           <div className="flex items-end justify-between mb-8 group">
             <div className="flex items-end space-x-6">
-              <div className="w-24 h-24 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-[2rem] flex items-center justify-center shadow-2xl shadow-emerald-500/20 transform transition-transform group-hover:scale-105 duration-500">
+              <div className="w-24 h-24 rounded-[2rem] flex items-center justify-center shadow-2xl shadow-emerald-500/20 transform transition-transform group-hover:scale-105 duration-500">
                 <Truck className="w-10 h-10 text-white" />
               </div>
               <div className="pb-2">

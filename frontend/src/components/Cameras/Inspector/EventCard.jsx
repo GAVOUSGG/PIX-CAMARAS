@@ -33,7 +33,7 @@ const EventCard = ({ event, onClick, onDelete, darkMode = true }) => {
     switch (type) {
       case "shipment":
         return {
-          bg: isDark ? "from-blue-500/10 to-blue-500/[0.02]" : "from-blue-50 to-white",
+          bg: isDark ? ".02]" : "",
           border: isDark ? "border-blue-500/20" : "border-blue-100",
           hoverBorder: isDark ? "hover:border-blue-400" : "hover:border-blue-300",
           text: isDark ? "text-blue-400" : "text-blue-600",
@@ -44,7 +44,7 @@ const EventCard = ({ event, onClick, onDelete, darkMode = true }) => {
         };
       case "tournament":
         return {
-          bg: isDark ? "from-purple-500/10 to-purple-500/[0.02]" : "from-purple-50 to-white",
+          bg: isDark ? ".02]" : "",
           border: isDark ? "border-purple-500/20" : "border-purple-100",
           hoverBorder: isDark ? "hover:border-purple-400" : "hover:border-purple-300",
           text: isDark ? "text-purple-400" : "text-purple-600",
@@ -55,7 +55,7 @@ const EventCard = ({ event, onClick, onDelete, darkMode = true }) => {
         };
       case "return":
         return {
-          bg: isDark ? "from-orange-500/10 to-orange-500/[0.02]" : "from-orange-50 to-white",
+          bg: isDark ? ".02]" : "",
           border: isDark ? "border-orange-500/20" : "border-orange-100",
           hoverBorder: isDark ? "hover:border-orange-400" : "hover:border-orange-300",
           text: isDark ? "text-orange-400" : "text-orange-600",
@@ -66,7 +66,7 @@ const EventCard = ({ event, onClick, onDelete, darkMode = true }) => {
         };
       case "maintenance":
         return {
-          bg: isDark ? "from-slate-500/10 to-slate-500/[0.02]" : "from-slate-50 to-white",
+          bg: isDark ? ".02]" : "",
           border: isDark ? "border-slate-500/20" : "border-slate-200",
           hoverBorder: isDark ? "hover:border-slate-400" : "hover:border-slate-400",
           text: isDark ? "text-slate-400" : "text-slate-600",
@@ -77,7 +77,7 @@ const EventCard = ({ event, onClick, onDelete, darkMode = true }) => {
         };
       default:
         return {
-          bg: isDark ? "from-emerald-500/10 to-emerald-500/[0.02]" : "from-emerald-50 to-white",
+          bg: isDark ? ".02]" : "",
           border: isDark ? "border-emerald-500/20" : "border-emerald-100",
           hoverBorder: isDark ? "hover:border-emerald-400" : "hover:border-emerald-300",
           text: isDark ? "text-emerald-400" : "text-emerald-600",
@@ -138,7 +138,7 @@ const EventCard = ({ event, onClick, onDelete, darkMode = true }) => {
           w-full p-6 rounded-3xl border text-left
           transition-all duration-500 hover:scale-[1.01] hover:shadow-2xl
           relative overflow-hidden group/button
-          bg-gradient-to-br ${config.bg} ${config.border} ${config.hoverBorder}
+          ${config.bg} ${config.border} ${config.hoverBorder}
         `}
       >
         <div className="relative z-10 flex flex-col md:flex-row md:items-start gap-6">

@@ -30,8 +30,8 @@ const Navigation = ({ activeTab, setActiveTab, user, isOpen, setIsOpen, darkMode
           <div className={`p-2 rounded-xl border transition-all duration-500 ${darkMode ? 'bg-white/5 border-white/10' : 'bg-emerald-500 border-emerald-600 shadow-lg shadow-emerald-500/20'}`}>
             <Camera className={`w-5 h-5 transition-colors duration-500 ${darkMode ? 'text-white' : 'text-white'}`} />
           </div>
-          <span className={`text-2xl font-black bg-clip-text text-transparent bg-gradient-to-r tracking-tight transition-all duration-500 ${
-            darkMode ? 'from-white to-white/70' : 'from-slate-900 to-slate-700'
+          <span className={`text-2xl font-black tracking-tight transition-all duration-500 ${
+            darkMode ? '' : ''
           }`}>
             PixGolf
           </span>
@@ -93,7 +93,7 @@ const Navigation = ({ activeTab, setActiveTab, user, isOpen, setIsOpen, darkMode
       {user && (
         <div className={`p-4 mx-4 mb-6 rounded-2xl border backdrop-blur-xl shrink-0 transition-colors duration-500 ${
           darkMode 
-            ? 'bg-gradient-to-br from-slate-800/50 to-slate-900/50 border-white/5' 
+            ? 'border-white/5' 
             : 'bg-white border-black/5 shadow-sm'
         }`}>
           <div className="flex items-center space-x-3">
@@ -132,7 +132,7 @@ const Navigation = ({ activeTab, setActiveTab, user, isOpen, setIsOpen, darkMode
             className={`fixed inset-0 z-[70] md:hidden animate-in fade-in duration-300 ${darkMode ? 'bg-[#0B1120]/80 backdrop-blur-sm' : 'bg-slate-900/40 backdrop-blur-sm'}`}
             onClick={() => setIsOpen(false)}
           />
-          <div className={`fixed inset-y-0 left-0 w-[300px] max-w-[85vw] border-r z-[80] md:hidden shadow-2xl animate-in slide-in-from-left duration-300 flex flex-col ${
+          <div className={`fixed inset-y-0 left-0 w-[300px] max-w-[85vw] border-r z-[80] md:hidden shadow-2xl animate-in slide-in-duration-300 flex flex-col ${
             darkMode ? 'bg-[#0B1120] border-white/10 shadow-black' : 'bg-white border-black/10 shadow-slate-200'
           }`}>
             <SidebarContent />

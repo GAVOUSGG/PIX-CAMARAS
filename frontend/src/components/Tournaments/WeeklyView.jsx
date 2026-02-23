@@ -354,7 +354,7 @@ const WeeklyView = ({
       {selectedDay &&
         tournamentsByDay[selectedDay] &&
         tournamentsByDay[selectedDay].length > 0 && (
-          <div className="bg-gradient-to-br from-blue-500/10 via-slate-800/20 to-purple-500/10 rounded-2xl border border-blue-500/30 p-6 animate-in fade-in slide-in-from-bottom-4 duration-300">
+          <div className="rounded-2xl border border-blue-500/30 p-6 animate-in fade-in slide-in-duration-300">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-xl font-bold text-white flex items-center">
                 <Calendar className="w-5 h-5 mr-2 text-blue-400" />

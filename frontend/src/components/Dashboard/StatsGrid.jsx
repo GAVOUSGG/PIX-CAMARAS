@@ -49,10 +49,10 @@ const StatsGrid = memo(({ tournaments, cameras, workers, darkMode }) => {
   };
 
   const glowClasses = {
-    emerald: 'from-emerald-500/20 via-emerald-500/5 to-transparent',
-    red: 'from-red-500/20 via-red-500/5 to-transparent',
-    blue: 'from-blue-500/20 via-blue-500/5 to-transparent',
-    orange: 'from-orange-500/20 via-orange-500/5 to-transparent'
+    emerald: '',
+    red: '',
+    blue: '',
+    orange: ''
   };
 
   return (
@@ -64,12 +64,12 @@ const StatsGrid = memo(({ tournaments, cameras, workers, darkMode }) => {
             key={index} 
             className={`rounded-3xl p-5 lg:p-6 relative overflow-hidden transition-all duration-500 border shadow-lg group transform-gpu ${
               darkMode 
-                ? 'bg-gradient-to-br from-slate-900/90 to-[#0B1120] border-white/5' 
+                ? 'border-white/5' 
                 : 'bg-white border-black/5 hover:border-black/10'
             }`}
           >
             {/* Background Glow - Optimized */}
-            <div className={`absolute -right-12 -top-12 w-32 h-32 rounded-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] opacity-40 pointer-events-none transition-opacity duration-500 ${glowClasses[stat.color]} ${darkMode ? 'opacity-40' : 'opacity-10'}`}></div>
+            <div className={`absolute -right-12 -top-12 w-32 h-32 rounded-full opacity-40 pointer-events-none transition-opacity duration-500 ${glowClasses[stat.color]} ${darkMode ? 'opacity-40' : 'opacity-10'}`}></div>
             
             <div className="flex items-start justify-between relative z-10 w-full mb-4">
               <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 border backdrop-blur-md ${colorClasses[stat.color]}`}>
@@ -85,7 +85,7 @@ const StatsGrid = memo(({ tournaments, cameras, workers, darkMode }) => {
             </div>
             
             {/* Divider line */}
-            <div className={`w-full h-px my-3 relative z-10 ${darkMode ? 'bg-gradient-to-r from-white/10 to-transparent' : 'bg-gradient-to-r from-black/5 to-transparent'}`}></div>
+            <div className={`w-full h-px my-3 relative z-10 ${darkMode ? '' : ''}`}></div>
 
             <div className="flex items-center gap-2 relative z-10">
               <span className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg border transition-all duration-500 ${

@@ -22,7 +22,7 @@ const Dashboard = memo(({ tournamentsData, camerasData, workersData, shipmentsDa
       <header className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 mb-4">
         <div>
           <h1 className={`text-2xl md:text-3xl font-black tracking-tight transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>
-            Bienvenido, <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-600">{userName}</span>
+            Bienvenido, <span className="">{userName}</span>
           </h1>
           <p className="text-slate-500 mt-1 text-[10px] uppercase tracking-widest font-bold">Resumen General de Operaciones</p>
         </div>
@@ -55,7 +55,7 @@ const Dashboard = memo(({ tournamentsData, camerasData, workersData, shipmentsDa
           <section className="dashboard-grid-item flex-grow">
             <React.Suspense fallback={
               <div className="h-[600px] w-full bg-[#0B1120] animate-pulse rounded-[2rem] flex items-center justify-center border border-white/5 relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-tr from-emerald-500/5 to-transparent mix-blend-screen"></div>
+                <div className="absolute inset-0 mix-blend-screen"></div>
                 <div className="flex flex-col items-center gap-4 relative z-10">
                   <div className="w-12 h-12 border-4 border-emerald-500/20 border-t-emerald-500 rounded-full animate-spin shadow-[0_0_15px_rgba(16,185,129,0.5)]"></div>
                   <div className="text-slate-400 text-sm font-bold tracking-widest uppercase">Cargando Mapa de Operaciones...</div>

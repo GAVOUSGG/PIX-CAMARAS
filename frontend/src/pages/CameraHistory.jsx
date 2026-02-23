@@ -187,7 +187,7 @@ const CameraHistory = ({ darkMode = true }) => {
         ) : (
           <div className="relative">
             {/* Vertical Timeline Line */}
-            <div className={`absolute left-5 md:left-8 top-0 bottom-0 w-0.5 opacity-20 bg-gradient-to-b from-emerald-500 via-blue-500 to-transparent`}></div>
+            <div className={`absolute left-5 md:left-8 top-0 bottom-0 w-0.5 opacity-20 `}></div>
 
             <div className="space-y-12">
               {filteredEvents.map((event, index) => {

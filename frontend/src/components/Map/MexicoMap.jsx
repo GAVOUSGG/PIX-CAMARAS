@@ -285,13 +285,13 @@ const MexicoMap = ({
     }`}>
 
       {/* Decorative gradient overlay */}
-      <div className={`absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-blue-500/5 pointer-events-none transition-opacity duration-500 ${darkMode ? 'opacity-100' : 'opacity-0'}`}></div>
+      <div className={`absolute inset-0 pointer-events-none transition-opacity duration-500 ${darkMode ? 'opacity-100' : 'opacity-0'}`}></div>
       
       {/* Header & Controls */}
       <div className={`relative p-3 md:p-4 border-b transition-all duration-500 backdrop-blur-sm ${
         darkMode 
-          ? 'border-emerald-500/20 bg-gradient-to-r from-slate-900/50 to-slate-800/50' 
-          : 'border-emerald-500/10 bg-gradient-to-r from-white to-slate-50 shadow-sm'
+          ? 'border-emerald-500/20 ' 
+          : 'border-emerald-500/10 shadow-sm'
       }`}>
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
@@ -556,14 +556,14 @@ const MexicoMap = ({
               <span className="text-gray-300 font-medium">Personal</span>
            </div>
            <div className="flex items-center gap-2.5 pt-1 border-t border-white/10">
-              <div className="w-8 h-0.5 bg-gradient-to-r from-emerald-500 to-emerald-300 border-t border-dashed border-emerald-300 shadow-lg shadow-emerald-500/30"></div>
+              <div className="w-8 h-0.5 border-t border-dashed border-emerald-300 shadow-lg shadow-emerald-500/30"></div>
               <span className="text-gray-300 font-medium">Envío en curso</span>
            </div>
             {filters.heatmap && (
               <div className="space-y-1 pt-1 border-t border-white/10">
                  <div className="text-[10px] text-gray-400 mb-1">Intensidad (Unidades)</div>
                  <div className="flex items-center gap-2">
-                    <div className="flex-1 h-2 rounded-full bg-gradient-to-r from-blue-500 via-lime-500 to-red-500 opacity-80"></div>
+                    <div className="flex-1 h-2 rounded-full opacity-80"></div>
                  </div>
                  <div className="flex justify-between text-[9px] text-gray-500 font-bold">
                     <span>1</span>
@@ -617,7 +617,7 @@ const MexicoMap = ({
                   key={state} 
                   className={`group relative border rounded-[2rem] p-6 transition-all duration-500 shadow-sm ${
                     darkMode 
-                      ? 'bg-gradient-to-br from-white/[0.05] to-transparent border-white/10 hover:border-white/20' 
+                      ? '.05] border-white/10 hover:border-white/20' 
                       : 'bg-white border-black/5 hover:border-black/10'
                   }`}
                 >
