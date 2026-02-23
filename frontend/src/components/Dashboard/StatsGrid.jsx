@@ -62,7 +62,7 @@ const StatsGrid = memo(({ tournaments, cameras, workers, darkMode }) => {
         return (
           <div 
             key={index} 
-            className={`rounded-3xl p-5 lg:p-6 relative overflow-hidden transition-all duration-500 border shadow-lg group transform-gpu ${
+            className={`rounded-2xl p-4 lg:p-5 relative overflow-hidden transition-all duration-500 border shadow-md group transform-gpu ${
               darkMode 
                 ? 'border-white/5' 
                 : 'bg-white border-black/5 hover:border-black/10'
@@ -71,24 +71,24 @@ const StatsGrid = memo(({ tournaments, cameras, workers, darkMode }) => {
             {/* Background Glow - Optimized */}
             <div className={`absolute -right-12 -top-12 w-32 h-32 rounded-full opacity-40 pointer-events-none transition-opacity duration-500 ${glowClasses[stat.color]} ${darkMode ? 'opacity-40' : 'opacity-10'}`}></div>
             
-            <div className="flex items-start justify-between relative z-10 w-full mb-4">
-              <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 border backdrop-blur-md ${colorClasses[stat.color]}`}>
-                <Icon className="w-6 h-6" />
+            <div className="flex items-start justify-between relative z-10 w-full mb-3">
+              <div className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-300 border backdrop-blur-md ${colorClasses[stat.color]}`}>
+                <Icon className="w-5 h-5" />
               </div>
             </div>
 
             <div className="relative z-10">
-              <h3 className={`text-3xl font-black tracking-tight mb-1 drop-shadow-md transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>
+              <h3 className={`text-2xl font-black tracking-tight mb-0.5 drop-shadow-sm transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>
                 {stat.value}
               </h3>
               <p className={`text-[10px] uppercase font-black tracking-widest transition-colors duration-500 ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>{stat.title}</p>
             </div>
             
             {/* Divider line */}
-            <div className={`w-full h-px my-3 relative z-10 ${darkMode ? '' : ''}`}></div>
+            <div className={`w-full h-[1px] my-2.5 relative z-10 ${darkMode ? '' : ''}`}></div>
 
             <div className="flex items-center gap-2 relative z-10">
-              <span className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg border transition-all duration-500 ${
+              <span className={`text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md border transition-all duration-500 ${
                 darkMode 
                   ? 'bg-white/5 border-white/5 text-slate-400' 
                   : 'bg-black/5 border-black/5 text-slate-600'
