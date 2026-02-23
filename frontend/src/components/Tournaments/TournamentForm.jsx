@@ -63,9 +63,15 @@ const TournamentForm = ({
     return end.toISOString().split("T")[0];
   }, [formData.startDate, formData.days]);
 
-  const availableWorkers = useMemo(() => {
-    return workers.filter(w => w.status === "disponible");
-  }, [workers]);
+  const localWorkers = useMemo(() => {
+    if (!formData.state) return [];
+    return workers.filter(w => w.status === "disponible" && w.state === formData.state);
+  }, [formData.state, workers]);
+
+  const otherWorkers = useMemo(() => {
+    if (!formData.state) return workers.filter(w => w.status === "disponible");
+    return workers.filter(w => w.status === "disponible" && w.state !== formData.state);
+  }, [formData.state, workers]);
 
   const selectedWorker = useMemo(() => 
     workers.find(w => w.id.toString() === formData.workerId)
@@ -337,9 +343,20 @@ const TournamentForm = ({
                 }`}
               >
                 <option value="">Seleccionar responsable táctico</option>
-                {availableWorkers.map(w => (
-                  <option key={w.id} value={w.id}>{w.name} - {w.phone} ({w.camerasAssigned?.length || 0} unidades)</option>
-                ))}
+                {formData.state && localWorkers.length > 0 && (
+                  <optgroup label={`Personal en ${formData.state}`}>
+                    {localWorkers.map(w => (
+                      <option key={w.id} value={w.id}>{w.name} - {w.phone} ({w.camerasAssigned?.length || 0} unidades)</option>
+                    ))}
+                  </optgroup>
+                )}
+                {otherWorkers.length > 0 && (
+                  <optgroup label={formData.state ? "Personal en otros estados" : "Todo el personal disponible"}>
+                    {otherWorkers.map(w => (
+                      <option key={w.id} value={w.id}>{w.name} - {w.phone} ({w.camerasAssigned?.length || 0} unidades)</option>
+                    ))}
+                  </optgroup>
+                )}
               </select>
               <p className="text-[9px] font-black uppercase tracking-widest text-slate-600 ml-1">
                 Mostrando todo el personal táctico disponible
