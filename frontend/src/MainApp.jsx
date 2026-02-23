@@ -9,6 +9,7 @@ const Dashboard = React.lazy(() => import("./pages/Dashboard"));
 const Tournaments = React.lazy(() => import("./pages/Tournaments"));
 const Workers = React.lazy(() => import("./pages/Workers"));
 const Cameras = React.lazy(() => import("./pages/Cameras"));
+const QuickAssign = React.lazy(() => import("./pages/QuickAssign"));
 const Logistics = React.lazy(() => import("./pages/Logistics"));
 const Map = React.lazy(() => import("./pages/Map"));
 const Statistics = React.lazy(() => import("./pages/Statistics"));
@@ -54,6 +55,7 @@ const MainApp = ({ user, onLogout }) => {
     updateCamera,
     completeTask,
     createShipmentFromTask,
+    createCameraHistoryEntry,
     
     createShipment,
     updateShipment,
@@ -137,6 +139,16 @@ const MainApp = ({ user, onLogout }) => {
             onUpdateCamera={updateCamera}
             onDeleteCamera={deleteCamera}
             onInspectCamera={setInspectorCameraId}
+            darkMode={darkMode}
+          />
+        );
+      case "quick-assign":
+        return (
+          <QuickAssign
+            camerasData={camerasData}
+            workersData={workersData}
+            onUpdateCamera={updateCamera}
+            onCreateCameraHistoryEntry={createCameraHistoryEntry}
             darkMode={darkMode}
           />
         );
