@@ -973,13 +973,17 @@ export const useAppState = () => {
               }, true); // skipWorkerUpdate=true
             }
           } else if (shipmentData.status === "entregado") {
-            shipmentData.cameras.forEach((cameraId) => {
-              updateCamera(cameraId, {
-                status: "disponible",
-                assignedTo: shipmentData.recipient,
-                location: shipmentData.destination,
-              });
-            });
+            for (const cameraId of shipmentData.cameras) {
+              try {
+                await updateCamera(cameraId, {
+                  status: "disponible",
+                  assignedTo: shipmentData.recipient,
+                  location: shipmentData.destination,
+                });
+              } catch (e) {
+                console.warn(`No se pudo actualizar cámara ${cameraId}: ${e.message}`);
+              }
+            }
           }
         }
 
@@ -1307,13 +1311,17 @@ export const useAppState = () => {
 
       // Liberar cámaras (cambiar estado a "disponible" y quitar asignación)
       if (shipmentToDelete && shipmentToDelete.cameras) {
-        shipmentToDelete.cameras.forEach((cameraId) => {
-          updateCamera(cameraId, {
-            status: "disponible",
-            assignedTo: "",
-            location: "Almacén",
-          });
-        });
+        for (const cameraId of shipmentToDelete.cameras) {
+          try {
+            await updateCamera(cameraId, {
+              status: "disponible",
+              assignedTo: "",
+              location: "Almacén",
+            });
+          } catch (e) {
+            console.warn(`Cámara ID ${cameraId} no encontrada durante limpieza: ${e.message}`);
+          }
+        }
       }
     } catch (error) {
       console.error("Error deleting shipment:", error);

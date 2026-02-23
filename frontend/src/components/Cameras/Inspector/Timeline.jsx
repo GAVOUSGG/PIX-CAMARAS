@@ -1,6 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import { Calendar, Filter, Search } from "lucide-react";
-import EventCard from "./EventCard";
+import {
+  ReactFlow,
+  Controls,
+  Background,
+  applyNodeChanges,
+  applyEdgeChanges,
+} from '@xyflow/react';
+import '@xyflow/react/dist/style.css';
+import GraphEventNode from "./GraphEventNode";
+
+const nodeTypes = {
+  customEvent: GraphEventNode,
+};
 
 const Timeline = ({ events, onEventClick, onEventDelete, zoomLevel, darkMode = true }) => {
   const [filterType, setFilterType] = useState("all");
@@ -28,34 +40,36 @@ const Timeline = ({ events, onEventClick, onEventDelete, zoomLevel, darkMode = t
     );
   }
 
-  const eventStats = {
+  const eventStats = useMemo(() => ({
     total: events.length,
     shipments: events.filter((e) => e.type === "shipment").length,
     tournaments: events.filter((e) => e.type === "tournament").length,
     returns: events.filter((e) => e.type === "return").length,
     maintenance: events.filter((e) => e.type === "maintenance").length,
-  };
+  }), [events]);
 
-  const filteredEvents = events.filter((event) => {
-    const matchesType = filterType === "all" || event.type === filterType;
-    
-    if (!matchesType) return false;
-    if (searchTerm === "") return true;
+  const filteredEvents = useMemo(() => {
+    return events.filter((event) => {
+      const matchesType = filterType === "all" || event.type === filterType;
+      
+      if (!matchesType) return false;
+      if (searchTerm === "") return true;
 
-    const term = searchTerm.toLowerCase();
-    const searchableValues = [
-      event.title,
-      event.id,
-      event.type,
-      event.details?.destination,
-      event.details?.recipient,
-      event.details?.trackingNumber
-    ]
-      .filter(Boolean)
-      .map(v => String(v).toLowerCase());
+      const term = searchTerm.toLowerCase();
+      const searchableValues = [
+        event.title,
+        event.id,
+        event.type,
+        event.details?.destination,
+        event.details?.recipient,
+        event.details?.trackingNumber
+      ]
+        .filter(Boolean)
+        .map(v => String(v).toLowerCase());
 
-    return searchableValues.some(val => val.includes(term));
-  });
+      return searchableValues.some(val => val.includes(term));
+    });
+  }, [events, filterType, searchTerm]);
 
   const filterOptions = [
     { value: "all", label: "Todos", count: eventStats.total, color: "emerald" },
@@ -65,10 +79,60 @@ const Timeline = ({ events, onEventClick, onEventDelete, zoomLevel, darkMode = t
     { value: "maintenance", label: "Mantenimiento", count: eventStats.maintenance, color: "slate" },
   ];
 
+  // ============================================
+  // GRAPH LOGIC (React Flow)
+  // ============================================
+
+  const initialNodes = useMemo(() => {
+    return filteredEvents.map((event, index) => ({
+      id: String(event.id),
+      type: 'customEvent',
+      position: { x: 250, y: index * 320 }, // Vertical Spacing
+      data: {
+        event,
+        darkMode,
+        onClick: onEventClick,
+      },
+    }));
+  }, [filteredEvents, darkMode, onEventClick]);
+
+  const initialEdges = useMemo(() => {
+    const edges = [];
+    for (let i = 0; i < filteredEvents.length - 1; i++) {
+      edges.push({
+        id: `e-${filteredEvents[i].id}-${filteredEvents[i + 1].id}`,
+        source: String(filteredEvents[i].id),
+        target: String(filteredEvents[i + 1].id),
+        animated: true,
+        style: { stroke: darkMode ? '#10b981' : '#059669', strokeWidth: 2 },
+      });
+    }
+    return edges;
+  }, [filteredEvents, darkMode]);
+
+  const [nodes, setNodes] = useState(initialNodes);
+  const [edges, setEdges] = useState(initialEdges);
+
+  // Sync state if filteredEvents change
+  React.useEffect(() => {
+    setNodes(initialNodes);
+    setEdges(initialEdges);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filteredEvents, darkMode]);
+
+  const onNodesChange = useCallback(
+    (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
+    []
+  );
+  const onEdgesChange = useCallback(
+    (changes) => setEdges((eds) => applyEdgeChanges(changes, eds)),
+    []
+  );
+
   return (
-    <div className="space-y-8 animate-fade-in">
+    <div className="space-y-8 animate-fade-in flex flex-col h-full">
       {/* Header and Filter Controls */}
-      <div className={`rounded-3xl border p-6 transition-all duration-500 ${
+      <div className={`rounded-3xl border p-6 transition-all duration-500 flex-shrink-0 ${
         darkMode ? 'bg-slate-900 border-white/5 shadow-2xl backdrop-blur-lg' : 'bg-white border-black/5 shadow-sm'
       }`}>
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-8">
@@ -129,51 +193,40 @@ const Timeline = ({ events, onEventClick, onEventDelete, zoomLevel, darkMode = t
         </div>
       </div>
 
-      {/* Vertical Timeline */}
-      <div className={`rounded-[2.5rem] border p-8 transition-all duration-500 overflow-hidden relative ${
-        darkMode ? 'bg-slate-900/30 border-white/5 shadow-2xl' : 'bg-white border-black/5 shadow-xl shadow-slate-200'
+      {/* Graph Timeline Area */}
+      <div className={`rounded-[3rem] border transition-all duration-500 overflow-hidden relative flex-1 min-h-[600px] ${
+        darkMode ? 'bg-slate-900 border-white/5 shadow-2xl' : 'bg-white border-black/5 shadow-xl shadow-slate-200'
       }`}>
         {filteredEvents.length === 0 ? (
-          <div className="text-center py-20">
-            <Filter className={`w-12 h-12 mx-auto mb-4 ${darkMode ? 'text-slate-600' : 'text-slate-300'}`} />
-            <p className={`text-lg font-medium ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>No se encontraron eventos</p>
+          <div className="h-full flex items-center justify-center py-20">
+            <div className="text-center">
+              <Filter className={`w-12 h-12 mx-auto mb-4 ${darkMode ? 'text-slate-600' : 'text-slate-300'}`} />
+              <p className={`text-lg font-medium ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>No se encontraron eventos</p>
+            </div>
           </div>
         ) : (
-          <div className="relative">
-            <div className={`absolute left-8 top-0 bottom-0 w-0.5 opacity-20 `}></div>
-
-            <div className="space-y-12 transition-all duration-500" style={{ transform: `scale(${zoomLevel})`, transformOrigin: 'top left' }}>
-              {filteredEvents.map((event, index) => (
-                <div key={event.id} className="relative pl-24 group transition-all duration-500 hover:translate-x-1">
-                  {/* Timeline Node */}
-                  <div className="absolute left-0 top-0 transition-all duration-500 group-hover:scale-110">
-                    <div className="relative">
-                      <div className={`w-16 h-16 rounded-full border-2 flex items-center justify-center shadow-xl transition-all duration-500 ${
-                        darkMode 
-                          ? 'bg-slate-950 border-white/10 text-emerald-400 group-hover:border-emerald-500/50' 
-                          : 'bg-white border-slate-100 text-emerald-600 group-hover:border-emerald-500/50'
-                      }`}>
-                        <span className="text-sm font-black uppercase tracking-tighter">
-                          #{filteredEvents.length - index}
-                        </span>
-                      </div>
-                      <div className={`absolute -inset-2 rounded-full blur-xl opacity-0 group-hover:opacity-20 transition-opacity bg-emerald-500`}></div>
-                    </div>
-                  </div>
-
-                  <div className={`rounded-3xl border transition-all duration-500 group-hover:shadow-2xl ${
-                    darkMode ? 'hover:border-white/10 hover:bg-white/[0.02]' : 'hover:border-black/5 hover:shadow-slate-200'
-                  }`}>
-                    <EventCard
-                      event={event}
-                      onClick={() => onEventClick(event)}
-                      onEventDelete={onEventDelete}
-                      darkMode={darkMode}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
+          <div className="w-full h-full absolute inset-0">
+            <ReactFlow
+              nodes={nodes}
+              edges={edges}
+              onNodesChange={onNodesChange}
+              onEdgesChange={onEdgesChange}
+              nodeTypes={nodeTypes}
+              fitView
+              minZoom={0.2}
+              maxZoom={1.5}
+              proOptions={{ hideAttribution: true }}
+            >
+              <Background 
+                color={darkMode ? '#334155' : '#cbd5e1'} 
+                gap={16} 
+                size={1} 
+              />
+              <Controls 
+                className={darkMode ? 'bg-slate-800 text-white fill-white border-white/10' : ''}
+                showInteractive={false} 
+              />
+            </ReactFlow>
           </div>
         )}
       </div>
