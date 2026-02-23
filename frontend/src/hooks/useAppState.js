@@ -1409,6 +1409,7 @@ export const useAppState = () => {
     updateCamera,
     deleteCamera,
     setCamerasData,
+    createCameraHistoryEntry,
 
     // Funciones para envíos
     createShipment,

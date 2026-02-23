@@ -139,7 +139,7 @@ const CommandPalette = ({ isOpen, onClose, cameras, onSelect, darkMode }) => {
 
 
 // --- PÁGINA PRINCIPAL ---
-const QuickAssign = ({ camerasData, workersData, onUpdateCamera, darkMode }) => {
+const QuickAssign = ({ camerasData, workersData, onUpdateCamera, onCreateCameraHistoryEntry, darkMode }) => {
   const [localCameras, setLocalCameras] = useState([]);
   
   // Selección
@@ -243,6 +243,16 @@ const QuickAssign = ({ camerasData, workersData, onUpdateCamera, darkMode }) => 
       
       setLocalCameras(prev => prev.map(c => c.id === camera.id ? { ...c, assignedTo: worker.name } : c));
       
+      // Registrar en el historial
+      if (onCreateCameraHistoryEntry) {
+        await onCreateCameraHistoryEntry(
+          camera.id,
+          'assignment',
+          `Asignada a ${worker.name}`,
+          { workerId: worker.id, workerName: worker.name, previousStatus: camera.status }
+        );
+      }
+
       showToast(`Cámara ${camera.id} asignada a ${worker.name}`);
       setSelectedCameraId(null);
       setSelectedWorkerId(null);
@@ -262,6 +272,16 @@ const QuickAssign = ({ camerasData, workersData, onUpdateCamera, darkMode }) => 
       
       setLocalCameras(prev => prev.map(c => c.id === cameraId ? { ...c, assignedTo: '', location: 'Almacén' } : c));
       
+      // Registrar en el historial
+      if (onCreateCameraHistoryEntry) {
+        await onCreateCameraHistoryEntry(
+          cameraId,
+          'return',
+          `Cámara devuelta al Almacén`,
+          { location: 'Almacén' }
+        );
+      }
+
       showToast(`Cámara ${cameraId} liberada`);
       if (selectedCameraId === cameraId) {
         setSelectedCameraId(null);
