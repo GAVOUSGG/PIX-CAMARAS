@@ -27,8 +27,8 @@ const Navigation = ({ activeTab, setActiveTab, user, isOpen, setIsOpen, darkMode
       {/* Brand area */}
       <div className="p-6 md:p-8 flex items-center justify-between">
         <div className="flex items-center space-x-3 group cursor-pointer">
-          <div className={`p-2 rounded-xl border transition-all duration-500 ${darkMode ? 'bg-white/5 border-white/10' : 'bg-emerald-500 border-emerald-600 shadow-lg shadow-emerald-500/20'}`}>
-            <Camera className={`w-5 h-5 transition-colors duration-500 ${darkMode ? 'text-white' : 'text-white'}`} />
+          <div className={``}>
+            <img src="" alt="" />
           </div>
           <span className={`text-2xl font-black tracking-tight transition-all duration-500 ${
             darkMode ? '' : ''

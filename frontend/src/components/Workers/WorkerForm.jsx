@@ -113,7 +113,7 @@ const WorkerForm = ({
         onClick={() => setShowForm(true)}
         className={`group px-6 py-4 rounded-2xl border font-black uppercase tracking-[0.2em] text-xs transition-all duration-300 flex items-center gap-3 shadow-xl ${
           darkMode 
-            ? 'bg-emerald-500 border-emerald-400 text-white hover:bg-emerald-400 shadow-emerald-500/20' 
+            ? 'bg-emerald-600 border-emerald-400 text-white hover:bg-emerald-400 ' 
             : 'bg-emerald-500 border-emerald-600 text-white hover:bg-emerald-600 shadow-emerald-500/10'
         }`}
       >
