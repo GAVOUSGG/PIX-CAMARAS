@@ -18,7 +18,7 @@ const Layout = ({ children, activeTab, setActiveTab, user, onLogout, darkMode, s
       />
       
       {/* Main Content Area */}
-      <div className={`flex flex-col flex-1 h-screen w-full overflow-hidden relative md:rounded-l-[2.5rem] border-l shadow-2xl transition-all duration-500 ${
+      <div className={`flex flex-col flex-1 h-screen w-full overflow-hidden relative  border-l shadow-2xl transition-all duration-500 ${
         darkMode 
           ? 'bg-[#0B1120] border-white/5' 
           : 'bg-white border-black/5'

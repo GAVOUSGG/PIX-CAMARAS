@@ -1,8 +1,8 @@
 import React, { useState, useEffect, Suspense } from "react";
 import { Camera, History, ArrowLeft, Search, Filter } from "lucide-react";
 import { apiService } from "../services/api";
-import EventCard from "../components/Cameras/Inspector/EventCard";
 import EventModal from "../components/Cameras/Inspector/EventModal";
+import Timeline from "../components/Cameras/Inspector/Timeline";
 
 const CameraHistory = ({ darkMode = true }) => {
   const [allHistory, setAllHistory] = useState([]);
@@ -115,35 +115,10 @@ const CameraHistory = ({ darkMode = true }) => {
               Historial de Cámaras
             </h1>
             <p className="text-slate-500 text-sm mt-1">
-              Registro completo de todos los eventos de las cámaras
+              Registro completo de todas las camaras
             </p>
           </div>
         </div>
-      </div>
-
-      {/* Quick Stats Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
-        {[
-          { label: 'Total Eventos', count: eventStats.total, color: 'emerald', val: 'all' },
-          { label: 'Envíos', count: eventStats.shipments, color: 'blue', val: 'shipment' },
-          { label: 'Torneos', count: eventStats.tournaments, color: 'purple', val: 'tournament' },
-          { label: 'Entregas', count: eventStats.returns, color: 'orange', val: 'return' },
-          { label: 'Mantenimiento', count: eventStats.maintenance, color: 'slate', val: 'maintenance' }
-        ].map((stat, i) => (
-          <button 
-            key={i}
-            onClick={() => setFilterType(stat.val)}
-            className={`p-4 rounded-2xl border transition-all duration-500 text-left group hover:scale-[1.02] ${
-              darkMode ? 'bg-slate-900 border-white/5 hover:border-white/20' : 'bg-white border-black/5 shadow-sm hover:border-black/10'
-            }`}
-          >
-            <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-1">{stat.label}</p>
-            <p className={`text-2xl font-black transition-colors duration-500 ${
-              darkMode ? 'text-white' : 'text-slate-900'
-            }`}>{stat.count}</p>
-            <div className={`h-1 w-8 mt-2 rounded-full transition-all duration-500 bg-${stat.color}-500/50 group-hover:w-full`}></div>
-          </button>
-        ))}
       </div>
 
       {/* Filters and Search */}
@@ -185,73 +160,32 @@ const CameraHistory = ({ darkMode = true }) => {
         </div>
       </div>
 
-      {/* Timeline */}
-      <div className={`rounded-[2.5rem] border p-6 md:p-10 transition-all duration-500 overflow-hidden relative ${
-        darkMode ? 'bg-slate-900/30 border-white/5 shadow-2xl' : 'bg-white border-black/5 shadow-xl shadow-slate-200'
-      }`}>
-        {filteredEvents.length === 0 ? (
-          <div className="text-center py-20">
-            <Filter className={`w-12 h-12 mx-auto mb-4 ${darkMode ? 'text-slate-600' : 'text-slate-300'}`} />
-            <p className={`text-lg font-medium ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>
-              No se encontraron eventos con estos filtros
+      {/* Timeline or Empty State */}
+      {filterCamera === "all" ? (
+        <div className={` border transition-all duration-500 overflow-hidden relative min-h-[600px] flex items-center justify-center ${
+          darkMode ? 'bg-slate-900/30 border-white/5 shadow-2xl' : 'bg-white border-black/5 shadow-xl shadow-slate-200'
+        }`}>
+          <div className="text-center p-8 max-w-lg mx-auto">
+            
+            <h2 className={`text-4xl font-black tracking-tight mb-4 ${darkMode ? 'text-white' : 'text-slate-900'}`}>
+              Selector
+            </h2>
+            <p className={`text-lg font-medium tracking-tight mb-8 ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+              Para visualizar el historial de una camara, por favor selecciona una camara en el menu superior.
             </p>
           </div>
-        ) : (
-          <div className="relative">
-            {/* Vertical Timeline Line */}
-            <div className={`absolute left-5 md:left-8 top-0 bottom-0 w-0.5 opacity-20 `}></div>
-
-            <div className="space-y-12">
-              {filteredEvents.map((event, index) => {
-                const camera = cameras.find((c) => c.id === event.cameraId);
-                return (
-                  <div key={event.id || index} className="relative pl-14 md:pl-24 group transition-all duration-500 hover:translate-x-1">
-                    {/* Timeline Dot */}
-                    <div className="absolute left-0 top-0 transition-transform duration-500 group-hover:scale-110">
-                      <div className="relative">
-                        <div className={`w-10 h-10 md:w-16 md:h-16 rounded-full border-2 flex items-center justify-center shadow-xl transition-all duration-500 ${
-                          darkMode 
-                            ? 'bg-slate-900 border-white/10 text-emerald-400 group-hover:border-emerald-500/50' 
-                            : 'bg-white border-slate-100 text-emerald-600 group-hover:border-emerald-500/50'
-                        }`}>
-                          <span className="text-xs md:text-sm font-black uppercase tracking-tighter">
-                            #{filteredEvents.length - index}
-                          </span>
-                        </div>
-                        <div className={`absolute -inset-2 rounded-full blur-xl opacity-0 group-hover:opacity-20 transition-opacity bg-emerald-500`}></div>
-                      </div>
-                    </div>
-
-                    {/* Event Content */}
-                    <div className="space-y-3">
-                      <div className="flex items-center gap-3">
-                        <div className={`flex items-center gap-2 px-3 py-1 rounded-full border text-[10px] font-black uppercase tracking-widest transition-colors duration-500 ${
-                          darkMode ? 'bg-white/5 border-white/10 text-slate-400' : 'bg-slate-50 border-slate-200 text-slate-500'
-                        }`}>
-                          <Camera className="w-3 h-3" />
-                          <span className="text-emerald-500 font-bold">{event.cameraId}</span>
-                          {camera && <span>• {camera.model}</span>}
-                        </div>
-                      </div>
-                      
-                      <div className={`rounded-3xl border transition-all duration-500 group-hover:shadow-2xl ${
-                        darkMode ? 'hover:border-white/10 hover:bg-white/[0.02]' : 'hover:border-black/5 hover:shadow-slate-200'
-                      }`}>
-                        <EventCard
-                          event={event}
-                          onClick={() => setSelectedEvent(event)}
-                          onDelete={() => handleDeleteHistoryEntry(event.id)}
-                          darkMode={darkMode}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
-      </div>
+        </div>
+      ) : (
+        <div className="h-[800px]">
+          <Timeline
+            events={filteredEvents}
+            onEventClick={setSelectedEvent}
+            onEventDelete={handleDeleteHistoryEntry}
+            zoomLevel={1}
+            darkMode={darkMode}
+          />
+        </div>
+      )}
 
       {/* Event Modal */}
       <Suspense fallback={null}>
