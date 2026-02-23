@@ -504,10 +504,6 @@ const QuickAssign = ({ camerasData, workersData, onUpdateCamera, onCreateCameraH
                 </div>
               ) : selectedCamerasArray.length > 1 ? (
                 <div className="text-center animate-fade-in">
-                  <div className="relative w-12 h-12 mx-auto mb-2">
-                    <CameraIcon className="w-10 h-10 absolute left-0 bottom-0 text-emerald-500" />
-                    <CameraIcon className="w-10 h-10 absolute right-0 top-0 text-emerald-400 opacity-60" />
-                  </div>
                   <h4 className="font-black text-2xl mb-1 text-emerald-500">{selectedCamerasArray.length}</h4>
                   <p className="text-xs opacity-70 mb-2 font-bold uppercase tracking-widest">Cámaras Seleccionadas</p>
                 </div>

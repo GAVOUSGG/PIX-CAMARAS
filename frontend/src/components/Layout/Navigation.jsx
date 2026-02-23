@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar, Camera, Package, Users, MapPin, History, Shield, BarChart3, X, LayoutDashboard } from 'lucide-react';
+import { Calendar, Camera, Package, Users, MapPin, History, Shield, BarChart3, X, LayoutDashboard, Zap } from 'lucide-react';
 
 const Navigation = ({ activeTab, setActiveTab, user, isOpen, setIsOpen, darkMode }) => {
   const menuItems = [
@@ -7,6 +7,7 @@ const Navigation = ({ activeTab, setActiveTab, user, isOpen, setIsOpen, darkMode
     { id: 'tournaments', label: 'Torneos', icon: Calendar },
     { id: 'workers', label: 'Trabajadores', icon: Users },
     { id: 'cameras', label: 'Cámaras', icon: Camera },
+    { id: 'quick-assign', label: 'Asignación Rápida', icon: Zap },
     { id: 'history', label: 'Historial Cámaras', icon: History },
     { id: 'logistics', label: 'Logística', icon: Package },
     { id: 'map', label: 'Mapa', icon: MapPin },
