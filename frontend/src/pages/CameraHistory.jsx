@@ -75,11 +75,23 @@ const CameraHistory = ({ darkMode = true }) => {
     const matchesType = filterType === "all" || event.type === filterType;
     const matchesCamera =
       filterCamera === "all" || event.cameraId === filterCamera;
-    const matchesSearch =
-      searchTerm === "" ||
-      event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      event.cameraId.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesType && matchesCamera && matchesSearch;
+    
+    if (!matchesType || !matchesCamera) return false;
+    if (searchTerm === "") return true;
+
+    const term = searchTerm.toLowerCase();
+    const searchableValues = [
+      event.title,
+      event.cameraId,
+      event.type,
+      event.details?.destination,
+      event.details?.recipient,
+      event.details?.trackingNumber
+    ]
+      .filter(Boolean)
+      .map(v => String(v).toLowerCase());
+
+    return searchableValues.some(val => val.includes(term));
   });
 
   const filterOptions = [

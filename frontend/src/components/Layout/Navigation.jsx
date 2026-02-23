@@ -28,7 +28,7 @@ const Navigation = ({ activeTab, setActiveTab, user, isOpen, setIsOpen, darkMode
       <div className="p-6 md:p-8 flex items-center justify-between">
         <div className="flex items-center space-x-3 group cursor-pointer">
           <div className={``}>
-            <img src="" alt="" />
+            
           </div>
           <span className={`text-2xl font-black tracking-tight transition-all duration-500 ${
             darkMode ? '' : ''

@@ -1,4 +1,5 @@
 import React from "react";
+import { createPortal } from "react-dom";
 import { X, Calendar, Clock, MapPin, User, Package } from "lucide-react";
 
 const EventModal = ({ event, onClose, darkMode = true }) => {
@@ -53,10 +54,14 @@ const EventModal = ({ event, onClose, darkMode = true }) => {
     </div>
   );
 
-  return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 z-50 animate-fade-in">
+  return createPortal(
+    <div className="fixed inset-0 bg-black/80 z-[100] backdrop-blur-md flex items-center justify-center p-4 animate-fade-in">
+      <div 
+        className="absolute inset-0" 
+        onClick={onClose} 
+      />
       <div
-        className={`w-full max-w-2xl rounded-[2.5rem] border shadow-2xl transition-all duration-500 overflow-hidden border-l-8 ${getBorderColor(
+        className={`relative w-full max-w-2xl rounded-[2.5rem] border shadow-2xl transition-all duration-500 overflow-hidden border-l-8 ${getBorderColor(
           event.type
         )} ${darkMode ? 'bg-slate-900 border-white/10' : 'bg-white border-black/5'}`}
       >
@@ -130,7 +135,8 @@ const EventModal = ({ event, onClose, darkMode = true }) => {
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

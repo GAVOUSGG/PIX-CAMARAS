@@ -38,10 +38,23 @@ const Timeline = ({ events, onEventClick, onEventDelete, zoomLevel, darkMode = t
 
   const filteredEvents = events.filter((event) => {
     const matchesType = filterType === "all" || event.type === filterType;
-    const matchesSearch =
-      searchTerm === "" ||
-      event.title.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesType && matchesSearch;
+    
+    if (!matchesType) return false;
+    if (searchTerm === "") return true;
+
+    const term = searchTerm.toLowerCase();
+    const searchableValues = [
+      event.title,
+      event.id,
+      event.type,
+      event.details?.destination,
+      event.details?.recipient,
+      event.details?.trackingNumber
+    ]
+      .filter(Boolean)
+      .map(v => String(v).toLowerCase());
+
+    return searchableValues.some(val => val.includes(term));
   });
 
   const filterOptions = [
