@@ -6,7 +6,7 @@ const Layout = ({ children, activeTab, setActiveTab, user, onLogout, darkMode, s
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <div className={`flex h-screen overflow-hidden selection:bg-emerald-500/30 font-sans transition-colors duration-500 ${darkMode ? 'bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-900'}`}>
+    <div className={`flex h-screen overflow-hidden selection:bg-emerald-500/30 font-sans transition-colors duration-500 ${darkMode ? 'bg-zinc-950 text-zinc-100' : 'bg-zinc-50 text-zinc-900'}`}>
       {/* Sidebar Navigation */}
       <Navigation 
         activeTab={activeTab} 
@@ -18,9 +18,9 @@ const Layout = ({ children, activeTab, setActiveTab, user, onLogout, darkMode, s
       />
       
       {/* Main Content Area */}
-      <div className={`flex flex-col flex-1 h-screen w-full overflow-hidden relative  border-l shadow-2xl transition-all duration-500 ${
+      <div className={`flex flex-col flex-1 h-screen w-full overflow-hidden relative border-l transition-all duration-500 ${
         darkMode 
-          ? 'bg-[#0B1120] border-white/5' 
+          ? 'bg-zinc-950 border-white/5' 
           : 'bg-white border-black/5'
       }`}>
         <Header 

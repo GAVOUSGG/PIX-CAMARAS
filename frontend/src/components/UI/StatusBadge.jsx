@@ -52,7 +52,7 @@ const StatusBadge = ({ status, darkMode = true }) => {
         icon: CheckCircle,
       },
       cancelado: {
-        color: darkMode ? "bg-slate-500/10 text-slate-400 border-slate-500/20" : "bg-slate-100 text-slate-700 border-slate-200",
+        color: darkMode ? "bg-zinc-500/10 text-zinc-400 border-zinc-500/20" : "bg-zinc-100 text-zinc-700 border-zinc-200",
         icon: AlertCircle,
       },
       ocupado: {
@@ -67,7 +67,7 @@ const StatusBadge = ({ status, darkMode = true }) => {
 
     return (
       configs[status.toLowerCase()] || {
-        color: darkMode ? "bg-slate-800 text-slate-400 border-slate-700" : "bg-slate-100 text-slate-600 border-slate-200",
+        color: darkMode ? "bg-zinc-800 text-zinc-400 border-zinc-700" : "bg-zinc-100 text-zinc-600 border-zinc-200",
         icon: AlertCircle,
       }
     );

@@ -15,10 +15,10 @@ const TournamentDetailsModal = ({ tournament, onClose }) => {
       />
 
       {/* Modal Content */}
-      <div className="relative bg-slate-900 border border-white/10 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto animate-in fade-in zoom-in duration-300">
+      <div className="relative bg-zinc-900 border border-white/10 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto animate-in fade-in zoom-in duration-300">
         
         {/* Header */}
-        <div className="sticky top-0 z-10 bg-slate-900 border-b border-white/10 p-6 flex items-start justify-between">
+        <div className="sticky top-0 z-10 bg-zinc-900 border-b border-white/10 p-6 flex items-start justify-between">
           <div>
             <div className="flex items-center gap-3 mb-2">
               <h2 className="text-2xl font-bold text-white">{tournament.name}</h2>

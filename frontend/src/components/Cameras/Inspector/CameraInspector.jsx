@@ -37,8 +37,8 @@ const CameraInspector = ({ cameraId, onBack, darkMode = true }) => {
 
   if (loading) {
     return (
-      <div className={`flex items-center justify-center h-screen transition-colors duration-500 ${darkMode ? 'bg-slate-950' : 'bg-slate-50'}`}>
-        <div className={`text-xl flex items-center space-x-3 transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>
+      <div className={`flex items-center justify-center h-screen transition-colors duration-500 ${darkMode ? 'bg-zinc-950' : 'bg-zinc-50'}`}>
+        <div className={`text-xl flex items-center space-x-3 transition-colors duration-500 ${darkMode ? 'text-white' : 'text-zinc-900'}`}>
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
           <span className="font-bold tracking-widest uppercase text-sm">Cargando Inspector...</span>
         </div>
@@ -48,8 +48,8 @@ const CameraInspector = ({ cameraId, onBack, darkMode = true }) => {
 
   if (!camera) {
     return (
-      <div className={`flex flex-col items-center justify-center h-screen gap-4 transition-colors duration-500 ${darkMode ? 'bg-slate-950' : 'bg-slate-50'}`}>
-        <div className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-slate-900'}`}>Cámara no encontrada</div>
+      <div className={`flex flex-col items-center justify-center h-screen gap-4 transition-colors duration-500 ${darkMode ? 'bg-zinc-950' : 'bg-zinc-50'}`}>
+        <div className={`text-xl font-bold ${darkMode ? 'text-white' : 'text-zinc-900'}`}>Cámara no encontrada</div>
         <button
           onClick={onBack}
           className={`flex items-center space-x-2 px-6 py-3 rounded-xl font-bold transition-all border ${
@@ -90,8 +90,8 @@ const CameraInspector = ({ cameraId, onBack, darkMode = true }) => {
             onClick={onBack}
             className={`p-3 rounded-2xl border transition-all duration-300 ${
               darkMode 
-                ? 'text-slate-400 hover:text-white hover:bg-white/10 border-white/10' 
-                : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100 border-slate-200 shadow-sm'
+                ? 'text-zinc-400 hover:text-white hover:bg-white/10 border-white/10' 
+                : 'text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100 border-zinc-200 shadow-sm'
             }`}
           >
             <ArrowLeft className="w-6 h-6" />
@@ -103,21 +103,21 @@ const CameraInspector = ({ cameraId, onBack, darkMode = true }) => {
               }`}>
                 {camera.id}
               </span>
-              <h1 className={`text-2xl md:text-3xl font-black tracking-tight transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>
+              <h1 className={`text-2xl md:text-3xl font-black tracking-tight transition-colors duration-500 ${darkMode ? 'text-white' : 'text-zinc-900'}`}>
                 {camera.model}
               </h1>
             </div>
-            <p className="text-slate-500 text-sm mt-1 font-medium italic">
-              Inspector de Cámara • <span className="text-emerald-500">Historial Completo</span>
+            <p className="text-zinc-500 text-sm mt-1 font-medium italic">
+              Inspector de Cámara ⬢ <span className="text-emerald-500">Historial Completo</span>
             </p>
           </div>
         </div>
 
         {/* Zoom Controls */}
         <div className={`flex items-center gap-4 border rounded-[2rem] px-6 py-3 transition-colors duration-500 ${
-          darkMode ? 'bg-slate-900 border-white/5 shadow-2xl' : 'bg-white border-black/5 shadow-lg shadow-slate-200/50'
+          darkMode ? 'bg-zinc-900 border-white/5 shadow-2xl' : 'bg-white border-black/5 shadow-lg shadow-zinc-200/50'
         }`}>
-          <ZoomOut className="w-4 h-4 text-slate-500" />
+          <ZoomOut className="w-4 h-4 text-zinc-500" />
           <input
             type="range"
             min="0.5"
@@ -127,9 +127,9 @@ const CameraInspector = ({ cameraId, onBack, darkMode = true }) => {
             onChange={(e) => setZoomLevel(parseFloat(e.target.value))}
             className="w-24 md:w-32 lg:w-48 h-1.5 bg-emerald-500/20 rounded-lg appearance-none cursor-pointer accent-emerald-500"
           />
-          <ZoomIn className="w-4 h-4 text-slate-500" />
+          <ZoomIn className="w-4 h-4 text-zinc-500" />
           <div className={`text-[10px] font-black w-12 text-center px-2 py-1.5 rounded-lg border transition-colors duration-500 ${
-            darkMode ? 'bg-white/5 border-white/10 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-600'
+            darkMode ? 'bg-white/5 border-white/10 text-zinc-300' : 'bg-zinc-50 border-zinc-200 text-zinc-600'
           }`}>
             {(zoomLevel * 100).toFixed(0)}%
           </div>

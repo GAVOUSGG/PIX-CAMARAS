@@ -5,24 +5,24 @@
 }
 
 :root {
-  --glass-bg: rgba(15, 23, 42, 0.6);
-  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-bg: rgba(9, 9, 11, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.05);
   --accent-gold: #fbbf24;
   --accent-emerald: #10b981;
   --accent-blue: #3b82f6;
-  --scroll-track: rgba(15, 23, 42, 0.3);
+  --scroll-track: rgba(9, 9, 11, 0.3);
   --scroll-thumb: rgba(16, 185, 129, 0.2);
-  --marker-bg: rgba(15, 23, 42, 0.7);
-  --body-bg: #0f172a;
+  --marker-bg: rgba(9, 9, 11, 0.7);
+  --body-bg: #09090b;
 }
 
 :root:not(.dark) {
-  --glass-bg: rgba(255, 255, 255, 0.8);
+  --glass-bg: rgba(255, 255, 255, 0.9);
   --glass-border: rgba(0, 0, 0, 0.05);
   --scroll-track: rgba(0, 0, 0, 0.05);
   --scroll-thumb: rgba(16, 185, 129, 0.4);
-  --marker-bg: rgba(255, 255, 255, 0.9);
-  --body-bg: #f8fafc;
+  --marker-bg: rgba(255, 255, 255, 0.95);
+  --body-bg: #fafafa;
 }
 
 /* Estilos base */

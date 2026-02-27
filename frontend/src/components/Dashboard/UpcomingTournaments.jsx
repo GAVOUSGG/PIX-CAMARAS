@@ -33,7 +33,7 @@ const UpcomingTournaments = memo(({ tournaments, darkMode }) => {
       <div className={`rounded-3xl p-5 lg:p-6 h-full border shadow-lg relative overflow-hidden transition-all duration-500 transform-gpu ${
         darkMode 
           ? 'border-white/5' 
-          : 'bg-white border-black/5 shadow-slate-200 shadow-sm'
+          : 'bg-white border-black/5 shadow-zinc-200 shadow-sm'
       }`}>
         <div className={`absolute -left-24 -top-24 w-64 h-64 rounded-full transition-opacity duration-500 pointer-events-none ${darkMode ? 'opacity-40' : 'opacity-10'}`}></div>
 
@@ -46,7 +46,7 @@ const UpcomingTournaments = memo(({ tournaments, darkMode }) => {
             }`}>
               <Clock className="w-4 h-4" />
             </div>
-            <h3 className={`text-lg font-bold tracking-tight transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>Próximos Torneos</h3>
+            <h3 className={`text-lg font-bold tracking-tight transition-colors duration-500 ${darkMode ? 'text-white' : 'text-zinc-900'}`}>Próximos Torneos</h3>
           </div>
           <span className={`text-[10px] uppercase font-black px-3 py-1.5 rounded-lg border tracking-widest transition-all duration-500 shadow-sm ${
             darkMode 
@@ -71,7 +71,7 @@ const UpcomingTournaments = memo(({ tournaments, darkMode }) => {
                   className={`group/card rounded-2xl border p-5 transition-all duration-300 cursor-pointer relative overflow-hidden shadow-sm ${
                     darkMode 
                       ? 'bg-white/[0.02] hover:bg-white/[0.04] border-white/5 hover:border-blue-500/10' 
-                      : 'bg-slate-50 border-black/5 hover:border-blue-500/20 hover:bg-white'
+                      : 'bg-zinc-50 border-black/5 hover:border-blue-500/20 hover:bg-white'
                   }`}
                   onClick={() => setSelectedTournament(tournament)}
                 >
@@ -87,20 +87,20 @@ const UpcomingTournaments = memo(({ tournaments, darkMode }) => {
                         <span className={`text-[8px] uppercase font-black tracking-widest leading-none mb-0.5 transition-colors duration-500 ${darkMode ? 'text-blue-400' : 'text-blue-600'}`}>
                           {dayName}
                         </span>
-                        <span className={`text-lg font-black leading-none transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>
+                        <span className={`text-lg font-black leading-none transition-colors duration-500 ${darkMode ? 'text-white' : 'text-zinc-900'}`}>
                           {dayNum}
                         </span>
                       </div>
 
                       <div className="min-w-0 flex flex-col justify-center">
                         <h4 className={`font-bold text-base leading-tight line-clamp-2 transition-colors duration-300 mb-1 ${
-                          darkMode ? 'text-white group-hover/card:text-blue-300' : 'text-slate-800 group-hover/card:text-blue-600'
+                          darkMode ? 'text-white group-hover/card:text-blue-300' : 'text-zinc-800 group-hover/card:text-blue-600'
                         }`}>
                           {tournament.name}
                         </h4>
                         <div className="flex items-center gap-1.5 opacity-60">
-                          <MapPin className={`w-3.5 h-3.5 ${darkMode ? 'text-slate-400' : 'text-slate-500'}`} />
-                          <p className={`text-[10px] uppercase font-bold truncate tracking-wider ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>{tournament.location}</p>
+                          <MapPin className={`w-3.5 h-3.5 ${darkMode ? 'text-zinc-400' : 'text-zinc-500'}`} />
+                          <p className={`text-[10px] uppercase font-bold truncate tracking-wider ${darkMode ? 'text-zinc-400' : 'text-zinc-500'}`}>{tournament.location}</p>
                         </div>
                       </div>
                     </div>
@@ -108,8 +108,8 @@ const UpcomingTournaments = memo(({ tournaments, darkMode }) => {
                     <button 
                       className={`p-2.5 rounded-xl transition-all duration-300 shadow-lg border shrink-0 ${
                         darkMode 
-                          ? 'bg-white/5 text-slate-400 group-hover/card:text-blue-400 group-hover/card:bg-blue-500/10 border-transparent group-hover/card:border-blue-500/20' 
-                          : 'bg-white text-slate-500 group-hover/card:text-blue-600 group-hover/card:bg-blue-50 border-black/5 group-hover/card:border-blue-200'
+                          ? 'bg-white/5 text-zinc-400 group-hover/card:text-blue-400 group-hover/card:bg-blue-500/10 border-transparent group-hover/card:border-blue-500/20' 
+                          : 'bg-white text-zinc-500 group-hover/card:text-blue-600 group-hover/card:bg-blue-50 border-black/5 group-hover/card:border-blue-200'
                       }`}
                       title="Ver Detalles"
                     >
@@ -126,12 +126,12 @@ const UpcomingTournaments = memo(({ tournaments, darkMode }) => {
             })
           ) : (
             <div className={`col-span-full flex flex-col items-center justify-center py-16 text-center opacity-60 rounded-2xl border border-dashed transition-all duration-500 ${
-              darkMode ? 'bg-white/[0.02] border-white/5' : 'bg-slate-50 border-black/10'
+              darkMode ? 'bg-white/[0.02] border-white/5' : 'bg-zinc-50 border-black/10'
             }`}>
               <div className={`w-14 h-14 rounded-full flex items-center justify-center mb-4 transition-colors duration-500 ${darkMode ? 'bg-white/5' : 'bg-black/5'}`}>
-                <Calendar className="w-6 h-6 text-slate-500" />
+                <Calendar className="w-6 h-6 text-zinc-500" />
               </div>
-              <p className="text-slate-400 text-sm font-bold tracking-wide">No hay torneos programados</p>
+              <p className="text-zinc-400 text-sm font-bold tracking-wide">No hay torneos programados</p>
             </div>
           )}
         </div>

@@ -16,7 +16,7 @@ const Cameras = ({ camerasData, workersData, onCreateCamera, onUpdateCamera, onD
   const [typeFilter, setTypeFilter] = useState('todos');
   const [locationFilter, setLocationFilter] = useState('todos');
 
-  // Obtener datos únicos para los filtros
+  // Obtener datos Òºnicos para los filtros
   const uniqueStatuses = useMemo(() => {
     const statuses = [...new Set(camerasData.map(camera => camera.status))];
     return statuses.sort();
@@ -32,7 +32,7 @@ const Cameras = ({ camerasData, workersData, onCreateCamera, onUpdateCamera, onD
     return locations.sort();
   }, [camerasData]);
 
-  // Filtrar cámaras
+  // Filtrar cÒ¡maras
   const filteredCameras = useMemo(() => {
     return camerasData.filter(camera => {
       const searchLower = searchTerm.toLowerCase();
@@ -65,15 +65,15 @@ const Cameras = ({ camerasData, workersData, onCreateCamera, onUpdateCamera, onD
     try {
       if (editingCamera) {
         await onUpdateCamera(editingCamera.id, cameraData);
-        alert("Cámara actualizada correctamente");
+        alert("CÒ¡mara actualizada correctamente");
       } else {
         await onCreateCamera(cameraData);
-        alert("Cámara creada correctamente");
+        alert("CÒ¡mara creada correctamente");
       }
       setShowForm(false);
       setEditingCamera(null);
     } catch (error) {
-      alert("Error al guardar la cámara");
+      alert("Error al guardar la cÒ¡mara");
     }
   };
 
@@ -86,9 +86,9 @@ const Cameras = ({ camerasData, workersData, onCreateCamera, onUpdateCamera, onD
   const handleDeleteCamera = async (cameraId) => {
     try {
       await onDeleteCamera(cameraId);
-      alert("Cámara eliminada correctamente");
+      alert("CÒ¡mara eliminada correctamente");
     } catch (error) {
-      alert("Error al eliminar la cámara");
+      alert("Error al eliminar la cÒ¡mara");
     }
   };
 
@@ -105,12 +105,12 @@ const Cameras = ({ camerasData, workersData, onCreateCamera, onUpdateCamera, onD
     setEditingCamera(null);
   };
 
-  // Función para asignar todas las cámaras a almacén
+  // FunciÒ³n para asignar todas las cÒ¡maras a almacÒ©n
   const handleAssignAllToWarehouse = async () => {
-    // Confirmar acción
+    // Confirmar acciÒ³n
     const confirmMessage = hasActiveFilters
-      ? `¿Estás seguro de que quieres asignar todas las ${filteredCameras.length} cámaras filtradas a Almacén?\n\nEsto cambiará su ubicación a "Almacén", estado a "disponible" y las desasignará de cualquier trabajador.`
-      : `¿Estás seguro de que quieres asignar todas las ${camerasData.length} cámaras a Almacén?\n\nEsto cambiará su ubicación a "Almacén", estado a "disponible" y las desasignará de cualquier trabajador.`;
+      ? `�¿EstÒ¡s seguro de que quieres asignar todas las ${filteredCameras.length} cÒ¡maras filtradas a AlmacÒ©n?\n\nEsto cambiarÒ¡ su ubicaciÒ³n a "AlmacÒ©n", estado a "disponible" y las desasignarÒ¡ de cualquier trabajador.`
+      : `�¿EstÒ¡s seguro de que quieres asignar todas las ${camerasData.length} cÒ¡maras a AlmacÒ©n?\n\nEsto cambiarÒ¡ su ubicaciÒ³n a "AlmacÒ©n", estado a "disponible" y las desasignarÒ¡ de cualquier trabajador.`;
     
     if (!window.confirm(confirmMessage)) {
       return;
@@ -122,32 +122,32 @@ const Cameras = ({ camerasData, workersData, onCreateCamera, onUpdateCamera, onD
     let errorCount = 0;
 
     try {
-      // Actualizar cada cámara
+      // Actualizar cada cÒ¡mara
       for (const camera of camerasToUpdate) {
         try {
-          // Solo actualizar si no está ya en almacén y disponible
-          if (camera.location !== 'Almacén' || camera.status !== 'disponible' || camera.assignedTo) {
+          // Solo actualizar si no estÒ¡ ya en almacÒ©n y disponible
+          if (camera.location !== 'AlmacÒ©n' || camera.status !== 'disponible' || camera.assignedTo) {
             await onUpdateCamera(camera.id, {
-              location: 'Almacén',
+              location: 'AlmacÒ©n',
               status: 'disponible',
-              assignedTo: '', // Limpiar asignación
+              assignedTo: '', // Limpiar asignaciÒ³n
             });
             successCount++;
           }
         } catch (error) {
-          console.error(`Error actualizando cámara ${camera.id}:`, error);
+          console.error(`Error actualizando cÒ¡mara ${camera.id}:`, error);
           errorCount++;
         }
       }
 
       if (errorCount === 0) {
-        alert(`✅ ${successCount} ${successCount === 1 ? 'cámara actualizada' : 'cámaras actualizadas'} correctamente a Almacén.`);
+        alert(`â�⬦ ${successCount} ${successCount === 1 ? 'cÒ¡mara actualizada' : 'cÒ¡maras actualizadas'} correctamente a AlmacÒ©n.`);
       } else {
-        alert(`⚠️ ${successCount} cámaras actualizadas, ${errorCount} errores.`);
+        alert(`âš ï¸ ${successCount} cÒ¡maras actualizadas, ${errorCount} errores.`);
       }
     } catch (error) {
-      console.error('Error en asignación masiva:', error);
-      alert('Error al asignar cámaras a almacén. Por favor intenta nuevamente.');
+      console.error('Error en asignaciÒ³n masiva:', error);
+      alert('Error al asignar cÒ¡maras a almacÒ©n. Por favor intenta nuevamente.');
     } finally {
       setIsAssigningToWarehouse(false);
     }
@@ -155,12 +155,12 @@ const Cameras = ({ camerasData, workersData, onCreateCamera, onUpdateCamera, onD
 
   return (
     <div className="space-y-6 animate-fade-in">
-      {/* Header con título y botones */}
+      {/* Header con tÒ­tulo y botones */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className={`text-2xl md:text-3xl font-bold tracking-tight transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>Inventario de Cámaras</h2>
-          <p className="text-slate-500 text-sm mt-1">
-            <span className="text-emerald-400 font-bold">{filteredCameras.length}</span> de {camerasData.length} cámaras registradas
+          <h2 className={`text-2xl md:text-3xl font-bold tracking-tight transition-colors duration-500 ${darkMode ? 'text-white' : 'text-zinc-900'}`}>Inventario de Camaras</h2>
+          <p className="text-zinc-500 text-sm mt-1">
+            <span className="text-emerald-400 font-bold">{filteredCameras.length}</span> de {camerasData.length} camaras registradas
           </p>
         </div>
         <div className="flex flex-col xs:flex-row items-stretch sm:items-center gap-2">
@@ -169,8 +169,8 @@ const Cameras = ({ camerasData, workersData, onCreateCamera, onUpdateCamera, onD
             disabled={isAssigningToWarehouse || (hasActiveFilters ? filteredCameras.length === 0 : camerasData.length === 0)}
             className={`border px-4 py-2.5 rounded-xl transition-all flex items-center justify-center space-x-2 font-bold text-sm tracking-wide ${
               darkMode 
-                ? 'bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border-blue-500/20 disabled:bg-slate-800 disabled:text-slate-600' 
-                : 'bg-blue-50 border-blue-200 text-blue-600 hover:bg-blue-100 disabled:bg-slate-100 disabled:text-slate-400'
+                ? 'bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border-blue-500/20 disabled:bg-zinc-800 disabled:text-zinc-600' 
+                : 'bg-blue-50 border-blue-200 text-blue-600 hover:bg-blue-100 disabled:bg-zinc-100 disabled:text-zinc-400'
             }`}
           >
             <Package className="w-5 h-5 transition-transform group-hover:scale-110" />
@@ -187,7 +187,7 @@ const Cameras = ({ camerasData, workersData, onCreateCamera, onUpdateCamera, onD
             className="group bg-emerald-500 hover:bg-emerald-600 text-white px-5 py-2.5 rounded-xl transition-all flex items-center justify-center space-x-2 font-bold text-sm shadow-lg shadow-emerald-500/20 active:scale-95"
           >
             <Plus className="w-5 h-5 transition-transform group-hover:rotate-90" />
-            <span>Agregar Cámara</span>
+            <span>Agregar CÒ¡mara</span>
           </button>
         </div>
       </div>
@@ -204,12 +204,12 @@ const Cameras = ({ camerasData, workersData, onCreateCamera, onUpdateCamera, onD
             key={i}
             onClick={() => setStatusFilter(stat.val)}
             className={`p-4 rounded-2xl border transition-all duration-500 text-left group hover:scale-[1.02] ${
-              darkMode ? 'bg-slate-900 border-white/5 hover:border-white/20' : 'bg-white border-black/5 shadow-sm hover:border-black/10'
+              darkMode ? 'bg-zinc-900 border-white/5 hover:border-white/20' : 'bg-white border-black/5 shadow-sm hover:border-black/10'
             }`}
           >
-            <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-1">{stat.label}</p>
+            <p className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-1">{stat.label}</p>
             <p className={`text-2xl font-black transition-colors duration-500 ${
-              darkMode ? 'text-white' : 'text-slate-900'
+              darkMode ? 'text-white' : 'text-zinc-900'
             }`}>{stat.count}</p>
             <div className={`h-1 w-8 mt-2 rounded-full transition-all duration-500 bg-${stat.color}-500/50 group-hover:w-full`}></div>
           </button>
@@ -218,11 +218,11 @@ const Cameras = ({ camerasData, workersData, onCreateCamera, onUpdateCamera, onD
 
       {/* Buscador y Filtros */}
       <div className={`rounded-2xl border p-6 transition-all duration-500 ${
-        darkMode ? 'bg-slate-900/50 border-white/5 shadow-2xl backdrop-blur-lg' : 'bg-white border-black/5 shadow-sm'
+        darkMode ? 'bg-zinc-900/50 border-white/5 shadow-2xl backdrop-blur-lg' : 'bg-white border-black/5 shadow-sm'
       }`}>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
           <div className="lg:col-span-2">
-            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2.5 ml-1 leading-none">
+            <label className="block text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2.5 ml-1 leading-none">
               <Search className="w-3.5 h-3.5 inline mr-1" />
               Buscador inteligente
             </label>
@@ -231,69 +231,69 @@ const Cameras = ({ camerasData, workersData, onCreateCamera, onUpdateCamera, onD
                 type="text"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="ID, modelo, serie o ubicación..."
+                placeholder="ID, modelo, serie o ubicacion..."
                 className={`w-full border rounded-xl px-4 py-2.5 pl-10 transition-all duration-300 text-sm outline-none focus:ring-2 focus:ring-emerald-500/50 ${
                   darkMode 
-                    ? 'bg-white/5 border-white/10 text-white placeholder-slate-500 group-hover:bg-white/10' 
-                    : 'bg-slate-50 border-slate-200 text-slate-900 placeholder-slate-400 group-hover:bg-slate-100'
+                    ? 'bg-white/5 border-white/10 text-white placeholder-zinc-500 group-hover:bg-white/10' 
+                    : 'bg-zinc-50 border-zinc-200 text-zinc-900 placeholder-zinc-400 group-hover:bg-zinc-100'
                 }`}
               />
-              <Search className={`w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 transition-colors ${
-                darkMode ? 'text-slate-500 group-focus-within:text-emerald-400' : 'text-slate-400 group-focus-within:text-emerald-500'
+              <Search className={`w-4 h-4 absolute left-3 top-1/2 transform -tranzinc-y-1/2 transition-colors ${
+                darkMode ? 'text-zinc-500 group-focus-within:text-emerald-400' : 'text-zinc-400 group-focus-within:text-emerald-500'
               }`} />
             </div>
           </div>
 
           <div>
-            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2.5 ml-1 leading-none">Estatus</label>
+            <label className="block text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2.5 ml-1 leading-none">Estatus</label>
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
               className={`w-full border rounded-xl px-4 py-2.5 text-sm appearance-none outline-none transition-all cursor-pointer focus:ring-2 focus:ring-emerald-500/50 ${
                 darkMode 
                   ? 'bg-white/5 border-white/10 text-white hover:bg-white/10' 
-                  : 'bg-slate-50 border-slate-200 text-slate-900 hover:bg-slate-100'
+                  : 'bg-zinc-50 border-zinc-200 text-zinc-900 hover:bg-zinc-100'
               }`}
             >
-              <option value="todos" className={darkMode ? "bg-slate-900" : "bg-white"}>Cualquier estado</option>
+              <option value="todos" className={darkMode ? "bg-zinc-900" : "bg-white"}>Cualquier estado</option>
               {uniqueStatuses.map(status => (
-                <option key={status} value={status} className={`${darkMode ? "bg-slate-900" : "bg-white"} capitalize`}>{status}</option>
+                <option key={status} value={status} className={`${darkMode ? "bg-zinc-900" : "bg-white"} capitalize`}>{status}</option>
               ))}
             </select>
           </div>
 
           <div>
-            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2.5 ml-1 leading-none">Modelo / Tipo</label>
+            <label className="block text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2.5 ml-1 leading-none">Modelo / Tipo</label>
             <select
               value={typeFilter}
               onChange={(e) => setTypeFilter(e.target.value)}
               className={`w-full border rounded-xl px-4 py-2.5 text-sm appearance-none outline-none transition-all cursor-pointer focus:ring-2 focus:ring-emerald-500/50 ${
                 darkMode 
                   ? 'bg-white/5 border-white/10 text-white hover:bg-white/10' 
-                  : 'bg-slate-50 border-slate-200 text-slate-900 hover:bg-slate-100'
+                  : 'bg-zinc-50 border-zinc-200 text-zinc-900 hover:bg-zinc-100'
               }`}
             >
-              <option value="todos" className={darkMode ? "bg-slate-900" : "bg-white"}>Todos los tipos</option>
+              <option value="todos" className={darkMode ? "bg-zinc-900" : "bg-white"}>Todos los tipos</option>
               {uniqueTypes.map(type => (
-                <option key={type} value={type} className={darkMode ? "bg-slate-900" : "bg-white"}>{type}</option>
+                <option key={type} value={type} className={darkMode ? "bg-zinc-900" : "bg-white"}>{type}</option>
               ))}
             </select>
           </div>
 
           <div>
-            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2.5 ml-1 leading-none">Ubicación</label>
+            <label className="block text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2.5 ml-1 leading-none">UbicaciÒ³n</label>
             <select
               value={locationFilter}
               onChange={(e) => setLocationFilter(e.target.value)}
               className={`w-full border rounded-xl px-4 py-2.5 text-sm appearance-none outline-none transition-all cursor-pointer focus:ring-2 focus:ring-emerald-500/50 ${
                 darkMode 
                   ? 'bg-white/5 border-white/10 text-white hover:bg-white/10' 
-                  : 'bg-slate-50 border-slate-200 text-slate-900 hover:bg-slate-100'
+                  : 'bg-zinc-50 border-zinc-200 text-zinc-900 hover:bg-zinc-100'
               }`}
             >
-              <option value="todos" className={darkMode ? "bg-slate-900" : "bg-white"}>Todas las sedes</option>
+              <option value="todos" className={darkMode ? "bg-zinc-900" : "bg-white"}>Todas las sedes</option>
               {uniqueLocations.map(location => (
-                <option key={location} value={location} className={darkMode ? "bg-slate-900" : "bg-white"}>{location}</option>
+                <option key={location} value={location} className={darkMode ? "bg-zinc-900" : "bg-white"}>{location}</option>
               ))}
             </select>
           </div>
@@ -301,9 +301,9 @@ const Cameras = ({ camerasData, workersData, onCreateCamera, onUpdateCamera, onD
 
         {/* Filters Active Display */}
         {hasActiveFilters && (
-          <div className={`mt-4 flex flex-wrap items-center justify-between pt-4 border-t gap-3 transition-colors duration-500 ${darkMode ? 'border-white/5' : 'border-slate-100'}`}>
+          <div className={`mt-4 flex flex-wrap items-center justify-between pt-4 border-t gap-3 transition-colors duration-500 ${darkMode ? 'border-white/5' : 'border-zinc-100'}`}>
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-[10px] font-black uppercase text-slate-500 tracking-widest mr-2">Filtros:</span>
+              <span className="text-[10px] font-black uppercase text-zinc-500 tracking-widest mr-2">Filtros:</span>
               <button 
                 onClick={clearFilters}
                 className={`text-[10px] font-black uppercase tracking-widest underline underline-offset-4 decoration-emerald-500/30 transition-colors duration-300 ${
@@ -315,16 +315,16 @@ const Cameras = ({ camerasData, workersData, onCreateCamera, onUpdateCamera, onD
             </div>
             
             <div className="flex items-center space-x-2">
-               {searchTerm && <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${darkMode ? 'bg-white/5 text-slate-300' : 'bg-slate-100 text-slate-600'}`}>"{searchTerm}"</span>}
+               {searchTerm && <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${darkMode ? 'bg-white/5 text-zinc-300' : 'bg-zinc-100 text-zinc-600'}`}>"{searchTerm}"</span>}
                {statusFilter !== 'todos' && <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${darkMode ? 'bg-emerald-500/10 text-emerald-400' : 'bg-emerald-50 text-emerald-600 uppercase'}`}>{statusFilter}</span>}
             </div>
           </div>
         )}
       </div>
 
-      {/* Tabla de cámaras */}
+      {/* Tabla de cÒ¡maras */}
       <div className={`rounded-3xl border overflow-hidden transition-all duration-500 ${
-        darkMode ? 'bg-[#0B1120] border-white/5 shadow-2xl' : 'bg-white border-black/5 shadow-xl shadow-slate-200'
+        darkMode ? 'bg-zinc-950 border-white/5 shadow-2xl' : 'bg-white border-black/5 shadow-xl shadow-zinc-200'
       }`}>
         <CamerasTable 
           cameras={filteredCameras}
@@ -339,10 +339,10 @@ const Cameras = ({ camerasData, workersData, onCreateCamera, onUpdateCamera, onD
       {/* Empty States */}
       {filteredCameras.length === 0 && (
         <div className={`text-center py-20 rounded-3xl border border-dashed transition-all duration-500 ${
-          darkMode ? 'bg-white/[0.02] border-white/10' : 'bg-slate-50 border-slate-200'
+          darkMode ? 'bg-white/[0.02] border-white/10' : 'bg-zinc-50 border-zinc-200'
         }`}>
-          <div className={`text-lg mb-4 font-medium transition-colors duration-500 ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>
-            {hasActiveFilters ? 'No se encontraron cámaras con los filtros aplicados' : 'No hay cámaras registradas'}
+          <div className={`text-lg mb-4 font-medium transition-colors duration-500 ${darkMode ? 'text-zinc-400' : 'text-zinc-500'}`}>
+            {hasActiveFilters ? 'No se encontraron cÒ¡maras con los filtros aplicados' : 'No hay cÒ¡maras registradas'}
           </div>
           {hasActiveFilters && (
             <button

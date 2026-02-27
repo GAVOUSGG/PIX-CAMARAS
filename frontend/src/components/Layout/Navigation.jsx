@@ -24,7 +24,7 @@ const Navigation = ({ activeTab, setActiveTab, user, isOpen, setIsOpen, darkMode
   };
 
   const SidebarContent = () => (
-    <div className={`flex flex-col h-full transition-colors duration-500 ${darkMode ? 'bg-[#0B1120]' : 'bg-slate-50'}`}>
+    <div className={`flex flex-col h-full transition-colors duration-500 ${darkMode ? 'bg-zinc-950' : 'bg-zinc-50'}`}>
       {/* Brand area */}
       <div className="p-6 md:p-8 flex items-center justify-between">
         <div className="flex items-center space-x-3 group cursor-pointer">
@@ -43,7 +43,7 @@ const Navigation = ({ activeTab, setActiveTab, user, isOpen, setIsOpen, darkMode
           <button 
             onClick={() => setIsOpen(false)}
             className={`md:hidden p-2 rounded-lg transition-colors border border-transparent ${
-              darkMode ? 'text-slate-400 hover:text-white hover:bg-white/5 hover:border-white/10' : 'text-slate-500 hover:text-slate-900 hover:bg-black/5 hover:border-black/10'
+              darkMode ? 'text-zinc-400 hover:text-white hover:bg-white/5 hover:border-white/10' : 'text-zinc-500 hover:text-zinc-900 hover:bg-black/5 hover:border-black/10'
             }`}
           >
             <X className="w-5 h-5" />
@@ -54,7 +54,7 @@ const Navigation = ({ activeTab, setActiveTab, user, isOpen, setIsOpen, darkMode
       {/* Navigation Links */}
       <nav className="flex-1 overflow-y-auto px-4 space-y-2 pb-6 custom-scrollbar">
         <div className="mb-4 px-3">
-          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest hidden md:block">
+          <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest hidden md:block">
             Menú Principal
           </p>
         </div>
@@ -72,13 +72,13 @@ const Navigation = ({ activeTab, setActiveTab, user, isOpen, setIsOpen, darkMode
                       ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shadow-lg shadow-emerald-500/5'
                       : 'bg-emerald-500 text-white border border-emerald-600 shadow-lg shadow-emerald-500/20 font-bold'
                     : darkMode
-                      ? 'text-slate-400 hover:bg-white/5 hover:text-slate-100 hover:border-white/5 border border-transparent'
-                      : 'text-slate-500 hover:bg-black/5 hover:text-slate-900 hover:border-black/5 border border-transparent'
+                      ? 'text-zinc-400 hover:bg-white/5 hover:text-zinc-100 hover:border-white/5 border border-transparent'
+                      : 'text-zinc-500 hover:bg-black/5 hover:text-zinc-900 hover:border-black/5 border border-transparent'
                 }
               `}
             >
               <div className="flex items-center space-x-3.5">
-                <Icon className={`w-5 h-5 transition-colors duration-300 ${isActive ? (darkMode ? 'text-emerald-400' : 'text-white') : (darkMode ? 'text-slate-400 group-hover:text-slate-100' : 'text-slate-500 group-hover:text-slate-900')}`} />
+                <Icon className={`w-5 h-5 transition-colors duration-300 ${isActive ? (darkMode ? 'text-emerald-400' : 'text-white') : (darkMode ? 'text-zinc-400 group-hover:text-zinc-100' : 'text-zinc-500 group-hover:text-zinc-900')}`} />
                 <span className="text-sm font-semibold tracking-wide">{label}</span>
               </div>
               
@@ -106,10 +106,10 @@ const Navigation = ({ activeTab, setActiveTab, user, isOpen, setIsOpen, darkMode
               </span>
             </div>
             <div className="overflow-hidden">
-              <p className="text-[10px] text-slate-500 uppercase font-black tracking-widest truncate">
+              <p className="text-[10px] text-zinc-500 uppercase font-black tracking-widest truncate">
                 {user.role === 'admin' ? 'Administrador' : 'Operador'}
               </p>
-              <p className={`text-sm font-bold truncate transition-colors duration-500 ${darkMode ? 'text-slate-200' : 'text-slate-800'}`}>{user.username}</p>
+              <p className={`text-sm font-bold truncate transition-colors duration-500 ${darkMode ? 'text-zinc-200' : 'text-zinc-800'}`}>{user.username}</p>
             </div>
           </div>
         </div>
@@ -121,7 +121,7 @@ const Navigation = ({ activeTab, setActiveTab, user, isOpen, setIsOpen, darkMode
     <>
       {/* Desktop Sidebar */}
       <aside className={`hidden md:block w-72 h-screen border-r relative z-20 shrink-0 transition-colors duration-500 ${
-        darkMode ? 'border-white/5 bg-[#0B1120]' : 'border-black/5 bg-slate-50'
+        darkMode ? 'border-white/5 bg-zinc-950' : 'border-black/5 bg-zinc-50'
       }`}>
         <SidebarContent />
       </aside>
@@ -130,11 +130,11 @@ const Navigation = ({ activeTab, setActiveTab, user, isOpen, setIsOpen, darkMode
       {isOpen && (
         <>
           <div 
-            className={`fixed inset-0 z-[70] md:hidden animate-in fade-in duration-300 ${darkMode ? 'bg-[#0B1120]/80 backdrop-blur-sm' : 'bg-slate-900/40 backdrop-blur-sm'}`}
+            className={`fixed inset-0 z-[70] md:hidden animate-in fade-in duration-300 ${darkMode ? 'bg-zinc-950/80 backdrop-blur-sm' : 'bg-zinc-900/40 backdrop-blur-sm'}`}
             onClick={() => setIsOpen(false)}
           />
           <div className={`fixed inset-y-0 left-0 w-[300px] max-w-[85vw] border-r z-[80] md:hidden shadow-2xl animate-in slide-in-duration-300 flex flex-col ${
-            darkMode ? 'bg-[#0B1120] border-white/10 shadow-black' : 'bg-white border-black/10 shadow-slate-200'
+            darkMode ? 'bg-zinc-950 border-white/10 shadow-black' : 'bg-white border-black/10 shadow-zinc-200'
           }`}>
             <SidebarContent />
           </div>

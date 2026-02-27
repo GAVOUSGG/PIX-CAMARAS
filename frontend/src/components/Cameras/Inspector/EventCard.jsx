@@ -67,12 +67,12 @@ const EventCard = ({ event, onClick, onDelete, darkMode = true }) => {
       case "maintenance":
         return {
           bg: isDark ? ".02]" : "",
-          border: isDark ? "border-slate-500/20" : "border-slate-200",
-          hoverBorder: isDark ? "hover:border-slate-400" : "hover:border-slate-400",
-          text: isDark ? "text-slate-400" : "text-slate-600",
-          iconBg: isDark ? "bg-slate-500/20" : "bg-slate-500",
-          iconText: isDark ? "text-slate-400" : "text-white",
-          shadow: "shadow-slate-500/10",
+          border: isDark ? "border-zinc-500/20" : "border-zinc-200",
+          hoverBorder: isDark ? "hover:border-zinc-400" : "hover:border-zinc-400",
+          text: isDark ? "text-zinc-400" : "text-zinc-600",
+          iconBg: isDark ? "bg-zinc-500/20" : "bg-zinc-500",
+          iconText: isDark ? "text-zinc-400" : "text-white",
+          shadow: "shadow-zinc-500/10",
           label: "Mantenimiento",
         };
       default:
@@ -151,18 +151,18 @@ const EventCard = ({ event, onClick, onDelete, darkMode = true }) => {
               <span className={`text-[10px] font-black uppercase tracking-widest block mb-1 ${config.text}`}>
                 {config.label}
               </span>
-              <h3 className={`text-lg font-black tracking-tight mb-2 leading-tight transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'} group-hover/button:text-emerald-500`}>
+              <h3 className={`text-lg font-black tracking-tight mb-2 leading-tight transition-colors duration-500 ${darkMode ? 'text-white' : 'text-zinc-900'} group-hover/button:text-emerald-500`}>
                 {event.title}
               </h3>
               
               {/* Date & Time */}
-              <div className="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-slate-500">
+              <div className="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-zinc-500">
                 <div className="flex items-center gap-1.5">
                   <Calendar className="w-3.5 h-3.5" />
                   <span>{date}</span>
                 </div>
                 {time && (
-                  <div className="flex items-center gap-1.5 border-l pl-3 border-slate-500/30">
+                  <div className="flex items-center gap-1.5 border-l pl-3 border-zinc-500/30">
                     <Clock className="w-3.5 h-3.5" />
                     <span>{time}</span>
                   </div>
@@ -171,18 +171,18 @@ const EventCard = ({ event, onClick, onDelete, darkMode = true }) => {
             </div>
           </div>
 
-          <ArrowRight className={`w-6 h-6 self-center transition-all duration-500 hidden md:block ${darkMode ? 'text-slate-700 group-hover:text-emerald-400 translate-x-0' : 'text-slate-300 group-hover:text-emerald-600'} group-hover/button:translate-x-2`} />
+          <ArrowRight className={`w-6 h-6 self-center transition-all duration-500 hidden md:block ${darkMode ? 'text-zinc-700 group-hover:text-emerald-400 tranzinc-x-0' : 'text-zinc-300 group-hover:text-emerald-600'} group-hover/button:tranzinc-x-2`} />
         </div>
 
         {/* Details Section */}
         {event.details && Object.keys(event.details).length > 0 && (
-          <div className={`mt-6 pt-6 border-t grid grid-cols-1 md:grid-cols-2 gap-4 transition-colors duration-500 ${darkMode ? 'border-white/5' : 'border-slate-100'}`}>
+          <div className={`mt-6 pt-6 border-t grid grid-cols-1 md:grid-cols-2 gap-4 transition-colors duration-500 ${darkMode ? 'border-white/5' : 'border-zinc-100'}`}>
             {event.details.destination && (
               <div className="flex items-center gap-2.5">
                 <MapPin className="w-4 h-4 text-emerald-500" />
                 <div>
-                  <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">Destino Final</p>
-                  <p className={`text-xs font-bold ${darkMode ? 'text-slate-300' : 'text-slate-700'}`}>{event.details.destination}</p>
+                  <p className="text-[10px] font-black uppercase tracking-widest text-zinc-500">Destino Final</p>
+                  <p className={`text-xs font-bold ${darkMode ? 'text-zinc-300' : 'text-zinc-700'}`}>{event.details.destination}</p>
                 </div>
               </div>
             )}
@@ -190,8 +190,8 @@ const EventCard = ({ event, onClick, onDelete, darkMode = true }) => {
               <div className="flex items-center gap-2.5">
                 <User className="w-4 h-4 text-blue-500" />
                 <div>
-                  <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">Receptor</p>
-                  <p className={`text-xs font-bold ${darkMode ? 'text-slate-300' : 'text-slate-700'}`}>{event.details.recipient}</p>
+                  <p className="text-[10px] font-black uppercase tracking-widest text-zinc-500">Receptor</p>
+                  <p className={`text-xs font-bold ${darkMode ? 'text-zinc-300' : 'text-zinc-700'}`}>{event.details.recipient}</p>
                 </div>
               </div>
             )}
@@ -199,7 +199,7 @@ const EventCard = ({ event, onClick, onDelete, darkMode = true }) => {
               <div className="flex items-center gap-2.5">
                 <Truck className="w-4 h-4 text-purple-500" />
                 <div>
-                  <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">Guía de Seguimiento</p>
+                  <p className="text-[10px] font-black uppercase tracking-widest text-zinc-500">Guía de Seguimiento</p>
                   <p className={`text-xs font-mono font-bold ${darkMode ? 'text-emerald-400' : 'text-emerald-600'}`}>{event.details.trackingNumber}</p>
                 </div>
               </div>
@@ -209,13 +209,13 @@ const EventCard = ({ event, onClick, onDelete, darkMode = true }) => {
 
         {/* Action Indicator */}
         <div className={`mt-6 flex items-center justify-between transition-colors duration-500`}>
-          <div className={`text-[10px] font-black uppercase tracking-tighter transition-colors duration-500 ${darkMode ? 'text-slate-600' : 'text-slate-400'}`}>
+          <div className={`text-[10px] font-black uppercase tracking-tighter transition-colors duration-500 ${darkMode ? 'text-zinc-600' : 'text-zinc-400'}`}>
             ID REF: {String(event.id).split("-")[0]}
           </div>
           <div className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-500 ${
-            darkMode ? 'bg-white/5 text-slate-400 group-hover:bg-emerald-500/10 group-hover:text-emerald-400' : 'bg-slate-50 text-slate-500 group-hover:bg-emerald-50 group-hover:text-emerald-600'
+            darkMode ? 'bg-white/5 text-zinc-400 group-hover:bg-emerald-500/10 group-hover:text-emerald-400' : 'bg-zinc-50 text-zinc-500 group-hover:bg-emerald-50 group-hover:text-emerald-600'
           }`}>
-            Detalles Maestros →
+            Detalles Maestros � 
           </div>
         </div>
       </button>

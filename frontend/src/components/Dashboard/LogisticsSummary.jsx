@@ -54,7 +54,7 @@ const LogisticsSummary = ({ shipments, darkMode }) => {
     <div className={`rounded-3xl p-5 h-full border shadow-lg relative overflow-hidden flex flex-col transition-all duration-500 transform-gpu ${
       darkMode 
         ? 'border-white/5' 
-        : 'bg-white border-black/5 shadow-slate-200 shadow-sm'
+        : 'bg-white border-black/5 shadow-zinc-200 shadow-sm'
     }`}>
       <div className={`absolute -bottom-24 -right-24 w-64 h-64 rounded-full transition-opacity duration-500 pointer-events-none ${darkMode ? 'opacity-40' : 'opacity-10'}`}></div>
 
@@ -67,9 +67,9 @@ const LogisticsSummary = ({ shipments, darkMode }) => {
           }`}>
             <Package className="w-4 h-4" />
           </div>
-          <h3 className={`text-lg font-bold tracking-tight transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>Logística</h3>
+          <h3 className={`text-lg font-bold tracking-tight transition-colors duration-500 ${darkMode ? 'text-white' : 'text-zinc-900'}`}>LogÒ­stica</h3>
         </div>
-        <div className={`w-1.5 h-1.5 rounded-full animate-pulse border transition-colors duration-500 ${darkMode ? 'bg-purple-400 border-[#0B1120]' : 'bg-purple-500 border-white'}`}></div>
+        <div className={`w-1.5 h-1.5 rounded-full animate-pulse border transition-colors duration-500 ${darkMode ? 'bg-purple-400 border-zinc-950' : 'bg-purple-500 border-white'}`}></div>
       </div>
 
       <div className="space-y-3 flex-grow relative z-10">
@@ -85,22 +85,22 @@ const LogisticsSummary = ({ shipments, darkMode }) => {
             <div key={idx} className={`p-4 rounded-2xl border transition-all duration-300 cursor-pointer shadow-sm ${
               darkMode 
                 ? 'bg-white/[0.02] hover:bg-white/[0.04] border-white/5 hover:border-white/10' 
-                : 'bg-slate-50 border-black/5 hover:border-black/10 hover:bg-white'
+                : 'bg-zinc-50 border-black/5 hover:border-black/10 hover:bg-white'
             }`}>
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">
-                  <div className={`p-2.5 rounded-xl transition-all duration-300 border ${darkMode ? styles.iconBg + ' ' + styles.border + ' ' + styles.shadow : 'bg-white border-slate-100 shadow-sm'}`}>
-                    <item.icon className={`w-5 h-5 transition-colors duration-300 ${darkMode ? styles.iconText : 'text-slate-600'}`} />
+                  <div className={`p-2.5 rounded-xl transition-all duration-300 border ${darkMode ? styles.iconBg + ' ' + styles.border + ' ' + styles.shadow : 'bg-white border-zinc-100 shadow-sm'}`}>
+                    <item.icon className={`w-5 h-5 transition-colors duration-300 ${darkMode ? styles.iconText : 'text-zinc-600'}`} />
                   </div>
                   <div>
-                    <p className={`text-[10px] lg:text-xs font-bold uppercase tracking-widest transition-colors duration-500 ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>{item.label}</p>
-                    <p className={`text-2xl font-black leading-none mt-1 transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>{item.val}</p>
+                    <p className={`text-[10px] lg:text-xs font-bold uppercase tracking-widest transition-colors duration-500 ${darkMode ? 'text-zinc-500' : 'text-zinc-400'}`}>{item.label}</p>
+                    <p className={`text-2xl font-black leading-none mt-1 transition-colors duration-500 ${darkMode ? 'text-white' : 'text-zinc-900'}`}>{item.val}</p>
                   </div>
                 </div>
                 <div className={`text-[10px] font-black px-2 py-1 rounded-lg border transition-all duration-500 ${
                   darkMode 
                     ? styles.badgeText + ' ' + styles.badgeBg + ' ' + styles.border 
-                    : 'text-slate-600 bg-slate-100 border-slate-200'
+                    : 'text-zinc-600 bg-zinc-100 border-zinc-200'
                 }`}>
                   {percentage}%
                 </div>
@@ -112,17 +112,17 @@ const LogisticsSummary = ({ shipments, darkMode }) => {
 
       <div className={`mt-6 pt-5 border-t relative z-10 transition-colors duration-500 ${darkMode ? 'border-white/5' : 'border-black/5'}`}>
         <div className={`flex justify-between items-center px-4 py-3 rounded-2xl border transition-all duration-500 ${
-          darkMode ? 'bg-white/[0.02] border-white/5' : 'bg-slate-50 border-black/5'
+          darkMode ? 'bg-white/[0.02] border-white/5' : 'bg-zinc-50 border-black/5'
         }`}>
-          <p className="text-[10px] text-slate-400 uppercase tracking-widest font-black">
+          <p className="text-[10px] text-zinc-400 uppercase tracking-widest font-black">
             Total Registros
           </p>
           <div className="flex items-center gap-2">
-            <span className={`text-lg font-black transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>{shipments.length}</span>
+            <span className={`text-lg font-black transition-colors duration-500 ${darkMode ? 'text-white' : 'text-zinc-900'}`}>{shipments.length}</span>
             <div className="flex -space-x-2">
               {[1, 2, 3].slice(0, Math.min(3, shipments.length)).map(i => (
                 <div key={i} className={`w-6 h-6 rounded-full border-2 flex items-center justify-center text-[8px] font-bold shadow-md transition-all duration-500 ${
-                  darkMode ? 'border-[#0B1120] bg-slate-800 text-slate-400' : 'border-white bg-slate-200 text-slate-600'
+                  darkMode ? 'border-zinc-950 bg-zinc-800 text-zinc-400' : 'border-white bg-zinc-200 text-zinc-600'
                 }`}>
                    {i}
                 </div>

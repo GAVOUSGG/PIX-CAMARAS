@@ -74,6 +74,9 @@ const initialShipments = [
 export const useAppState = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [selectedTournament, setSelectedTournament] = useState(null);
+  
+  // Agregar un flag para forzar a abrir modales de creacion
+  const [openCreateModal, setOpenCreateModal] = useState("");
 
   // Estados de datos
   const [tournamentsData, setTournamentsData] = useState([]);
@@ -1420,5 +1423,7 @@ export const useAppState = () => {
     // Funciones para tareas
     completeTask,
     createShipmentFromTask,
+    openCreateModal,
+    setOpenCreateModal
   };
 };

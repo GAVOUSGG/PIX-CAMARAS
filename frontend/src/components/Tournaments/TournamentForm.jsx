@@ -136,14 +136,14 @@ const TournamentForm = ({
   };
 
   return (
-    <div className={`space-y-10 animate-fade-in py-2 ${darkMode ? 'text-white' : 'text-slate-900'}`}>
+    <div className={`space-y-6 md:space-y-10 animate-fade-in py-2 ${darkMode ? 'text-white' : 'text-zinc-900'}`}>
       {/* Header */}
-      <div className={`flex items-center justify-between border-b pb-8 transition-colors duration-500 ${darkMode ? 'border-white/5' : 'border-slate-100'}`}>
+      <div className={`flex items-start sm:items-center justify-between border-b pb-4 md:pb-8 transition-colors duration-500 gap-4 ${darkMode ? 'border-white/5' : 'border-zinc-100'}`}>
         <div>
-          <h3 className={`text-2xl font-black transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'} tracking-tight`}>
+          <h3 className={`text-2xl font-black transition-colors duration-500 ${darkMode ? 'text-white' : 'text-zinc-900'} tracking-tight`}>
             {isEditing ? "Editar" : "Nuevo"} <span className={`${darkMode ? 'text-white' : 'text-black'}`}>Torneo</span>
           </h3>
-          <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">
+          <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest mt-1">
             Gestión y seguimiento de torneos
           </p>
         </div>
@@ -151,24 +151,24 @@ const TournamentForm = ({
           onClick={onCancel}
           className={`p-3 transition-all duration-300 border ${
             darkMode 
-              ? 'bg-white/5 border-white/5 text-slate-400 hover:bg-white/10 hover:text-white' 
-              : 'bg-slate-100 border-slate-200 text-slate-500 hover:bg-slate-200 hover:text-slate-900'
+              ? 'bg-white/5 border-white/5 text-zinc-400 hover:bg-white/10 hover:text-white' 
+              : 'bg-zinc-100 border-zinc-200 text-zinc-500 hover:bg-zinc-200 hover:text-zinc-900'
           }`}
         >
           <X className="w-6 h-6" />
         </button>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-10">
+      <form onSubmit={handleSubmit} className="space-y-6 md:space-y-10">
         {/* Información Básica */}
         <section className="space-y-6">
           <div className="flex items-center gap-3 mb-2">
             <div className={`w-1.5 h-6 ${darkMode ? 'bg-emerald-500/50' : 'bg-emerald-500'}`}></div>
-            <h4 className={`text-xs font-black uppercase tracking-[0.2em] ${darkMode ? 'text-slate-400' : 'text-black-500'}`}>Información del Torneo</h4>
+            <h4 className={`text-xs font-black uppercase tracking-[0.2em] ${darkMode ? 'text-zinc-400' : 'text-black-500'}`}>Información del Torneo</h4>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
             <div className="space-y-2">
-              <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-slate-500' : 'text-black'}`}>Nombre del torneo</label>
+              <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-zinc-500' : 'text-zinc-900'}`}>Nombre del torneo</label>
               <input
                 type="text"
                 required
@@ -176,22 +176,22 @@ const TournamentForm = ({
                 onChange={(e) => handleInputChange("name", e.target.value)}
                 className={`w-full border px-5 py-4 transition-all duration-300 outline-none focus:ring-2 focus:ring-emerald-500/50 ${
                   darkMode 
-                    ? 'bg-slate-950/50 border-white/5 text-white placeholder-slate-600 focus:bg-slate-950' 
-                    : 'bg-slate-50 border-slate-200 text-slate-900 placeholder-slate-400 focus:bg-white'
+                    ? 'bg-zinc-950/50 border-white/5 text-white placeholder-zinc-600 focus:bg-zinc-950' 
+                    : 'bg-zinc-50 border-zinc-200 text-zinc-900 placeholder-zinc-400 focus:bg-white'
                 }`}
                 placeholder="Nombre torneo"
               />
             </div>
             <div className="space-y-2">
-              <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-slate-500' : 'text-black-400'}`}>Ubicación del torneo</label>
+              <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-zinc-500' : 'text-black-400'}`}>Ubicación del torneo</label>
               <select
                 required
                 value={formData.state}
                 onChange={(e) => handleInputChange("state", e.target.value)}
                 className={`w-full border px-5 py-4 transition-all duration-300 outline-none ${
                   darkMode 
-                    ? 'bg-slate-950/50 border-white/5 text-white' 
-                    : 'bg-slate-50 border-slate-200 text-slate-400'
+                    ? 'bg-zinc-950/50 border-white/5 text-white' 
+                    : 'bg-zinc-50 border-zinc-200 text-zinc-400'
                 }`}
               >
                 <option value="">Seleccionar estado</option>
@@ -200,11 +200,11 @@ const TournamentForm = ({
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
             <div className="space-y-2">
-              <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-slate-500' : 'text-black-400'}`}>Campo de Golf</label>
+              <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-zinc-500' : 'text-black-400'}`}>Campo de Golf</label>
               <div className="relative group">
-                <MapPin className={`absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 transition-colors ${darkMode ? 'text-slate-600 group-focus-within:text-emerald-500' : 'text-slate-400 group-focus-within:text-emerald-600'}`} />
+                <MapPin className={`absolute left-5 top-1/2 -tranzinc-y-1/2 w-4 h-4 transition-colors ${darkMode ? 'text-zinc-600 group-focus-within:text-emerald-500' : 'text-zinc-400 group-focus-within:text-emerald-600'}`} />
                 <input
                   type="text"
                   required
@@ -212,15 +212,15 @@ const TournamentForm = ({
                   onChange={(e) => handleInputChange("field", e.target.value)}
                   className={`w-full border pl-12 pr-5 py-4 transition-all duration-300 outline-none focus:ring-2 focus:ring-emerald-500/50 ${
                     darkMode 
-                      ? 'bg-slate-950/50 border-white/5 text-white placeholder-slate-600' 
-                      : 'bg-slate-50 border-slate-200 text-slate-900 placeholder-slate-400'
+                      ? 'bg-zinc-950/50 border-white/5 text-white placeholder-zinc-600' 
+                      : 'bg-zinc-50 border-zinc-200 text-zinc-900 placeholder-zinc-400'
                   }`}
                   placeholder="Nombre del campo"
                 />
               </div>
             </div>
             <div className="space-y-2">
-              <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-slate-500' : 'text-black'}`}>Ciudad</label>
+              <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-zinc-500' : 'text-black'}`}>Ciudad</label>
               <input
                 type="text"
                 required
@@ -228,8 +228,8 @@ const TournamentForm = ({
                 onChange={(e) => handleInputChange("location", e.target.value)}
                 className={`w-full border px-5 py-4 transition-all duration-300 outline-none focus:ring-2 focus:ring-emerald-500/50 ${
                   darkMode 
-                    ? 'bg-slate-950/50 border-white/5 text-white placeholder-slate-600' 
-                    : 'bg-slate-50 border-slate-200 text-slate-900 placeholder-slate-400'
+                    ? 'bg-zinc-950/50 border-white/5 text-white placeholder-zinc-600' 
+                    : 'bg-zinc-50 border-zinc-200 text-zinc-900 placeholder-zinc-400'
                 }`}
                 placeholder="Ciudad"
               />
@@ -241,11 +241,11 @@ const TournamentForm = ({
         <section className="space-y-6">
           <div className="flex items-center gap-3 mb-2">
             <div className={`w-1.5 h-6 ${darkMode ? 'bg-blue-500/50' : 'bg-blue-500'}`}></div>
-            <h4 className={`text-xs font-black uppercase tracking-[0.2em] ${darkMode ? 'text-slate-400' : 'text-black'}`}>Fecha Torneo</h4>
+            <h4 className={`text-xs font-black uppercase tracking-[0.2em] ${darkMode ? 'text-zinc-400' : 'text-black'}`}>Fecha Torneo</h4>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8">
             <div className="space-y-2">
-              <label className={`text-[10px] font-black uppercase tracking-widest ml-1 flex items-center gap-2 ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>
+              <label className={`text-[10px] font-black uppercase tracking-widest ml-1 flex items-center gap-2 ${darkMode ? 'text-zinc-500' : 'text-zinc-400'}`}>
                 <Calendar className="w-3.5 h-3.5" /> Dia inicio torneo
               </label>
               <input
@@ -255,13 +255,13 @@ const TournamentForm = ({
                 onChange={(e) => handleInputChange("startDate", e.target.value)}
                 className={`w-full border px-5 py-4 transition-all duration-300 outline-none ${
                   darkMode 
-                    ? 'bg-slate-950/50 border-white/5 text-white scheme-dark' 
-                    : 'bg-slate-50 border-slate-200 text-slate-900'
+                    ? 'bg-zinc-950/50 border-white/5 text-white scheme-dark' 
+                    : 'bg-zinc-50 border-zinc-200 text-zinc-900'
                 }`}
               />
             </div>
             <div className="space-y-2">
-              <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>Plazo de Duración (Días) *</label>
+              <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-zinc-500' : 'text-zinc-400'}`}>Plazo de Duración (Días) *</label>
               <input
                 type="number"
                 min="1"
@@ -270,28 +270,28 @@ const TournamentForm = ({
                 onChange={(e) => handleInputChange("days", e.target.value)}
                 className={`w-full border px-5 py-4 transition-all duration-300 outline-none ${
                    darkMode 
-                  ? 'bg-slate-950/50 border-white/5 text-white' 
-                  : 'bg-slate-50 border-slate-200 text-slate-900'
+                  ? 'bg-zinc-950/50 border-white/5 text-white' 
+                  : 'bg-zinc-50 border-zinc-200 text-zinc-900'
                 }`}
               />
             </div>
             <div className="space-y-2">
-              <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>Dia Fin Torneo</label>
+              <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-zinc-500' : 'text-zinc-400'}`}>Dia Fin Torneo</label>
               <input
                 type="date"
                 readOnly
                 value={endDate}
                 className={`w-full border px-5 py-4 transition-all duration-300 outline-none cursor-not-allowed ${
                   darkMode 
-                  ? 'bg-white/5 border-white/5 text-slate-500' 
-                  : 'bg-slate-100 border-slate-100 text-slate-400'
+                  ? 'bg-white/5 border-white/5 text-zinc-500' 
+                  : 'bg-zinc-100 border-zinc-100 text-zinc-400'
                 }`}
               />
             </div>
           </div>
 
           <div className="space-y-3">
-            <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-slate-500' : 'text-black-400'}`}>Numero de hoyos</label>
+            <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${darkMode ? 'text-zinc-500' : 'text-black-400'}`}>Numero de hoyos</label>
             <div className="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-10 gap-3">
               {[1,2,3,4,5,6,7,8,9].map(num => (
                 <button
@@ -304,18 +304,18 @@ const TournamentForm = ({
                         ? 'bg-emerald-500/10 border-emerald-500/50 text-emerald-400 shadow-xl shadow-emerald-500/10'
                         : 'bg-emerald-500 border-emerald-600 text-white shadow-xl shadow-emerald-500/20'
                       : darkMode
-                        ? 'bg-slate-950/50 border-white/5 text-slate-500 hover:bg-slate-950 hover:text-white'
-                        : 'bg-slate-50 border-slate-200 text-slate-400 hover:bg-white hover:text-slate-900'
+                        ? 'bg-zinc-950/50 border-white/5 text-zinc-500 hover:bg-zinc-950 hover:text-white'
+                        : 'bg-zinc-50 border-zinc-200 text-zinc-400 hover:bg-white hover:text-zinc-900'
                   }`}
                 >
                   {num}
                 </button>
               ))}
             </div>
-            <div className={`mt-4 p-4 border flex items-center gap-4 transition-colors duration-500 ${darkMode ? 'bg-white/[0.02] border-white/5' : 'bg-slate-50/50 border-slate-100'}`}>
+            <div className={`mt-4 p-4 border flex items-center gap-4 transition-colors duration-500 ${darkMode ? 'bg-white/[0.02] border-white/5' : 'bg-zinc-50/50 border-zinc-100'}`}>
               <Camera className={`w-4 h-4 ${darkMode ? 'text-emerald-400' : 'text-emerald-600'}`} />
               <p className="text-[10px] font-black uppercase tracking-[0.1em]">
-                Camaras requeridas para el torneo: <span className={`${darkMode ? 'text-white' : 'text-slate-900'} text-xs ml-1`}>{requiredCameras} CAMARAS</span>
+                Camaras requeridas para el torneo: <span className={`${darkMode ? 'text-white' : 'text-zinc-900'} text-xs ml-1`}>{requiredCameras} CAMARAS</span>
               </p>
             </div>
           </div>
@@ -325,12 +325,12 @@ const TournamentForm = ({
         <section className="space-y-6">
           <div className="flex items-center gap-3 mb-2">
             <div className={`w-1.5 h-6 ${darkMode ? 'bg-purple-500/50' : 'bg-purple-500'}`}></div>
-            <h4 className={`text-xs font-black uppercase tracking-[0.2em] ${darkMode ? 'text-slate-400' : 'text-black-500'}`}>Visor Asignado</h4>
+            <h4 className={`text-xs font-black uppercase tracking-[0.2em] ${darkMode ? 'text-zinc-400' : 'text-black-500'}`}>Visor Asignado</h4>
           </div>
           
           <div className="space-y-8">
             <div className="space-y-2">
-              <label className={`text-[10px] font-black uppercase tracking-widest ml-1 flex items-center gap-2 ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>
+              <label className={`text-[10px] font-black uppercase tracking-widest ml-1 flex items-center gap-2 ${darkMode ? 'text-zinc-500' : 'text-zinc-400'}`}>
                 <Users className="w-3.5 h-3.5" /> Visor de Campo Asignado
               </label>
               <select
@@ -338,8 +338,8 @@ const TournamentForm = ({
                 onChange={(e) => handleInputChange("workerId", e.target.value)}
                 className={`w-full border px-5 py-4 transition-all duration-300 outline-none ${
                     darkMode 
-                  ? 'bg-slate-950/50 border-white/5 text-white' 
-                  : 'bg-slate-50 border-slate-200 text-slate-900'
+                  ? 'bg-zinc-950/50 border-white/5 text-white' 
+                  : 'bg-zinc-50 border-zinc-200 text-zinc-900'
                 }`}
               >
                 <option value="">Seleccionar responsable táctico</option>
@@ -358,15 +358,15 @@ const TournamentForm = ({
                   </optgroup>
                 )}
               </select>
-              <p className="text-[9px] font-black uppercase tracking-widest text-slate-600 ml-1">
+              <p className="text-[9px] font-black uppercase tracking-widest text-zinc-600 ml-1">
                 Mostrando todo el personal disponible
               </p>
             </div>
 
             {formData.workerId && (
-              <div className={`p-8 border transition-all duration-500 space-y-6 ${darkMode ? 'bg-white/[0.02] border-white/5 shadow-2xl' : 'bg-slate-50/50 border-slate-200 shadow-sm'}`}>
+              <div className={`p-4 md:p-8 border transition-all duration-500 space-y-4 md:space-y-6 ${darkMode ? 'bg-white/[0.02] border-white/5 shadow-2xl' : 'bg-zinc-50/50 border-zinc-200 shadow-sm'}`}>
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                  <h5 className={`text-[10px] font-black uppercase tracking-[0.2em] flex items-center gap-3 ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+                  <h5 className={`text-[10px] font-black uppercase tracking-[0.2em] flex items-center gap-3 ${darkMode ? 'text-zinc-400' : 'text-zinc-500'}`}>
                     <Camera className="w-4 h-4" /> Selección Táctica de Hardware
                   </h5>
                   <div className={`px-4 py-2 text-[10px] font-black tracking-widest border transition-all duration-500 ${
@@ -390,8 +390,8 @@ const TournamentForm = ({
                             ? 'bg-emerald-500/10 border-emerald-500/50 text-emerald-400 ring-2 ring-emerald-500/20' 
                             : 'bg-emerald-500 border-emerald-600 text-white shadow-lg shadow-emerald-500/20'
                           : darkMode
-                            ? 'bg-slate-950/50 border-white/5 text-slate-500 hover:border-white/20 hover:text-white'
-                            : 'bg-white border-slate-200 text-slate-500 hover:border-slate-400 hover:text-slate-900 shadow-sm'
+                            ? 'bg-zinc-950/50 border-white/5 text-zinc-500 hover:border-white/20 hover:text-white'
+                            : 'bg-white border-zinc-200 text-zinc-500 hover:border-zinc-400 hover:text-zinc-900 shadow-sm'
                       }`}
                     >
                       <div className="text-[11px] font-black transition-colors duration-300 mb-1">{cam.id}</div>
@@ -402,9 +402,9 @@ const TournamentForm = ({
                     </button>
                   ))}
                   {workerCameras.length === 0 && (
-                    <div className={`col-span-full py-12 text-center border border-dashed transition-all duration-500 ${darkMode ? 'bg-white/[0.01] border-white/10' : 'bg-slate-100/50 border-slate-200'}`}>
-                      <Package className={`w-12 h-12 mx-auto mb-4 opacity-20 ${darkMode ? 'text-white' : 'text-slate-900'}`} />
-                      <p className="text-[10px] text-slate-500 font-black uppercase tracking-widest">El responsable no tiene unidades asignadas en inventario</p>
+                    <div className={`col-span-full py-12 text-center border border-dashed transition-all duration-500 ${darkMode ? 'bg-white/[0.01] border-white/10' : 'bg-zinc-100/50 border-zinc-200'}`}>
+                      <Package className={`w-12 h-12 mx-auto mb-4 opacity-20 ${darkMode ? 'text-white' : 'text-zinc-900'}`} />
+                      <p className="text-[10px] text-zinc-500 font-black uppercase tracking-widest">El responsable no tiene unidades asignadas en inventario</p>
                     </div>
                   )}
                 </div>
@@ -414,38 +414,38 @@ const TournamentForm = ({
         </section>
 
         {/* Resumen Final y Acciones */}
-        <section className={`p-10 border transition-all duration-500 space-y-8 ${
-          darkMode ? 'bg-emerald-500/[0.02] border-emerald-500/10' : 'bg-slate-50 border-slate-100 shadow-xl shadow-slate-200/50'
+        <section className={`p-4 md:p-10 border transition-all duration-500 space-y-6 md:space-y-8 ${
+          darkMode ? 'bg-emerald-500/[0.02] border-emerald-500/10' : 'bg-zinc-50 border-zinc-100 shadow-xl shadow-zinc-200/50'
         }`}>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-10">
             <div>
-              <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Estado Torneo</p>
+              <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-2">Estado Torneo</p>
               <div className="flex items-center gap-3">
                 <div className={`w-2.5 h-2.5 ${currentStatus === 'activo' ? 'bg-emerald-500 shadow-lg shadow-emerald-500/40' : 'bg-amber-500 shadow-lg shadow-amber-500/40'} animate-pulse`}></div>
-                <span className={`text-sm font-black uppercase tracking-tight transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>{currentStatus}</span>
+                <span className={`text-sm font-black uppercase tracking-tight transition-colors duration-500 ${darkMode ? 'text-white' : 'text-zinc-900'}`}>{currentStatus}</span>
               </div>
             </div>
             <div>
-              <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Camaras</p>
+              <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-2">Camaras</p>
               <span className={`text-lg font-black tracking-tighter ${formData.assignedCameras.length >= requiredCameras ? 'text-emerald-500' : 'text-amber-500'}`}>
-                {formData.assignedCameras.length} <span className="text-xs text-slate-500 ml-1">/ {requiredCameras}</span>
+                {formData.assignedCameras.length} <span className="text-xs text-zinc-500 ml-1">/ {requiredCameras}</span>
               </span>
             </div>
             <div>
-              <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Numero de hoyos</p>
-              <span className={`text-lg font-black tracking-tighter transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>
-                {formData.holes || 0} <span className="text-xs text-slate-500 ml-1">HOYOS</span>
+              <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-2">Numero de hoyos</p>
+              <span className={`text-lg font-black tracking-tighter transition-colors duration-500 ${darkMode ? 'text-white' : 'text-zinc-900'}`}>
+                {formData.holes || 0} <span className="text-xs text-zinc-500 ml-1">HOYOS</span>
               </span>
             </div>
             <div>
-              <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Dias Torneo</p>
-              <span className={`text-lg font-black tracking-tighter transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>
-                {formData.days || 0} <span className="text-xs text-slate-500 ml-1">DÍAS</span>
+              <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-2">Dias Torneo</p>
+              <span className={`text-lg font-black tracking-tighter transition-colors duration-500 ${darkMode ? 'text-white' : 'text-zinc-900'}`}>
+                {formData.days || 0} <span className="text-xs text-zinc-500 ml-1">DÍAS</span>
               </span>
             </div>
           </div>
 
-          <div className="flex flex-col md:flex-row gap-5 pt-6">
+          <div className="flex flex-col sm:flex-row gap-3 md:gap-5 pt-6">
             <button
               type="submit"
               className="flex-grow bg-emerald-500 text-white font-black py-5 hover:bg-emerald-400 transition-all shadow-2xl shadow-emerald-500/20 active:scale-[0.98] uppercase tracking-[0.2em] text-xs"
@@ -457,8 +457,8 @@ const TournamentForm = ({
               onClick={onCancel}
               className={`px-12 py-5 font-black uppercase tracking-widest text-xs transition-all duration-300 border ${
                 darkMode 
-                  ? 'bg-white/5 border-white/5 text-slate-400 hover:bg-white/10 hover:text-white' 
-                  : 'bg-slate-100 border-slate-200 text-slate-500 hover:bg-slate-200 hover:text-slate-900'
+                  ? 'bg-white/5 border-white/5 text-zinc-400 hover:bg-white/10 hover:text-white' 
+                  : 'bg-zinc-100 border-zinc-200 text-zinc-500 hover:bg-zinc-200 hover:text-zinc-900'
               }`}
             >
               Descartar

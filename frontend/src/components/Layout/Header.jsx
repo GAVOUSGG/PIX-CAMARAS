@@ -11,7 +11,7 @@ const Header = ({ user, onLogout, onMenuClick, darkMode, setDarkMode }) => {
           <div className="flex items-center space-x-4 flex-1">
             <button
               onClick={onMenuClick}
-              className={`md:hidden p-2 -ml-2 rounded-lg¿ transition-colors ${darkMode ? 'text-slate-400 hover:text-white hover:bg-white/5' : 'text-slate-500 hover:text-slate-900 hover:bg-black/5'}`}
+              className={`md:hidden p-2 -ml-2 rounded-lg transition-colors ${darkMode ? 'text-zinc-400 hover:text-white hover:bg-white/5' : 'text-zinc-500 hover:text-zinc-900 hover:bg-black/5'}`}
             >
               <Menu className="w-6 h-6" />
             </button>
@@ -25,8 +25,8 @@ const Header = ({ user, onLogout, onMenuClick, darkMode, setDarkMode }) => {
               onClick={() => setDarkMode(!darkMode)}
               className={`p-2.5 rounded-xl border transition-all duration-300 ${
                 darkMode 
-                  ? 'bg-white/5 border-white/10 text-yellow-400 hover:bg-white/10 shadow-[0_0_15px_rgba(251,191,36,0.1)]' 
-                  : 'bg-black/5 border-black/10 text-blue-600 hover:bg-black/10 shadow-[0_0_15px_rgba(37,99,235,0.1)]'
+                  ? 'bg-white/5 border-white/10 text-zinc-400 hover:text-white hover:bg-white/10' 
+                  : 'bg-black/5 border-black/10 text-zinc-600 hover:text-zinc-900 hover:bg-black/10'
               }`}
               title={darkMode ? "Pasar a modo claro" : "Pasar a modo oscuro"}
             >
@@ -35,8 +35,8 @@ const Header = ({ user, onLogout, onMenuClick, darkMode, setDarkMode }) => {
 
             {/* Date Display (Desktop) */}
             <div className={`text-right hidden sm:block px-4 border-r ${darkMode ? 'border-white/10' : 'border-black/10'}`}>
-              <p className="text-[10px] text-slate-500 uppercase font-black tracking-widest leading-tight">Hoy</p>
-              <p className={`text-sm font-bold leading-tight ${darkMode ? 'text-slate-200' : 'text-slate-700'}`}>
+              <p className="text-[10px] text-zinc-500 uppercase font-black tracking-widest leading-tight">Hoy</p>
+              <p className={`text-sm font-bold leading-tight ${darkMode ? 'text-zinc-200' : 'text-zinc-700'}`}>
                 {new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' })}
               </p>
             </div>
@@ -49,8 +49,8 @@ const Header = ({ user, onLogout, onMenuClick, darkMode, setDarkMode }) => {
                   : 'bg-black/5 hover:bg-black/10 border-black/5'
               }`}>
                 <div className="text-right hidden sm:block">
-                  <p className="text-[10px] text-slate-500 uppercase font-black tracking-widest leading-tight">Hola</p>
-                  <p className="text-sm font-bold text-emerald-500 leading-tight">{user.username}</p>
+                  <p className="text-[10px] text-zinc-500 uppercase font-black tracking-widest leading-tight">Hola</p>
+                  <p className="text-sm font-bold text-emerald-600 leading-tight">{user.username}</p>
                 </div>
                 
                 <button 

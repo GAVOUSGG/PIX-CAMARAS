@@ -21,7 +21,7 @@ const Timeline = ({ events, onEventClick, onEventDelete, zoomLevel, darkMode = t
   if (events.length === 0) {
     return (
       <div className={`rounded-[2.5rem] border p-20 transition-all duration-500 overflow-hidden relative ${
-        darkMode ? 'bg-slate-900 border-white/5 shadow-2xl backdrop-blur-xl' : 'bg-white border-black/5 shadow-xl shadow-slate-200'
+        darkMode ? 'bg-zinc-900 border-white/5 shadow-2xl backdrop-blur-xl' : 'bg-white border-black/5 shadow-xl shadow-zinc-200'
       }`}>
         <div className="text-center">
           <div className={`w-24 h-24 mx-auto mb-6 rounded-3xl flex items-center justify-center transition-all duration-500 ${
@@ -29,10 +29,10 @@ const Timeline = ({ events, onEventClick, onEventDelete, zoomLevel, darkMode = t
           }`}>
             <Calendar className={`w-12 h-12 ${darkMode ? 'text-emerald-400' : 'text-emerald-600'}`} />
           </div>
-          <p className={`text-2xl font-black tracking-tight mb-2 ${darkMode ? 'text-white' : 'text-slate-900'}`}>
+          <p className={`text-2xl font-black tracking-tight mb-2 ${darkMode ? 'text-white' : 'text-zinc-900'}`}>
             Historial vacío
           </p>
-          <p className="text-slate-500 font-medium">
+          <p className="text-zinc-500 font-medium">
             Los eventos aparecerán aquí cuando la cámara sea utilizada en torneos o logística.
           </p>
         </div>
@@ -133,7 +133,7 @@ const Timeline = ({ events, onEventClick, onEventDelete, zoomLevel, darkMode = t
     <div className="space-y-8 animate-fade-in flex flex-col h-full">
       {/* Header and Filter Controls */}
       <div className={`rounded-3xl border p-6 transition-all duration-500 flex-shrink-0 ${
-        darkMode ? 'bg-slate-900 border-white/5 shadow-2xl backdrop-blur-lg' : 'bg-white border-black/5 shadow-sm'
+        darkMode ? 'bg-zinc-900 border-white/5 shadow-2xl backdrop-blur-lg' : 'bg-white border-black/5 shadow-sm'
       }`}>
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-8">
           <div className="flex items-center gap-4">
@@ -143,15 +143,15 @@ const Timeline = ({ events, onEventClick, onEventDelete, zoomLevel, darkMode = t
               <Calendar className={`w-6 h-6 ${darkMode ? 'text-emerald-400' : 'text-white'}`} />
             </div>
             <div>
-              <h2 className={`text-xl font-black tracking-tight ${darkMode ? 'text-white' : 'text-slate-900'}`}>Evolución Temporal</h2>
-              <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">
+              <h2 className={`text-xl font-black tracking-tight ${darkMode ? 'text-white' : 'text-zinc-900'}`}>Evolución Temporal</h2>
+              <p className="text-zinc-500 text-[10px] font-black uppercase tracking-widest">
                 Visualizando {filteredEvents.length} de {events.length} eventos
               </p>
             </div>
           </div>
 
           <div className="relative group flex-1 lg:max-w-xs">
-            <Search className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 transition-colors ${darkMode ? 'text-slate-500 group-focus-within:text-emerald-400' : 'text-slate-400 group-focus-within:text-emerald-500'}`} />
+            <Search className={`absolute left-3 top-1/2 -tranzinc-y-1/2 w-4 h-4 transition-colors ${darkMode ? 'text-zinc-500 group-focus-within:text-emerald-400' : 'text-zinc-400 group-focus-within:text-emerald-500'}`} />
             <input
               type="text"
               placeholder="Identificador, evento..."
@@ -159,8 +159,8 @@ const Timeline = ({ events, onEventClick, onEventDelete, zoomLevel, darkMode = t
               onChange={(e) => setSearchTerm(e.target.value)}
               className={`w-full border rounded-xl px-4 py-2.5 pl-10 transition-all duration-300 text-sm outline-none focus:ring-2 focus:ring-emerald-500/50 ${
                 darkMode 
-                  ? 'bg-white/5 border-white/10 text-white placeholder-slate-500 group-hover:bg-white/10' 
-                  : 'bg-slate-50 border-slate-200 text-slate-900 placeholder-slate-400 group-hover:bg-slate-100'
+                  ? 'bg-white/5 border-white/10 text-white placeholder-zinc-500 group-hover:bg-white/10' 
+                  : 'bg-zinc-50 border-zinc-200 text-zinc-900 placeholder-zinc-400 group-hover:bg-zinc-100'
               }`}
             />
           </div>
@@ -181,9 +181,9 @@ const Timeline = ({ events, onEventClick, onEventDelete, zoomLevel, darkMode = t
                       : 'bg-emerald-500 border-emerald-600 text-white shadow-lg'
                     : option.count > 0
                     ? darkMode
-                      ? 'bg-white/5 border-white/10 text-slate-400 hover:bg-white/10 hover:text-white'
-                      : 'bg-slate-50 border-slate-200 text-slate-500 hover:bg-slate-100 hover:text-slate-900'
-                    : 'bg-white/5 border-white/5 text-slate-700 cursor-not-allowed opacity-30'
+                      ? 'bg-white/5 border-white/10 text-zinc-400 hover:bg-white/10 hover:text-white'
+                      : 'bg-zinc-50 border-zinc-200 text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900'
+                    : 'bg-white/5 border-white/5 text-zinc-700 cursor-not-allowed opacity-30'
                 }
               `}
             >
@@ -195,13 +195,13 @@ const Timeline = ({ events, onEventClick, onEventDelete, zoomLevel, darkMode = t
 
       {/* Graph Timeline Area */}
       <div className={`rounded-[3rem] border transition-all duration-500 overflow-hidden relative flex-1 min-h-[600px] ${
-        darkMode ? 'bg-slate-900 border-white/5 shadow-2xl' : 'bg-white border-black/5 shadow-xl shadow-slate-200'
+        darkMode ? 'bg-zinc-900 border-white/5 shadow-2xl' : 'bg-white border-black/5 shadow-xl shadow-zinc-200'
       }`}>
         {filteredEvents.length === 0 ? (
           <div className="h-full flex items-center justify-center py-20">
             <div className="text-center">
-              <Filter className={`w-12 h-12 mx-auto mb-4 ${darkMode ? 'text-slate-600' : 'text-slate-300'}`} />
-              <p className={`text-lg font-medium ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>No se encontraron eventos</p>
+              <Filter className={`w-12 h-12 mx-auto mb-4 ${darkMode ? 'text-zinc-600' : 'text-zinc-300'}`} />
+              <p className={`text-lg font-medium ${darkMode ? 'text-zinc-400' : 'text-zinc-500'}`}>No se encontraron eventos</p>
             </div>
           </div>
         ) : (
@@ -223,7 +223,7 @@ const Timeline = ({ events, onEventClick, onEventDelete, zoomLevel, darkMode = t
                 size={1} 
               />
               <Controls 
-                className={darkMode ? 'bg-slate-800 text-white fill-white border-white/10' : ''}
+                className={darkMode ? 'bg-zinc-800 text-white fill-white border-white/10' : ''}
                 showInteractive={false} 
               />
             </ReactFlow>
@@ -233,9 +233,9 @@ const Timeline = ({ events, onEventClick, onEventDelete, zoomLevel, darkMode = t
 
       {/* Analytics Summary */}
       <div className={`rounded-3xl border p-6 transition-all duration-500 ${
-        darkMode ? 'bg-slate-900/50 border-white/5 shadow-2xl backdrop-blur-lg' : 'bg-white border-black/5 shadow-sm'
+        darkMode ? 'bg-zinc-900/50 border-white/5 shadow-2xl backdrop-blur-lg' : 'bg-white border-black/5 shadow-sm'
       }`}>
-        <h3 className={`text-[10px] font-black uppercase tracking-widest mb-6 ${darkMode ? 'text-slate-500' : 'text-slate-400'}`}>Dashboard Analítico</h3>
+        <h3 className={`text-[10px] font-black uppercase tracking-widest mb-6 ${darkMode ? 'text-zinc-500' : 'text-zinc-400'}`}>Dashboard Analítico</h3>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           {[
             { label: 'Total Eventos', count: eventStats.total, color: 'emerald' },
@@ -247,12 +247,12 @@ const Timeline = ({ events, onEventClick, onEventDelete, zoomLevel, darkMode = t
             <div 
               key={i}
               className={`p-4 rounded-2xl border transition-all duration-500 ${
-                darkMode ? 'bg-white/[0.02] border-white/5' : 'bg-slate-50 border-slate-100'
+                darkMode ? 'bg-white/[0.02] border-white/5' : 'bg-zinc-50 border-zinc-100'
               }`}
             >
-              <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-1">{stat.label}</p>
+              <p className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-1">{stat.label}</p>
               <p className={`text-2xl font-black transition-colors duration-500 ${
-                darkMode ? 'text-white' : 'text-slate-900'
+                darkMode ? 'text-white' : 'text-zinc-900'
               }`}>{stat.count}</p>
               <div className={`h-1 w-8 mt-2 rounded-full bg-${stat.color}-500/50`}></div>
             </div>
