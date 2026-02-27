@@ -91,7 +91,7 @@ const LoginPage = ({ onLogin }) => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="block w-full pl-12 pr-4 py-3.5 bg-white/40 border-2 border-white/50 rounded-sm text-emerald-950 placeholder-emerald-900/30 focus:outline-none focus:ring-0 focus:border-emerald-500 focus:bg-white/80 transition-all duration-300 shadow-inner font-medium text-lg tracking-widest"
-                placeholder="••••••••••"
+                placeholder="⬢⬢⬢⬢⬢⬢⬢⬢⬢⬢"
                 required
                 autoComplete="current-password"
               />
@@ -101,9 +101,9 @@ const LoginPage = ({ onLogin }) => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full relative mt-8 flex justify-center py-4 px-4 border border-transparent shadow-xl shadow-emerald-600/20 text-base font-black uppercase tracking-widest text-white bg-lime-700 hover:bg-lime-500 hover:shadow-emerald-500/30 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 overflow-hidden group"
+            className="w-full relative mt-8 flex justify-center py-4 px-4 border border-transparent shadow-xl shadow-emerald-600/20 text-base font-black uppercase tracking-widest text-white bg-lime-700 hover:bg-lime-500 hover:shadow-emerald-500/30 hover:-tranzinc-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 overflow-hidden group"
           >
-            <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
+            <div className="absolute inset-0 bg-white/20 tranzinc-y-full group-hover:tranzinc-y-0 transition-transform duration-500"></div>
             <span className="relative z-10 flex items-center gap-2">
               {loading ? (
                 <div className="w-5 h-5 border-2 border-emerald-200 border-t-white rounded-full animate-spin" />

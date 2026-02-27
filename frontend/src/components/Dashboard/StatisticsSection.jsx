@@ -164,7 +164,7 @@ const StatisticsSection = memo(({ tournaments = [], cameras = [], workers = [], 
   return (
     <div className="space-y-8 transform-gpu">
       {/* Selector de Pestañas Desktop */}
-      <div className="flex flex-wrap gap-2 bg-slate-900/40 p-1.5 rounded-2xl border border-white/5 backdrop-blur-md sticky top-0 z-10 overflow-x-auto">
+      <div className="flex flex-wrap gap-2 bg-zinc-900/40 p-1.5 rounded-2xl border border-white/5 backdrop-blur-md sticky top-0 z-10 overflow-x-auto">
         {tabs.map((tab) => (
           <button
             key={tab.id}
@@ -183,7 +183,7 @@ const StatisticsSection = memo(({ tournaments = [], cameras = [], workers = [], 
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fade-in">
         
-        {/* --- SECCIÓN TORNEOS --- */}
+        {/* --- SECCI�N TORNEOS --- */}
         {activeTab === 'tournaments' && (
           <>
             <div className="md:col-span-2 border border-white/5 shadow-2xl rounded-[2rem] p-6 md:p-8 relative overflow-hidden group">
@@ -297,7 +297,7 @@ const StatisticsSection = memo(({ tournaments = [], cameras = [], workers = [], 
           </>
         )}
 
-        {/* --- SECCIÓN CÁMARAS --- */}
+        {/* --- SECCI�N CÁMARAS --- */}
         {activeTab === 'cameras' && (
           <>
             <div className="border border-white/5 shadow-2xl rounded-[2rem] p-6 md:p-8 relative overflow-hidden group">
@@ -340,7 +340,7 @@ const StatisticsSection = memo(({ tournaments = [], cameras = [], workers = [], 
           </>
         )}
 
-        {/* --- SECCIÓN PERSONAL --- */}
+        {/* --- SECCI�N PERSONAL --- */}
         {activeTab === 'workers' && (
           <>
             <div className="md:col-span-2 border border-white/5 shadow-2xl rounded-[2rem] p-6 md:p-8 relative overflow-hidden group">
@@ -360,7 +360,7 @@ const StatisticsSection = memo(({ tournaments = [], cameras = [], workers = [], 
           </>
         )}
 
-        {/* --- SECCIÓN LOGÍSTICA --- */}
+        {/* --- SECCI�N LOGÍSTICA --- */}
         {activeTab === 'logistics' && (
           <>
             <div className="border border-white/5 shadow-2xl rounded-[2rem] p-6 md:p-8 relative overflow-hidden group">

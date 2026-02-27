@@ -7,17 +7,17 @@ const WorkerMobileCard = ({ worker, onView, onEdit, onDelete, darkMode = true })
 
   return (
     <div className={`p-6 rounded-3xl border transition-all duration-300 ${
-      darkMode ? 'bg-white/[0.02] border-white/5 shadow-2xl' : 'bg-white border-black/5 shadow-xl shadow-slate-200'
+      darkMode ? 'bg-white/[0.02] border-white/5 shadow-2xl' : 'bg-white border-black/5 shadow-xl shadow-zinc-200'
     }`}>
       {/* Header */}
       <div className="flex items-start justify-between mb-5">
         <div className="flex items-center space-x-3 flex-1 min-w-0">
-          <div className={`p-2.5 rounded-xl transition-colors duration-500 ${darkMode ? 'bg-white/5 text-slate-400' : 'bg-slate-50 text-slate-500'}`}>
+          <div className={`p-2.5 rounded-xl transition-colors duration-500 ${darkMode ? 'bg-white/5 text-zinc-400' : 'bg-zinc-50 text-zinc-500'}`}>
             <User className="w-5 h-5 flex-shrink-0" />
           </div>
           <div className="min-w-0">
-            <div className={`text-base font-black transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'} truncate`}>{worker.name}</div>
-            <div className="text-[10px] font-bold text-slate-500 uppercase tracking-tight">ID: {worker.id}</div>
+            <div className={`text-base font-black transition-colors duration-500 ${darkMode ? 'text-white' : 'text-zinc-900'} truncate`}>{worker.name}</div>
+            <div className="text-[10px] font-bold text-zinc-500 uppercase tracking-tight">ID: {worker.id}</div>
             {worker.specialty && (
               <div className={`text-[10px] font-black uppercase tracking-widest truncate ${darkMode ? 'text-emerald-500/70' : 'text-emerald-600'}`}>{worker.specialty}</div>
             )}
@@ -39,7 +39,7 @@ const WorkerMobileCard = ({ worker, onView, onEdit, onDelete, darkMode = true })
             <button
               onClick={() => setShowMenu(!showMenu)}
               className={`p-2.5 rounded-xl transition-all duration-300 ${
-                darkMode ? 'bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white' : 'bg-slate-50 text-slate-500 hover:bg-slate-100'
+                darkMode ? 'bg-white/5 text-zinc-400 hover:bg-white/10 hover:text-white' : 'bg-zinc-50 text-zinc-500 hover:bg-zinc-100'
               }`}
             >
               <MoreVertical className="w-5 h-5" />
@@ -49,7 +49,7 @@ const WorkerMobileCard = ({ worker, onView, onEdit, onDelete, darkMode = true })
               <>
                 <div className="fixed inset-0 z-40" onClick={() => setShowMenu(false)} />
                 <div className={`absolute right-0 mt-3 w-56 rounded-2xl border shadow-2xl z-50 overflow-hidden transform origin-top-right transition-all duration-300 ${
-                  darkMode ? 'bg-slate-900 border-white/10 shadow-black' : 'bg-white border-black/5'
+                  darkMode ? 'bg-zinc-900 border-white/10 shadow-black' : 'bg-white border-black/5'
                 }`}>
                   <div className="p-2 space-y-1">
                     <button
@@ -58,7 +58,7 @@ const WorkerMobileCard = ({ worker, onView, onEdit, onDelete, darkMode = true })
                         setShowMenu(false);
                       }}
                       className={`w-full flex items-center space-x-3 px-4 py-3 text-xs font-black uppercase tracking-widest rounded-xl transition-colors ${
-                        darkMode ? 'text-white hover:bg-white/10' : 'text-slate-700 hover:bg-slate-50'
+                        darkMode ? 'text-white hover:bg-white/10' : 'text-zinc-700 hover:bg-zinc-50'
                       }`}
                     >
                       <Eye className="w-4 h-4 text-emerald-500" />
@@ -70,13 +70,13 @@ const WorkerMobileCard = ({ worker, onView, onEdit, onDelete, darkMode = true })
                         setShowMenu(false);
                       }}
                       className={`w-full flex items-center space-x-3 px-4 py-3 text-xs font-black uppercase tracking-widest rounded-xl transition-colors ${
-                        darkMode ? 'text-blue-400 hover:bg-white/10' : 'text-blue-600 hover:bg-slate-50'
+                        darkMode ? 'text-blue-400 hover:bg-white/10' : 'text-blue-600 hover:bg-zinc-50'
                       }`}
                     >
                       <Edit className="w-4 h-4" />
                       <span>Modificar</span>
                     </button>
-                    <div className={`border-t my-1 ${darkMode ? 'border-white/10' : 'border-slate-100'}`}></div>
+                    <div className={`border-t my-1 ${darkMode ? 'border-white/10' : 'border-zinc-100'}`}></div>
                     <button
                       onClick={() => {
                         if (confirm('¿Confirmar baja definitiva del operador en el sistema?')) {
@@ -108,14 +108,14 @@ const WorkerMobileCard = ({ worker, onView, onEdit, onDelete, darkMode = true })
       <div className="space-y-4">
         {/* State */}
         <div className="flex items-center space-x-3">
-          <MapPin className="w-4 h-4 text-slate-500 flex-shrink-0" />
-          <span className={`text-[11px] font-bold transition-colors duration-500 ${darkMode ? 'text-slate-300' : 'text-slate-600'} truncate`}>{worker.state}</span>
+          <MapPin className="w-4 h-4 text-zinc-500 flex-shrink-0" />
+          <span className={`text-[11px] font-bold transition-colors duration-500 ${darkMode ? 'text-zinc-300' : 'text-zinc-600'} truncate`}>{worker.state}</span>
         </div>
 
         {/* Phone */}
         <div className="flex items-center space-x-3">
-          <Phone className="w-4 h-4 text-slate-500 flex-shrink-0" />
-          <span className={`text-[11px] font-mono font-bold transition-colors duration-500 ${darkMode ? 'text-slate-300' : 'text-slate-600'}`}>{worker.phone}</span>
+          <Phone className="w-4 h-4 text-zinc-500 flex-shrink-0" />
+          <span className={`text-[11px] font-mono font-bold transition-colors duration-500 ${darkMode ? 'text-zinc-300' : 'text-zinc-600'}`}>{worker.phone}</span>
         </div>
       </div>
     </div>

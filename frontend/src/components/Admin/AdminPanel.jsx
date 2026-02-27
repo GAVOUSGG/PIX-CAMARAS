@@ -36,7 +36,7 @@ const AdminPanel = ({ darkMode = true }) => {
         setError('Error al cargar usuarios');
       }
     } catch (err) {
-      setError('Error de conexión');
+      setError('Error de conexiÒ³n');
     } finally {
       setLoading(false);
     }
@@ -87,12 +87,12 @@ const AdminPanel = ({ darkMode = true }) => {
         alert(data.error || 'Error al guardar usuario');
       }
     } catch (err) {
-      alert('Error de conexión');
+      alert('Error de conexiÒ³n');
     }
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('¿Estás seguro de eliminar este usuario?')) return;
+    if (!window.confirm('�¿EstÒ¡s seguro de eliminar este usuario?')) return;
     
     try {
       const response = await fetch(`${API_URL}/users/${id}`, {
@@ -106,7 +106,7 @@ const AdminPanel = ({ darkMode = true }) => {
         alert('Error al eliminar usuario');
       }
     } catch (err) {
-      alert('Error de conexión');
+      alert('Error de conexiÒ³n');
     }
   };
 
@@ -133,11 +133,11 @@ const AdminPanel = ({ darkMode = true }) => {
     <div className="space-y-6 animate-fade-in">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h2 className={`text-xl md:text-2xl font-bold transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>Panel de Administración</h2>
-          <p className="text-sm md:text-base text-slate-500">Gestión de usuarios y monitoreo de actividad</p>
+          <h2 className={`text-xl md:text-2xl font-bold transition-colors duration-500 ${darkMode ? 'text-white' : 'text-zinc-900'}`}>Panel de AdministraciÒ³n</h2>
+          <p className="text-sm md:text-base text-zinc-500">GestiÒ³n de usuarios y monitoreo de actividad</p>
         </div>
         <div className="flex flex-wrap gap-2 md:space-x-3">
-          <div className={`flex rounded-xl p-1 transition-colors duration-500 ${darkMode ? 'bg-slate-900 border border-white/5' : 'bg-slate-100 border border-black/5'}`}>
+          <div className={`flex rounded-xl p-1 transition-colors duration-500 ${darkMode ? 'bg-zinc-900 border border-white/5' : 'bg-zinc-100 border border-black/5'}`}>
             <button
               onClick={() => setActiveView('users')}
               className={`px-4 py-1.5 rounded-lg text-sm font-bold transition-all whitespace-nowrap ${
@@ -145,7 +145,7 @@ const AdminPanel = ({ darkMode = true }) => {
                   ? darkMode 
                     ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' 
                     : 'bg-emerald-500 text-white shadow-lg' 
-                  : 'text-slate-500 hover:text-slate-400'
+                  : 'text-zinc-500 hover:text-zinc-400'
               }`}
             >
               Usuarios
@@ -157,7 +157,7 @@ const AdminPanel = ({ darkMode = true }) => {
                   ? darkMode 
                     ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' 
                     : 'bg-emerald-500 text-white shadow-lg' 
-                  : 'text-slate-500 hover:text-slate-400'
+                  : 'text-zinc-500 hover:text-zinc-400'
               }`}
             >
               Historial
@@ -183,40 +183,40 @@ const AdminPanel = ({ darkMode = true }) => {
       )}
 
       <div className={`rounded-3xl border overflow-hidden transition-all duration-500 ${
-        darkMode ? 'bg-[#0B1120] border-white/5 shadow-2xl' : 'bg-white border-black/5 shadow-xl shadow-slate-200'
+        darkMode ? 'bg-zinc-950 border-white/5 shadow-2xl' : 'bg-white border-black/5 shadow-xl shadow-zinc-200'
       }`}>
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead>
-              <tr className={`border-b transition-colors duration-500 ${darkMode ? 'bg-white/[0.02] border-white/5' : 'bg-slate-50 border-slate-100'}`}>
+              <tr className={`border-b transition-colors duration-500 ${darkMode ? 'bg-white/[0.02] border-white/5' : 'bg-zinc-50 border-zinc-100'}`}>
                 {activeView === 'users' ? (
                   <>
-                    <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">Usuario</th>
-                    <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest hidden md:table-cell">Rol</th>
-                    <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">Estado</th>
-                    <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest hidden sm:table-cell">Último Acceso</th>
-                    <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest text-right">Acciones</th>
+                    <th className="px-6 py-4 text-[10px] font-black text-zinc-500 uppercase tracking-widest">Usuario</th>
+                    <th className="px-6 py-4 text-[10px] font-black text-zinc-500 uppercase tracking-widest hidden md:table-cell">Rol</th>
+                    <th className="px-6 py-4 text-[10px] font-black text-zinc-500 uppercase tracking-widest">Estado</th>
+                    <th className="px-6 py-4 text-[10px] font-black text-zinc-500 uppercase tracking-widest hidden sm:table-cell">Òšltimo Acceso</th>
+                    <th className="px-6 py-4 text-[10px] font-black text-zinc-500 uppercase tracking-widest text-right">Acciones</th>
                   </>
                 ) : (
                   <>
-                    <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">Fecha</th>
-                    <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">Usuario</th>
-                    <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">IP</th>
-                    <th className="px-6 py-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">Resultado</th>
+                    <th className="px-6 py-4 text-[10px] font-black text-zinc-500 uppercase tracking-widest">Fecha</th>
+                    <th className="px-6 py-4 text-[10px] font-black text-zinc-500 uppercase tracking-widest">Usuario</th>
+                    <th className="px-6 py-4 text-[10px] font-black text-zinc-500 uppercase tracking-widest">IP</th>
+                    <th className="px-6 py-4 text-[10px] font-black text-zinc-500 uppercase tracking-widest">Resultado</th>
                   </>
                 )}
               </tr>
             </thead>
-            <tbody className={`divide-y transition-colors duration-500 ${darkMode ? 'divide-white/5' : 'divide-slate-100'}`}>
+            <tbody className={`divide-y transition-colors duration-500 ${darkMode ? 'divide-white/5' : 'divide-zinc-100'}`}>
               {activeView === 'users' ? (
                 users.map((user) => (
                   <tr key={user.id} className={`transition-colors hover:bg-emerald-500/[0.02]`}>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
-                        <div className={`h-10 w-10 rounded-xl flex items-center justify-center mr-3 transition-colors duration-500 ${darkMode ? 'bg-white/5' : 'bg-slate-100'}`}>
+                        <div className={`h-10 w-10 rounded-xl flex items-center justify-center mr-3 transition-colors duration-500 ${darkMode ? 'bg-white/5' : 'bg-zinc-100'}`}>
                           <UserIcon className={`h-5 w-5 ${darkMode ? 'text-emerald-400' : 'text-emerald-600'}`} />
                         </div>
-                        <span className={`text-sm font-bold ${darkMode ? 'text-white' : 'text-slate-900'}`}>{user.username}</span>
+                        <span className={`text-sm font-bold ${darkMode ? 'text-white' : 'text-zinc-900'}`}>{user.username}</span>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap hidden md:table-cell">
@@ -240,7 +240,7 @@ const AdminPanel = ({ darkMode = true }) => {
                         </span>
                       )}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 hidden sm:table-cell font-medium">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-zinc-500 hidden sm:table-cell font-medium">
                       <div className="flex items-center">
                         <Clock className="h-4 w-4 mr-2 opacity-50" />
                         {user.lastLogin ? new Date(user.lastLogin).toLocaleString() : 'Nunca'}
@@ -250,13 +250,13 @@ const AdminPanel = ({ darkMode = true }) => {
                       <div className="flex items-center justify-end space-x-2">
                         <button 
                           onClick={() => openModal(user)}
-                          className={`p-2 rounded-lg transition-colors ${darkMode ? 'text-slate-400 hover:text-blue-400 hover:bg-blue-500/10' : 'text-slate-400 hover:text-blue-600 hover:bg-blue-50'}`}
+                          className={`p-2 rounded-lg transition-colors ${darkMode ? 'text-zinc-400 hover:text-blue-400 hover:bg-blue-500/10' : 'text-zinc-400 hover:text-blue-600 hover:bg-blue-50'}`}
                         >
                           <Edit2 className="w-4 h-4" />
                         </button>
                         <button 
                           onClick={() => handleDelete(user.id)}
-                          className={`p-2 rounded-lg transition-colors ${darkMode ? 'text-slate-400 hover:text-red-400 hover:bg-red-500/10' : 'text-slate-400 hover:text-red-600 hover:bg-red-50'}`}
+                          className={`p-2 rounded-lg transition-colors ${darkMode ? 'text-zinc-400 hover:text-red-400 hover:bg-red-500/10' : 'text-zinc-400 hover:text-red-600 hover:bg-red-50'}`}
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
@@ -267,13 +267,13 @@ const AdminPanel = ({ darkMode = true }) => {
               ) : (
                 history.map((attempt) => (
                   <tr key={attempt.id} className={`transition-colors hover:bg-emerald-500/[0.02]`}>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-500">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-zinc-500">
                       {new Date(attempt.timestamp).toLocaleString()}
                     </td>
-                    <td className={`px-6 py-4 whitespace-nowrap text-sm font-bold ${darkMode ? 'text-white' : 'text-slate-900'}`}>
+                    <td className={`px-6 py-4 whitespace-nowrap text-sm font-bold ${darkMode ? 'text-white' : 'text-zinc-900'}`}>
                       {attempt.username}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                    <td className="px-6 py-4 whitespace-nowrap text-[10px] font-black text-zinc-500 uppercase tracking-widest">
                       {attempt.ip}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -299,15 +299,15 @@ const AdminPanel = ({ darkMode = true }) => {
       {showModal && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4 animate-fade-in">
           <div className={`w-full max-w-md p-8 rounded-[2rem] border shadow-2xl transition-all duration-500 ${
-            darkMode ? 'bg-slate-900 border-white/10' : 'bg-white border-black/5'
+            darkMode ? 'bg-zinc-900 border-white/10' : 'bg-white border-black/5'
           }`}>
             <div className="flex justify-between items-center mb-8">
-              <h3 className={`text-2xl font-black tracking-tight ${darkMode ? 'text-white' : 'text-slate-900'}`}>
+              <h3 className={`text-2xl font-black tracking-tight ${darkMode ? 'text-white' : 'text-zinc-900'}`}>
                 {editingUser ? 'Editar' : 'Nuevo'} <span className="text-emerald-500">Usuario</span>
               </h3>
               <button 
                 onClick={() => setShowModal(false)}
-                className={`p-2 rounded-xl transition-colors ${darkMode ? 'hover:bg-white/5 text-slate-500 hover:text-white' : 'hover:bg-slate-100 text-slate-400 hover:text-slate-900'}`}
+                className={`p-2 rounded-xl transition-colors ${darkMode ? 'hover:bg-white/5 text-zinc-500 hover:text-white' : 'hover:bg-zinc-100 text-zinc-400 hover:text-zinc-900'}`}
               >
                 <X className="w-6 h-6" />
               </button>
@@ -315,13 +315,13 @@ const AdminPanel = ({ darkMode = true }) => {
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-1">Identificador de Usuario</label>
+                <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 ml-1">Identificador de Usuario</label>
                 <input
                   type="text"
                   value={formData.username}
                   onChange={(e) => setFormData({...formData, username: e.target.value})}
                   className={`w-full px-4 py-3 rounded-xl border text-sm font-medium outline-none transition-all focus:ring-2 focus:ring-emerald-500/50 ${
-                    darkMode ? 'bg-white/5 border-white/10 text-white placeholder-slate-500' : 'bg-slate-50 border-slate-200 text-slate-900'
+                    darkMode ? 'bg-white/5 border-white/10 text-white placeholder-zinc-500' : 'bg-zinc-50 border-zinc-200 text-zinc-900'
                   }`}
                   placeholder="ej. JuanPerez"
                   required
@@ -329,33 +329,33 @@ const AdminPanel = ({ darkMode = true }) => {
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-1">
-                  Contraseña {editingUser && '(opcional)'}
+                <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 ml-1">
+                  ContraseÒ±a {editingUser && '(opcional)'}
                 </label>
                 <input
                   type="password"
                   value={formData.password}
                   onChange={(e) => setFormData({...formData, password: e.target.value})}
                   className={`w-full px-4 py-3 rounded-xl border text-sm font-medium outline-none transition-all focus:ring-2 focus:ring-emerald-500/50 ${
-                    darkMode ? 'bg-white/5 border-white/10 text-white placeholder-slate-500' : 'bg-slate-50 border-slate-200 text-slate-900'
+                    darkMode ? 'bg-white/5 border-white/10 text-white placeholder-zinc-500' : 'bg-zinc-50 border-zinc-200 text-zinc-900'
                   }`}
-                  placeholder="••••••••"
+                  placeholder="â��¢â��¢â��¢â��¢â��¢â��¢â��¢â��¢"
                   required={!editingUser}
                   autoComplete="new-password"
                 />
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-1">Nivel de Acceso</label>
+                <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 ml-1">Nivel de Acceso</label>
                 <select
                   value={formData.role}
                   onChange={(e) => setFormData({...formData, role: e.target.value})}
                   className={`w-full px-4 py-3 rounded-xl border text-sm font-bold outline-none appearance-none transition-all focus:ring-2 focus:ring-emerald-500/50 cursor-pointer ${
-                    darkMode ? 'bg-white/5 border-white/10 text-white' : 'bg-slate-50 border-slate-200 text-slate-900'
+                    darkMode ? 'bg-white/5 border-white/10 text-white' : 'bg-zinc-50 border-zinc-200 text-zinc-900'
                   }`}
                 >
-                  <option value="user" className={darkMode ? 'bg-slate-900' : 'bg-white'}>Colaborador (Ventas)</option>
-                  <option value="admin" className={darkMode ? 'bg-slate-900' : 'bg-white'}>Administrador (Total)</option>
+                  <option value="user" className={darkMode ? 'bg-zinc-900' : 'bg-white'}>Colaborador (Ventas)</option>
+                  <option value="admin" className={darkMode ? 'bg-zinc-900' : 'bg-white'}>Administrador (Total)</option>
                 </select>
               </div>
 
@@ -364,7 +364,7 @@ const AdminPanel = ({ darkMode = true }) => {
                   type="button"
                   onClick={() => setShowModal(false)}
                   className={`flex-1 px-6 py-3 rounded-xl text-sm font-bold transition-all border ${
-                    darkMode ? 'bg-white/5 border-white/10 text-slate-400 hover:bg-white/10 hover:text-white' : 'bg-slate-100 border-slate-200 text-slate-600 hover:bg-slate-200'
+                    darkMode ? 'bg-white/5 border-white/10 text-zinc-400 hover:bg-white/10 hover:text-white' : 'bg-zinc-100 border-zinc-200 text-zinc-600 hover:bg-zinc-200'
                   }`}
                 >
                   Cancelar

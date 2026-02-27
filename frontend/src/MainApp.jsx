@@ -64,6 +64,8 @@ const MainApp = ({ user, onLogout }) => {
     setWorkersData,
     setCamerasData,
     setShipmentsData,
+    openCreateModal,
+    setOpenCreateModal
   } = useAppState();
 
   // Función para manejar el envío de cámaras
@@ -103,6 +105,7 @@ const MainApp = ({ user, onLogout }) => {
             tasksData={tasksData}
             onCompleteTask={completeTask}
             onShipCameras={handleShipCameras}
+            setActiveTab={setActiveTab}
             darkMode={darkMode}
           />
         );
@@ -116,6 +119,8 @@ const MainApp = ({ user, onLogout }) => {
             onUpdateTournament={updateTournament}
             onDeleteTournament={deleteTournament}
             onSetSelectedTournament={setSelectedTournament}
+            openCreateModal={openCreateModal}
+            setOpenCreateModal={setOpenCreateModal}
             darkMode={darkMode}
           />
         );
@@ -163,6 +168,8 @@ const MainApp = ({ user, onLogout }) => {
             onCreateShipment={createShipment}
             onUpdateShipment={updateShipment}
             onDeleteShipment={deleteShipment}
+            openCreateModal={openCreateModal}
+            setOpenCreateModal={setOpenCreateModal}
             darkMode={darkMode}
           />
         );
@@ -198,6 +205,8 @@ const MainApp = ({ user, onLogout }) => {
             tasksData={tasksData}
             onCompleteTask={completeTask}
             onShipCameras={handleShipCameras}
+            setActiveTab={setActiveTab}
+            setOpenCreateModal={setOpenCreateModal}
             darkMode={darkMode}
           />
         );
@@ -207,9 +216,9 @@ const MainApp = ({ user, onLogout }) => {
   if (loading) {
     return (
       <div className={`min-h-screen flex items-center justify-center transition-colors duration-500 ${
-        darkMode ? 'bg-slate-900' : 'bg-slate-50'
+        darkMode ? 'bg-zinc-900' : 'bg-zinc-50'
       }`}>
-        <div className={`text-xl font-bold tracking-widest animate-pulse ${darkMode ? 'text-white' : 'text-slate-900'}`}>Cargando PixGolf...</div>
+        <div className={`text-xl font-bold tracking-widest animate-pulse ${darkMode ? 'text-white' : 'text-zinc-900'}`}>Cargando PixGolf...</div>
       </div>
     );
   }

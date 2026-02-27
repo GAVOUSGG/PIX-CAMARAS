@@ -43,7 +43,7 @@ const CameraCard = ({ camera, onClose, onEdit }) => {
         onClick={onClose}
       />
       <div 
-        className="relative bg-slate-800 border border-white/20 rounded-2xl p-6 max-w-2xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-y-auto shadow-2xl"
+        className="relative bg-zinc-800 border border-white/20 rounded-2xl p-6 max-w-2xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-y-auto shadow-2xl"
         onClick={handleModalClick}
       >
         {/* Header */}

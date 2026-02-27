@@ -21,7 +21,7 @@ const StatsGrid = memo(({ tournaments, cameras, workers, darkMode }) => {
       title: 'Trabajadores',
       value: workers.filter(w => w.status === 'activo').length,
       icon: Users,
-      color: 'blue',
+      color: 'zinc',
       description: 'Activos en campo'
     },
     {
@@ -40,9 +40,9 @@ const StatsGrid = memo(({ tournaments, cameras, workers, darkMode }) => {
     red: darkMode
       ? 'bg-red-500/10 text-red-400 border-red-500/20 shadow-[0_0_15px_rgba(239,68,68,0.15)]'
       : 'bg-red-50 text-red-600 border-red-200 shadow-[0_0_15px_rgba(239,68,68,0.1)]',
-    blue: darkMode
-      ? 'bg-blue-500/10 text-blue-400 border-blue-500/20 shadow-[0_0_15px_rgba(59,130,246,0.15)]'
-      : 'bg-blue-50 text-blue-600 border-blue-200 shadow-[0_0_15px_rgba(59,130,246,0.1)]',
+    zinc: darkMode
+      ? 'bg-zinc-500/10 text-zinc-400 border-zinc-500/20 shadow-[0_0_15px_rgba(161,161,170,0.15)]'
+      : 'bg-zinc-50 text-zinc-600 border-zinc-200 shadow-[0_0_15px_rgba(161,161,170,0.1)]',
     orange: darkMode
       ? 'bg-orange-500/10 text-orange-400 border-orange-500/20 shadow-[0_0_15px_rgba(249,115,22,0.15)]'
       : 'bg-orange-50 text-orange-600 border-orange-200 shadow-[0_0_15px_rgba(249,115,22,0.1)]'
@@ -78,10 +78,10 @@ const StatsGrid = memo(({ tournaments, cameras, workers, darkMode }) => {
             </div>
 
             <div className="relative z-10">
-              <h3 className={`text-2xl font-black tracking-tight mb-0.5 drop-shadow-sm transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>
+              <h3 className={`text-2xl font-black tracking-tight mb-0.5 drop-shadow-sm transition-colors duration-500 ${darkMode ? 'text-white' : 'text-zinc-900'}`}>
                 {stat.value}
               </h3>
-              <p className={`text-[10px] uppercase font-black tracking-widest transition-colors duration-500 ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>{stat.title}</p>
+              <p className={`text-[10px] uppercase font-black tracking-widest transition-colors duration-500 ${darkMode ? 'text-zinc-400' : 'text-zinc-500'}`}>{stat.title}</p>
             </div>
             
             {/* Divider line */}
@@ -90,8 +90,8 @@ const StatsGrid = memo(({ tournaments, cameras, workers, darkMode }) => {
             <div className="flex items-center gap-2 relative z-10">
               <span className={`text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md border transition-all duration-500 ${
                 darkMode 
-                  ? 'bg-white/5 border-white/5 text-slate-400' 
-                  : 'bg-black/5 border-black/5 text-slate-600'
+                  ? 'bg-white/5 border-white/5 text-zinc-400' 
+                  : 'bg-black/5 border-black/5 text-zinc-600'
               }`}>
                 {stat.description}
               </span>

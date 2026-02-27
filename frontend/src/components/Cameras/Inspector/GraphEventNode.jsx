@@ -17,7 +17,7 @@ const getTypeConfig = (type, darkMode) => {
     case "shipment":
       return {
         border: darkMode ? "border-blue-500/30" : "border-blue-200",
-        bg: darkMode ? "bg-slate-900/90" : "bg-white/95",
+        bg: darkMode ? "bg-zinc-900/90" : "bg-white/95",
         text: darkMode ? "text-blue-400" : "text-blue-600",
         iconBg: darkMode ? "bg-blue-500/20" : "bg-blue-500",
         iconText: darkMode ? "text-blue-400" : "text-white",
@@ -26,7 +26,7 @@ const getTypeConfig = (type, darkMode) => {
     case "tournament":
       return {
         border: darkMode ? "border-purple-500/30" : "border-purple-200",
-        bg: darkMode ? "bg-slate-900/90" : "bg-white/95",
+        bg: darkMode ? "bg-zinc-900/90" : "bg-white/95",
         text: darkMode ? "text-purple-400" : "text-purple-600",
         iconBg: darkMode ? "bg-purple-500/20" : "bg-purple-500",
         iconText: darkMode ? "text-purple-400" : "text-white",
@@ -35,7 +35,7 @@ const getTypeConfig = (type, darkMode) => {
     case "return":
       return {
         border: darkMode ? "border-orange-500/30" : "border-orange-200",
-        bg: darkMode ? "bg-slate-900/90" : "bg-white/95",
+        bg: darkMode ? "bg-zinc-900/90" : "bg-white/95",
         text: darkMode ? "text-orange-400" : "text-orange-600",
         iconBg: darkMode ? "bg-orange-500/20" : "bg-orange-500",
         iconText: darkMode ? "text-orange-400" : "text-white",
@@ -43,17 +43,17 @@ const getTypeConfig = (type, darkMode) => {
       };
     case "maintenance":
       return {
-        border: darkMode ? "border-slate-500/30" : "border-slate-300",
-        bg: darkMode ? "bg-slate-900/90" : "bg-white/95",
-        text: darkMode ? "text-slate-400" : "text-slate-600",
-        iconBg: darkMode ? "bg-slate-500/20" : "bg-slate-500",
-        iconText: darkMode ? "text-slate-400" : "text-white",
+        border: darkMode ? "border-zinc-500/30" : "border-zinc-300",
+        bg: darkMode ? "bg-zinc-900/90" : "bg-white/95",
+        text: darkMode ? "text-zinc-400" : "text-zinc-600",
+        iconBg: darkMode ? "bg-zinc-500/20" : "bg-zinc-500",
+        iconText: darkMode ? "text-zinc-400" : "text-white",
         label: "Mantenimiento",
       };
     default:
       return {
         border: darkMode ? "border-emerald-500/30" : "border-emerald-200",
-        bg: darkMode ? "bg-slate-900/90" : "bg-white/95",
+        bg: darkMode ? "bg-zinc-900/90" : "bg-white/95",
         text: darkMode ? "text-emerald-400" : "text-emerald-600",
         iconBg: darkMode ? "bg-emerald-500/20" : "bg-emerald-500",
         iconText: darkMode ? "text-emerald-400" : "text-white",
@@ -103,7 +103,7 @@ const GraphEventNode = ({ data }) => {
 
       <div 
         onClick={() => onClick(event)}
-        className={`w-80 rounded-2xl border-2 backdrop-blur-md shadow-xl transition-all duration-300 cursor-pointer hover:-translate-y-1 hover:shadow-2xl ${config.bg} ${config.border}`}
+        className={`w-80 rounded-2xl border-2 backdrop-blur-md shadow-xl transition-all duration-300 cursor-pointer hover:-tranzinc-y-1 hover:shadow-2xl ${config.bg} ${config.border}`}
       >
         <div className="p-5">
           {/* Header */}
@@ -115,20 +115,20 @@ const GraphEventNode = ({ data }) => {
               <span className={`text-[10px] font-black uppercase tracking-widest block mb-1 ${config.text}`}>
                 {config.label}
               </span>
-              <h3 className={`text-base font-black tracking-tight mb-2 leading-tight truncate ${darkMode ? 'text-white' : 'text-slate-900'}`}>
+              <h3 className={`text-base font-black tracking-tight mb-2 leading-tight truncate ${darkMode ? 'text-white' : 'text-zinc-900'}`}>
                 {event.title}
               </h3>
             </div>
           </div>
 
           {/* Chronology Base Meta */}
-          <div className="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-slate-500">
+          <div className="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-zinc-500">
             <div className="flex items-center gap-1.5">
               <Calendar className="w-3.5 h-3.5" />
               <span>{date}</span>
             </div>
             {time && (
-              <div className="flex items-center gap-1.5 border-l pl-3 border-slate-500/30">
+              <div className="flex items-center gap-1.5 border-l pl-3 border-zinc-500/30">
                 <Clock className="w-3.5 h-3.5" />
                 <span>{time}</span>
               </div>
@@ -137,11 +137,11 @@ const GraphEventNode = ({ data }) => {
 
           {/* Relevant Mini Details Map */}
           {event.details && Object.keys(event.details).length > 0 && (
-            <div className={`mt-4 pt-4 border-t flex flex-wrap gap-x-4 gap-y-2 ${darkMode ? 'border-white/10' : 'border-slate-200'}`}>
+            <div className={`mt-4 pt-4 border-t flex flex-wrap gap-x-4 gap-y-2 ${darkMode ? 'border-white/10' : 'border-zinc-200'}`}>
                {event.details.origin && (
                   <div className="flex items-center gap-1.5 w-full">
                     <MapPin className="w-3.5 h-3.5 text-blue-500" />
-                    <span className={`text-[10px] uppercase font-bold truncate ${darkMode ? 'text-slate-300' : 'text-slate-600'}`}>
+                    <span className={`text-[10px] uppercase font-bold truncate ${darkMode ? 'text-zinc-300' : 'text-zinc-600'}`}>
                       <span className="opacity-50 mr-1">ORIGEN:</span>
                       {event.details.origin}
                     </span>
@@ -150,7 +150,7 @@ const GraphEventNode = ({ data }) => {
                {event.details.destination && (
                   <div className="flex items-center gap-1.5 w-full">
                     <MapPin className="w-3.5 h-3.5 text-emerald-500" />
-                    <span className={`text-[10px] uppercase font-bold truncate ${darkMode ? 'text-slate-300' : 'text-slate-600'}`}>
+                    <span className={`text-[10px] uppercase font-bold truncate ${darkMode ? 'text-zinc-300' : 'text-zinc-600'}`}>
                       <span className="opacity-50 mr-1">DESTINO:</span>
                       {event.details.destination}
                     </span>
@@ -159,7 +159,7 @@ const GraphEventNode = ({ data }) => {
                 {event.details.trackingNumber && (
                   <div className="flex items-center gap-1.5">
                     <Truck className="w-3.5 h-3.5 text-purple-500" />
-                    <span className={`text-[10px] font-mono tracking-tighter font-bold ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+                    <span className={`text-[10px] font-mono tracking-tighter font-bold ${darkMode ? 'text-zinc-400' : 'text-zinc-500'}`}>
                       {event.details.trackingNumber}
                     </span>
                   </div>

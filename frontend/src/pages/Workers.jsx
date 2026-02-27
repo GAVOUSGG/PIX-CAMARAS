@@ -21,13 +21,13 @@ const Workers = ({
   const [stateFilter, setStateFilter] = useState("todos");
   const [statusFilter, setStatusFilter] = useState("todos");
 
-  // Obtener estados únicos para el filtro
+  // Obtener estados Òºnicos para el filtro
   const uniqueStates = useMemo(() => {
     const states = [...new Set(workersData.map((worker) => worker.state))];
     return states.sort();
   }, [workersData]);
 
-  // Obtener status únicos para el filtro
+  // Obtener status Òºnicos para el filtro
   const uniqueStatuses = useMemo(() => {
     const statuses = [...new Set(workersData.map((worker) => worker.status))];
     return statuses.sort();
@@ -37,7 +37,7 @@ const Workers = ({
   const filteredWorkers = useMemo(() => {
     return workersData
       .filter((worker) => {
-        // Filtro por búsqueda en nombre, email o teléfono
+        // Filtro por bÒºsqueda en nombre, email o telÒ©fono
         const matchesSearch =
           searchTerm === "" ||
           worker.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -114,11 +114,11 @@ const Workers = ({
 
   return (
     <div className="space-y-6 animate-fade-in">
-      {/* Header con título y botón */}
+      {/* Header con tÒ­tulo y botÒ³n */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className={`text-2xl md:text-3xl font-bold tracking-tight transition-colors duration-500 ${darkMode ? 'text-white' : 'text-slate-900'}`}>Trabajadores</h2>
-          <p className="text-slate-500 text-sm mt-1">
+          <h2 className={`text-2xl md:text-3xl font-bold tracking-tight transition-colors duration-500 ${darkMode ? 'text-white' : 'text-zinc-900'}`}>Trabajadores</h2>
+          <p className="text-zinc-500 text-sm mt-1">
             <span className="text-emerald-500 font-bold">{filteredWorkers.length}</span> de {workersData.length} trabajadores registrados
           </p>
         </div>
@@ -134,12 +134,12 @@ const Workers = ({
 
       {/* Buscador y Filtros */}
       <div className={`rounded-2xl border p-6 transition-all duration-500 ${
-        darkMode ? 'bg-slate-900/50 border-white/5 shadow-2xl backdrop-blur-lg' : 'bg-white border-black/5 shadow-sm'
+        darkMode ? 'bg-zinc-900/50 border-white/5 shadow-2xl backdrop-blur-lg' : 'bg-white border-black/5 shadow-sm'
       }`}>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {/* Buscador */}
           <div className="md:col-span-2">
-            <label className="block text-sm font-medium text-slate-500 mb-2">
+            <label className="block text-sm font-medium text-zinc-500 mb-2">
               <Search className="w-4 h-4 inline mr-2" />
               Buscar trabajador
             </label>
@@ -148,22 +148,22 @@ const Workers = ({
                 type="text"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Buscar por nombre, email o teléfono..."
+                placeholder="Buscar por nombre, email o telÒ©fono..."
                 className={`w-full border rounded-xl px-4 py-2 pl-10 transition-all duration-300 outline-none focus:ring-2 focus:ring-emerald-500/50 ${
                   darkMode 
-                    ? 'bg-white/5 border-white/10 text-white placeholder-slate-500 group-hover:bg-white/10' 
-                    : 'bg-slate-50 border-slate-200 text-slate-900 placeholder-slate-400 group-hover:bg-slate-100'
+                    ? 'bg-white/5 border-white/10 text-white placeholder-zinc-500 group-hover:bg-white/10' 
+                    : 'bg-zinc-50 border-zinc-200 text-zinc-900 placeholder-zinc-400 group-hover:bg-zinc-100'
                 }`}
               />
-              <Search className={`w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 transition-colors ${
-                darkMode ? 'text-slate-500 group-focus-within:text-emerald-400' : 'text-slate-400 group-focus-within:text-emerald-500'
+              <Search className={`w-4 h-4 absolute left-3 top-1/2 transform -tranzinc-y-1/2 transition-colors ${
+                darkMode ? 'text-zinc-500 group-focus-within:text-emerald-400' : 'text-zinc-400 group-focus-within:text-emerald-500'
               }`} />
             </div>
           </div>
 
           {/* Filtro por Estado */}
           <div>
-            <label className="block text-sm font-medium text-slate-500 mb-2">
+            <label className="block text-sm font-medium text-zinc-500 mb-2">
               <Filter className="w-4 h-4 inline mr-2" />
               Estado
             </label>
@@ -173,17 +173,17 @@ const Workers = ({
               className={`w-full border rounded-xl px-4 py-2 appearance-none outline-none transition-all cursor-pointer focus:ring-2 focus:ring-emerald-500/50 ${
                 darkMode 
                   ? 'bg-white/5 border-white/10 text-white hover:bg-white/10' 
-                  : 'bg-slate-50 border-slate-200 text-slate-900 hover:bg-slate-100'
+                  : 'bg-zinc-50 border-zinc-200 text-zinc-900 hover:bg-zinc-100'
               }`}
             >
-              <option value="todos" className={darkMode ? 'bg-slate-900' : 'bg-white'}>
+              <option value="todos" className={darkMode ? 'bg-zinc-900' : 'bg-white'}>
                 Todos los estados
               </option>
               {uniqueStates.map((state) => (
                 <option
                   key={state}
                   value={state}
-                  className={darkMode ? 'bg-slate-900' : 'bg-white'}
+                  className={darkMode ? 'bg-zinc-900' : 'bg-white'}
                 >
                   {state}
                 </option>
@@ -193,7 +193,7 @@ const Workers = ({
 
           {/* Filtro por Status */}
           <div>
-            <label className="block text-sm font-medium text-slate-500 mb-2">
+            <label className="block text-sm font-medium text-zinc-500 mb-2">
               Estatus
             </label>
             <select
@@ -202,17 +202,17 @@ const Workers = ({
               className={`w-full border rounded-xl px-4 py-2 appearance-none outline-none transition-all cursor-pointer focus:ring-2 focus:ring-emerald-500/50 ${
                 darkMode 
                   ? 'bg-white/5 border-white/10 text-white hover:bg-white/10' 
-                  : 'bg-slate-50 border-slate-200 text-slate-900 hover:bg-slate-100'
+                  : 'bg-zinc-50 border-zinc-200 text-zinc-900 hover:bg-zinc-100'
               }`}
             >
-              <option value="todos" className={darkMode ? 'bg-slate-900' : 'bg-white'}>
+              <option value="todos" className={darkMode ? 'bg-zinc-900' : 'bg-white'}>
                 Todos los estatus
               </option>
               {uniqueStatuses.map((status) => (
                 <option
                   key={status}
                   value={status}
-                  className={`${darkMode ? 'bg-slate-900' : 'bg-white'} capitalize`}
+                  className={`${darkMode ? 'bg-zinc-900' : 'bg-white'} capitalize`}
                 >
                   {status}
                 </option>
@@ -223,9 +223,9 @@ const Workers = ({
 
         {/* Controles de filtros activos */}
         {hasActiveFilters && (
-          <div className={`mt-4 flex items-center justify-between pt-4 border-t transition-colors duration-500 ${darkMode ? 'border-white/5' : 'border-slate-100'}`}>
+          <div className={`mt-4 flex items-center justify-between pt-4 border-t transition-colors duration-500 ${darkMode ? 'border-white/5' : 'border-zinc-100'}`}>
             <div className="flex items-center space-x-2 text-sm">
-              <span className="text-slate-500 font-bold uppercase text-[10px] tracking-widest mr-2">Activos:</span>
+              <span className="text-zinc-500 font-bold uppercase text-[10px] tracking-widest mr-2">Activos:</span>
               {searchTerm && (
                 <span className={`px-2 py-1 rounded text-xs font-bold transition-colors ${
                   darkMode ? 'bg-emerald-500/10 text-emerald-400' : 'bg-emerald-50 text-emerald-600'
@@ -251,7 +251,7 @@ const Workers = ({
             <button
               onClick={clearFilters}
               className={`flex items-center space-x-2 transition-colors text-xs font-bold uppercase tracking-widest ${
-                darkMode ? 'text-slate-400 hover:text-white' : 'text-slate-500 hover:text-slate-900'
+                darkMode ? 'text-zinc-400 hover:text-white' : 'text-zinc-500 hover:text-zinc-900'
               }`}
             >
               <X className="w-3.5 h-3.5" />
@@ -263,7 +263,7 @@ const Workers = ({
 
       {/* Tabla de trabajadores */}
       <div className={`rounded-3xl border overflow-hidden transition-all duration-500 ${
-        darkMode ? 'bg-[#0B1120] border-white/5 shadow-2xl' : 'bg-white border-black/5 shadow-xl shadow-slate-200'
+        darkMode ? 'bg-zinc-950 border-white/5 shadow-2xl' : 'bg-white border-black/5 shadow-xl shadow-zinc-200'
       }`}>
         <WorkersTable
           workers={filteredWorkers}
@@ -277,9 +277,9 @@ const Workers = ({
       {/* Estado cuando no hay resultados */}
       {filteredWorkers.length === 0 && (
         <div className={`text-center py-16 rounded-3xl border border-dashed transition-all duration-500 ${
-          darkMode ? 'bg-white/[0.02] border-white/10' : 'bg-slate-50 border-slate-200'
+          darkMode ? 'bg-white/[0.02] border-white/10' : 'bg-zinc-50 border-zinc-200'
         }`}>
-          <div className={`text-lg mb-4 font-medium transition-colors duration-500 ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+          <div className={`text-lg mb-4 font-medium transition-colors duration-500 ${darkMode ? 'text-zinc-400' : 'text-zinc-500'}`}>
             {hasActiveFilters
               ? "No se encontraron trabajadores con los filtros aplicados"
               : "No hay trabajadores registrados"}

@@ -58,24 +58,24 @@ const CommandPalette = ({ isOpen, onClose, cameras, onSelect, darkMode }) => {
 
   return (
     <div className="fixed inset-0 z-[100] flex items-start justify-center pt-20 sm:pt-32 px-4 animate-fade-in">
-      <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" onClick={onClose} />
+      <div className="absolute inset-0 bg-zinc-900/40 backdrop-blur-sm" onClick={onClose} />
       
       <div className={`relative w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden border ${
-        darkMode ? 'bg-slate-900 border-white/10' : 'bg-white border-black/10'
+        darkMode ? 'bg-zinc-900 border-white/10' : 'bg-white border-black/10'
       }`}>
         <div className={`flex items-center px-4 py-4 border-b ${darkMode ? 'border-white/10' : 'border-black/5'}`}>
-          <Search className={`w-5 h-5 mr-3 ${darkMode ? 'text-slate-400' : 'text-slate-400'}`} />
+          <Search className={`w-5 h-5 mr-3 ${darkMode ? 'text-zinc-400' : 'text-zinc-400'}`} />
           <input
             ref={inputRef}
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Buscar cámara por ID, modelo, tipo o asignado a..."
+            placeholder="Buscar cÒ¡mara por ID, modelo, tipo o asignado a..."
             className={`flex-1 bg-transparent border-none outline-none text-lg font-medium ${
-              darkMode ? 'text-white placeholder-slate-500' : 'text-slate-900 placeholder-slate-400'
+              darkMode ? 'text-white placeholder-zinc-500' : 'text-zinc-900 placeholder-zinc-400'
             }`}
           />
-          <div className={`px-2 py-1 flex items-center gap-1 rounded text-[10px] font-bold uppercase tracking-widest ${darkMode ? 'bg-white/10 text-slate-400' : 'bg-slate-100 text-slate-500'}`}>
+          <div className={`px-2 py-1 flex items-center gap-1 rounded text-[10px] font-bold uppercase tracking-widest ${darkMode ? 'bg-white/10 text-zinc-400' : 'bg-zinc-100 text-zinc-500'}`}>
             <span>ESC</span>
           </div>
         </div>
@@ -97,28 +97,28 @@ const CommandPalette = ({ isOpen, onClose, cameras, onSelect, darkMode }) => {
                     disabled={isAssigned}
                     className={`w-full flex items-center justify-between p-3 rounded-xl transition-all text-left mb-1 ${
                       isAssigned 
-                        ? (darkMode ? 'opacity-50 cursor-not-allowed' : 'opacity-50 bg-slate-50 cursor-not-allowed')
-                        : (darkMode ? 'hover:bg-white/5 active:scale-[0.99]' : 'hover:bg-slate-50 active:scale-[0.99]')
+                        ? (darkMode ? 'opacity-50 cursor-not-allowed' : 'opacity-50 bg-zinc-50 cursor-not-allowed')
+                        : (darkMode ? 'hover:bg-white/5 active:scale-[0.99]' : 'hover:bg-zinc-50 active:scale-[0.99]')
                     }`}
                   >
                     <div className="flex items-center gap-3">
-                      <div className={`w-10 h-10 flex items-center justify-center rounded-lg ${darkMode ? 'bg-slate-800' : 'bg-slate-100'}`}>
+                      <div className={`w-10 h-10 flex items-center justify-center rounded-lg ${darkMode ? 'bg-zinc-800' : 'bg-zinc-100'}`}>
                         <CameraIcon className={`w-5 h-5 ${darkMode ? 'text-emerald-400' : 'text-emerald-500'}`} />
                       </div>
                       <div>
                         <div className="flex items-center gap-2">
-                          <span className={`font-mono font-bold ${darkMode ? 'text-white' : 'text-slate-900'}`}>{camera.id}</span>
+                          <span className={`font-mono font-bold ${darkMode ? 'text-white' : 'text-zinc-900'}`}>{camera.id}</span>
                           {isAssigned && (
-                            <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-500/20 text-slate-500 font-bold uppercase">
+                            <span className="text-[10px] px-2 py-0.5 rounded-full bg-zinc-500/20 text-zinc-500 font-bold uppercase">
                               Asignado
                             </span>
                           )}
                         </div>
-                        <p className={`text-xs ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>{camera.model} • {camera.location}</p>
+                        <p className={`text-xs ${darkMode ? 'text-zinc-400' : 'text-zinc-500'}`}>{camera.model} â��¢ {camera.location}</p>
                       </div>
                     </div>
                     {isAssigned && (
-                      <span className={`text-xs font-bold ${darkMode ? 'text-slate-400' : 'text-slate-600'}`}>
+                      <span className={`text-xs font-bold ${darkMode ? 'text-zinc-400' : 'text-zinc-600'}`}>
                         {camera.assignedTo}
                       </span>
                     )}
@@ -126,7 +126,7 @@ const CommandPalette = ({ isOpen, onClose, cameras, onSelect, darkMode }) => {
                 );
               })
             ) : (
-              <div className="p-8 text-center text-slate-500">
+              <div className="p-8 text-center text-zinc-500">
                 <p className="text-sm">No se encontraron resultados para "{searchTerm}"</p>
               </div>
             )}
@@ -138,11 +138,11 @@ const CommandPalette = ({ isOpen, onClose, cameras, onSelect, darkMode }) => {
 };
 
 
-// --- PÁGINA PRINCIPAL ---
+// --- PÒGINA PRINCIPAL ---
 const QuickAssign = ({ camerasData, workersData, onUpdateCamera, onCreateCameraHistoryEntry, darkMode }) => {
   const [localCameras, setLocalCameras] = useState([]);
   
-  // Selección
+  // SelecciÒ³n
   const [selectedCameraIds, setSelectedCameraIds] = useState([]);
   const [selectedWorkerId, setSelectedWorkerId] = useState(null);
 
@@ -180,7 +180,7 @@ const QuickAssign = ({ camerasData, workersData, onUpdateCamera, onCreateCameraH
     setToast({ message, type });
   };
 
-  // --- DERIVACIÓN DE DATOS ---
+  // --- DERIVACIÒ�SN DE DATOS ---
 
   const activeWorkers = useMemo(() => {
     let filtered = workersData.filter(w => w.status !== 'inactivo');
@@ -218,12 +218,12 @@ const QuickAssign = ({ camerasData, workersData, onUpdateCamera, onCreateCameraH
     return Array.from(types).sort();
   }, [localCameras]);
 
-  // --- ESTADÍSTICAS ---
+  // --- ESTADÒSTICAS ---
   const totalCameras = localCameras.length;
   const assignedCamerasCount = localCameras.filter(c => c.assignedTo).length;
   const progressPercent = totalCameras > 0 ? Math.round((assignedCamerasCount / totalCameras) * 100) : 0;
 
-  // --- LÓGICA DE ASIGNACIÓN ---
+  // --- LÒ�SGICA DE ASIGNACIÒ�SN ---
 
   const handleAssign = async () => {
     if (selectedCameraIds.length === 0 || !selectedWorkerId) return;
@@ -258,12 +258,12 @@ const QuickAssign = ({ camerasData, workersData, onUpdateCamera, onCreateCameraH
       
       setLocalCameras(prev => prev.map(c => selectedCameraIds.includes(c.id) ? { ...c, assignedTo: worker.name } : c));
 
-      showToast(`${selectedCameraIds.length} ${selectedCameraIds.length === 1 ? 'cámara asignada' : 'cámaras asignadas'} a ${worker.name}`);
+      showToast(`${selectedCameraIds.length} ${selectedCameraIds.length === 1 ? 'cÒ¡mara asignada' : 'cÒ¡maras asignadas'} a ${worker.name}`);
       setSelectedCameraIds([]);
       setSelectedWorkerId(null);
     } catch (error) {
       console.error(error);
-      showToast('Error al asignar cámaras', 'error');
+      showToast('Error al asignar cÒ¡maras', 'error');
     } finally {
       setIsProcessing(false);
     }
@@ -272,28 +272,28 @@ const QuickAssign = ({ camerasData, workersData, onUpdateCamera, onCreateCameraH
   const handleUnassign = async (cameraId) => {
     setIsProcessing(true);
     try {
-      const updates = { assignedTo: '', location: 'Almacén' };
+      const updates = { assignedTo: '', location: 'AlmacÒ©n' };
       await onUpdateCamera(cameraId, updates);
       
-      setLocalCameras(prev => prev.map(c => c.id === cameraId ? { ...c, assignedTo: '', location: 'Almacén' } : c));
+      setLocalCameras(prev => prev.map(c => c.id === cameraId ? { ...c, assignedTo: '', location: 'AlmacÒ©n' } : c));
       
       // Registrar en el historial
       if (onCreateCameraHistoryEntry) {
         await onCreateCameraHistoryEntry(
           cameraId,
           'return',
-          `Cámara devuelta al Almacén`,
-          { location: 'Almacén' }
+          `CÒ¡mara devuelta al AlmacÒ©n`,
+          { location: 'AlmacÒ©n' }
         );
       }
 
-      showToast(`Cámara ${cameraId} liberada`);
+      showToast(`CÒ¡mara ${cameraId} liberada`);
       if (selectedCameraIds.includes(cameraId)) {
         setSelectedCameraIds(prev => prev.filter(id => id !== cameraId));
       }
     } catch (error) {
       console.error(error);
-      showToast('Error al liberar la cámara', 'error');
+      showToast('Error al liberar la cÒ¡mara', 'error');
     } finally {
       setIsProcessing(false);
     }
@@ -310,7 +310,7 @@ const QuickAssign = ({ camerasData, workersData, onUpdateCamera, onCreateCameraH
 
 
   return (
-    <div className={`h-full flex flex-col space-y-6 animate-fade-in pb-4 ${darkMode ? 'text-white' : 'text-slate-900'}`}>
+    <div className={`h-full flex flex-col space-y-6 animate-fade-in pb-4 ${darkMode ? 'text-white' : 'text-zinc-900'}`}>
       
       {/* Toast & Command Palette */}
       <Toast message={toast.message} type={toast.type} onClose={() => setToast({ message: '', type: '' })} />
@@ -331,20 +331,20 @@ const QuickAssign = ({ camerasData, workersData, onUpdateCamera, onCreateCameraH
             <Zap className={`w-8 h-8 ${darkMode ? 'text-emerald-400' : 'text-emerald-500'}`} />
             Asignación Rápida
           </h2>
-          <p className="text-slate-500 text-sm mt-1 font-medium">Asigna y libera cámaras rápidamente con esta vista especializada de 3 columnas.</p>
+          <p className="text-zinc-500 text-sm mt-1 font-medium">Asigna y libera cÒ¡maras rÒ¡pidamente con esta vista especializada de 3 columnas.</p>
         </div>
 
         <div className="flex items-center gap-4">
           <button
             onClick={() => setIsCommandOpen(true)}
             className={`flex items-center gap-3 px-6 py-3 rounded-xl border transition-all duration-300 hover:scale-105 active:scale-95 group shadow-sm ${
-              darkMode ? 'bg-slate-800 border-white/10 hover:border-emerald-500/50 hover:shadow-emerald-500/20' : 'bg-white border-black/10 hover:border-emerald-400 hover:shadow-emerald-500/20'
+              darkMode ? 'bg-zinc-800 border-white/10 hover:border-emerald-500/50 hover:shadow-emerald-500/20' : 'bg-white border-black/10 hover:border-emerald-400 hover:shadow-emerald-500/20'
             }`}
           >
-            <Command className={`w-5 h-5 ${darkMode ? 'text-slate-400 group-hover:text-emerald-400' : 'text-slate-500 group-hover:text-emerald-500'}`} />
-            <span className="font-bold text-sm tracking-wide">Búsqueda Global</span>
-            <div className={`flex items-center gap-1 px-2 py-1 rounded text-[10px] font-black uppercase tracking-widest ${darkMode ? 'bg-white/10 text-slate-400' : 'bg-slate-100 text-slate-600'}`}>
-              <span>⌘K</span>
+            <Command className={`w-5 h-5 ${darkMode ? 'text-zinc-400 group-hover:text-emerald-400' : 'text-zinc-500 group-hover:text-emerald-500'}`} />
+            <span className="font-bold text-sm tracking-wide">Busqueda Global</span>
+            <div className={`flex items-center gap-1 px-2 py-1 rounded text-[10px] font-black uppercase tracking-widest ${darkMode ? 'bg-white/10 text-zinc-400' : 'bg-zinc-100 text-zinc-600'}`}>
+              <span>K</span>
             </div>
           </button>
         </div>
@@ -354,13 +354,13 @@ const QuickAssign = ({ camerasData, workersData, onUpdateCamera, onCreateCameraH
       <div className="flex flex-col lg:flex-row gap-6 flex-1 min-h-0 lg:overflow-hidden overflow-y-auto pb-4 custom-scrollbar">
         
         {/* COLUMNA 1: LISTA DE ACTIVOS */}
-        <div className={`w-full lg:w-[300px] xl:w-[350px] shrink-0 flex flex-col rounded-3xl border shadow-sm h-[500px] lg:h-full ${darkMode ? 'bg-[#0B1120] border-white/5' : 'bg-slate-50 border-black/5'}`}>
+        <div className={`w-full lg:w-[300px] xl:w-[350px] shrink-0 flex flex-col rounded-3xl border shadow-sm h-[500px] lg:h-full ${darkMode ? 'bg-zinc-950 border-white/5' : 'bg-zinc-50 border-black/5'}`}>
           <div className="p-5 border-b border-inherit space-y-4">
             <h3 className="font-black text-lg flex items-center gap-2">
             Camaras
             </h3>
             <div className="relative">
-              <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 opacity-50" />
+              <Search className="w-4 h-4 absolute left-3 top-1/2 -tranzinc-y-1/2 opacity-50" />
               <input
                 type="text"
                 placeholder="Buscar por ID, modelo..."
@@ -374,12 +374,12 @@ const QuickAssign = ({ camerasData, workersData, onUpdateCamera, onCreateCameraH
             
             <div className="flex gap-2">
               <div className="relative flex-1">
-                <Filter className="w-3 h-3 absolute left-3 top-1/2 -translate-y-1/2 opacity-50" />
+                <Filter className="w-3 h-3 absolute left-3 top-1/2 -tranzinc-y-1/2 opacity-50" />
                 <select 
                   value={cameraTypeFilter}
                   onChange={e => setCameraTypeFilter(e.target.value)}
                   className={`w-full pl-8 pr-4 py-2 rounded-lg border text-xs outline-none font-bold appearance-none cursor-pointer ${
-                    darkMode ? 'bg-slate-800 border-white/10' : 'bg-white border-black/10'
+                    darkMode ? 'bg-zinc-800 border-white/10' : 'bg-white border-black/10'
                   }`}
                 >
                   <option value="">Todos los tipos</option>
@@ -405,9 +405,9 @@ const QuickAssign = ({ camerasData, workersData, onUpdateCamera, onCreateCameraH
                     }
                   }}
                   className={`relative p-4 rounded-2xl border transition-all duration-300 ${
-                    isAssigned ? (darkMode ? 'opacity-40 border-white/5' : 'opacity-50 border-black/5 bg-slate-100') :
+                    isAssigned ? (darkMode ? 'opacity-40 border-white/5' : 'opacity-50 border-black/5 bg-zinc-100') :
                     isSelected ? (darkMode ? 'border-emerald-500 bg-emerald-500/10 shadow-[0_0_15px_rgba(16,185,129,0.15)] ring-1 ring-emerald-500' : 'border-emerald-500 bg-emerald-50 shadow-[0_0_15px_rgba(16,185,129,0.15)] ring-1 ring-emerald-500') :
-                    (darkMode ? 'bg-slate-800/50 hover:bg-slate-800 border-white/5 hover:border-emerald-500/30 cursor-pointer' : 'bg-white hover:bg-slate-50 border-black/5 hover:border-emerald-400 cursor-pointer shadow-sm')
+                    (darkMode ? 'bg-zinc-800/50 hover:bg-zinc-800 border-white/5 hover:border-emerald-500/30 cursor-pointer' : 'bg-white hover:bg-zinc-50 border-black/5 hover:border-emerald-400 cursor-pointer shadow-sm')
                   }`}
                 >
                   <div className="flex justify-between items-start mb-2">
@@ -416,7 +416,7 @@ const QuickAssign = ({ camerasData, workersData, onUpdateCamera, onCreateCameraH
                       <span className="font-mono font-bold text-sm tracking-tight">{camera.id}</span>
                     </div>
                     {isAssigned ? (
-                      <span className="text-[10px] uppercase font-black tracking-widest px-2 py-0.5 rounded bg-slate-500/20 text-slate-500">
+                      <span className="text-[10px] uppercase font-black tracking-widest px-2 py-0.5 rounded bg-zinc-500/20 text-zinc-500">
                         Asignado
                       </span>
                     ) : (
@@ -432,12 +432,12 @@ const QuickAssign = ({ camerasData, workersData, onUpdateCamera, onCreateCameraH
                   
                   <div className="flex items-center gap-2 mb-3">
                     <MapPin className="w-3 h-3 opacity-50" />
-                    <span className="text-[10px] font-medium opacity-80">{camera.location || 'Almacén'}</span>
+                    <span className="text-[10px] font-medium opacity-80">{camera.location || 'AlmacÒ©n'}</span>
                   </div>
 
                   <div className="flex items-center justify-between mt-auto">
                     <span className={`text-[9px] uppercase font-black tracking-widest px-2 py-0.5 rounded ${
-                      darkMode ? 'bg-black/30 text-slate-400' : 'bg-slate-200 text-slate-600'
+                      darkMode ? 'bg-black/30 text-zinc-400' : 'bg-zinc-200 text-zinc-600'
                     }`}>
                       {camera.type}
                     </span>
@@ -454,7 +454,7 @@ const QuickAssign = ({ camerasData, workersData, onUpdateCamera, onCreateCameraH
                   </div>
                   
                   {isAssigned && (
-                    <div className={`mt-3 pt-2 text-xs border-t font-semibold flex items-center gap-2 ${darkMode ? 'border-white/10 text-slate-300' : 'border-black/5 text-slate-700'}`}>
+                    <div className={`mt-3 pt-2 text-xs border-t font-semibold flex items-center gap-2 ${darkMode ? 'border-white/10 text-zinc-300' : 'border-black/5 text-zinc-700'}`}>
                       <User className="w-3 h-3 opacity-50" />
                       A: {camera.assignedTo}
                     </div>
@@ -465,13 +465,13 @@ const QuickAssign = ({ camerasData, workersData, onUpdateCamera, onCreateCameraH
             
             {filteredCameras.length === 0 && (
               <div className="text-center py-10 opacity-50">
-                <p className="text-sm font-medium">No se encontraron cámaras.</p>
+                <p className="text-sm font-medium">No se encontraron camaras.</p>
               </div>
             )}
           </div>
         </div>
 
-        {/* COLUMNA 2: PANEL DE ACCIÓN CENTRAL */}
+        {/* COLUMNA 2: PANEL DE ACCIÒ�SN CENTRAL */}
         <div className="flex-1 flex flex-col justify-start items-center gap-8 py-8 px-4 rounded-3xl border border-dashed border-emerald-500/30 bg-emerald-500/[0.02] min-h-[400px] lg:min-h-0">
           
           {/* Progress Bar */}
@@ -479,19 +479,19 @@ const QuickAssign = ({ camerasData, workersData, onUpdateCamera, onCreateCameraH
             <div className="flex justify-between items-center mb-2">
               <span className="text-xs font-bold uppercase tracking-widest opacity-60">Camaras Asignadas</span>
             </div>
-            <div className={`h-2 rounded-full overflow-hidden ${darkMode ? 'bg-white/5' : 'bg-slate-200'}`}>
+            <div className={`h-2 rounded-full overflow-hidden ${darkMode ? 'bg-white/5' : 'bg-zinc-200'}`}>
               <div className="h-full bg-emerald-500 transition-all duration-1000 ease-out relative overflow-hidden" style={{ width: `${progressPercent}%` }}>
                 <div className="absolute inset-0 bg-white/20 w-full h-full animate-[shimmer_2s_infinite]" />
               </div>
             </div>
-            <p className="text-[10px] text-right mt-1 opacity-50">{assignedCamerasCount} de {totalCameras} cámaras</p>
+            <p className="text-[10px] text-right mt-1 opacity-50">{assignedCamerasCount} de {totalCameras} cÒ¡maras</p>
           </div>
 
           <div className="flex flex-col items-center w-full max-w-sm gap-6">
             
-            {/* Cámara Seleccionada Placeholder */}
+            {/* CÒ¡mara Seleccionada Placeholder */}
             <div className={`w-full p-6 rounded-3xl border-2 transition-all duration-500 ${
-              selectedCamerasArray.length > 0 ? 'border-emerald-500 bg-emerald-500/10 shadow-lg shadow-emerald-500/10' : (darkMode ? 'border-white/5 bg-slate-800/30 border-dashed' : 'border-black/5 bg-white border-dashed')
+              selectedCamerasArray.length > 0 ? 'border-emerald-500 bg-emerald-500/10 shadow-lg shadow-emerald-500/10' : (darkMode ? 'border-white/5 bg-zinc-800/30 border-dashed' : 'border-black/5 bg-white border-dashed')
             }`}>
               {selectedCamerasArray.length === 1 ? (
                 <div className="text-center animate-fade-in">
@@ -505,11 +505,11 @@ const QuickAssign = ({ camerasData, workersData, onUpdateCamera, onCreateCameraH
               ) : selectedCamerasArray.length > 1 ? (
                 <div className="text-center animate-fade-in">
                   <h4 className="font-black text-2xl mb-1 text-emerald-500">{selectedCamerasArray.length}</h4>
-                  <p className="text-xs opacity-70 mb-2 font-bold uppercase tracking-widest">Cámaras Seleccionadas</p>
+                  <p className="text-xs opacity-70 mb-2 font-bold uppercase tracking-widest">Camaras Seleccionadas</p>
                 </div>
               ) : (
                 <div className="text-center opacity-40">
-                  <p className="text-xs font-semibold uppercase tracking-widest">Selecciona cámaras</p>
+                  <p className="text-xs font-semibold uppercase tracking-widest">Selecciona camaras</p>
                 </div>
               )}
             </div>
@@ -520,7 +520,7 @@ const QuickAssign = ({ camerasData, workersData, onUpdateCamera, onCreateCameraH
 
             {/* Trabajador Seleccionado Placeholder */}
              <div className={`w-full p-6 rounded-3xl border-2 transition-all duration-500 ${
-              selectedWorkerObj ? 'border-emerald-500 bg-emerald-500/10 shadow-lg shadow-emerald-500/10' : (darkMode ? 'border-white/5 bg-slate-800/30 border-dashed' : 'border-black/5 bg-white border-dashed')
+              selectedWorkerObj ? 'border-emerald-500 bg-emerald-500/10 shadow-lg shadow-emerald-500/10' : (darkMode ? 'border-white/5 bg-zinc-800/30 border-dashed' : 'border-black/5 bg-white border-dashed')
             }`}>
               {selectedWorkerObj ? (
                 <div className="text-center animate-fade-in">
@@ -548,16 +548,16 @@ const QuickAssign = ({ camerasData, workersData, onUpdateCamera, onCreateCameraH
               disabled={selectedCameraIds.length === 0 || !selectedWorkerId || isProcessing}
               className={`w-full relative py-4 rounded-xl font-black uppercase tracking-widest text-sm transition-all duration-300 overflow-hidden group ${
                 selectedCameraIds.length === 0 || !selectedWorkerId || isProcessing
-                  ? (darkMode ? 'bg-slate-800 text-slate-600 cursor-not-allowed' : 'bg-slate-200 text-slate-400 cursor-not-allowed')
+                  ? (darkMode ? 'bg-zinc-800 text-zinc-600 cursor-not-allowed' : 'bg-zinc-200 text-zinc-400 cursor-not-allowed')
                   : 'bg-emerald-500 text-white shadow-xl shadow-emerald-500/20 hover:scale-105 active:scale-95 hover:bg-emerald-400'
               }`}
             >
-              <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
+              <div className="absolute inset-0 bg-white/20 tranzinc-y-full group-hover:tranzinc-y-0 transition-transform duration-500"></div>
               <span className="relative z-10 flex items-center justify-center gap-2">
                 {isProcessing ? (
                   <div className="w-5 h-5 border-2 border-emerald-200 border-t-white rounded-full animate-spin" />
                 ) : (
-                  <>{selectedCamerasArray.length > 1 ? 'Asignar Cámaras' : 'Asignar Cámara'} <ArrowRight className="w-4 h-4" /></>
+                  <>{selectedCamerasArray.length > 1 ? 'Asignar CÒ¡maras' : 'Asignar CÒ¡mara'} <ArrowRight className="w-4 h-4" /></>
                 )}
               </span>
             </button>
@@ -568,22 +568,22 @@ const QuickAssign = ({ camerasData, workersData, onUpdateCamera, onCreateCameraH
               className={`w-full py-3 rounded-xl font-bold text-xs uppercase tracking-widest transition-all ${
                 selectedCameraIds.length === 0 && !selectedWorkerId
                   ? 'opacity-0 pointer-events-none'
-                  : 'opacity-50 hover:opacity-100 hover:bg-slate-500/10'
+                  : 'opacity-50 hover:opacity-100 hover:bg-zinc-500/10'
               }`}
             >
-              Limpiar Selección
+              Limpiar SelecciÒ³n
             </button>
           </div>
         </div>
 
         {/* COLUMNA 3: LISTA DE PERSONAS */}
-        <div className={`w-full lg:w-[300px] xl:w-[350px] shrink-0 flex flex-col rounded-3xl border shadow-sm h-[500px] lg:h-full ${darkMode ? 'bg-[#0B1120] border-white/5' : 'bg-slate-50 border-black/5'}`}>
+        <div className={`w-full lg:w-[300px] xl:w-[350px] shrink-0 flex flex-col rounded-3xl border shadow-sm h-[500px] lg:h-full ${darkMode ? 'bg-zinc-950 border-white/5' : 'bg-zinc-50 border-black/5'}`}>
           <div className="p-5 border-b border-inherit space-y-4">
              <h3 className="font-black text-lg flex items-center gap-2">
               <User className="w-5 h-5 opacity-70" /> Trabajadores
             </h3>
             <div className="relative">
-              <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 opacity-50" />
+              <Search className="w-4 h-4 absolute left-3 top-1/2 -tranzinc-y-1/2 opacity-50" />
               <input
                 type="text"
                 placeholder="Buscar trabajador..."
@@ -607,11 +607,11 @@ const QuickAssign = ({ camerasData, workersData, onUpdateCamera, onCreateCameraH
                   onClick={() => setSelectedWorkerId(worker.id)}
                   className={`p-3 rounded-2xl border transition-all duration-300 flex items-center gap-4 cursor-pointer relative overflow-hidden ${
                     isSelected ? (darkMode ? 'border-emerald-500 bg-emerald-500/10 ring-1 ring-emerald-500' : 'border-emerald-500 bg-emerald-50 ring-1 ring-emerald-500') :
-                    (darkMode ? 'bg-slate-800/50 hover:bg-slate-800 border-white/5 hover:border-emerald-500/30' : 'bg-white hover:bg-slate-50 border-black/5 hover:border-emerald-400')
+                    (darkMode ? 'bg-zinc-800/50 hover:bg-zinc-800 border-white/5 hover:border-emerald-500/30' : 'bg-white hover:bg-zinc-50 border-black/5 hover:border-emerald-400')
                   }`}
                 >
                   <div className={`w-12 h-12 rounded-xl border flex items-center justify-center shrink-0 shadow-sm ${
-                    isSelected ? 'bg-emerald-500 border-emerald-400 text-white' : (darkMode ? 'bg-slate-900 border-white/10' : 'bg-slate-100 border-black/5')
+                    isSelected ? 'bg-emerald-500 border-emerald-400 text-white' : (darkMode ? 'bg-zinc-900 border-white/10' : 'bg-zinc-100 border-black/5')
                   }`}>
                     <span className="font-black text-lg">{worker.name.charAt(0)}</span>
                   </div>

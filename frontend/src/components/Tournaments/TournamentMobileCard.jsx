@@ -109,20 +109,14 @@ const TournamentMobileCard = ({ tournament, onView, onEdit, onDelete, onUpdateSt
         </div>
 
         <div className="grid grid-cols-1 gap-3">
-          <div className="flex items-center gap-3 p-3 bg-white/5 rounded-2xl border border-white/5">
-             <div className="p-2 bg-blue-500/10 rounded-xl">
-               <MapPin className="w-4 h-4 text-blue-400" />
-             </div>
+          <div className="flex flex-col p-3 bg-white/5 rounded-2xl border border-white/5">
              <div>
                <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest leading-none mb-1">Ubicación</p>
                <p className="text-sm text-gray-300 font-medium truncate">{tournament.location}, {tournament.state}</p>
              </div>
           </div>
 
-          <div className="flex items-center gap-3 p-3 bg-white/5 rounded-2xl border border-white/5">
-             <div className="p-2 bg-emerald-500/10 rounded-xl">
-               <Calendar className="w-4 h-4 text-emerald-400" />
-             </div>
+          <div className="flex flex-col p-3 bg-white/5 rounded-2xl border border-white/5">
              <div>
                <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest leading-none mb-1">Cronograma</p>
                <p className="text-sm text-gray-300 font-medium truncate">
@@ -132,10 +126,7 @@ const TournamentMobileCard = ({ tournament, onView, onEdit, onDelete, onUpdateSt
           </div>
 
           <div className="flex items-center justify-between p-3 bg-white/5 rounded-2xl border border-white/5">
-             <div className="flex items-center gap-3">
-               <div className="p-2 bg-purple-500/10 rounded-xl">
-                 <Users className="w-4 h-4 text-purple-400" />
-               </div>
+             <div className="flex flex-col">
                <div>
                  <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest leading-none mb-1">Responsable</p>
                  <p className="text-sm text-gray-300 font-medium truncate">{tournament.worker || 'Sin asignar'}</p>

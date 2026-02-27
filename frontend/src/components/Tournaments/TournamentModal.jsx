@@ -24,7 +24,7 @@ const TournamentModal = ({
       {/* Overlay */}
       <div 
         className={`fixed inset-0 backdrop-blur-sm transition-colors duration-500 ${
-          darkMode ? 'bg-slate-950/80' : 'bg-slate-900/40'
+          darkMode ? 'bg-zinc-950/80' : 'bg-zinc-900/40'
         }`} 
         onClick={onClose} 
       />
@@ -33,8 +33,8 @@ const TournamentModal = ({
       <div 
         className={`w-full max-w-4xl relative z-10 shadow-2xl border transition-all duration-500 p-8 max-h-[90vh] overflow-y-auto custom-scrollbar ${
           darkMode 
-            ? 'bg-slate-900 border-white/5' 
-            : 'bg-white border-black/5 shadow-slate-300'
+            ? 'bg-zinc-900 border-white/5' 
+            : 'bg-white border-black/5 shadow-zinc-300'
         }`}
         onClick={handleModalClick}
       >
